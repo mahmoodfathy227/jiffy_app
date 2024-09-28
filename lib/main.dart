@@ -32,6 +32,8 @@ import 'app/modules/onboarding/controllers/onboarding_controller.dart';
 
 import 'package:flutter/services.dart';
 
+import 'app/modules/product/views/product_view.dart';
+
 final sl = GetIt.instance;
 ApiConsumer apiConsumer = sl();
 bool isFlutterLocalNotificationsInitialized = false;
@@ -197,8 +199,9 @@ class MyApp extends StatelessWidget {
                               useInheritedMediaQuery: true,
                               title: APP_NAME,
                               theme: AppTheme.lightTheme(color: snap.data),
-                              initialRoute: Routes.SPLASH,
-                              initialBinding: SplashBinding(),
+                              // initialRoute: Routes.SPLASH,
+                              // initialBinding: SplashBinding(),
+                              home: const ProductView(),
                               getPages: AppPages.routes,
                             ));
                   });

@@ -4,6 +4,7 @@ import 'package:jiffy/app/modules/global/config/configs.dart';
 var primaryColor = defaultPrimaryColor;
 const secondaryPrimaryColor = Color(0xff040404);
 const lightPrimaryColor = Color(0xffd2a70a);
+const primaryBackgroundColor =  Color(0xffF9F3FF);
 //Text Color
 const appTextPrimaryColor = Color(0xff1C1F34);
 const appTextSecondaryColor = Color(0xff6C757D);

@@ -75,12 +75,24 @@ dependencies:
 
 flutter:
   fonts:
-    - family: circularStd
+    - family: CircularStd
       fonts:
-        - asset: assets/fonts/circular-std-medium-500.ttf
+        - asset: assets/fonts/CircularStd-Medium.ttf
+        - asset: assets/fonts/CircularStd-Book.ttf
+        - asset: assets/fonts/CircularStd-Black.ttf
+        - asset: assets/fonts/CircularStd-Bold.ttf
+
+
+
+    - family: museomoderno
+      fonts:
+        - asset: assets/fonts/museomoderno/MuseoModerno-Medium.ttf
+        - asset: assets/fonts/museomoderno/MuseoModerno-Regular.ttf
+        - asset: assets/fonts/museomoderno/MuseoModerno-Black.ttf
+        - asset: assets/fonts/museomoderno/MuseoModerno-Bold.ttf
+
 
   uses-material-design: true
-
 
 
 
@@ -89,8 +101,8 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/images/auth/
     - assets/images/splash/
-    - assets/fonts/
     - assets/images/onboarding/
     - assets/images/forgot_password/
     - shorebird.yaml

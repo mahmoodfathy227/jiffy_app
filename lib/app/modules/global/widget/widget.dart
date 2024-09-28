@@ -17,8 +17,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:jiffy/app/modules/auth/controllers/auth_controller.dart';
 // import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
-import 'package:jiffy/app/modules/global/model/model_response.dart' hide Colors;
-import 'package:jiffy/app/modules/global/model/test_model_response.dart';
+import 'package:jiffy/app/modules/global/model/model_response.dart' hide Colors hide Material;
+
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 // import 'package:jiffy/app/modules/home/controllers/home_controller.dart';
@@ -439,6 +439,8 @@ Widget orderCard(Order order) {
 
 class MyDefaultButton extends StatefulWidget {
   final String? btnText;
+  final bool isActive;
+  final String errorText;
   final bool localeText;
   final Function() onPressed;
   final Color? color;
@@ -454,6 +456,7 @@ class MyDefaultButton extends StatefulWidget {
     this.btnText,
     required this.onPressed,
     this.color,
+    this.isActive = true,
     this.isSelected = true,
     this.localeText = false,
     required this.isloading,
@@ -461,6 +464,7 @@ class MyDefaultButton extends StatefulWidget {
     this.height,
     this.width,
     this.Icon,
+     this.errorText = "",
   }) : super(key: key);
 
   @override
@@ -481,64 +485,112 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
-    return widget.isloading!
-        ? Center(
-            child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
-            size: 50,
-          ))
-        : InkWell(
-            onTap: () => {
+    return Column(
+      children: [
+        widget.errorText.isEmpty?
+        SizedBox()
+            :
+        Text(widget.errorText , style: primaryTextStyle(color: Colors.red,
+        size: 12.sp.round(),
+
+                ),   maxLines: 2, overflow: TextOverflow.ellipsis,),
+        SizedBox(height: 10.h,),
+
+        InkWell(
+          onTap: () => {
+            if(isloading){
+
+            }else{
               widget.onPressed(),
-            },
-            child: Container(
-              width: 315.w,
-              height: widget.height ?? 48.h,
-              clipBehavior: Clip.antiAlias,
-              decoration: ShapeDecoration(
-                color: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    widget.Icon ?? 'assets/icons/cart_in_button.svg',
-                    width: 20.w,
-                    height: 20.h,
-                  ),
-                  SizedBox(
-                    width: 16.w,
-                  ),
-                  Text(
-                      widget.localeText
-                          ? widget.btnText!.toUpperCase()
-                          : widget.btnText!,
-                      textAlign: TextAlign.center,
-                      style: primaryTextStyle(
-                        color: widget.textColor ?? Color(0xFF21034F),
-                        size: 16.sp.round(),
-                        weight: FontWeight.w700,
-                      )),
+            }
+
+          },
+          child: Container(
+            width: 315.w,
+            height: widget.height ?? 50.h,
+            clipBehavior: Clip.antiAlias,
+
+            decoration: ShapeDecoration(
+              gradient: widget.isActive? const LinearGradient(
+                colors: [
+                  Color(0xFF6900CC), // Starting color (dark purple)
+                  Color(0xFF20003D), // Ending color (light purple)
                 ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ) :
+              const LinearGradient(
+                colors: [
+                  Color(0xFF575757), // Starting color (dark purple)
+                  Color(0xFF575757),  // Ending color (light purple)
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              )
+
+              ,
+              // color: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
-          );
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // SvgPicture.asset(
+                //   widget.Icon ?? 'assets/icons/cart_in_button.svg',
+                //   width: 20.w,
+                //   height: 20.h,
+                // ),
+                // SizedBox(
+                //   width: 16.w,
+                // ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        widget.localeText
+                            ? widget.btnText!.toUpperCase()
+                            : widget.btnText!,
+                        textAlign: TextAlign.center,
+                        style: primaryTextStyle(
+                          color: Colors.white,
+                          // color: widget.textColor ?? Color(0xFF21034F),
+                          size: 16.sp.round(),
+                          weight: FontWeight.w500,
+                        )),
+                    widget.isloading? SizedBox(width: 5.w,) : SizedBox(),
+                    widget.isloading?
+                    SizedBox(
+                      width: 20.w,
+                        height: 20.h,
+                        child: CircularProgressIndicator(strokeWidth: 4, color: Colors.grey[300],))
+                        :
+                    SizedBox(),
+
+
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
 class CustomTextField extends StatefulWidget {
   final String labelText;
   final ValueChanged<String> onChanged;
-  final String? errorText;
+  final String errorText;
   final String? initialValue;
   final bool obscureText;
   final Color? LabelStyle;
   final double? width;
+
   final String? icon;
   final ValueChanged<String>? onSubmitted;
   final TextEditingController? customTextEditingController;
@@ -548,7 +600,7 @@ class CustomTextField extends StatefulWidget {
     super.key,
     required this.labelText,
     required this.onChanged,
-    this.errorText,
+    this.errorText = "",
     this.obscureText = false,
     this.icon,
     this.LabelStyle,
@@ -556,7 +608,7 @@ class CustomTextField extends StatefulWidget {
     this.onSubmitted,
     this.customTextEditingController,
     this.width,
-    this.keyboardType = TextInputType.text, // Default to TextInputType.text
+    this.keyboardType = TextInputType.text,// Default to TextInputType.text
   });
 
   @override
@@ -565,55 +617,192 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   late bool _obscureText;
+   bool isValueEmpty = true;
 
+
+  late FocusNode _focusNode;
+  bool isFocused = false;
   @override
   void initState() {
     super.initState();
+if(widget.customTextEditingController != null){
+  isValueEmpty = widget.customTextEditingController!.text.isEmpty;
+}
+
     _obscureText = widget.obscureText;
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
-      width: widget.width ?? 310.w,
+      width: widget.width ?? 320.w,
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextFormField(
-            controller: widget.customTextEditingController,
-            onChanged: widget.onChanged,
-            initialValue: widget.initialValue ?? '',
-            obscureText: _obscureText,
-            onFieldSubmitted: widget.onSubmitted,
-            keyboardType: widget.keyboardType,
-            style: primaryTextStyle(
-              color: Colors.black,
-              size: 14.sp.round(),
-              weight: FontWeight.w400,
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+
+                    spreadRadius: -10, blurRadius: 30,
+                    offset: const Offset(0, 4)),],
             ),
-            decoration: InputDecoration(
-              hintStyle: primaryTextStyle(
-                color: Colors.black,
-                size: 14.sp.round(),
-                weight: FontWeight.w400,
-                height: 1,
-              ),
-              errorStyle: primaryTextStyle(
-                color: Colors.red,
-                size: 14.sp.round(),
-                weight: FontWeight.w400,
-                height: 1,
-              ),
-              labelStyle: primaryTextStyle(
-                color: widget.LabelStyle ?? const Color(0xFFA6AAC3),
-                size: 14.sp.round(),
-                weight: FontWeight.w400,
-                height: 1,
-              ),
-              errorText: widget.errorText,
-              labelText: widget.labelText,
-              prefixIcon: widget.icon != null
-                  ? Padding(
+            height: 55.h,
+            child: Material(
+              elevation: 2,
+
+              borderRadius: BorderRadius.circular(10),
+
+              child: Focus(
+                onFocusChange: (hasFocus) {
+                  setState(() {
+                    isFocused = hasFocus;
+                  });
+                print("changed focus now ${hasFocus} ");
+                },
+                child: TextFormField(
+
+                  controller: widget.customTextEditingController,
+                  onChanged: (value) {
+                    widget.onChanged(value);
+                    setState(() {
+                      isValueEmpty = value.isEmpty;
+                    });
+                  },
+                  initialValue: widget.initialValue ?? '',
+                  obscureText: _obscureText,
+                  onFieldSubmitted: widget.onSubmitted,
+                  keyboardType: widget.keyboardType,
+                  style: secondaryTextStyle(
+                    color: Colors.black,
+                    size: 14.sp.round(),
+                    weight: FontWeight.w400,
+                  ),
+
+                  decoration: InputDecoration(
+
+                    filled: true,
+                    fillColor:
+
+
+                    isFocused ?
+
+
+                    primaryBackgroundColor :Colors.white ,
+
+
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+
+                      borderSide:  BorderSide(
+                        color:
+                        widget.errorText.isNotEmpty?
+                        Colors.red
+                            :
+                        Colors.white,
+                        width: 0,
+                      ),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+
+                      borderSide:  BorderSide(
+                        color:
+                        widget.errorText.isNotEmpty?
+                        Colors.red
+                            :
+                        primaryColor,
+                        width: 0,
+                      ),
+                    ),
+
+                    hintStyle: secondaryTextStyle(
+                      color: Colors.black,
+                      size: 14.sp.round(),
+                      weight: FontWeight.w400,
+                      height: 1,
+                    ),
+
+                    // errorStyle: primaryTextStyle(
+                    //   color: Colors.red,
+                    //   size: 14.sp.round(),
+                    //   weight: FontWeight.w400,
+                    //   height: 1,
+                    // ),
+
+                    helperStyle: secondaryTextStyle(
+
+                      color: Colors.red,
+                      size: 12.sp.round(),
+                      weight: FontWeight.w400,
+                      height: 1,
+
+                    ),
+                    label:
+                    !isFocused ?
+                    Container(
+                      width: 150.w,
+                      height: 40.h,
+                      color: isValueEmpty
+                          ? Colors.white : Color(0xffF9F3FF),
+                      child: Center(
+                        child: Text(widget.labelText, style: secondaryTextStyle(
+                          size:  13.sp.round(),
+
+                          color:
+
+                          widget.errorText.isNotEmpty?
+                            Colors.red
+                          :
+
+                          isValueEmpty
+                              ?
+
+                          Colors.grey[300]
+                          :
+                          primaryColor
+                          ,
+                          weight: FontWeight.w400,
+
+                        ),
+                        ),
+                      ),
+                    ):
+                    Container(
+                      width: 150.w,
+                      height: 40.h,
+                      color:
+                   const Color(0xffF9F3FF) ,
+                    child:
+                    Center(
+                      child: Text(widget.labelText, style: secondaryTextStyle(
+                      size:  13.sp.round() ,
+                          color:   widget.errorText.isNotEmpty?
+                          Colors.red
+                              :  primaryColor,
+                      weight: FontWeight.w400
+                    ),),),
+                    ),
+                    // labelStyle: secondaryTextStyle(
+                    //   color: widget.LabelStyle ??  Colors.grey[400],
+                    //
+                    //   size: 14.sp.round(),
+                    //   weight: FontWeight.w400,
+                    //   height: 1,
+                    // ),
+
+                    // errorText: widget.errorText,
+                    // helperText: widget.errorText,
+                    // labelText: widget.labelText,
+
+                    prefixIcon: widget.icon != null
+                        ? Padding(
                       padding: EdgeInsets.all(12.w),
                       child: SvgPicture.asset(
                         widget.icon!,
@@ -621,29 +810,49 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         height: 13.h,
                       ),
                     )
-                  : null,
-              suffixIcon: widget.obscureText
-                  ? IconButton(
-                      icon: SvgPicture.asset(
-                        _obscureText
-                            ? 'assets/icons/eye_closed.svg'
-                            : 'assets/icons/eye_open.svg',
-                        width: _obscureText ? 20.w : 18.w,
-                        height: _obscureText ? 20.h : 18.h,
+                        : null,
+                    suffixIcon: widget.obscureText
+                        ? Padding(
+                      padding:  EdgeInsets.only(right: 5.w),
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          _obscureText
+                              ? 'assets/images/auth/eye-slash.svg'
+                              : 'assets/images/auth/eye.svg',
+                          width: _obscureText ? 24.w : 24.w,
+                          height: _obscureText ? 24.h : 24.h,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
                     )
-                  : null,
+                        : null,
+                  ),
+                ),
+              ),
             ),
           ),
+
+
+          widget.errorText.isEmpty ? const SizedBox() : SizedBox(height: 5.h),
+          widget.errorText.isEmpty ?
+              SizedBox()
+          :
+          ShowUp(
+            child: Text(widget.errorText?? "", style: primaryTextStyle(
+              weight: FontWeight.w400,
+              size: 12.sp.round(),
+              color: Colors.red
+            ),),
+          )
         ],
       ),
     );
   }
+
 }
 
 Widget DividerSocial() {
@@ -952,45 +1161,205 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      leading: back ?? true
-          ? IconButton(
-              icon: Container(
-                height: 40.h,
-                width: 40.w,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      spreadRadius: 0,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: SvgPicture.asset(
-                    "assets/images/forgot_password/Frame 361.svg"),
+    return
+      SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 220.h,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            SvgPicture.asset("assets/images/eclipseAppBar.svg",
+            fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+            ),
+            Padding(
+                padding: EdgeInsets.only(bottom: 100.h),
+
+child: Row(
+  children: [
+
+    IconButton(
+        onPressed: (){
+
+        },
+        icon:
+        Stack(
+            alignment: Alignment.center,
+            children: [
+              SvgPicture.asset(
+                "assets/images/close-circle.svg",
+
+
               ),
-              onPressed: () {
-                if (function != null) {
-                  function!();
-                } else {
-                  Get.back();
-                }
-              },
+              SvgPicture.asset(
+                "assets/images/back_btn.svg",
+                width: 88.h,
+
+              ),
+
+            ]
+        )
+
+
+    ),
+
+    Spacer(),
+    Text("product" , style: secondaryTextStyle(
+      color: Colors.white,
+      weight: FontWeight.w700,
+      size: 22.sp.round(),
+    ),),
+    Spacer(),
+    IconButton(
+        onPressed: (){
+
+        },
+        icon:
+        Stack(
+            alignment: Alignment.center,
+            children: [
+              SvgPicture.asset(
+                "assets/images/close-circle.svg",
+
+
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 4.h),
+                child: SvgPicture.asset(
+                  "assets/images/shopping-cart.svg",
+                  width: 22.h,
+
+                ),
+              ),
+
+            ]
+        )
+
+
+    ),
+
+
+
+  ],
+),
             )
-          : const SizedBox(),
-      title: Text(title ?? '',
+          ],
+        ),
+      );
+
+      AppBar(
+
+      flexibleSpace:
+      ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: 400.h,
+        ),
+        child: SizedBox(
+          height: 300, // Set your desired height
+          child: SvgPicture.asset('assets/images/eclipseAppBar.svg',
+            fit: BoxFit.contain,
+
+
+          ),
+        )
+
+
+        // SvgPicture.asset("assets/images/eclipseAppBar.svg",
+        //
+        //   width: MediaQuery.of(context).size.width,
+        //   fit: BoxFit.cover,
+        //
+        // ),
+      ),
+
+
+
+      // leading: back ?? true
+      //     ? Padding(
+      //       padding:  EdgeInsets.only(left: 16.w),
+      //       child: IconButton(
+      //           icon: Container(
+      //             height: 50.h,
+      //             width: 50.w,
+      //             decoration: BoxDecoration(
+      //               color: Colors.white,
+      //               borderRadius: BorderRadius.all(Radius.circular(30)),
+      //               boxShadow: [
+      //                 BoxShadow(
+      //                   color: Colors.grey.withOpacity(0.4),
+      //                   spreadRadius: 0,
+      //                   blurRadius: 7,
+      //                   offset: Offset(0, 3), // changes position of shadow
+      //                 ),
+      //               ],
+      //             ),
+      //             child: SvgPicture.asset(
+      //                 "assets/images/back_btn.svg"),
+      //           ),
+      //           onPressed: () {
+      //             if (function != null) {
+      //               function!();
+      //             } else {
+      //               Get.back();
+      //             }
+      //           },
+      //         ),
+      //     )
+      //     : const SizedBox(),
+      title: Text(
+          // title ??
+              'Product',
           style: TextStyle(
-            color: Color(0xFF1D1F22),
+            color: Colors.red,
             fontSize: 22.sp,
             fontFamily: GoogleFonts.cormorant().fontFamily,
             fontWeight: FontWeight.w700,
             height: 0,
           )),
-      actions: actions ?? [Container()],
+      actions: actions ?? [
+        SizedBox(width: 16.w),
+        IconButton(
+          icon: Container(
+            height: 50.h,
+            width: 50.w,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 0,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: SvgPicture.asset(
+                "assets/images/back_btn.svg"),
+          ),
+          onPressed: () {
+            if (function != null) {
+              function!();
+            } else {
+              Get.back();
+            }
+          },
+        ),
+        Spacer(),
+        Text(
+          // title ??
+            'Product',
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 22.sp,
+              fontFamily: GoogleFonts.cormorant().fontFamily,
+              fontWeight: FontWeight.w700,
+              height: 0,
+            )),
+        Spacer(),
+        Text("test"),
+        SizedBox(width: 16.w),
+      ],
       centerTitle: true,
       backgroundColor: const Color(0xffFDFDFD),
     );

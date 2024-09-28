@@ -1,37 +1,240 @@
+
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jiffy/app/modules/auth/views/login_view.dart';
-import 'package:jiffy/app/modules/global/config/configs.dart';
-import 'package:jiffy/app/modules/global/theme/app_theme.dart';
-import 'package:jiffy/app/modules/global/widget/widget.dart';
+
+import '../../global/config/configs.dart';
+import '../../global/config/helpers.dart';
+import '../../global/theme/app_theme.dart';
+import '../../global/theme/colors.dart';
+import '../../global/widget/widget.dart';
 import '../controllers/auth_controller.dart';
+import 'login_view.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
   final AuthController controller = Get.put(AuthController());
+  bool isCompany = false;
+String randomId = "123";
 
-  Widget registerForm(BuildContext context) {
-    return Column(
-      children: [
-        ShowUp(
-          delay: 200,
-          child: SizedBox(
-            width: 326.w,
-            child: Text(
-              'Create a new account',
-              textAlign: TextAlign.center,
-              style: boldTextStyle(
-                color: const Color(0xFF090A0A),
-                size: 28.sp.round(),
-                weight: FontWeight.w400,
+  @override
+  Widget build(BuildContext context) {
+
+    Widget registerForm(BuildContext context) {
+      return Obx(() {
+        return Column(
+
+          children: [
+
+
+            ShowUp(
+
+              delay: 200,
+              child: SizedBox(
+                width: 326.w,
+                child: Text(
+                  'Create an account',
+                  textAlign: TextAlign.center,
+                  style: primaryTextStyle(
+                      weight: FontWeight.w800,
+                      size: 30.sp.round(),
+                      color: primaryColor
+                  ),
+
+
+                ),
               ),
+            ),
+            SizedBox(height: 20.h),
+            Container(
+              height: 55.h,
+              margin: EdgeInsets.symmetric(horizontal: kDefaultPadding * 2),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(35),
+                ),
+              ),
+
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          isCompany = false;
+                          randomId = Random().nextInt(10000).toString();
+                          controller.setUser("user");
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+
+                        decoration: BoxDecoration(
+                          gradient:
+                          !isCompany ?
+
+                          const LinearGradient(
+                            colors: [
+                              Color(0xFF6900CC), // Starting color (dark purple)
+                              Color(0xFF20003D), // Ending color (light purple)
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ) : null, // Dark purple background
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(35),
+                          ),
+                        ),
+                        child: Text(
+                          'Individual',
+                          style: primaryTextStyle(
+                              size: 16.sp.round(),
+                              weight: !isCompany ? FontWeight.w900 : FontWeight
+                                  .w300,
+                              color: !isCompany ? Colors.white : primaryColor
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          isCompany = true;
+                          randomId = Random().nextInt(10000).toString();
+                          controller.setUser("dealer");
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+
+                        decoration: BoxDecoration(
+                          gradient:
+                          isCompany ?
+
+                          const LinearGradient(
+                            colors: [
+                              Color(0xFF6900CC), // Starting color (dark purple)
+                              Color(0xFF20003D), // Ending color (light purple)
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ) : null,
+                          // Light purple background
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(35),
+                          ),
+                        ),
+                        child: Text(
+                            'Company',
+                            style: primaryTextStyle(
+                                size: 16.sp.round(),
+                                weight: isCompany ? FontWeight.w900 : FontWeight
+                                    .w300,
+                                color: !isCompany ? primaryColor : Colors.white
+                            )
+
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 41.h),
+         buildRegisterFields(context),
+
+          ],
+        );
+      });
+    }
+
+    return Scaffold(
+      backgroundColor: primaryBackgroundColor,
+      body: SafeArea(
+        child: SizedBox(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ShowUp(
+                    delay: 200,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                          child: GestureDetector(
+                            onTap: (){
+                              Get.back();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    spreadRadius: 2,
+                                    blurRadius: 20,
+                                    offset:
+                                    Offset(0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/images/back_btn.svg",
+                                width: 80.w,
+                                height: 80.h,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 5),
+                        SvgPicture.asset(
+                          LOGO,
+                          width: 40.w,
+                          height: 30.h,
+                          fit: BoxFit.cover,
+                        ),
+
+                      ],
+                    )),
+
+                registerForm(context),
+              ],
             ),
           ),
         ),
-        SizedBox(height: 41.h),
+      ),
+    );
+  }
+
+  buildRegisterFields(BuildContext context) {
+    return Column(
+      key: Key(randomId),
+      children: [
         SizedBox(
             width: 310.w,
             child: Row(
@@ -45,10 +248,8 @@ class RegisterView extends StatelessWidget {
                         child: CustomTextField(
                           labelText: 'First Name',
                           onChanged: (value) =>
-                              controller.firstName.value = value,
-                          errorText: controller.firstNameError.value.isEmpty
-                              ? null
-                              : controller.firstNameError.value,
+                          controller.firstName.value = value,
+                          errorText:  controller.firstNameError.value,
                         ),
                       )),
                   SizedBox(width: 20.w),
@@ -59,148 +260,208 @@ class RegisterView extends StatelessWidget {
                         child: CustomTextField(
                           labelText: 'Last Name',
                           onChanged: (value) =>
-                              controller.lastName.value = value,
-                          errorText: controller.lastNameError.value.isEmpty
-                              ? null
-                              : controller.lastNameError.value,
+                          controller.lastName.value = value,
+                          errorText: controller.lastNameError.value,
                         ),
                       ))
                 ])),
-        SizedBox(height: 20.h),
+    SizedBox(height: 25.h),
+        isCompany
+            ? ShowUp(
+          delay: 600,
+          child: CustomTextField(
+
+            labelText: 'Company Name',
+            onChanged: (value) => controller.company.value = value,
+            errorText: controller.companyError.value ,
+          ),
+        ) :
+        const SizedBox(),
+
+
+        isCompany
+            ?         SizedBox(height: 20.h) :
+        SizedBox()
+        ,
         ShowUp(
           delay: 600,
           child: CustomTextField(
-            labelText: 'Email Address',
+            labelText: 'Your Email',
             onChanged: (value) => controller.email.value = value,
-            errorText: controller.emailError.value.isEmpty
-                ? null
-                : controller.emailError.value,
+            errorText: controller.emailError.value ,
           ),
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 25.h),
         ShowUp(
           delay: 600,
           child: CustomTextField(
             labelText: 'Password',
             onChanged: (value) => controller.password.value = value,
-            errorText: controller.passwordError.value.isEmpty
-                ? null
-                : controller.passwordError.value,
+            errorText: controller.passwordError.value ,
             obscureText: true,
           ),
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 25.h),
         ShowUp(
           delay: 600,
           child: CustomTextField(
             labelText: 'Confirm Password',
             onChanged: (value) => controller.confirmPassword.value = value,
-            errorText: controller.confirmPasswordError.value.isEmpty
-                ? null
-                : controller.confirmPasswordError.value,
+            errorText: controller.confirmPasswordError.value ,
             obscureText: true,
           ),
         ),
-        SizedBox(height: 28.h),
-        ShowUp(
+        SizedBox(height: 25.h),
+     ShowUp(
           delay: 800,
           child: MyDefaultButton(
+            errorText: controller.errorMessage.value,
             isloading: controller.isLoading.value,
-            btnText: 'SIGN UP',
+            btnText: 'Sign up',
             onPressed: () => controller.register(),
           ),
         ),
-        SizedBox(height: 35.h),
-        Opacity(
-            opacity: 0.60,
-            child: Text(
-              'or log in with',
-              textAlign: TextAlign.center,
-              style: primaryTextStyle(
-                color: Colors.black,
-                size: 12.sp.round(),
-                weight: FontWeight.w400,
-                letterSpacing: 0.24,
-              ),
-            )),
-        SizedBox(height: 23.h),
-        gridSocialIcon(),
-        SizedBox(height: 40.h),
+        SizedBox(height: 15.h),
         ShowUp(
-          delay: 500,
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Already have an account?',
+          delay: 400,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Already have an account?',
+                textAlign: TextAlign.center,
+                style: primaryTextStyle(
+                  color: Color(0xFF555662),
+                  size: 13.sp.round(),
+                  weight: FontWeight.w400,
+
+
+                ),
+              ),
+              GestureDetector(
+                onTap: (){
+                  controller.clearFields();
+                  Get.to(() => LoginView());
+                },
+                child: Text(
+                  'Log in',
+                  textAlign: TextAlign.center,
                   style: primaryTextStyle(
-                    color: Colors.black,
-                    size: 14.sp.round(),
+                    color: primaryColor,
+                    size: 13.sp.round(),
                     weight: FontWeight.w400,
+
                   ),
                 ),
-                TextSpan(
-                  text: '   ',
-                  style: primaryTextStyle(
-                    color: const Color(0xFF979C9E),
-                    size: 12.sp.round(),
-                    weight: FontWeight.w400,
-                  ),
-                ),
-                TextSpan(
-                  text: 'Log In',
-                  style: primaryTextStyle(
-                    color: const Color(0xFFAA61FF),
-                    size: 14.sp.round(),
-                    weight: FontWeight.w400,
-                    height: 2,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      controller.clearFields();
-                      Get.to(() => LoginView());
-                    },
-                ),
-              ],
-            ),
-            textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 40.h),
+
+        SizedBox(height: 25.h),
+
+        Row(
+          children: [
+
+            Expanded(
+              child: Container(
+                height: 1,
+
+                color: Colors.grey[300],
+              ),
+            ),
+            SizedBox(width: 10.w,),
+            Text("Sign up with", style: primaryTextStyle(
+                weight: FontWeight.w400,
+                size: 16.sp.round(),
+                color: Color(0xff10001F)
+            ),),
+            SizedBox(width: 10.w,),
+            Expanded(
+              child: Container(
+                height: 1,
+
+                color: Colors.grey[300],
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width - 60.w,
+          height: 80.h,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: SizedBox(
+                    height: 55.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/icons/facebook.svg", color: Colors.blue,),
+                        SizedBox(width: 10.w,),
+                        Text("Facebook",
+                          style: primaryTextStyle(color: Colors.black,
+                              size: 15.sp.round(), weight: FontWeight.w300
+                          ),),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 15.w,),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: SizedBox(
+                    height: 55.h,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/icons/google.svg"),
+                        SizedBox(width: 10.w,),
+                        Text("Google", style: primaryTextStyle(
+                            color: Colors.black,
+                            size: 15.sp.round(), weight: FontWeight.w300),),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+
+            ],
+          ),
+        )
+
       ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      return Scaffold(
-        appBar: CustomAppBar(),
-        body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ShowUp(
-                  delay: 200,
-                  child: SvgPicture.asset(
-                    LOGO,
-                    width: 124.w,
-                    height: 82.h,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(height: 13.h),
-                registerForm(context),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
-  }
 }

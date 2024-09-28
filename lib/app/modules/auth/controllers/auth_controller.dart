@@ -1,27 +1,40 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'dart:ui';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/services.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/app/modules/global/config/constant.dart';
-import 'package:jiffy/app/modules/global/model/model_response.dart';
-import 'package:jiffy/app/modules/services/api_service.dart';
+
 import 'package:dio/dio.dart' as dio;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart' as authTest;
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:jiffy/main.dart';
+
+import '../../../../main.dart';
 import '../../../routes/app_pages.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../global/config/constant.dart';
+import '../../global/model/model_response.dart';
+import '../../services/api_service.dart';
+import '../views/create_new_password_view.dart';
+import '../views/login_view.dart';
+import '../views/password_updated.dart';
+import '../views/verification_code_view.dart';
+
 class AuthController extends GetxController {
   var email = ''.obs;
+  var company = ''.obs;
   var password = ''.obs;
   var confirmPassword = ''.obs;
   var firstName = ''.obs;
   var lastName = ''.obs;
   var emailError = ''.obs;
+  var companyError = ''.obs;
   var passwordError = ''.obs;
   var isGuest = false.obs;
   var confirmPasswordError = ''.obs;
@@ -31,6 +44,7 @@ class AuthController extends GetxController {
   var firstNameError = ''.obs;
   var lastNameError = ''.obs;
   var googleSignIn = GoogleSignIn();
+  var  errorMessage = ''.obs;
 
   authTest.FirebaseAuth auth = authTest.FirebaseAuth.instance;
 
@@ -38,6 +52,12 @@ class AuthController extends GetxController {
   String deviceId = '';
   FirebaseMessaging? messaging;
 
+
+  RxBool isEnded = false.obs;
+  RxInt timer = 20.obs;
+  RxInt tweenId = 0.obs;
+  int randomId = 0;
+  RxBool isResetDone = false.obs;
   @override
   void onReady() {
     super.onReady();
@@ -154,6 +174,21 @@ class AuthController extends GetxController {
     });
   }
 
+
+  bool isUser = true;
+  Future<void> getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var isUserValue = prefs.getBool('isUser');
+    if (isUserValue != null) {
+      if (isUserValue == false) {
+        isUser = false;
+      } else {
+        isUser = true;
+      }
+    }
+    print("isUser: $isUser");
+  }
+
   Future<void> appleLogin() async {
     try {
       isLoading.value = true;
@@ -242,7 +277,10 @@ class AuthController extends GetxController {
       }
     }
   }
-
+ String userType = "user";
+  setUser(value){
+    userType = value;
+  }
   void register() async {
     bool isValid = validateFirstName() &
         validateLastName() &
@@ -258,9 +296,10 @@ class AuthController extends GetxController {
         'email': email.value,
         'password': password.value,
         'password_confirmation': confirmPassword.value,
-        'imei': deviceId, // استخدام معرف الجهاز الديناميكي الفريد
-        'token': fcmToken.isEmpty ? 'test' : fcmToken, // FCM token
-        'device_type': GetPlatform.isAndroid ? 'android' : 'ios',
+        'type': userType,
+        // 'imei': deviceId, // استخدام معرف الجهاز الديناميكي الفريد
+        // 'token': fcmToken.isEmpty ? 'test' : fcmToken, // FCM token
+        // 'device_type': GetPlatform.isAndroid ? 'android' : 'ios',
       });
       try {
         final response = await apiConsumer.post(
@@ -279,11 +318,12 @@ class AuthController extends GetxController {
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
-
-          Get.offNamedUntil(Routes.MAIN, (Route) => false);
+Get.toNamed(Routes.LOGIN);
+          // Get.offNamedUntil(Routes.MAIN, (Route) => false);
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
+          errorMessage.value = apiResponse.message ?? "Error Happened";
           print('Registration failed: ${response.statusMessage}');
         }
         isLoading.value = false;
@@ -294,6 +334,7 @@ class AuthController extends GetxController {
         print('Registration failed:  ${e} $stackTrace');
         final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
         handleApiErrorUser(apiResponse.message);
+        errorMessage.value = apiResponse.message ?? "Error Happened";
       }
     }
   }
@@ -360,9 +401,9 @@ class AuthController extends GetxController {
       var formData = dio.FormData.fromMap({
         'email': email.value,
         'password': password.value,
-        'token': fcmToken.isEmpty ? 'test' : fcmToken, // FCM token
-        'imei': deviceId, // استخدام معرف الجهاز الديناميكي الفريد
-        'device_type': GetPlatform.isAndroid ? 'android' : 'ios',
+        // 'token': fcmToken.isEmpty ? 'test' : fcmToken, // FCM token
+        // 'imei': deviceId, // استخدام معرف الجهاز الديناميكي الفريد
+        // 'device_type': GetPlatform.isAndroid ? 'android' : 'ios',
       });
       try {
         final response = await apiConsumer.post(
@@ -382,25 +423,290 @@ class AuthController extends GetxController {
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
-          Get.offNamedUntil(Routes.MAIN, (Route) => false);
+          Get.off(HomeScreen());
+           // Get.offUntil(LoginView(), (Route) => false);
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
+          errorMessage.value = apiResponse.message ?? "Error Happened";
+          HapticFeedback.vibrate();
         }
       } catch (e, stackTrace) {
         isLoading.value = false;
         isGuest.value = false;
         print('Login failed: ${e}');
-        final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
-        handleApiErrorUser(apiResponse.message);
+        // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
+        // handleApiErrorUser(apiResponse.message);
+        errorMessage.value = "Please Check Email and Password and Try Again";
+        HapticFeedback.vibrate();
       }
     }
   }
 
+  void forgotPassword() async {
+
+
+    if (validateEmail()) {
+      isLoading.value = true;
+      globalController.errorMessage.value = '';
+      var formData = dio.FormData.fromMap({
+        'email': email.value,
+
+      });
+      try {
+        await saveStringToPrefs("reset_email", email.value);
+
+        final response = await apiConsumer.post(
+          '/password/forget',
+          formDataIsEnabled: true,
+          formData: formData,
+        );
+
+        isLoading.value = false;
+        final apiResponse = ApiResponse.fromJson(response);
+        if (apiResponse.status == 'success') {
+          print("sent successful");
+          clearFields();
+          Get.off(const VerificationCodeView());
+
+        } else {
+          handleApiErrorUser(apiResponse.message);
+          handleApiError(response.statusCode);
+          // Get.snackbar("Error", apiResponse.message?? "Error Happened");
+          errorMessage.value = apiResponse.message ?? "Error Happened";
+        }
+      } catch (e, stackTrace) {
+        isLoading.value = false;
+        isGuest.value = false;
+        print('Login failed: ${e}');
+
+        // Get.snackbar("Error", e.toString()?? "Error Happened");
+        // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
+        // handleApiErrorUser(apiResponse.message);
+        errorMessage.value = "Error Happened Please Try Again";
+      }
+    }
+  }
   Future<void> cacheUserData(UserData data) async {
     final prefs = await SharedPreferences.getInstance();
     final userDataString = jsonEncode(data.toJson());
     await prefs.setString('user_data', userDataString);
     print('User data cached: $userDataString');
   }
+
+
+   RxString myPassword = "".obs;
+
+ RxInt passwordStrength = 0.obs;
+ Rx<Color> strengthColor = const Color(0xFFBBBBBB).obs;
+ RxString passwordDescription = "".obs;
+  void checkPasswordStrength(String value) {
+    myPassword.value = value.trim();
+
+    if (myPassword.isEmpty) {
+      passwordStrength.value = 0;
+      passwordDescription.value = "Very Weak";
+strengthColor.value =  Color(0xFFB80F28);
+    } else if (myPassword.value.length > 5 && myPassword.value.length < 8) {
+      passwordStrength.value = 1;
+
+      strengthColor.value =  Color(0xFFF79B00);
+      passwordDescription.value = "Weak";
+    } else if (myPassword.value.length == 8) {
+      passwordStrength.value = 2;
+      passwordDescription.value = "Moderate";
+      strengthColor.value =  Color(0xFFCBF7B8);
+    } else if (myPassword.value.length > 8 && myPassword.contains(RegExp(r'[0-9]')) && myPassword.contains(RegExp(r'[a-zA-Z]'))) {
+      passwordStrength.value = 3;
+      passwordDescription.value = "Strong";
+      strengthColor.value =  Color(0xFF2EB070);
+    } else {
+
+    }
+  }
+
+
+  startTimer() async {
+    randomTheId();
+    tweenId.value = randomId;
+    isEnded.value = false;
+
+
+  }
+  endTimer() {
+    isEnded.value = true;
+  }
+  randomTheId() {
+    randomId = Random().nextInt(999999);
+  }
+
+RxBool isValidOTP = false.obs;
+  RxBool isCorrectOTP = false.obs;
+  RxBool isTyping = true.obs;
+  String otpValue = "";
+
+
+  validateOTP(otp) {
+    isTyping.value = true;
+    otpValue = otp;
+    if (otp.length == 5) {
+      isValidOTP.value = true;
+      print("isvalid true");
+      // sendOTP(false);
+    } else {
+      isValidOTP.value = false;
+      print("isvalid false");
+
+    }
+    // if (otp == "11111") {
+    //   Get.to(() => const CreateNewPasswordView());
+    // }
+  }
+
+
+  resetPassword() async{
+    if(validateConfirmPassword() && validatePassword()){
+      isLoading.value = true;
+      String? email = await getStringFromPrefs("reset_email");
+      String? otp = await getStringFromPrefs("reset_otp");
+      var formData = dio.FormData.fromMap({
+        'email': email,
+        'otp': otp,
+        'password': password.value,
+        'password_confirmation': confirmPassword.value
+      });
+      try {
+        print("your form data is ${formData.fields}");
+        final response = await apiConsumer.post(
+          'password/reset',
+          formDataIsEnabled: true,
+          formData: formData,
+        );
+
+        isLoading.value = false;
+        final apiResponse = ApiDataResponse.fromJson(response);
+        if (apiResponse.status == 'success') {
+          print("reset successful");
+
+
+          clearFields();
+          Get.offAll(const PasswordUpdated());
+          isLoading.value = false;
+          return true;
+          // Get.offAll(const CreateNewPasswordView());
+          // Get.off(HomeScreen());
+          // Get.offUntil(LoginView(), (Route) => false);
+        } else {
+          handleApiErrorUser(apiResponse.message);
+          handleApiError(response.statusCode);
+          errorMessage.value = apiResponse.message ?? "Error Happened Please Try Again";
+          HapticFeedback.vibrate();
+          isLoading.value = false;
+          return false;
+        }
+      } catch (e, stackTrace) {
+        isLoading.value = false;
+
+        print('otp failed: ${e}');
+        // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
+        // handleApiErrorUser(apiResponse.message);
+        errorMessage.value = "Error Happened Please Try Again";
+        HapticFeedback.vibrate();
+        isLoading.value = false;
+        return false;
+      }
+      Get.off(const PasswordUpdated());
+    }
+  }
+  Future<dynamic> sendOTP(isFromButton) async {
+    isLoading.value = true;
+    isTyping.value = false;
+    print("isTyping ${isTyping.value}");
+
+    if(await checkOTP()){
+
+      isCorrectOTP.value = true;
+      print("correct otp yes");
+      if(isFromButton){
+        Get.offAll(const CreateNewPasswordView());
+      }
+      isLoading.value = false;
+    } else {
+      isCorrectOTP.value = false;
+      print("correct otp no");
+      isLoading.value = false;
+    }
+
+
+
+
+
+  }
+
+  Future<bool> checkOTP() async{
+    String? email = await getStringFromPrefs("reset_email");
+    saveStringToPrefs("reset_otp", otpValue);
+    var formData = dio.FormData.fromMap({
+      'email': email,
+      'otp': otpValue,
+    });
+    try {
+      print("your form data is ${formData.fields}");
+      final response = await apiConsumer.post(
+        'password/verify',
+        formDataIsEnabled: true,
+        formData: formData,
+      );
+
+      isLoading.value = false;
+      final apiResponse = ApiDataResponse.fromJson(response);
+      if (apiResponse.status == 'success') {
+        print("otp successful");
+
+
+        clearFields();
+        return true;
+        // Get.offAll(const CreateNewPasswordView());
+        // Get.off(HomeScreen());
+        // Get.offUntil(LoginView(), (Route) => false);
+      } else {
+        handleApiErrorUser(apiResponse.message);
+        handleApiError(response.statusCode);
+        errorMessage.value = apiResponse.message ?? "Please Check OTP and Try Again";
+        HapticFeedback.vibrate();
+        return false;
+      }
+    } catch (e, stackTrace) {
+      isLoading.value = false;
+
+      print('otp failed: ${e}');
+      // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
+      // handleApiErrorUser(apiResponse.message);
+      errorMessage.value = "Please Check OTP and Try Again";
+      HapticFeedback.vibrate();
+      return false;
+    }
+  }
+
+  Future<String?> getStringFromPrefs(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
+  Future<void> saveStringToPrefs(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  Future<void> removeStringFromPrefs(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(key);
+  }
+
+
+
+
+
 }
+
+

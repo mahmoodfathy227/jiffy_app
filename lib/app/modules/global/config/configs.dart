@@ -6,7 +6,7 @@ const APP_NAME = 'jiffy';
 var defaultPrimaryColor = Color(0xFF4F0099);
 
 const DOMAIN_URL =
-    'https://panel.jiffy.com'; // Don't add slash at the end of the url
+    'https://jiffy.genixarea.pro'; // Don't add slash at the end of the url
 const BASE_URL = '$DOMAIN_URL/api/';
 
 const DEFAULT_LANGUAGE = 'en';

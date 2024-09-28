@@ -98,6 +98,22 @@ class ApiResponse {
   }
 }
 
+class ApiDataResponse {
+  final String? status;
+  final String? message;
+  final dynamic data;
+
+  ApiDataResponse({required this.status, required this.message, this.data});
+
+  factory ApiDataResponse.fromJson(Map<String, dynamic> json) {
+    return ApiDataResponse(
+      status: json['status'] ?? json['status'],
+      message: json['message'] ?? json['message'],
+      data: json['data'] ?? json['data'],
+    );
+  }
+}
+
 class ApiCategoryResponse {
   String? status;
   String? message;
@@ -442,30 +458,7 @@ class Unit {
   }
 }
 
-class Category {
-  int? id;
-  String? name;
-  String? slug;
-  Null? image;
 
-  Category({this.id, this.name, this.slug, this.image});
-
-  Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    slug = json['slug'];
-    image = json['image'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['slug'] = this.slug;
-    data['image'] = this.image;
-    return data;
-  }
-}
 
 class ApiCollectionsResponse {
   String? status;
