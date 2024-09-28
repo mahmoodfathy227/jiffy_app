@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
+import 'package:jiffy/app/modules/onboarding/views/onboarding_view.dart';
+import 'package:flutter/animation.dart';
 
 class OnboardingController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -50,12 +53,12 @@ class OnboardingController extends GetxController
   void initializeControllers() {
     scaleWelcomeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 500),
     );
 
     fadeWelcomeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 500),
     );
 
     scaleController = AnimationController(
@@ -70,7 +73,7 @@ class OnboardingController extends GetxController
 
     rotationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 800),
     );
 
     textController = AnimationController(
@@ -85,7 +88,7 @@ class OnboardingController extends GetxController
     // Initialize the slide-up animation controller
     slideUpController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 650), // Duration for slide-up
+      duration: const Duration(milliseconds: 500), // Duration for slide-up
     );
 
     // Define the slide-up animation (starts from off-screen and moves up)
@@ -96,6 +99,7 @@ class OnboardingController extends GetxController
       parent: slideUpController!,
       curve: Curves.easeInOut,
     ));
+
     scaleWelcomeAnimation = Tween<double>(
       begin: 9, // Start zoomed in
       end: 1.0, // Scale to normal size
@@ -115,7 +119,7 @@ class OnboardingController extends GetxController
     // Background and Image animations
     backgroundScaleAnimation = Tween<double>(
       begin: 1.0, // Start at normal size
-      end: 1.1, // Slight zoom
+      end: 1.15, // Slight zoom
     ).animate(CurvedAnimation(
       parent: scaleController!,
       curve: Curves.easeInOut,
@@ -128,13 +132,12 @@ class OnboardingController extends GetxController
       parent: fadeController!,
       curve: Curves.easeInOut,
     ));
-
     imageRotationAnimation = Tween<double>(
-      begin: -0.05, // Slight counterclockwise rotation
-      end: 0.05, // Rotate back and forth
+      begin: -0.0833, // بدء الدوران من -30 درجة (الربع الرابع)
+      end: 0, // العودة للوضع الطبيعي (0 درجة)
     ).animate(CurvedAnimation(
       parent: rotationController!,
-      curve: Curves.easeInOut,
+      curve: Curves.easeInOut, // لضمان حركة سلسة
     ));
 
     imageFadeAnimation = Tween<double>(
@@ -147,7 +150,7 @@ class OnboardingController extends GetxController
 
     // Text animations (Title and description)
     titleSlideAnimation = Tween<Offset>(
-      begin: Offset(0, 1), // Slide in from below
+      begin: Offset(0, 1.3), // Slide in from below
       end: Offset(0, 0), // End at normal position
     ).animate(CurvedAnimation(
       parent: textController!,
@@ -155,7 +158,7 @@ class OnboardingController extends GetxController
     ));
 
     descSlideAnimation = Tween<Offset>(
-      begin: Offset(0, 1), // Slide in from below
+      begin: Offset(0, 1.3), // Slide in from below
       end: Offset(0, 0),
     ).animate(CurvedAnimation(
       parent: textController!,
@@ -172,7 +175,6 @@ class OnboardingController extends GetxController
   }
 
   // Starts the initial animations when the first page is loaded
-// Starts the initial animations when the first page is loaded
   void startInitialAnimations() {
     scaleController?.forward();
     fadeController?.forward();

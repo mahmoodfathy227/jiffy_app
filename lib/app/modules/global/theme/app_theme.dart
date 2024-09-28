@@ -130,6 +130,7 @@ TextStyle primaryTextStyle({
   TextBaseline? textBaseline,
   Color? decorationColor,
   Color? backgroundColor,
+  List<Shadow>? shadows ,
   double? height,
 }) {
   return TextStyle(
@@ -145,6 +146,7 @@ TextStyle primaryTextStyle({
     decorationColor: decorationColor,
     wordSpacing: wordSpacing,
     textBaseline: textBaseline,
+    shadows: shadows,
     backgroundColor: backgroundColor,
     height: height,
   );

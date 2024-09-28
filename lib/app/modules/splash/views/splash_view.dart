@@ -16,18 +16,18 @@ class SplashScreen extends StatelessWidget {
       body: GestureDetector(
         onTap: () {
           // إعادة تشغيل الأنيميشن عند النقر
-          splashController.animationController!.reset();
-          splashController.animationController!.forward();
+          splashController.restartAnimation();
         },
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // الشعار مع أنيميشن Fade In + Scale
-              FadeTransition(
-                opacity: splashController.fadeAnimation!,
-                child: ScaleTransition(
-                  scale: splashController.scaleAnimation!,
+              // الشعار مع أنيميشن Fade Out + Scale
+              ScaleTransition(
+                scale: splashController.scaleAnimation, // زوم للشعار
+                child: FadeTransition(
+                  opacity:
+                      splashController.fadeAnimation, // اختفاء تدريجي للشعار
                   child: SvgPicture.asset('assets/images/splash/logo.svg',
                       width: 90.w), // الشعار
                 ),

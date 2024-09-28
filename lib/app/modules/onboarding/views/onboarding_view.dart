@@ -84,44 +84,47 @@ class OnboardingView extends StatelessWidget {
                     return Positioned(
                       top: 547.1.h,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SlideTransition(
-                              position: controller.titleSlideAnimation!,
-                              child: Text(
-                                title,
-                                style: primaryTextStyle(
-                                  color: Colors.white,
-                                  size: 30.sp.round(),
-                                  weight: FontWeight.normal,
-                                  height: 1.5,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            SlideTransition(
-                              position: controller.descSlideAnimation!,
-                              child: SizedBox(
-                                width: 300.w,
-                                child: Center(
+                          width: MediaQuery.of(context).size.width,
+                          child: FadeTransition(
+                            opacity: controller
+                                .textFadeAnimation!, // استخدام الفيد التدريجي للنص
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SlideTransition(
+                                  position: controller.titleSlideAnimation!,
                                   child: Text(
-                                    description,
-                                    textAlign: TextAlign.center,
+                                    title,
                                     style: primaryTextStyle(
                                       color: Colors.white,
-                                      size: 12.sp.round(),
+                                      size: 30.sp.round(),
                                       weight: FontWeight.normal,
-                                      height: 1.64,
+                                      height: 1.5,
                                     ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(height: 10.h),
+                                SlideTransition(
+                                  position: controller.descSlideAnimation!,
+                                  child: SizedBox(
+                                    width: 300.w,
+                                    child: Center(
+                                      child: Text(
+                                        description,
+                                        textAlign: TextAlign.center,
+                                        style: primaryTextStyle(
+                                          color: Colors.white,
+                                          size: 12.sp.round(),
+                                          weight: FontWeight.normal,
+                                          height: 1.64,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          )),
                     );
                   }),
 
@@ -271,41 +274,61 @@ class OnboardingView extends StatelessWidget {
                           children: [
                             // Outer shadow (drop shadow)
                             Text(
-                              'Get Started !',
+                              'Get Started!',
                               textAlign: TextAlign.center,
                               style: primaryTextStyle(
                                 size: 48.sp.round(),
                                 weight: FontWeight.w700,
-                                color: Colors.white.withOpacity(0.95),
+                                color: Colors.white.withOpacity(1),
                                 letterSpacing: -1.20,
+                                shadows: [
+                                  // Shadow 1: light shadow
+                                  Shadow(
+                                    offset: Offset(2, 2), // اتجاه الظل
+                                    blurRadius: 4, // درجة التمويه
+                                    color: Colors.black
+                                        .withOpacity(0.15), // لون الظل الخفيف
+                                  ),
+                                  // Shadow 2: medium shadow
+                                  Shadow(
+                                    offset: Offset(4, 4),
+                                    blurRadius: 8,
+                                    color: Colors.black
+                                        .withOpacity(0.10), // لون الظل المتوسط
+                                  ),
+                                  // Shadow 3: strong shadow
+                                  Shadow(
+                                    offset: Offset(6, 6),
+                                    blurRadius: 12,
+                                    color: Colors.black
+                                        .withOpacity(0.05), // لون الظل الأقوى
+                                  ),
+                                ],
                               ),
                             ),
-                            Positioned(
-                              top:
-                                  4, // Adjust the positioning for the inner shadow effect
-                              left: 0,
-                              right: 0,
-                              child: ShaderMask(
-                                shaderCallback: (bounds) {
-                                  return LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      Colors.black.withOpacity(0.25),
-                                      Colors.transparent,
-                                    ],
-                                  ).createShader(bounds);
-                                },
-                                blendMode: BlendMode.srcIn,
-                                child: Text(
-                                  'Get Started !',
-                                  textAlign: TextAlign.center,
-                                  style: primaryTextStyle(
-                                    size: 48.sp.round(),
-                                    weight: FontWeight.w700,
-                                    color: Colors.white, // Main text color
-                                    letterSpacing: -1.20,
-                                  ),
+                            // Inner shadow using Gradient
+                            ShaderMask(
+                              shaderCallback: (bounds) {
+                                return LinearGradient(
+                                  colors: [
+                                    Colors.black
+                                        .withOpacity(0.2), // يبدأ بلون داكن
+                                    Colors.transparent, // تدريجيًا إلى الشفافية
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ).createShader(bounds);
+                              },
+                              blendMode: BlendMode.dstIn,
+                              child: Text(
+                                'Get Started!',
+                                textAlign: TextAlign.center,
+                                style: primaryTextStyle(
+                                  size: 48.sp.round(),
+                                  weight: FontWeight.w700,
+                                  color: Colors
+                                      .white, // Main text color (can be changed or omitted)
+                                  letterSpacing: -1.20,
                                 ),
                               ),
                             ),
@@ -393,7 +416,8 @@ class OnboardingView extends StatelessWidget {
             child: ScaleTransition(
               scale: controller.backgroundScaleAnimation!,
               child: RotationTransition(
-                turns: controller.rotationController!,
+                turns: controller
+                    .imageRotationAnimation!, // استخدام الأنيميشن المعدل هنا
                 child: ClipOval(
                   child: Image.asset(
                     centerImagePath,
