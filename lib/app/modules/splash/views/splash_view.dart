@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
                 scale: splashController.scaleAnimation, // زوم للشعار
                 child: FadeTransition(
                   opacity:
-                  splashController.fadeAnimation, // اختفاء تدريجي للشعار
+                      splashController.fadeAnimation, // اختفاء تدريجي للشعار
                   child: SvgPicture.asset('assets/images/splash/logo.svg',
                       width: 90.w), // الشعار
                 ),

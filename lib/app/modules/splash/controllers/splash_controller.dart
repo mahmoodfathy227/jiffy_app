@@ -52,7 +52,7 @@ class SplashController extends GetxController
     });
 
     //Navigate to the next screen after both animations are complete
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    Future.delayed(const Duration(seconds: 4), () {
       Get.off(() => OnboardingView(),
           transition: Transition.fadeIn, duration: const Duration(seconds: 1));
     });
