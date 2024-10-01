@@ -199,9 +199,9 @@ class MyApp extends StatelessWidget {
                               useInheritedMediaQuery: true,
                               title: APP_NAME,
                               theme: AppTheme.lightTheme(color: snap.data),
-                              // initialRoute: Routes.SPLASH,
-                              // initialBinding: SplashBinding(),
-                              home: const ProductView(),
+                              initialRoute: Routes.SPLASH,
+                              initialBinding: SplashBinding(),
+                              // home: const ProductView(),
                               getPages: AppPages.routes,
                             ));
                   });

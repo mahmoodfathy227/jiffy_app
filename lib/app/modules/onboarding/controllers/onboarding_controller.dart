@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/app/modules/onboarding/views/onboarding_view.dart';
 import 'package:flutter/animation.dart';
-import 'package:jiffy/app/modules/auth/views/login_view.dart';
-import 'package:flutter/services.dart';
+
+import '../../../routes/app_pages.dart';
+
 class OnboardingController extends GetxController
     with SingleGetTickerProviderMixin {
   // Observable variables for page tracking
@@ -185,7 +186,6 @@ class OnboardingController extends GetxController
 
   // Restarts the onboarding process by resetting and starting animations
   void restartOnboarding() {
-    print("restarting...");
     // Reset the current page
     currentPage.value = 0;
     previousPage.value = -1;
@@ -195,14 +195,6 @@ class OnboardingController extends GetxController
 
     // Reset and forward all animations
     resetAndForwardAllAnimations();
-  }
-
-
-//login navigation after onboarding
-  navigateToLogin(){
-    HapticFeedback.vibrate();
-
-    Get.off(LoginView());
   }
 
   // Handles the transition to the next page with synchronized animations
@@ -231,6 +223,11 @@ class OnboardingController extends GetxController
 
       currentPage.value = 3; // Set to welcome page
     }
+  }
+
+
+  navigateToLogin(){
+   Get.offAllNamed(Routes.LOGIN);
   }
 
   // Resets and starts all animations for the current page
