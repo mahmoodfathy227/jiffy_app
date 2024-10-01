@@ -11,6 +11,7 @@ import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
+import 'package:jiffy/app/modules/help/bindings/help_binding.dart';
 import 'package:restart_app/restart_app.dart';
 
 import 'package:shorebird_code_push/shorebird_code_push.dart';
@@ -199,9 +200,11 @@ class MyApp extends StatelessWidget {
                               useInheritedMediaQuery: true,
                               title: APP_NAME,
                               theme: AppTheme.lightTheme(color: snap.data),
-                              initialRoute: Routes.SPLASH,
-                              initialBinding: SplashBinding(),
-                              // home: const ProductView(),
+                              // initialRoute: Routes.SPLASH,
+                              // initialBinding: SplashBinding(),
+                           initialRoute: Routes.HELP,
+                           initialBinding: HelpBinding(),
+                              //  home: const ProductView(),
                               getPages: AppPages.routes,
                             ));
                   });

@@ -31,7 +31,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      // appBar: const CustomAppBar(),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [

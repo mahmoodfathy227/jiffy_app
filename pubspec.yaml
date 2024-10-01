@@ -68,6 +68,9 @@ dependencies:
   share_plus:
   app_links:
   public_ip_address:
+  dotted_border:
+  auto_size_text:
+
   image: ^3.0.1
   scrollable_positioned_list:
   smooth_page_indicator:
@@ -105,4 +108,5 @@ flutter:
     - assets/images/splash/
     - assets/images/onboarding/
     - assets/images/forgot_password/
+    - assets/images/help/
     - shorebird.yaml

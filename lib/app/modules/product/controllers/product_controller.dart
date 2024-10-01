@@ -21,6 +21,7 @@ class ProductController extends GetxController {
   List<Attachments> productImages = [
 Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425403c991effaf0d605dadc42842?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=D9o6NPrgMRF9l43Jr4n-YQxpH2ZBdusAQ6ILW7n9F7w2c0tLQVUt4dgAJ9V341F1tBbxAhA3QPSRXJpu9wdcd3NaBqv3vRCghsXGt1~m~1LIfcUPjea8N5KVZ-mE5KEsNnoiWiCDCRUyMJXwL2leEZYussnnroNWA4NyqqmbRn8Wfcs3QBIr43mnnRuGGitJbHZszJWvzjhwtEIQZYnKY03pIglyFwvvmOL75744EJVEWlSgkGcBC6PNpicohiKMHti6HAdm1VS2HOercx4npHoptbLZhP6Mxb-d92LlZwCj09e1DeH~oAHGjy5Wpzpy6Urnwk5tR4tvcgPpJcjL7g__", type: ""),
     Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425403c991effaf0d605dadc42842?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=D9o6NPrgMRF9l43Jr4n-YQxpH2ZBdusAQ6ILW7n9F7w2c0tLQVUt4dgAJ9V341F1tBbxAhA3QPSRXJpu9wdcd3NaBqv3vRCghsXGt1~m~1LIfcUPjea8N5KVZ-mE5KEsNnoiWiCDCRUyMJXwL2leEZYussnnroNWA4NyqqmbRn8Wfcs3QBIr43mnnRuGGitJbHZszJWvzjhwtEIQZYnKY03pIglyFwvvmOL75744EJVEWlSgkGcBC6PNpicohiKMHti6HAdm1VS2HOercx4npHoptbLZhP6Mxb-d92LlZwCj09e1DeH~oAHGjy5Wpzpy6Urnwk5tR4tvcgPpJcjL7g__", type: ""),
+    Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425403c991effaf0d605dadc42842?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=D9o6NPrgMRF9l43Jr4n-YQxpH2ZBdusAQ6ILW7n9F7w2c0tLQVUt4dgAJ9V341F1tBbxAhA3QPSRXJpu9wdcd3NaBqv3vRCghsXGt1~m~1LIfcUPjea8N5KVZ-mE5KEsNnoiWiCDCRUyMJXwL2leEZYussnnroNWA4NyqqmbRn8Wfcs3QBIr43mnnRuGGitJbHZszJWvzjhwtEIQZYnKY03pIglyFwvvmOL75744EJVEWlSgkGcBC6PNpicohiKMHti6HAdm1VS2HOercx4npHoptbLZhP6Mxb-d92LlZwCj09e1DeH~oAHGjy5Wpzpy6Urnwk5tR4tvcgPpJcjL7g__", type: ""),
 
 
   ];
@@ -113,7 +114,15 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
     }
   }
 
-  List<ReviewsModel> reviews = [];
+  List<ReviewsModel> reviews = [
+    ReviewsModel(
+      id: 1,
+      customer: "John Doe",
+      title: "Loved it",
+      comment: "This is a great product. I really enjoyed using it. I will definitely buy it again.",
+      rating: 4
+    )
+  ];
   bool isFirstTimeGettingReviews = false;
   bool isReviewsLoading = false;
 

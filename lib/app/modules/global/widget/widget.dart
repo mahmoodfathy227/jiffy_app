@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -446,10 +447,16 @@ class MyDefaultButton extends StatefulWidget {
   final Color? color;
   final Color? textColor;
   final bool isSelected;
-  final String? Icon;
+  final String Icon;
   final double? height;
   final bool isloading;
   final double? width;
+  final double borderRadius;
+  final bool isSecondaryTextStyle;
+  final int btnWidth;
+  final bool isPlainBackground;
+final int iconPadding;
+
 
   const MyDefaultButton({
     Key? key,
@@ -463,8 +470,13 @@ class MyDefaultButton extends StatefulWidget {
     this.textColor,
     this.height,
     this.width,
-    this.Icon,
+    this.Icon = "",
      this.errorText = "",
+    this.borderRadius = 10.0,
+     this.isSecondaryTextStyle = false,
+     this.btnWidth = 315,
+     this.isPlainBackground = false,
+     this.iconPadding = 10,
   }) : super(key: key);
 
   @override
@@ -506,12 +518,26 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
 
           },
           child: Container(
-            width: 315.w,
+
+            width: widget.btnWidth.w,
             height: widget.height ?? 50.h,
             clipBehavior: Clip.antiAlias,
 
             decoration: ShapeDecoration(
-              gradient: widget.isActive? const LinearGradient(
+
+              gradient:
+              widget.isPlainBackground ?
+              LinearGradient(
+                colors: [
+               Colors.transparent ,// Starting color (dark purple)
+                  Colors.transparent, // Ending color (light purple)
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              )
+:
+
+              widget.isActive? const LinearGradient(
                 colors: [
                   Color(0xFF6900CC), // Starting color (dark purple)
                   Color(0xFF20003D), // Ending color (light purple)
@@ -531,48 +557,74 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
               ,
               // color: primaryColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                side:
+                widget.isPlainBackground ?
+                BorderSide(color: primaryColor, width: 1)
+                :
+                BorderSide(color: Colors.transparent),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child:   Row(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // SvgPicture.asset(
-                //   widget.Icon ?? 'assets/icons/cart_in_button.svg',
-                //   width: 20.w,
-                //   height: 20.h,
-                // ),
-                // SizedBox(
-                //   width: 16.w,
-                // ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                        widget.localeText
-                            ? widget.btnText!.toUpperCase()
-                            : widget.btnText!,
-                        textAlign: TextAlign.center,
-                        style: primaryTextStyle(
-                          color: Colors.white,
-                          // color: widget.textColor ?? Color(0xFF21034F),
-                          size: 16.sp.round(),
-                          weight: FontWeight.w500,
-                        )),
-                    widget.isloading? SizedBox(width: 5.w,) : SizedBox(),
-                    widget.isloading?
-                    SizedBox(
-                      width: 20.w,
-                        height: 20.h,
-                        child: CircularProgressIndicator(strokeWidth: 4, color: Colors.grey[300],))
-                        :
-                    SizedBox(),
+                SizedBox(width:  widget.iconPadding *1.5.w,),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+
+                  maxWidth: screenWidth * 0.5
+
+                  ),
+                  child: Text(
+                      widget.localeText
+                          ? widget.btnText!.toUpperCase()
+                          : widget.btnText!,
+                      textAlign: TextAlign.center,
+                      style: !widget.isSecondaryTextStyle ?
+                      primaryTextStyle(
+                        color: Colors.white,
+                        // color: widget.textColor ?? Color(0xFF21034F),
+                        size: 16.sp.round(),
+                        weight: FontWeight.w500,
+                      )
+                          :
+                      secondaryTextStyle(
+                        weight:
+                        FontWeight.w300,
+                        size: 15.sp.round(),
+                        color:
+                        widget.isPlainBackground?
+                        primaryColor
+                            :
+                        Colors.white,
+                      )
 
 
-                  ],
+
+                  ),
                 ),
+
+
+
+                widget.Icon.isEmpty ?
+                const SizedBox():
+                Padding(
+                    padding:  EdgeInsets.only(left: widget.iconPadding.w),
+                    child: SvgPicture.asset(widget.Icon)),
+SizedBox(width: 12.w,),
+                widget.isloading? SizedBox(width: 5.w,) : SizedBox(),
+                widget.isloading?
+                Padding(
+                  padding:  EdgeInsets.only(right: 5.0.w),
+                  child: SizedBox(
+                      width: 20.w,
+                      height: 20.h,
+                      child: CircularProgressIndicator(strokeWidth: 4, color: Colors.grey[300],)),
+                )
+                    :
+                SizedBox(),
+
               ],
             ),
           ),
@@ -590,7 +642,8 @@ class CustomTextField extends StatefulWidget {
   final bool obscureText;
   final Color? LabelStyle;
   final double? width;
-
+  final double? height;
+final int maxLines;
   final String? icon;
   final ValueChanged<String>? onSubmitted;
   final TextEditingController? customTextEditingController;
@@ -608,7 +661,9 @@ class CustomTextField extends StatefulWidget {
     this.onSubmitted,
     this.customTextEditingController,
     this.width,
-    this.keyboardType = TextInputType.text,// Default to TextInputType.text
+    this.keyboardType = TextInputType.text,
+    this.height,
+     this.maxLines = 4,// Default to TextInputType.text
   });
 
   @override
@@ -643,17 +698,14 @@ if(widget.customTextEditingController != null){
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
 
-                    spreadRadius: -10, blurRadius: 30,
-                    offset: const Offset(0, 4)),],
-            ),
-            height: 55.h,
+            height: widget.height ?? 55.h,
+
             child: Material(
-              elevation: 2,
+
+                  color: Color(0xffFFFFFF),
+              elevation:2,
+shadowColor: Color(0xff00000033).withOpacity(0.4),
 
               borderRadius: BorderRadius.circular(10),
 
@@ -664,172 +716,201 @@ if(widget.customTextEditingController != null){
                   });
                 print("changed focus now ${hasFocus} ");
                 },
-                child: TextFormField(
+                child: Container(
 
-                  controller: widget.customTextEditingController,
-                  onChanged: (value) {
-                    widget.onChanged(value);
-                    setState(() {
-                      isValueEmpty = value.isEmpty;
-                    });
-                  },
-                  initialValue: widget.initialValue ?? '',
-                  obscureText: _obscureText,
-                  onFieldSubmitted: widget.onSubmitted,
-                  keyboardType: widget.keyboardType,
-                  style: secondaryTextStyle(
-                    color: Colors.black,
-                    size: 14.sp.round(),
-                    weight: FontWeight.w400,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                   ),
+                  child: TextFormField(
 
-                  decoration: InputDecoration(
-
-                    filled: true,
-                    fillColor:
-
-
-                    isFocused ?
-
-
-                    primaryBackgroundColor :Colors.white ,
-
-
-
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-
-                      borderSide:  BorderSide(
-                        color:
-                        widget.errorText.isNotEmpty?
-                        Colors.red
-                            :
-                        Colors.white,
-                        width: 0,
-                      ),
-                    ),
-
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-
-                      borderSide:  BorderSide(
-                        color:
-                        widget.errorText.isNotEmpty?
-                        Colors.red
-                            :
-                        primaryColor,
-                        width: 0,
-                      ),
-                    ),
-
-                    hintStyle: secondaryTextStyle(
+                    controller: widget.customTextEditingController,
+                    onChanged: (value) {
+                      widget.onChanged(value);
+                      setState(() {
+                        isValueEmpty = value.isEmpty;
+                      });
+                    },
+                    // initialValue: widget.initialValue ?? '',
+                    obscureText: _obscureText,
+maxLines: widget.maxLines,
+                    onFieldSubmitted: widget.onSubmitted,
+                    keyboardType: widget.keyboardType,
+                    style: secondaryTextStyle(
                       color: Colors.black,
                       size: 14.sp.round(),
                       weight: FontWeight.w400,
-                      height: 1,
                     ),
 
-                    // errorStyle: primaryTextStyle(
-                    //   color: Colors.red,
-                    //   size: 14.sp.round(),
-                    //   weight: FontWeight.w400,
-                    //   height: 1,
-                    // ),
+                    decoration: InputDecoration(
 
-                    helperStyle: secondaryTextStyle(
+                      filled: true,
+                      fillColor:
 
-                      color: Colors.red,
-                      size: 12.sp.round(),
-                      weight: FontWeight.w400,
-                      height: 1,
 
-                    ),
-                    label:
-                    !isFocused ?
-                    Container(
-                      width: 150.w,
-                      height: 40.h,
-                      color: isValueEmpty
-                          ? Colors.white : Color(0xffF9F3FF),
-                      child: Center(
-                        child: Text(widget.labelText, style: secondaryTextStyle(
-                          size:  13.sp.round(),
+                   Colors.white ,
+
+
+
+                      enabledBorder: OutlineInputBorder(
+
+                        borderRadius: BorderRadius.circular(10),
+
+                        borderSide:  BorderSide(
 
                           color:
-
                           widget.errorText.isNotEmpty?
-                            Colors.red
-                          :
+                          Colors.red
+                              :
+                          Colors.white,
+                          width: 1,
+                        ),
+                      ),
 
-                          isValueEmpty
-                              ?
+                      focusedBorder: OutlineInputBorder(
 
-                          Colors.grey[300]
-                          :
+                        borderRadius: BorderRadius.circular(10),
+
+                        borderSide:  BorderSide(
+                          color:
+                          widget.errorText.isNotEmpty?
+                          Colors.red
+                              :
                           primaryColor
                           ,
-                          weight: FontWeight.w400,
-
-                        ),
+                          width: 1,
                         ),
                       ),
-                    ):
-                    Container(
-                      width: 150.w,
-                      height: 40.h,
-                      color:
-                   const Color(0xffF9F3FF) ,
-                    child:
-                    Center(
-                      child: Text(widget.labelText, style: secondaryTextStyle(
-                      size:  13.sp.round() ,
-                          color:   widget.errorText.isNotEmpty?
-                          Colors.red
-                              :  primaryColor,
-                      weight: FontWeight.w400
-                    ),),),
+
+                      hintStyle: secondaryTextStyle(
+                        color: Colors.black,
+                        size: 14.sp.round(),
+                        weight: FontWeight.w400,
+                        height: 1,
+                      ),
+
+
+                      helperStyle: secondaryTextStyle(
+
+                        color: Colors.red,
+                        size: 12.sp.round(),
+                        weight: FontWeight.w400,
+                        height: 1,
+
+                      ),
+                      label:
+                      !isFocused ?
+                      FittedBox(
+                        child: Container(
+                        
+                          width: 250.w,
+                          height: 40.h,
+                          color: Colors.transparent,
+                          child:  Align(
+                            alignment: Alignment.centerLeft,
+                            child:
+
+                            Align(
+                              alignment:
+
+                              Alignment.centerLeft,
+                              child: AutoSizeText(
+
+
+                                widget.labelText,
+                                style:  secondaryTextStyle(
+                                  size:  8.sp.round(),
+
+                                  color:
+
+                                  widget.errorText.isNotEmpty?
+                                  Colors.red
+                                      :
+!isValueEmpty?
+                                  primaryColor
+:
+
+                                  Colors.grey[300]
+                                  ,
+                                  weight: FontWeight.w400,
+
+                                ), // Set an initial font size
+                                maxLines: 2, // Adjust as needed
+                              ),
+                            ),
+
+
+                          ),
+                        ),
+                      )
+                          :
+                      FittedBox(
+                        child: Container(
+                        
+                          width: 80.w,
+                          height: 40.h,
+                          color:
+                                             Colors.transparent,
+                        child:
+                        Center(
+                          child: AutoSizeText(
+
+
+                            widget.labelText,
+                            style: secondaryTextStyle(
+                                size:  8.sp.round() ,
+                                color:   widget.errorText.isNotEmpty?
+                                Colors.red
+                                    :  primaryColor,
+                                weight: FontWeight.w400
+                            ), // Set an initial font size
+                            maxLines: 2, // Adjust as needed
+                          ),
+                        )
+
+
+                        ),
+                      ),
+
+
+                      prefixIcon: widget.icon != null
+                          ? Padding(
+                        padding: EdgeInsets.all(12.w),
+                        child: SvgPicture.asset(
+                          widget.icon!,
+                          width: 13.w,
+                          height: 13.h,
+                        ),
+                      )
+                          : null,
+                      suffixIcon: widget.obscureText
+                          ? Padding(
+                        padding:  EdgeInsets.only(right: 5.w),
+                        child: IconButton(
+                          icon: SvgPicture.asset(
+                            _obscureText
+                                ? 'assets/images/auth/eye-slash.svg'
+                                : 'assets/images/auth/eye.svg',
+                            width: _obscureText ? 24.w : 24.w,
+                            height: _obscureText ? 24.h : 24.h,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
+                      )
+                          : null,
                     ),
-                    // labelStyle: secondaryTextStyle(
-                    //   color: widget.LabelStyle ??  Colors.grey[400],
-                    //
-                    //   size: 14.sp.round(),
-                    //   weight: FontWeight.w400,
-                    //   height: 1,
-                    // ),
-
-                    // errorText: widget.errorText,
-                    // helperText: widget.errorText,
-                    // labelText: widget.labelText,
-
-                    prefixIcon: widget.icon != null
-                        ? Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: SvgPicture.asset(
-                        widget.icon!,
-                        width: 13.w,
-                        height: 13.h,
-                      ),
-                    )
-                        : null,
-                    suffixIcon: widget.obscureText
-                        ? Padding(
-                      padding:  EdgeInsets.only(right: 5.w),
-                      child: IconButton(
-                        icon: SvgPicture.asset(
-                          _obscureText
-                              ? 'assets/images/auth/eye-slash.svg'
-                              : 'assets/images/auth/eye.svg',
-                          width: _obscureText ? 24.w : 24.w,
-                          height: _obscureText ? 24.h : 24.h,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      ),
-                    )
-                        : null,
                   ),
                 ),
               ),
@@ -1144,16 +1225,20 @@ class _SlideToastState extends State<SlideToast> with TickerProviderStateMixin {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? title;
+  final String title;
   final List<Widget>? actions;
   final Function()? function;
   final bool? back;
+  final String svgPath;
+  final VoidCallback myFunction;
 
   const CustomAppBar({
-    this.title,
+     this.title = "",
     this.actions,
     this.function,
     this.back,
+    this.svgPath = "assets/images/shopping-cart.svg",
+    required this.myFunction,
   });
 
   @override
@@ -1162,88 +1247,96 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return
-      SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 220.h,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            SvgPicture.asset("assets/images/eclipseAppBar.svg",
-            fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width,
-            ),
-            Padding(
-                padding: EdgeInsets.only(bottom: 100.h),
-
-child: Row(
-  children: [
-
-    IconButton(
-        onPressed: (){
-
-        },
-        icon:
-        Stack(
+      SingleChildScrollView(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 220.h,
+          child: Stack(
             alignment: Alignment.center,
             children: [
-              SvgPicture.asset(
-                "assets/images/close-circle.svg",
-
-
-              ),
-              SvgPicture.asset(
-                "assets/images/back_btn.svg",
-                width: 88.h,
-
-              ),
-
-            ]
-        )
-
-
-    ),
-
-    Spacer(),
-    Text("product" , style: secondaryTextStyle(
-      color: Colors.white,
-      weight: FontWeight.w700,
-      size: 22.sp.round(),
-    ),),
-    Spacer(),
-    IconButton(
-        onPressed: (){
-
-        },
-        icon:
-        Stack(
-            alignment: Alignment.center,
-            children: [
-              SvgPicture.asset(
-                "assets/images/close-circle.svg",
-
-
+              SvgPicture.asset("assets/images/eclipseAppBar.svg",
+              fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 4.h),
-                child: SvgPicture.asset(
-                  "assets/images/shopping-cart.svg",
-                  width: 22.h,
-
+                  padding: EdgeInsets.only(bottom: 100.h),
+        
+        child: Row(
+          children: [
+        
+            IconButton(
+          onPressed: (){
+        Get.back();
+          },
+          icon:
+          Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(
+                  "assets/images/close-circle.svg",
+        
+        
                 ),
-              ),
-
-            ]
-        )
-
-
-    ),
-
-
-
-  ],
-),
-            )
+                SvgPicture.asset(
+                  "assets/images/back_btn.svg",
+                  width: 88.h,
+        
+                ),
+        
+              ]
+          )
+        
+        
+            ),
+        
+            Spacer(),
+            Text(title , style: secondaryTextStyle(
+        color: Colors.white,
+        weight: FontWeight.w700,
+        size: 18.sp.round(),
+            ),),
+            Spacer(),
+            IconButton(
+          onPressed: (){
+        
+          },
+          icon:
+          Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(
+                  "assets/images/close-circle.svg",
+        
+        
+                ),
+                GestureDetector(
+                  onTap: (){
+                    myFunction;
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 4.h),
+                    child: SvgPicture.asset(
+                      svgPath,
+                      // "assets/images/shopping-cart.svg",
+                      width: 22.h,
+        
+                    ),
+                  ),
+                ),
+        
+              ]
+          )
+        
+        
+            ),
+        
+        
+        
           ],
+        ),
+              )
+            ],
+          ),
         ),
       );
 
@@ -3199,5 +3292,13 @@ Widget socialMediaPlaceHolder() {
             ),
           )),
     ],
+  );
+}
+
+myCustomDivider() {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 7.w),
+    height: 1,
+    color: Colors.grey[300],
   );
 }
