@@ -109,4 +109,5 @@ flutter:
     - assets/images/onboarding/
     - assets/images/forgot_password/
     - assets/images/help/
+    - assets/images/address/
     - shorebird.yaml

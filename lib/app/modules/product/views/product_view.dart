@@ -178,19 +178,21 @@ class ProductView extends GetView<ProductController> {
             );
         }),
       ),
-      floatingActionButton: SizedBox(
-        height: 90.h,
-        width: MediaQuery.of(context).size.width - 60.w,
-        child: FloatingActionButton(onPressed: (){},
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-        child: ShowUp(
-          delay: 200,
-          child:   _buildAddToCartButton(
-              context, controller.product.value),
-        )
-        ),
-      ),
+      floatingActionButton: buildFloatingButton(buttonName: 'Add to Cart', context: context,
+          onPressed: (){}),
+      // SizedBox(
+      //   height: 90.h,
+      //   width: MediaQuery.of(context).size.width - 60.w,
+      //   child: FloatingActionButton(onPressed: (){},
+      //       backgroundColor: Colors.transparent,
+      //       elevation: 0.0,
+      //   child: ShowUp(
+      //     delay: 200,
+      //     child:   _buildAddToCartButton(
+      //         context, controller.product.value),
+      //   )
+      //   ),
+      // ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       //Product Add To Cart Button
       // bottomNavigationBar: Obx(() {

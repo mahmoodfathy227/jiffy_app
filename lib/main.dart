@@ -7,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jiffy/app/modules/address/bindings/address_binding.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
@@ -28,6 +29,7 @@ import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 
+import 'app/modules/address/views/address_view.dart';
 import 'app/modules/global/model/test_model_response.dart';
 import 'app/modules/onboarding/controllers/onboarding_controller.dart';
 
@@ -202,9 +204,9 @@ class MyApp extends StatelessWidget {
                               theme: AppTheme.lightTheme(color: snap.data),
                               // initialRoute: Routes.SPLASH,
                               // initialBinding: SplashBinding(),
-                           initialRoute: Routes.HELP,
-                           initialBinding: HelpBinding(),
-                              //  home: const ProductView(),
+                           // initialRoute: Routes.ADDRESS,
+                           // initialBinding: AddressBinding(),
+                                home: const AddressView(),
                               getPages: AppPages.routes,
                             ));
                   });

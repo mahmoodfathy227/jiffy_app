@@ -39,6 +39,7 @@ import '../../auth/views/login_view.dart';
 import '../../auth/views/register_view.dart';
 import '../../services/api_consumer.dart';
 import '../../services/api_service.dart';
+import '../config/helpers.dart';
 
 final AuthController authcontroller = Get.put(AuthController());
 
@@ -591,8 +592,11 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
                           :
                       secondaryTextStyle(
                         weight:
-                        FontWeight.w300,
-                        size: 15.sp.round(),
+                        widget.isPlainBackground?
+                        FontWeight.w500
+                        :
+                        FontWeight.w700,
+                        size: 17.sp.round(),
                         color:
                         widget.isPlainBackground?
                         primaryColor
@@ -701,216 +705,206 @@ if(widget.customTextEditingController != null){
 
             height: widget.height ?? 55.h,
 
-            child: Material(
-
-                  color: Color(0xffFFFFFF),
-              elevation:2,
-shadowColor: Color(0xff00000033).withOpacity(0.4),
-
-              borderRadius: BorderRadius.circular(10),
-
-              child: Focus(
-                onFocusChange: (hasFocus) {
-                  setState(() {
-                    isFocused = hasFocus;
-                  });
+            child: Focus(
+              onFocusChange: (hasFocus) {
+                setState(() {
+                  isFocused = hasFocus;
+                });
                 print("changed focus now ${hasFocus} ");
-                },
-                child: Container(
+              },
+              child: Container(
 
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
+                    customBoxShadow
+                  ],
+                ),
+                child: TextFormField(
+
+                  controller: widget.customTextEditingController,
+                  onChanged: (value) {
+                    widget.onChanged(value);
+                    setState(() {
+                      isValueEmpty = value.isEmpty;
+                    });
+                  },
+                  // initialValue: widget.initialValue ?? '',
+                  obscureText: _obscureText,
+                  maxLines: widget.maxLines,
+                  onFieldSubmitted: widget.onSubmitted,
+                  keyboardType: widget.keyboardType,
+                  style: secondaryTextStyle(
+                    color: Colors.black,
+                    size: 14.sp.round(),
+                    weight: FontWeight.w400,
                   ),
-                  child: TextFormField(
 
-                    controller: widget.customTextEditingController,
-                    onChanged: (value) {
-                      widget.onChanged(value);
-                      setState(() {
-                        isValueEmpty = value.isEmpty;
-                      });
-                    },
-                    // initialValue: widget.initialValue ?? '',
-                    obscureText: _obscureText,
-maxLines: widget.maxLines,
-                    onFieldSubmitted: widget.onSubmitted,
-                    keyboardType: widget.keyboardType,
-                    style: secondaryTextStyle(
+                  decoration: InputDecoration(
+
+                    filled: true,
+                    fillColor:
+
+
+                    Colors.white ,
+
+
+
+                    enabledBorder: OutlineInputBorder(
+
+                      borderRadius: BorderRadius.circular(10),
+
+                      borderSide:  BorderSide(
+
+                        color:
+                        widget.errorText.isNotEmpty?
+                        Colors.red
+                            :
+                        Colors.white,
+                        width: 1,
+                      ),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+
+                      borderRadius: BorderRadius.circular(10),
+
+                      borderSide:  BorderSide(
+                        color:
+                        widget.errorText.isNotEmpty?
+                        Colors.red
+                            :
+                        primaryColor
+                        ,
+                        width: 1,
+                      ),
+                    ),
+
+                    hintStyle: secondaryTextStyle(
                       color: Colors.black,
                       size: 14.sp.round(),
                       weight: FontWeight.w400,
+                      height: 1,
                     ),
 
-                    decoration: InputDecoration(
 
-                      filled: true,
-                      fillColor:
+                    helperStyle: secondaryTextStyle(
 
+                      color: Colors.red,
+                      size: 12.sp.round(),
+                      weight: FontWeight.w400,
+                      height: 1,
 
-                   Colors.white ,
-
-
-
-                      enabledBorder: OutlineInputBorder(
-
-                        borderRadius: BorderRadius.circular(10),
-
-                        borderSide:  BorderSide(
-
-                          color:
-                          widget.errorText.isNotEmpty?
-                          Colors.red
-                              :
-                          Colors.white,
-                          width: 1,
-                        ),
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-
-                        borderRadius: BorderRadius.circular(10),
-
-                        borderSide:  BorderSide(
-                          color:
-                          widget.errorText.isNotEmpty?
-                          Colors.red
-                              :
-                          primaryColor
-                          ,
-                          width: 1,
-                        ),
-                      ),
-
-                      hintStyle: secondaryTextStyle(
-                        color: Colors.black,
-                        size: 14.sp.round(),
-                        weight: FontWeight.w400,
-                        height: 1,
-                      ),
+                    ),
+                    label:
+                    !isFocused ?
+                    FittedBox(
+                      child: Container(
 
 
-                      helperStyle: secondaryTextStyle(
+                        color: Colors.transparent,
+                        child:  Align(
+                          alignment: Alignment.centerLeft,
+                          child:
 
-                        color: Colors.red,
-                        size: 12.sp.round(),
-                        weight: FontWeight.w400,
-                        height: 1,
+                          Align(
+                            alignment:
 
-                      ),
-                      label:
-                      !isFocused ?
-                      FittedBox(
-                        child: Container(
-                        
-                          width: 250.w,
-                          height: 40.h,
-                          color: Colors.transparent,
-                          child:  Align(
-                            alignment: Alignment.centerLeft,
-                            child:
-
-                            Align(
-                              alignment:
-
-                              Alignment.centerLeft,
-                              child: AutoSizeText(
+                            Alignment.centerLeft,
+                            child: AutoSizeText(
 
 
-                                widget.labelText,
-                                style:  secondaryTextStyle(
-                                  size:  8.sp.round(),
+                              widget.labelText,
+                              style:  secondaryTextStyle(
+                                size:  14.sp.round(),
 
-                                  color:
+                                color:
 
-                                  widget.errorText.isNotEmpty?
-                                  Colors.red
-                                      :
-!isValueEmpty?
-                                  primaryColor
-:
+                                widget.errorText.isNotEmpty?
+                                Colors.red
+                                    :
+                                !isValueEmpty?
+                                primaryColor
+                                    :
 
-                                  Colors.grey[300]
-                                  ,
-                                  weight: FontWeight.w400,
+                                greyishColor
+                                ,
+                                weight: FontWeight.w400,
 
-                                ), // Set an initial font size
-                                maxLines: 2, // Adjust as needed
-                              ),
+                              ), // Set an initial font size
+                              maxLines: 2, // Adjust as needed
+                              minFontSize: 8.sp,
+                              stepGranularity: 8.sp,
                             ),
-
-
                           ),
+
+
                         ),
-                      )
-                          :
-                      FittedBox(
-                        child: Container(
-                        
+                      ),
+                    )
+                        :
+                    FittedBox(
+                      child: Container(
+
                           width: 80.w,
                           height: 40.h,
                           color:
-                                             Colors.transparent,
-                        child:
-                        Center(
-                          child: AutoSizeText(
+                          Colors.transparent,
+                          child:
+                          Center(
+                            child: AutoSizeText(
 
 
-                            widget.labelText,
-                            style: secondaryTextStyle(
-                                size:  8.sp.round() ,
-                                color:   widget.errorText.isNotEmpty?
-                                Colors.red
-                                    :  primaryColor,
-                                weight: FontWeight.w400
-                            ), // Set an initial font size
-                            maxLines: 2, // Adjust as needed
-                          ),
-                        )
+                              widget.labelText,
+                              style: secondaryTextStyle(
+                                  size:  12.sp.round() ,
+                                  color:   widget.errorText.isNotEmpty?
+                                  Colors.red
+                                      :  primaryColor,
+                                  weight: FontWeight.w400
+                              ), // Set an initial font size
+                              maxLines: 2,
+                              minFontSize: 8.sp,
+                              stepGranularity: 8.sp,
+                              // Adjust as needed
+                            ),
+                          )
 
 
-                        ),
                       ),
-
-
-                      prefixIcon: widget.icon != null
-                          ? Padding(
-                        padding: EdgeInsets.all(12.w),
-                        child: SvgPicture.asset(
-                          widget.icon!,
-                          width: 13.w,
-                          height: 13.h,
-                        ),
-                      )
-                          : null,
-                      suffixIcon: widget.obscureText
-                          ? Padding(
-                        padding:  EdgeInsets.only(right: 5.w),
-                        child: IconButton(
-                          icon: SvgPicture.asset(
-                            _obscureText
-                                ? 'assets/images/auth/eye-slash.svg'
-                                : 'assets/images/auth/eye.svg',
-                            width: _obscureText ? 24.w : 24.w,
-                            height: _obscureText ? 24.h : 24.h,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        ),
-                      )
-                          : null,
                     ),
+
+
+                    prefixIcon: widget.icon != null
+                        ? Padding(
+                      padding: EdgeInsets.all(12.w),
+                      child: SvgPicture.asset(
+                        widget.icon!,
+                        width: 13.w,
+                        height: 13.h,
+                      ),
+                    )
+                        : null,
+                    suffixIcon: widget.obscureText
+                        ? Padding(
+                      padding:  EdgeInsets.only(right: 5.w),
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          _obscureText
+                              ? 'assets/images/auth/eye-slash.svg'
+                              : 'assets/images/auth/eye.svg',
+                          width: _obscureText ? 24.w : 24.w,
+                          height: _obscureText ? 24.h : 24.h,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                    )
+                        : null,
                   ),
                 ),
               ),
@@ -1250,89 +1244,93 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       SingleChildScrollView(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: 220.h,
+          height: 230.h,
           child: Stack(
             alignment: Alignment.center,
             children: [
               SvgPicture.asset("assets/images/eclipseAppBar.svg",
+
               fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
               ),
               Padding(
                   padding: EdgeInsets.only(bottom: 100.h),
-        
-        child: Row(
-          children: [
-        
-            IconButton(
-          onPressed: (){
-        Get.back();
-          },
-          icon:
-          Stack(
-              alignment: Alignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/images/close-circle.svg",
-        
-        
-                ),
-                SvgPicture.asset(
-                  "assets/images/back_btn.svg",
-                  width: 88.h,
-        
-                ),
-        
-              ]
-          )
-        
-        
-            ),
-        
-            Spacer(),
-            Text(title , style: secondaryTextStyle(
-        color: Colors.white,
-        weight: FontWeight.w700,
-        size: 18.sp.round(),
-            ),),
-            Spacer(),
-            IconButton(
-          onPressed: (){
-        
-          },
-          icon:
-          Stack(
-              alignment: Alignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/images/close-circle.svg",
-        
-        
-                ),
-                GestureDetector(
-                  onTap: (){
-                    myFunction;
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 4.h),
-                    child: SvgPicture.asset(
-                      svgPath,
-                      // "assets/images/shopping-cart.svg",
-                      width: 22.h,
-        
+
+        child: Padding(
+          padding:  EdgeInsets.only(top: 10.h),
+          child: Row(
+            children: [
+
+              IconButton(
+            onPressed: (){
+          Get.back();
+            },
+            icon:
+            Stack(
+                alignment: Alignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/images/close-circle.svg",
+
+
+                  ),
+                  SvgPicture.asset(
+                    "assets/images/back_btn.svg",
+                    width: 88.h,
+
+                  ),
+
+                ]
+            )
+
+
+              ),
+
+              Spacer(),
+              Text(title , style: secondaryTextStyle(
+          color: Colors.white,
+          weight: FontWeight.w700,
+          size: 18.sp.round(),
+              ),),
+              Spacer(),
+              IconButton(
+            onPressed: (){
+
+            },
+            icon:
+            Stack(
+                alignment: Alignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/images/close-circle.svg",
+
+
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      myFunction;
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 4.h),
+                      child: SvgPicture.asset(
+                        svgPath,
+                        // "assets/images/shopping-cart.svg",
+                        width: 22.h,
+
+                      ),
                     ),
                   ),
-                ),
-        
-              ]
-          )
-        
-        
-            ),
-        
-        
-        
-          ],
+
+                ]
+            )
+
+
+              ),
+
+
+
+            ],
+          ),
         ),
               )
             ],
@@ -3301,4 +3299,195 @@ myCustomDivider() {
     height: 1,
     color: Colors.grey[300],
   );
+}
+
+customSearchBar() {
+
+}
+
+buildFloatingButton({required String buttonName ,
+  required BuildContext context, required dynamic onPressed,
+  bool isPlainBackground = false
+
+
+} ) {
+  return SizedBox(
+    height: 91.h,
+    width: MediaQuery.of(context).size.width - 60.w,
+    child: FloatingActionButton(onPressed: (){},
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        child: ShowUp(
+            delay: 200,
+            child:  GestureDetector(
+              onTap: () async {
+
+              },
+              child: SizedBox(
+
+                  child: MyDefaultButton(
+                    isPlainBackground: isPlainBackground,
+                    height: 75.h,
+                    btnWidth: 350,
+                    onPressed: onPressed,
+
+                    isloading: false,
+                    btnText: buttonName,
+                    isSecondaryTextStyle: true,
+                    borderRadius: 50,
+
+
+                  )),
+            )
+        )
+    ),
+  );
+}
+
+
+Widget SearchHomeBar() {
+  // Adding the header with the logo, search bar, and location
+  return Container(
+    height: 300.h,
+    color: Colors.transparent,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Open Drawer or any action
+                },
+                child: SvgPicture.asset(
+                  'assets/images/home/menu.svg',
+                ),
+              ),
+              SvgPicture.asset(
+                'assets/images/splash/logo.svg',
+                width: 60.w,
+                height: 52.h,
+              ),
+              SvgPicture.asset(
+                'assets/images/home/notification.svg',
+              ),
+            ],
+          ),
+          SizedBox(height: 26.h),
+          SearchBar(),
+          SizedBox(height: 25.h),
+          Text(
+            'Current Location',
+            textAlign: TextAlign.center,
+            style: secondaryTextStyle(
+              color: Colors.white,
+              size: 12.sp.round(),
+              weight: FontWeight.w300,
+              letterSpacing: -0.41,
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/home/locations.svg',
+              ),
+              SizedBox(width: 8.w),
+              Text(
+                'Cairo, Egypt',
+                textAlign: TextAlign.center,
+                style: secondaryTextStyle(
+                  color: Color(0xFFFFFDD2),
+                  size: 24.sp.round(),
+                  weight: FontWeight.w700,
+                  height: 0.09,
+                  letterSpacing: -0.41,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget SearchBar() {
+  return // Search Text Field inside the rounded container
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+      child: Row(
+        children: [
+          Container(
+            width: 287.w,
+            height: 44.h,
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(31),
+              ),
+              shadows: const [
+                BoxShadow(
+                  color: Color(0x19000000),
+                  blurRadius: 30,
+                  offset: Offset(0, 4),
+                  spreadRadius: -5,
+                )
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding:
+                    EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search',
+                        hintStyle: primaryTextStyle(
+                          color: Color(0xFF4F0099).withOpacity(0.3),
+                          size: 16.sp.round(),
+                          weight: FontWeight.w100,
+                          letterSpacing: -0.41,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 11.w), // Space between the search field and the icon
+          // Search Icon next to the search field
+          Container(
+              width: 44.w,
+              height: 44.h,
+              decoration: const ShapeDecoration(
+                color: Colors.white,
+                shape: OvalBorder(),
+                shadows: [
+                  BoxShadow(
+                    color: Color(0x19000000),
+                    blurRadius: 30,
+                    offset: Offset(0, 4),
+                    spreadRadius: -5,
+                  )
+                ],
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/home/search.svg',
+                  width: 18.w,
+                  height: 18.h,
+                ),
+              )),
+        ],
+      ),
+    );
 }
