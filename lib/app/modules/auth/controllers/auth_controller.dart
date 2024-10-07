@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:jiffy/app/modules/home/views/home_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart' as authTest;
@@ -423,7 +424,7 @@ Get.toNamed(Routes.LOGIN);
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
-          Get.off(HomeScreen());
+          Get.to(HomeView());
            // Get.offUntil(LoginView(), (Route) => false);
         } else {
           handleApiErrorUser(apiResponse.message);

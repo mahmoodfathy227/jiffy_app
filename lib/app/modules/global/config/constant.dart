@@ -1,11 +1,22 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:jiffy/app/modules/global/model/model_response.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../main.dart';
+import '../../../builtInPackage/like_button-2.0.5/lib/like_button.dart';
+import '../model/test_model_response.dart';
+import '../theme/app_theme.dart';
+import '../widget/widget.dart';
+import 'helpers.dart';
 
 class AppConstants {
   static UserData? userData;
@@ -108,4 +119,5 @@ class AppConstants {
   }
 
   static String placeHolderImage = "assets/images/placeholder.png";
+
 }

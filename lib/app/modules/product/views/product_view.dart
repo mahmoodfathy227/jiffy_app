@@ -42,12 +42,11 @@ class ProductView extends GetView<ProductController> {
   @override
   Widget build(BuildContext context) {
     ProductController().initialized ? null : Get.put(ProductController());
-    // HomeController homeController = Get.put(HomeController());
     controller.setIndex();
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
-// appBar: const CustomAppBar(),
+
       body: SafeArea(
         child: Obx(() {
           return
@@ -111,14 +110,9 @@ class ProductView extends GetView<ProductController> {
                       alignment: Alignment.topCenter,
                       children: [
 
-                        GetBuilder<ProductController>(builder: (logic) {
-                          print(
-                              "the prodicts attaches are ${logic.product.value
-                                  .attachments}");
-                          return _buildProductImagesCarousel(context,
-                              logic.productImages, logic.placeHolderImg.value);
-                        }),
+                        _buildProductImagesCarousel(context, [controller.product.value.image], ""),
                         CustomAppBar(myFunction: (){}, title: "Product", svgPath: "assets/images/shopping-cart.svg",),
+
                       ],
                     ),
 
@@ -178,19 +172,21 @@ class ProductView extends GetView<ProductController> {
             );
         }),
       ),
-      floatingActionButton: SizedBox(
-        height: 90.h,
-        width: MediaQuery.of(context).size.width - 60.w,
-        child: FloatingActionButton(onPressed: (){},
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-        child: ShowUp(
-          delay: 200,
-          child:   _buildAddToCartButton(
-              context, controller.product.value),
-        )
-        ),
-      ),
+      floatingActionButton: buildFloatingButton(buttonName: 'Add to Cart', context: context,
+          onPressed: (){}),
+      // SizedBox(
+      //   height: 90.h,
+      //   width: MediaQuery.of(context).size.width - 60.w,
+      //   child: FloatingActionButton(onPressed: (){},
+      //       backgroundColor: Colors.transparent,
+      //       elevation: 0.0,
+      //   child: ShowUp(
+      //     delay: 200,
+      //     child:   _buildAddToCartButton(
+      //         context, controller.product.value),
+      //   )
+      //   ),
+      // ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       //Product Add To Cart Button
       // bottomNavigationBar: Obx(() {
@@ -243,90 +239,7 @@ class ProductView extends GetView<ProductController> {
     );
   }
 
-  buildSearchAndFilter(context) {
-    return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: 65.h,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 15.w,
-          ),
-          Flexible(
-            flex: 12,
-            child: Container(
-              child: TextField(
-                onSubmitted: (v) {
-                  // controller.addSearchKeywords(v);
-                  // controller.getSearchResultsFromApi();
-                  //
-                  //
-                  //
-                  // Get.to(()=> ResultView());
-                },
-                autofocus: false,
-                style: primaryTextStyle(
-                  color: Colors.black,
-                  size: 14.sp.round(),
-                  weight: FontWeight.w400,
-                ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey, width: 2)),
-                  hintStyle: primaryTextStyle(
-                    color: Colors.black,
-                    size: 14.sp.round(),
-                    weight: FontWeight.w400,
-                    height: 1,
-                  ),
-                  errorStyle: primaryTextStyle(
-                    color: Colors.red,
-                    size: 14.sp.round(),
-                    weight: FontWeight.w400,
-                    height: 1,
-                  ),
-                  labelStyle: primaryTextStyle(
-                    color: Colors.grey,
-                    size: 14.sp.round(),
-                    weight: FontWeight.w400,
-                    height: 1,
-                  ),
-                  labelText: "Search Clothes ...",
-                  prefixIcon: IconButton(
-                    icon: SvgPicture.asset(
-                      'assets/icons/search.svg',
-                      width: 25.w,
-                      height: 25.h,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Spacer(),
-          Container(
-            child: SvgPicture.asset(
-              "assets/images/product/upload.svg",
-              height: 35.h,
-              width: 35.w,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(
-            width: 15.w,
-          )
-        ],
-      ),
-    );
-  }
+
 
   buildBottomSheet(ViewProductData comingProduct, BuildContext context) {
     final DraggableScrollableController sheetController =
@@ -559,7 +472,7 @@ class ProductView extends GetView<ProductController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                  controller.product.value.rating == null ? "4.9" :
+                  controller.product.value.rating == null ? "0" :
                   controller.product.value.rating.toString(),
                   style: secondaryTextStyle(
                       color: Color(0xFF231F20),
@@ -604,39 +517,38 @@ class ProductView extends GetView<ProductController> {
             height: 10,
           ),
           buildRatingBar(
-              "5",
-              80
-            // controller.product.value.rating_percentages!.isEmpty
-            //     ? 0
-            //     : controller.product.value.rating_percentages![4].toDouble()
+            "5",
+            controller.product.value.rating_percentages!.isEmpty
+                ? 0
+                : controller.product.value.rating_percentages![4].toDouble()
           ),
           buildRatingBar(
               "4",
-              12
-            // controller.product.value.rating_percentages!.isEmpty
-            //     ? 0
-            //     : controller.product.value.rating_percentages![3].toDouble()
+
+            controller.product.value.rating_percentages!.isEmpty
+                ? 0
+                : controller.product.value.rating_percentages![3].toDouble()
           ),
           buildRatingBar(
               "3",
-              5
-            // controller.product.value.rating_percentages!.isEmpty
-            //     ? 0
-            //     : controller.product.value.rating_percentages![2].toDouble()
+
+            controller.product.value.rating_percentages!.isEmpty
+                ? 0
+                : controller.product.value.rating_percentages![2].toDouble()
           ),
           buildRatingBar(
               "2",
-              3
-            // controller.product.value.rating_percentages!.isEmpty
-            //     ? 0
-            //     : controller.product.value.rating_percentages![1].toDouble()
+
+            controller.product.value.rating_percentages!.isEmpty
+                ? 0
+                : controller.product.value.rating_percentages![1].toDouble()
           ),
           buildRatingBar(
               "1",
-              3
-            // controller.product.value.rating_percentages!.isEmpty
-            //     ? 0
-            //     : controller.product.value.rating_percentages![1].toDouble()
+
+            controller.product.value.rating_percentages!.isEmpty
+                ? 0
+                : controller.product.value.rating_percentages![1].toDouble()
           ),
           SizedBox(
             height: 50,
@@ -819,7 +731,7 @@ class ProductView extends GetView<ProductController> {
     controller.endSharing();
   }
 
-  _buildProductImagesCarousel(BuildContext context, List<Attachments> imgList,
+  _buildProductImagesCarousel(BuildContext context, List<String> imgList,
       placeHolderImg) {
     //adding attachments
     // if (comingProduct.attachments != null) {
@@ -969,9 +881,8 @@ class ProductView extends GetView<ProductController> {
           controller.isShowDescription.value
               ? DescriptionTextWidget(
             text:
-            // comingProduct.description ?? ""
-            //     "",
-            "A luxurious symphony of floral notes, Purple Flowers EDP captures the essence of delicate blossoms with a soft, lingering aroma perfect for any occasion.",
+            comingProduct.description ?? ""
+                "",
 
           )
               : SizedBox()),
@@ -980,52 +891,7 @@ class ProductView extends GetView<ProductController> {
     );
   }
 
-  _buildSizeGuide(BuildContext context, ViewProductData comingProduct) {
-    return controller.product.value.sizeGuide?.fitType == null
-        ? SizedBox()
-        : Column(
-      children: [
-        //Details
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: Row(
-            children: [
-              Text("Size Guide",
-                  style: boldTextStyle(size: 22.sp.round())),
-              Spacer(),
-              IconButton(
-                  onPressed: () {
-                    // Get.to(
-                    //     () => SizeGuideView(
-                    //           selectedFitType: controller
-                    //                   .productSizeGuide.value.fitType ??
-                    //               "",
-                    //           selectedStretch: controller
-                    //                   .productSizeGuide.value.stretch ??
-                    //               "",
-                    //           selectedAttr: controller
-                    //                   .productSizeGuide.value.attr ??
-                    //               [],
-                    //         ),
-                    //     transition: Transition.fadeIn,
-                    //     curve: Curves.easeInOut,
-                    //     duration: const Duration(milliseconds: 400));
-                  },
-                  icon: Icon(Icons.arrow_forward_ios_rounded, size: 17.w))
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 7.w),
-          height: 1.h,
-          color: Colors.grey[300],
-        ),
-        SizedBox(
-          height: 5.h,
-        ),
-      ],
-    );
-  }
+
 
   _buildSeeAlsoProduct(BuildContext context, ViewProductData comingProduct) {
     return Column(
@@ -1188,31 +1054,25 @@ class ProductView extends GetView<ProductController> {
           return controller.isReviewsLoading
               ? placeHolderWidget()
               : controller.reviews.isEmpty
-              ? Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "No Comments Yet ..",
-                style: primaryTextStyle(),
-              ),
-              SizedBox(
-                height: 3.h,
-              ),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       left: MediaQuery.of(context).size.width / 3.1),
-              //   child: StarRating(
-              //       rating: 0,
-              //       onRatingChanged: (v) {},
-              //       color: Color(0xffFBBD51),
-              //       isCustomer: true),
-              // ),
-              SizedBox(
-                height: 30.h,
+              ? Align(
+            alignment: Alignment.center,
+                child: Column(
+
+                            children: [
+                Text(
+                  "No Comments Yet ..",
+                  style: secondaryTextStyle(),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Icon(Icons.comment_bank , color: greyishColor,),
+                SizedBox(
+                  height: 30.h,
+                )
+                            ],
+                          ),
               )
-            ],
-          )
               : Padding(
             padding: EdgeInsets.only(left: kDefaultPadding *1.5, top: 10.h,
 
@@ -1226,12 +1086,13 @@ class ProductView extends GetView<ProductController> {
                     SizedBox(height: 10.h,),
                     Padding(
                       padding: EdgeInsets.only(left: kDefaultPadding * 0.6),
-                      child: Text("213 Reviews", style: secondaryTextStyle(
+                      child: Text("Reviews (${controller.product.value.ratings_count.toString()})", style: secondaryTextStyle(
                         color: greyishColor,
                         size: 12.sp.round()
                       ),),
                     ),
                     SizedBox(height: 5.h,),
+                  
                     ListView.separated(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -1553,38 +1414,7 @@ class ProductView extends GetView<ProductController> {
             children: [
               Text("Sizes", style: boldTextStyle(size: 22.sp.round())),
               Spacer(),
-              controller.product.value.sizeGuide?.fitType == null
-                  ? SizedBox()
-                  : Row(
-                children: [
-                  Text("Size Guide",
-                      style: primaryTextStyle(size: 15.sp.round())),
-                  IconButton(
-                      onPressed: () {
-                        // Get.to(
-                        //     () => SizeGuideView(
-                        //           selectedFitType: controller
-                        //                   .productSizeGuide
-                        //                   .value
-                        //                   .fitType ??
-                        //               "",
-                        //           selectedStretch: controller
-                        //                   .productSizeGuide
-                        //                   .value
-                        //                   .stretch ??
-                        //               "",
-                        //           selectedAttr: controller
-                        //                   .productSizeGuide.value.attr ??
-                        //               [],
-                        //         ),
-                        //     transition: Transition.fadeIn,
-                        //     curve: Curves.easeInOut,
-                        //     duration: const Duration(milliseconds: 400));
-                      },
-                      icon: Icon(Icons.arrow_forward_ios_rounded,
-                          size: 17.w)),
-                ],
-              )
+
             ],
           ),
           SizedBox(height: 5.h),
@@ -1761,7 +1591,7 @@ class ProductView extends GetView<ProductController> {
               color: Color(0xffFBBD51),
             ),
 
-            Text("4.5", style: secondaryTextStyle(
+            Text(controller.product.value.rating.toString(), style: secondaryTextStyle(
                 color: primaryColor
             ),),
             SizedBox(width: kDefaultPadding* 1.5,),
@@ -1976,7 +1806,7 @@ class _BuildBundleState extends State<BuildBundle> {
 }
 
 class ImageSliderWithIndicators extends StatefulWidget {
-  final List<Attachments> imgList;
+  final List<String> imgList;
   final String placeHolderImg;
 
   const ImageSliderWithIndicators({
@@ -2007,13 +1837,13 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                 MaterialPageRoute(
                   builder: (context) =>
                       FullScreenImage(
-                        imageUrls: widget.imgList.map((e) => e.path!).toList(),
+                        imageUrls: widget.imgList.map((e) => e).toList(),
                         initialIndex: widget.imgList.indexOf(image),
                       ),
                 ),
               ),
           child: Hero(
-            tag: image.path!,
+            tag: image,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(50.0.r),
                 child: ColorFiltered(
@@ -2025,7 +1855,7 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                         .srcATop,),
                   child: CachedNetworkImage(
 
-                    imageUrl: image.path!,
+                    imageUrl: image,
                     height: MediaQuery
                         .of(context)
                         .size

@@ -140,39 +140,53 @@ class Banners {
 }
 
 class Product {
-  int? id;
-  String? name;
-  String? description;
-  String? image;
-  String? price;
-  String? discountedPrice;
+  final dynamic id;
+  final dynamic name;
+  final dynamic description;
+  final dynamic image;
+  final dynamic price;
+  final dynamic old_price;
+  final dynamic size;
+  final dynamic outOfStock;
+  final dynamic rating;
 
-  Product(
-      {this.id,
-      this.name,
-      this.description,
-      this.image,
-      this.price,
-      this.discountedPrice});
+  Product({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.price,
+    required this.old_price,
+    required this.size,
+    required this.outOfStock,
+    required this.rating,
+  });
 
-  Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    description = json['description'];
-    image = json['image'];
-    price = json['price'];
-    discountedPrice = json['discounted_price'];
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      image: json['image'] ?? '',
+      price: json['price'] != null ? json['price'] : null,
+      size: json['size'] != null ? json['size'] : null,
+      old_price: json['old_price'] != null ? json['old_price']: 0,
+      outOfStock: json['out_of_stock'] ?? 0,
+      rating: json['rating'] ?? 0.0,
+    );
   }
-
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['image'] = this.image;
-    data['price'] = this.price;
-    data['discounted_price'] = this.discountedPrice;
-    return data;
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'image': image,
+      'price': price,
+      'old_price': old_price,
+      'size': size,
+      'out_of_stock': outOfStock,
+      'rating': rating,
+    };
   }
 }
 
@@ -225,44 +239,31 @@ class ColorData {
 }
 
 class ViewProductData {
-  int? id;
-  String? name;
-  String? description;
-  String? image;
-  String? price;
-  String? old_price;
-  String? selectedSize;
-  String? selectedColor;
-  List<ProductColor>? colors;
-  List<String>? sizes;
-  Unit? unit;
-  dynamic rating;
-  dynamic ratings_count;
-  List<dynamic>? rating_percentages;
-  Category? category;
-  Styles? style;
-  List<Attachments>? attachments;
-  SizeGuide? sizeGuide;
-
+  final dynamic id;
+  final dynamic name;
+  final dynamic description;
+  final dynamic image;
+  final dynamic price;
+  final dynamic old_price;
+  final dynamic size;
+  final dynamic outOfStock;
+  final dynamic rating;
+  final dynamic ratings_count;
+  final dynamic rating_percentages;
   ViewProductData(
-      {this.id,
-      this.name,
-      this.description,
-      this.image,
-      this.price,
-      this.old_price,
-      this.selectedSize,
-      this.selectedColor,
-      this.colors,
-      this.sizes,
-      this.unit,
-      this.category,
-      this.style,
-      this.attachments,
-      this.sizeGuide,
-      this.rating,
-      this.rating_percentages,
-      this.ratings_count});
+      {
+        required this.id,
+        required this.name,
+        required this.description,
+        required this.image,
+        required this.price,
+        required this.old_price,
+        required this.size,
+        required this.outOfStock,
+        required this.rating,
+        this.ratings_count,
+        this.rating_percentages,
+      });
 
   factory ViewProductData.fromJson(Map<String, dynamic> json) {
     return ViewProductData(
@@ -271,25 +272,15 @@ class ViewProductData {
       description: json['description'],
       image: json['image'],
       rating: json['rating'],
-      ratings_count: json['ratings_count'],
-      rating_percentages: json['rating_percentages'] ?? [],
+
       price: json['price'],
       old_price: json['old_price'] ?? null,
-      colors: (json['colors'] as List<dynamic>?)
-          ?.map((item) => ProductColor.fromJson(item))
-          .toList(),
-      sizes:
-          json['sizes'] == null ? [] : List<String>.from(json['sizes'] ?? []),
-      unit: json['unit'] != null ? Unit.fromJson(json['unit']) : null,
-      category:
-          json['category'] != null ? Category.fromJson(json['category']) : null,
-      style: json['style'] != null ? Styles.fromJson(json['style']) : null,
-      attachments: (json['attachments'] as List<dynamic>?)
-          ?.map((item) => Attachments.fromJson(item))
-          .toList(),
-      sizeGuide: json['sizeGuide'] != null
-          ? SizeGuide.fromJson(json['sizeGuide'])
-          : null,
+      size: json['size'],
+      outOfStock: json['out_of_stock'] ?? null,
+      ratings_count: json['ratings_count'] ?? null,
+      rating_percentages: json['rating_percentages'] ?? null,
+
+
     );
   }
 
@@ -300,23 +291,13 @@ class ViewProductData {
     data['description'] = this.description;
     data['image'] = this.image;
     data['price'] = this.price;
-    if (this.colors != null) {
-      data['colors'] = this.colors!.map((v) => v.toJson()).toList();
-    }
-    data['sizes'] = this.sizes;
-    if (this.unit != null) {
-      data['unit'] = this.unit!.toJson();
-    }
-    if (this.category != null) {
-      data['category'] = this.category!.toJson();
-    }
-    data['style'] = this.style;
-    if (this.attachments != null) {
-      data['attachments'] = this.attachments!.map((v) => v.toJson()).toList();
-    }
-    if (this.sizeGuide != null) {
-      data['sizeGuide'] = this.sizeGuide!.toJson();
-    }
+    data['old_price'] = this.old_price;
+    data['size'] = this.size;
+    data['out_of_stock'] = this.outOfStock;
+    data['rating'] = this.rating;
+    data['ratings_count'] = this.ratings_count;
+    data['rating_percentages'] = this.rating_percentages;
+
     return data;
   }
 }
@@ -340,30 +321,30 @@ class Unit {
   }
 }
 
-class Category {
-  int? id;
-  String? name;
-  String? slug;
-  String? image;
-
-  Category({this.id, this.name, this.slug, this.image});
-
-  Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    slug = json['slug'];
-    image = json['image'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['slug'] = this.slug;
-    data['image'] = this.image;
-    return data;
-  }
-}
+// class Category {
+//   int? id;
+//   String? name;
+//   String? slug;
+//   String? image;
+//
+//   Category({this.id, this.name, this.slug, this.image});
+//
+//   Category.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     name = json['name'];
+//     slug = json['slug'];
+//     image = json['image'];
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['name'] = this.name;
+//     data['slug'] = this.slug;
+//     data['image'] = this.image;
+//     return data;
+//   }
+// }
 
 class Attachments {
   String? type;

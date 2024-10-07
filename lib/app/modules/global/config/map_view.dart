@@ -275,8 +275,8 @@ class _MapViewState extends State<MyMapView>
     return Scaffold(
       key: homeScaffoldKey, // Assign the key here
 
-      appBar: const CustomAppBar(
-        title: 'Choose Your Location',
+      appBar:  CustomAppBar(
+        title: 'Choose Your Location', myFunction: () {  },
       ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {

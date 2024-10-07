@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
+import 'package:jiffy/app/modules/home/views/home_view.dart';
 
 
 import '../../../../main.dart';
@@ -29,7 +30,17 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
   // Rx<int> currentStock = 0.obs;
   List<ProductColor> colorsList = [];
   Rx<int> imageIndex = 0.obs;
-  Rx<ViewProductData> product = ViewProductData().obs;
+  Rx<ViewProductData> product = ViewProductData(
+    id: 0,
+    name: "Perfume",
+    price: 0.toString(),
+    description: "Good Perfume",
+    image: "https://www.pngall.com/wp-content/uploads/2016/05/Perfume-Free-Download-PNG.png",
+    old_price: 0.toString(),
+    rating: 4,
+    size: "",
+    outOfStock: false,
+  ).obs;
   ApiConsumer apiConsumer = sl();
   final count = 0.obs;
   final isShowDescription = true.obs;
@@ -115,13 +126,13 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
   }
 
   List<ReviewsModel> reviews = [
-    ReviewsModel(
-      id: 1,
-      customer: "John Doe",
-      title: "Loved it",
-      comment: "This is a great product. I really enjoyed using it. I will definitely buy it again.",
-      rating: 4
-    )
+    // ReviewsModel(
+    //   id: 1,
+    //   customer: "John Doe",
+    //   title: "Loved it",
+    //   comment: "This is a great product. I really enjoyed using it. I will definitely buy it again.",
+    //   rating: 4
+    // )
   ];
   bool isFirstTimeGettingReviews = false;
   bool isReviewsLoading = false;
@@ -218,77 +229,44 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
     productSizeGuide.value = SizeGuide();
     // isProductLoading.value = true;
     isProductLoading.value = false;
+    var testProduct = ViewProductData(
+      id: 0,
+      name: "Perfume",
+      price: 0.toString(),
+      description: "Good Perfume",
+      image: "https://www.pngall.com/wp-content/uploads/2016/05/Perfume-Free-Download-PNG.png",
+      old_price: 0.toString(),
+      rating: 4,
+      size: "",
+      outOfStock: false,
+
+
+
+    );
     try {
-      // final response = await apiConsumer.post(
-      //   'products/$id',
-      // );
-
-      // product.value = ViewProduct.fromJson(response).data!;
-      product.value = ViewProductData(
-        id: 0,
-        name: "Perfume",
-        price: 0.toString(),
-        description: "Good Perfume",
-        image: "https://www.pngall.com/wp-content/uploads/2016/05/Perfume-Free-Download-PNG.png",
-        colors: [],
-        sizes: [],
-        attachments: [],
-        sizeGuide: SizeGuide(),
-        category: Category(id: 0, name: "Perfume"),
-        old_price: 0.toString(),
-        rating: 4,
-        rating_percentages: [],
-        ratings_count: 0.toString(),
-
-
-
+      final response = await apiConsumer.post(
+        'products/$id',
       );
-      print("the value is ${product.runtimeType}");
-      print("the product is ${product.value.name}");
 
-      //adding attachments
-      for (var attachment in product.value.attachments!) {
-        if (attachment.name == "app_show") {
-          productImages.addNonNull(attachment);
-        }
-      }
-      print('test images with app show are ${productImages}');
-      //adding attributes
-      for (var size in product.value.sizes!) {
-        sizeList.addNonNull(size);
-        print(size.toString() + 'test sizesss');
-      }
+      product.value = ViewProduct.fromJson(response).data!;
 
-      //adding colors
-      for (var color in product.value.colors!) {
-        colorsList.addNonNull(color);
-      }
-      setColor(colorsList.first.name);
-      //adding Size Guide
 
-      if (product.value.sizeGuide?.fitType != null) {
-        print("the value is not null and adding ");
-        productSizeGuide.value = product.value.sizeGuide!;
-      }
-      print("your size guide is ${product.value.sizeGuide}");
 
-      print("attachments are  ${productImages}");
-      print("color are  ${colorsList}");
+
 
       isProductLoading.value = false;
 
       setSelectedIndex(selectedIndex.value);
       changeImagesList(selectedColor.value);
+      print("your product data is ${product.value}");
       update();
-      if (product.value.category != null) {
-        getRelatedProducts(product.value.category!.id);
-      }
+
     } catch (e, stackTrace) {
       print(stackTrace.toString() + ' product test error' + '${e.toString()}');
       isProductLoading.value = false;
-      product.value = ViewProductData();
+      product.value = testProduct;
       Get.snackbar("Error", "Product Not Found Redirect..");
-      // Get.off(() => MainView());
+      Get.off(() => HomeView());
     }
   }
 

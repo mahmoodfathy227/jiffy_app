@@ -94,6 +94,7 @@ Get.to(() => LoginView());
     return Obx(() {
       return Scaffold(
           appBar: CustomAppBar(
+            myFunction: (){},
             function: controller.socialView.value == true ? null : back,
             back: controller.socialView.value == true ? false : true,
           ),

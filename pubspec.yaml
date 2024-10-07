@@ -57,6 +57,7 @@ dependencies:
   path_provider: 2.1.3
   google_fonts: any
   modal_bottom_sheet: any
+  circle_wheel_scroll: ^0.0.3
   sign_in_with_apple: ^6.1.0
   image_picker: any
   geocoding: ^3.0.0
@@ -66,10 +67,12 @@ dependencies:
   json_annotation:
   google_maps_flutter: 2.5.3
   share_plus:
+
   app_links:
   public_ip_address:
   dotted_border:
   auto_size_text:
+  skeletonizer:
 
   image: ^3.0.1
   scrollable_positioned_list:
@@ -103,10 +106,13 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/home/
     - assets/icons/
     - assets/images/auth/
     - assets/images/splash/
+    - assets/fonts/
     - assets/images/onboarding/
     - assets/images/forgot_password/
     - assets/images/help/
+    - assets/images/address/
     - shorebird.yaml

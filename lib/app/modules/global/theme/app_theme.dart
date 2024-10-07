@@ -99,7 +99,7 @@ TextStyle secondaryTextStyle({
   TextBaseline? textBaseline,
   Color? decorationColor,
   Color? backgroundColor,
-  double? height,
+  double? height,  int decorationThickness = 1,
 }) {
   return TextStyle(
     fontSize: size != null ? size.toDouble() : textSecondarySizeGlobal,
@@ -187,10 +187,11 @@ class AppTheme {
   static ThemeData lightTheme({Color? color}) => ThemeData(
         useMaterial3: true,
         primarySwatch: createMaterialColor(color ?? primaryColor),
+
         primaryColor: color ?? primaryColor,
         colorScheme: ColorScheme.fromSeed(
             seedColor: color ?? primaryColor, outlineVariant: borderColor),
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: const Color(0xffEAE5F0),
         fontFamily: GoogleFonts.bebasNeue().fontFamily,
         bottomNavigationBarTheme:
             BottomNavigationBarThemeData(backgroundColor: Colors.white),

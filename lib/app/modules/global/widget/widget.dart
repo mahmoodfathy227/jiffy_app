@@ -5,42 +5,255 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:jiffy/app/modules/auth/controllers/auth_controller.dart';
+
 // import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
-import 'package:jiffy/app/modules/global/model/model_response.dart' hide Colors hide Material;
+import 'package:jiffy/app/modules/global/model/model_response.dart' hide Colors
+    hide Material;
 
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
-// import 'package:jiffy/app/modules/home/controllers/home_controller.dart';
-// import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
-// import 'package:jiffy/app/modules/product/controllers/product_controller.dart';
-// import 'package:jiffy/app/modules/product/views/product_view.dart';
-// import 'package:jiffy/app/modules/search/controllers/search_controller.dart';
-// import 'package:jiffy/app/modules/search/views/result_view.dart';
-// import 'package:jiffy/app/modules/search/views/search_view.dart';
-import 'package:jiffy/app/modules/services/dio_consumer.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../main.dart';
+import '../../../builtInPackage/like_button-2.0.5/lib/like_button.dart';
 import '../../../routes/app_pages.dart';
 import '../../auth/views/login_view.dart';
 import '../../auth/views/register_view.dart';
-import '../../services/api_consumer.dart';
-import '../../services/api_service.dart';
+import '../../home/controllers/home_controller.dart';
+import '../../product/controllers/product_controller.dart';
+import '../../product/views/product_view.dart';
+import '../config/helpers.dart';
+import '../model/test_model_response.dart';
 
 final AuthController authcontroller = Get.put(AuthController());
+
+class TitleWithSeeAll extends StatelessWidget {
+  final String title; // Title text
+  final String actionText; // Action text ("See All")
+  final VoidCallback onTap; // Action when "See All" is clicked
+
+  const TitleWithSeeAll({
+    Key? key,
+    required this.title,
+    required this.actionText,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 23.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Title Text
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: secondaryTextStyle(
+                  color: Color(0xFF20003D),
+                  size: 24.sp.round(),
+                  fontFamily: 'MuseoModerno',
+                  weight: FontWeight.w600,
+                  letterSpacing: -0.41,
+                ),
+              ),
+
+              // "See All" Text
+              GestureDetector(
+                onTap: onTap, // Action when "See All" is tapped
+                child: Text(
+                  actionText,
+                  style: secondaryTextStyle(
+                    color: Color(0xFF20003D),
+                    size: 14.sp.round(),
+                    weight: FontWeight.w300,
+                    letterSpacing: -0.41,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
+Widget SearchHomeBar({HomeController? homeController}) {
+  // Adding the header with the logo, search bar, and location
+
+  return Container(
+      height: 300.h,
+      color: Colors.transparent,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SlideTransition(
+                position: homeController!.slideAnimation,
+                child: FadeTransition(
+                    opacity:
+                    homeController!.fadeInAnimation, // GetX controlled fade
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // Open Drawer or any action
+                          },
+                          child: SvgPicture.asset(
+                            'assets/images/home/menu.svg',
+                          ),
+                        ),
+                        SvgPicture.asset(
+                          'assets/images/splash/logo.svg',
+                          width: 60.w,
+                          height: 52.h,
+                        ),
+                        SvgPicture.asset(
+                          'assets/images/home/notification.svg',
+                        ),
+                      ],
+                    ))),
+            SizedBox(height: 26.h),
+            FadeTransition(
+                opacity: homeController.fadeInAnimation, // GetX controlled fade
+                child: SearchBar()),
+            SizedBox(height: 25.h),
+            FadeTransition(
+                opacity: homeController.fadeInAnimation, // GetX controlled fade
+                child: Text(
+                  'Current Location',
+                  textAlign: TextAlign.center,
+                  style: secondaryTextStyle(
+                    color: Colors.white,
+                    size: 12.sp.round(),
+                    weight: FontWeight.w300,
+                    letterSpacing: -0.41,
+                  ),
+                )),
+            SizedBox(height: 10.h),
+            FadeTransition(
+              opacity: homeController.fadeInAnimation, // GetX controlled fade
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/home/locations.svg',
+                  ),
+                  SizedBox(width: 12.w),
+                  Text(
+                    'Cairo, Egypt',
+                    textAlign: TextAlign.center,
+                    style: secondaryTextStyle(
+                      color: Color(0xFFFFFDD2),
+                      size: 24.sp.round(),
+                      weight: FontWeight.w700,
+                      height: 0.09,
+                      letterSpacing: -0.41,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ));
+}
+
+Widget SearchBar() {
+  return // Search Text Field inside the rounded container
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+      child: Row(
+        children: [
+          Container(
+            width: 287.w,
+            height: 44.h,
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(31),
+              ),
+              shadows: const [
+                BoxShadow(
+                  color: Color(0x19000000),
+                  blurRadius: 30,
+                  offset: Offset(0, 4),
+                  spreadRadius: -5,
+                )
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.SEARCH);
+                    },
+                    child: Padding(
+                      padding:
+                      EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
+                      child: customSearchField(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 11.w), // Space between the search field and the icon
+          // Search Icon next to the search field
+          GestureDetector(
+            onTap: () {
+              Get.to(SearchView());
+            },
+            child: Container(
+                width: 44.w,
+                height: 44.h,
+                decoration: const ShapeDecoration(
+                  color: Colors.white,
+                  shape: OvalBorder(),
+                  shadows: [
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 30,
+                      offset: Offset(0, 4),
+                      spreadRadius: -5,
+                    )
+                  ],
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    'assets/images/home/search.svg',
+                    width: 18.w,
+                    height: 18.h,
+                  ),
+                )),
+          ),
+        ],
+      ),
+    );
+}
 
 Widget gridSocialIcon() {
   return Row(
@@ -180,47 +393,51 @@ class SecondMyDefaultButtonState extends State<SecondMyDefaultButton> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    var screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return widget.isloading!
         ? Center(
-            child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
-            size: 50,
-          ))
+        child: LoadingAnimationWidget.flickr(
+          leftDotColor: primaryColor,
+          rightDotColor: const Color(0xFFFF0084),
+          size: 50,
+        ))
         : InkWell(
-            onTap: () => {
-              widget.onPressed(),
-            },
-            child: Container(
-              width: 315,
-              height: 48,
-              clipBehavior: Clip.antiAlias,
-              decoration: ShapeDecoration(
-                color: Color(0xFF21034F),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                      widget.localeText
-                          ? widget.btnText!.toUpperCase()
-                          : widget.btnText!,
-                      textAlign: TextAlign.center,
-                      style: primaryTextStyle(
-                        color: widget.textColor ?? Colors.white,
-                        size: 16.sp.round(),
-                        weight: FontWeight.w700,
-                      )),
-                ],
-              ),
-            ),
-          );
+      onTap: () =>
+      {
+        widget.onPressed(),
+      },
+      child: Container(
+        width: 315,
+        height: 48,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          color: Color(0xFF21034F),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+                widget.localeText
+                    ? widget.btnText!.toUpperCase()
+                    : widget.btnText!,
+                textAlign: TextAlign.center,
+                style: primaryTextStyle(
+                  color: widget.textColor ?? Colors.white,
+                  size: 16.sp.round(),
+                  weight: FontWeight.w700,
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -266,46 +483,50 @@ class MySecondDefaultButtonState extends State<MySecondDefaultButton> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    var screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return widget.isloading!
         ? Center(
-            child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
-            size: 50,
-          ))
+        child: LoadingAnimationWidget.flickr(
+          leftDotColor: primaryColor,
+          rightDotColor: const Color(0xFFFF0084),
+          size: 50,
+        ))
         : InkWell(
-            onTap: () => {
-              widget.onPressed(),
-            },
-            child: Container(
-              width: 315.w,
-              height: 48.h,
-              clipBehavior: Clip.antiAlias,
-              decoration: ShapeDecoration(
-                  color: widget.color ?? Color(0xFF21034F),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                      widget.localeText
-                          ? widget.btnText!.toUpperCase()
-                          : widget.btnText!,
-                      textAlign: TextAlign.center,
-                      style: primaryTextStyle(
-                        color: Colors.white,
-                        size: 16.sp.round(),
-                        weight: FontWeight.w700,
-                      )),
-                ],
-              ),
-            ),
-          );
+      onTap: () =>
+      {
+        widget.onPressed(),
+      },
+      child: Container(
+        width: 315.w,
+        height: 48.h,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+            color: widget.color ?? Color(0xFF21034F),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            )),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+                widget.localeText
+                    ? widget.btnText!.toUpperCase()
+                    : widget.btnText!,
+                textAlign: TextAlign.center,
+                style: primaryTextStyle(
+                  color: Colors.white,
+                  size: 16.sp.round(),
+                  weight: FontWeight.w700,
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -315,18 +536,18 @@ Widget MainLoading({double? width, double? height}) {
       height: height ?? 812.h,
       child: Center(
           child: LoadingAnimationWidget.flickr(
-        leftDotColor: primaryColor,
-        rightDotColor: const Color(0xFFFF0084),
-        size: 50,
-      )));
+            leftDotColor: primaryColor,
+            rightDotColor: const Color(0xFFFF0084),
+            size: 50,
+          )));
 }
 
 Color getColorStatusOrder(status) {
   return status == 'PENDING'
       ? const Color(0xFFCF6112)
       : status == 'Delivered'
-          ? const Color(0xFF33C200)
-          : const Color(0xFFC40000);
+      ? const Color(0xFF33C200)
+      : const Color(0xFFC40000);
 }
 
 Widget orderCard(Order order) {
@@ -455,12 +676,12 @@ class MyDefaultButton extends StatefulWidget {
   final bool isSecondaryTextStyle;
   final int btnWidth;
   final bool isPlainBackground;
-final int iconPadding;
+  final int iconPadding;
 
 
   const MyDefaultButton({
     Key? key,
-    this.btnText,
+    this.btnText = "btn",
     required this.onPressed,
     this.color,
     this.isActive = true,
@@ -471,12 +692,12 @@ final int iconPadding;
     this.height,
     this.width,
     this.Icon = "",
-     this.errorText = "",
+    this.errorText = "",
     this.borderRadius = 10.0,
-     this.isSecondaryTextStyle = false,
-     this.btnWidth = 315,
-     this.isPlainBackground = false,
-     this.iconPadding = 10,
+    this.isSecondaryTextStyle = false,
+    this.btnWidth = 315,
+    this.isPlainBackground = false,
+    this.iconPadding = 10,
   }) : super(key: key);
 
   @override
@@ -495,27 +716,30 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    var screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Column(
       children: [
-        widget.errorText.isEmpty?
+        widget.errorText.isEmpty ?
         SizedBox()
             :
-        Text(widget.errorText , style: primaryTextStyle(color: Colors.red,
-        size: 12.sp.round(),
+        Text(widget.errorText, style: primaryTextStyle(color: Colors.red,
+          size: 12.sp.round(),
 
-                ),   maxLines: 2, overflow: TextOverflow.ellipsis,),
+        ), maxLines: 2, overflow: TextOverflow.ellipsis,),
         SizedBox(height: 10.h,),
 
         InkWell(
-          onTap: () => {
+          onTap: () =>
+          {
             if(isloading){
-
-            }else{
-              widget.onPressed(),
-            }
-
+            } else
+              {
+                widget.onPressed(),
+              }
           },
           child: Container(
 
@@ -529,15 +753,15 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
               widget.isPlainBackground ?
               LinearGradient(
                 colors: [
-               Colors.transparent ,// Starting color (dark purple)
+                  Colors.transparent, // Starting color (dark purple)
                   Colors.transparent, // Ending color (light purple)
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               )
-:
+                  :
 
-              widget.isActive? const LinearGradient(
+              widget.isActive ? const LinearGradient(
                 colors: [
                   Color(0xFF6900CC), // Starting color (dark purple)
                   Color(0xFF20003D), // Ending color (light purple)
@@ -548,7 +772,7 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
               const LinearGradient(
                 colors: [
                   Color(0xFF575757), // Starting color (dark purple)
-                  Color(0xFF575757),  // Ending color (light purple)
+                  Color(0xFF575757), // Ending color (light purple)
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
@@ -561,19 +785,19 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
                 side:
                 widget.isPlainBackground ?
                 BorderSide(color: primaryColor, width: 1)
-                :
+                    :
                 BorderSide(color: Colors.transparent),
               ),
             ),
-            child:   Row(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width:  widget.iconPadding *1.5.w,),
+                SizedBox(width: widget.iconPadding * 1.5.w,),
                 ConstrainedBox(
                   constraints: BoxConstraints(
 
-                  maxWidth: screenWidth * 0.5
+                      maxWidth: screenWidth * 0.5
 
                   ),
                   child: Text(
@@ -591,36 +815,38 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
                           :
                       secondaryTextStyle(
                         weight:
-                        FontWeight.w300,
-                        size: 15.sp.round(),
+                        widget.isPlainBackground ?
+                        FontWeight.w500
+                            :
+                        FontWeight.w700,
+                        size: 17.sp.round(),
                         color:
-                        widget.isPlainBackground?
+                        widget.isPlainBackground ?
                         primaryColor
                             :
                         Colors.white,
                       )
 
 
-
                   ),
                 ),
 
 
-
                 widget.Icon.isEmpty ?
-                const SizedBox():
+                const SizedBox() :
                 Padding(
-                    padding:  EdgeInsets.only(left: widget.iconPadding.w),
+                    padding: EdgeInsets.only(left: widget.iconPadding.w),
                     child: SvgPicture.asset(widget.Icon)),
-SizedBox(width: 12.w,),
-                widget.isloading? SizedBox(width: 5.w,) : SizedBox(),
-                widget.isloading?
+                SizedBox(width: 12.w,),
+                widget.isloading ? SizedBox(width: 5.w,) : SizedBox(),
+                widget.isloading ?
                 Padding(
-                  padding:  EdgeInsets.only(right: 5.0.w),
+                  padding: EdgeInsets.only(right: 5.0.w),
                   child: SizedBox(
                       width: 20.w,
                       height: 20.h,
-                      child: CircularProgressIndicator(strokeWidth: 4, color: Colors.grey[300],)),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 4, color: Colors.grey[300],)),
                 )
                     :
                 SizedBox(),
@@ -643,7 +869,7 @@ class CustomTextField extends StatefulWidget {
   final Color? LabelStyle;
   final double? width;
   final double? height;
-final int maxLines;
+  final int maxLines;
   final String? icon;
   final ValueChanged<String>? onSubmitted;
   final TextEditingController? customTextEditingController;
@@ -663,7 +889,7 @@ final int maxLines;
     this.width,
     this.keyboardType = TextInputType.text,
     this.height,
-     this.maxLines = 4,// Default to TextInputType.text
+    this.maxLines = 1, // Default to TextInputType.text
   });
 
   @override
@@ -672,17 +898,18 @@ final int maxLines;
 
 class _CustomTextFieldState extends State<CustomTextField> {
   late bool _obscureText;
-   bool isValueEmpty = true;
+  bool isValueEmpty = true;
 
 
   late FocusNode _focusNode;
   bool isFocused = false;
+
   @override
   void initState() {
     super.initState();
-if(widget.customTextEditingController != null){
-  isValueEmpty = widget.customTextEditingController!.text.isEmpty;
-}
+    if (widget.customTextEditingController != null) {
+      isValueEmpty = widget.customTextEditingController!.text.isEmpty;
+    }
 
     _obscureText = widget.obscureText;
   }
@@ -690,7 +917,6 @@ if(widget.customTextEditingController != null){
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       width: widget.width ?? 320.w,
 
@@ -701,216 +927,205 @@ if(widget.customTextEditingController != null){
 
             height: widget.height ?? 55.h,
 
-            child: Material(
-
-                  color: Color(0xffFFFFFF),
-              elevation:2,
-shadowColor: Color(0xff00000033).withOpacity(0.4),
-
-              borderRadius: BorderRadius.circular(10),
-
-              child: Focus(
-                onFocusChange: (hasFocus) {
-                  setState(() {
-                    isFocused = hasFocus;
-                  });
+            child: Focus(
+              onFocusChange: (hasFocus) {
+                setState(() {
+                  isFocused = hasFocus;
+                });
                 print("changed focus now ${hasFocus} ");
-                },
-                child: Container(
+              },
+              child: Container(
 
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
+                    customBoxShadow
+                  ],
+                ),
+                child: TextFormField(
+
+                  controller: widget.customTextEditingController,
+                  onChanged: (value) {
+                    widget.onChanged(value);
+                    setState(() {
+                      isValueEmpty = value.isEmpty;
+                    });
+                  },
+                  // initialValue: widget.initialValue ?? '',
+                  obscureText: _obscureText,
+                  maxLines: widget.maxLines,
+                  onFieldSubmitted: widget.onSubmitted,
+                  keyboardType: widget.keyboardType,
+                  style: secondaryTextStyle(
+                    color: Colors.black,
+                    size: 14.sp.round(),
+                    weight: FontWeight.w400,
                   ),
-                  child: TextFormField(
 
-                    controller: widget.customTextEditingController,
-                    onChanged: (value) {
-                      widget.onChanged(value);
-                      setState(() {
-                        isValueEmpty = value.isEmpty;
-                      });
-                    },
-                    // initialValue: widget.initialValue ?? '',
-                    obscureText: _obscureText,
-maxLines: widget.maxLines,
-                    onFieldSubmitted: widget.onSubmitted,
-                    keyboardType: widget.keyboardType,
-                    style: secondaryTextStyle(
+                  decoration: InputDecoration(
+
+                    filled: true,
+                    fillColor:
+
+
+                    Colors.white,
+
+
+                    enabledBorder: OutlineInputBorder(
+
+                      borderRadius: BorderRadius.circular(10),
+
+                      borderSide: BorderSide(
+
+                        color:
+                        widget.errorText.isNotEmpty ?
+                        Colors.red
+                            :
+                        Colors.white,
+                        width: 1,
+                      ),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+
+                      borderRadius: BorderRadius.circular(10),
+
+                      borderSide: BorderSide(
+                        color:
+                        widget.errorText.isNotEmpty ?
+                        Colors.red
+                            :
+                        primaryColor
+                        ,
+                        width: 1,
+                      ),
+                    ),
+
+                    hintStyle: secondaryTextStyle(
                       color: Colors.black,
                       size: 14.sp.round(),
                       weight: FontWeight.w400,
+                      height: 1,
                     ),
 
-                    decoration: InputDecoration(
 
-                      filled: true,
-                      fillColor:
+                    helperStyle: secondaryTextStyle(
 
+                      color: Colors.red,
+                      size: 12.sp.round(),
+                      weight: FontWeight.w400,
+                      height: 1,
 
-                   Colors.white ,
-
-
-
-                      enabledBorder: OutlineInputBorder(
-
-                        borderRadius: BorderRadius.circular(10),
-
-                        borderSide:  BorderSide(
-
-                          color:
-                          widget.errorText.isNotEmpty?
-                          Colors.red
-                              :
-                          Colors.white,
-                          width: 1,
-                        ),
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-
-                        borderRadius: BorderRadius.circular(10),
-
-                        borderSide:  BorderSide(
-                          color:
-                          widget.errorText.isNotEmpty?
-                          Colors.red
-                              :
-                          primaryColor
-                          ,
-                          width: 1,
-                        ),
-                      ),
-
-                      hintStyle: secondaryTextStyle(
-                        color: Colors.black,
-                        size: 14.sp.round(),
-                        weight: FontWeight.w400,
-                        height: 1,
-                      ),
+                    ),
+                    label:
+                    !isFocused ?
+                    FittedBox(
+                      child: Container(
 
 
-                      helperStyle: secondaryTextStyle(
+                        color: Colors.transparent,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child:
 
-                        color: Colors.red,
-                        size: 12.sp.round(),
-                        weight: FontWeight.w400,
-                        height: 1,
+                          Align(
+                            alignment:
 
-                      ),
-                      label:
-                      !isFocused ?
-                      FittedBox(
-                        child: Container(
-                        
-                          width: 250.w,
-                          height: 40.h,
-                          color: Colors.transparent,
-                          child:  Align(
-                            alignment: Alignment.centerLeft,
-                            child:
-
-                            Align(
-                              alignment:
-
-                              Alignment.centerLeft,
-                              child: AutoSizeText(
+                            Alignment.centerLeft,
+                            child: AutoSizeText(
 
 
-                                widget.labelText,
-                                style:  secondaryTextStyle(
-                                  size:  8.sp.round(),
+                              widget.labelText,
+                              style: secondaryTextStyle(
+                                size: 14.sp.round(),
 
-                                  color:
+                                color:
 
-                                  widget.errorText.isNotEmpty?
-                                  Colors.red
-                                      :
-!isValueEmpty?
-                                  primaryColor
-:
+                                widget.errorText.isNotEmpty ?
+                                Colors.red
+                                    :
+                                !isValueEmpty ?
+                                primaryColor
+                                    :
 
-                                  Colors.grey[300]
-                                  ,
-                                  weight: FontWeight.w400,
+                                greyishColor
+                                ,
+                                weight: FontWeight.w400,
 
-                                ), // Set an initial font size
-                                maxLines: 2, // Adjust as needed
-                              ),
+                              ), // Set an initial font size
+                              maxLines: 2, // Adjust as needed
+                              minFontSize: 8.sp,
+                              stepGranularity: 8.sp,
                             ),
-
-
                           ),
+
+
                         ),
-                      )
-                          :
-                      FittedBox(
-                        child: Container(
-                        
+                      ),
+                    )
+                        :
+                    FittedBox(
+                      child: Container(
+
                           width: 80.w,
                           height: 40.h,
                           color:
-                                             Colors.transparent,
-                        child:
-                        Center(
-                          child: AutoSizeText(
+                          Colors.transparent,
+                          child:
+                          Center(
+                            child: AutoSizeText(
 
 
-                            widget.labelText,
-                            style: secondaryTextStyle(
-                                size:  8.sp.round() ,
-                                color:   widget.errorText.isNotEmpty?
-                                Colors.red
-                                    :  primaryColor,
-                                weight: FontWeight.w400
-                            ), // Set an initial font size
-                            maxLines: 2, // Adjust as needed
-                          ),
-                        )
+                              widget.labelText,
+                              style: secondaryTextStyle(
+                                  size: 12.sp.round(),
+                                  color: widget.errorText.isNotEmpty ?
+                                  Colors.red
+                                      : primaryColor,
+                                  weight: FontWeight.w400
+                              ), // Set an initial font size
+                              maxLines: 2,
+                              minFontSize: 8.sp,
+                              stepGranularity: 8.sp,
+                              // Adjust as needed
+                            ),
+                          )
 
 
-                        ),
                       ),
-
-
-                      prefixIcon: widget.icon != null
-                          ? Padding(
-                        padding: EdgeInsets.all(12.w),
-                        child: SvgPicture.asset(
-                          widget.icon!,
-                          width: 13.w,
-                          height: 13.h,
-                        ),
-                      )
-                          : null,
-                      suffixIcon: widget.obscureText
-                          ? Padding(
-                        padding:  EdgeInsets.only(right: 5.w),
-                        child: IconButton(
-                          icon: SvgPicture.asset(
-                            _obscureText
-                                ? 'assets/images/auth/eye-slash.svg'
-                                : 'assets/images/auth/eye.svg',
-                            width: _obscureText ? 24.w : 24.w,
-                            height: _obscureText ? 24.h : 24.h,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        ),
-                      )
-                          : null,
                     ),
+
+
+                    prefixIcon: widget.icon != null
+                        ? Padding(
+                      padding: EdgeInsets.all(12.w),
+                      child: SvgPicture.asset(
+                        widget.icon!,
+                        width: 13.w,
+                        height: 13.h,
+                      ),
+                    )
+                        : null,
+                    suffixIcon: widget.obscureText
+                        ? Padding(
+                      padding: EdgeInsets.only(right: 5.w),
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          _obscureText
+                              ? 'assets/images/auth/eye-slash.svg'
+                              : 'assets/images/auth/eye.svg',
+                          width: _obscureText ? 24.w : 24.w,
+                          height: _obscureText ? 24.h : 24.h,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                    )
+                        : null,
                   ),
                 ),
               ),
@@ -920,13 +1135,13 @@ maxLines: widget.maxLines,
 
           widget.errorText.isEmpty ? const SizedBox() : SizedBox(height: 5.h),
           widget.errorText.isEmpty ?
-              SizedBox()
-          :
+          SizedBox()
+              :
           ShowUp(
-            child: Text(widget.errorText?? "", style: primaryTextStyle(
-              weight: FontWeight.w400,
-              size: 12.sp.round(),
-              color: Colors.red
+            child: Text(widget.errorText ?? "", style: primaryTextStyle(
+                weight: FontWeight.w400,
+                size: 12.sp.round(),
+                color: Colors.red
             ),),
           )
         ],
@@ -971,14 +1186,13 @@ Widget DividerSocial() {
   );
 }
 
-Widget buttonSocialMedia(
-    {txtColor,
-    bool? axis,
-    required index,
-    required text,
-    required icon,
-    required color,
-    required borderColor}) {
+Widget buttonSocialMedia({txtColor,
+  bool? axis,
+  required index,
+  required text,
+  required icon,
+  required color,
+  required borderColor}) {
   return ShowUp(
       delay: index * 100,
       child: Container(
@@ -993,50 +1207,49 @@ Widget buttonSocialMedia(
           ),
           child: axis == null || axis == false
               ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      icon,
-                      width: 25.w,
-                      height: 25.h,
-                      fit: BoxFit.cover,
-                    ),
-                    Text(
-                      text,
-                      style: primaryTextStyle(
-                        size: 16.sp.round(),
-                        color: Color(txtColor),
-                        weight: FontWeight.w500,
-                        height: 0.06,
-                      ),
-                    ),
-                    const SizedBox()
-                  ],
-                )
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                icon,
+                width: 25.w,
+                height: 25.h,
+                fit: BoxFit.cover,
+              ),
+              Text(
+                text,
+                style: primaryTextStyle(
+                  size: 16.sp.round(),
+                  color: Color(txtColor),
+                  weight: FontWeight.w500,
+                  height: 0.06,
+                ),
+              ),
+              const SizedBox()
+            ],
+          )
               : Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                      const SizedBox(),
-                      SvgPicture.asset(icon),
-                      Text(
-                        text,
-                        style: primaryTextStyle(
-                          size: 16.sp.round(),
-                          color: Color(txtColor),
-                          weight: FontWeight.w500,
-                          height: 0.06,
-                        ),
-                      ),
-                    ])));
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(),
+                SvgPicture.asset(icon),
+                Text(
+                  text,
+                  style: primaryTextStyle(
+                    size: 16.sp.round(),
+                    color: Color(txtColor),
+                    weight: FontWeight.w500,
+                    height: 0.06,
+                  ),
+                ),
+              ])));
 }
 
-void buildCustomShowModel(
-    {required BuildContext context,
-    required Widget child,
-    double? height,
-    EdgeInsets? padding}) async {
+void buildCustomShowModel({required BuildContext context,
+  required Widget child,
+  double? height,
+  EdgeInsets? padding}) async {
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
     context: context,
@@ -1076,22 +1289,26 @@ void imagesSourcesShowModel({
           child: TextButton(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Take a Photo",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
             onPressed: onCameraPressed != null
                 ? () {
-                    onCameraPressed();
-                  }
+              onCameraPressed();
+            }
                 : null,
           ),
         ),
@@ -1101,22 +1318,26 @@ void imagesSourcesShowModel({
           child: TextButton(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Select from Gallery",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
             onPressed: onGalleryPressed != null
                 ? () {
-                    onGalleryPressed();
-                  }
+              onGalleryPressed();
+            }
                 : null,
           ),
         ),
@@ -1146,7 +1367,7 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
     _animController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     final curve =
-        CurvedAnimation(curve: Curves.decelerate, parent: _animController);
+    CurvedAnimation(curve: Curves.decelerate, parent: _animController);
     _animOffset =
         Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero)
             .animate(curve);
@@ -1233,7 +1454,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback myFunction;
 
   const CustomAppBar({
-     this.title = "",
+    this.title = "",
     this.actions,
     this.function,
     this.back,
@@ -1249,112 +1470,121 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return
       SingleChildScrollView(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 220.h,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          height: 230.h,
           child: Stack(
             alignment: Alignment.center,
             children: [
               SvgPicture.asset("assets/images/eclipseAppBar.svg",
-              fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
+
+                fit: BoxFit.cover,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
               ),
               Padding(
-                  padding: EdgeInsets.only(bottom: 100.h),
-        
-        child: Row(
-          children: [
-        
-            IconButton(
-          onPressed: (){
-        Get.back();
-          },
-          icon:
-          Stack(
-              alignment: Alignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/images/close-circle.svg",
-        
-        
-                ),
-                SvgPicture.asset(
-                  "assets/images/back_btn.svg",
-                  width: 88.h,
-        
-                ),
-        
-              ]
-          )
-        
-        
-            ),
-        
-            Spacer(),
-            Text(title , style: secondaryTextStyle(
-        color: Colors.white,
-        weight: FontWeight.w700,
-        size: 18.sp.round(),
-            ),),
-            Spacer(),
-            IconButton(
-          onPressed: (){
-        
-          },
-          icon:
-          Stack(
-              alignment: Alignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/images/close-circle.svg",
-        
-        
-                ),
-                GestureDetector(
-                  onTap: (){
-                    myFunction;
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 4.h),
-                    child: SvgPicture.asset(
-                      svgPath,
-                      // "assets/images/shopping-cart.svg",
-                      width: 22.h,
-        
-                    ),
+                padding: EdgeInsets.only(bottom: 100.h),
+
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10.h),
+                  child: Row(
+                    children: [
+
+                      IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon:
+                          Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/images/close-circle.svg",
+
+
+                                ),
+                                SvgPicture.asset(
+                                  "assets/images/back_btn.svg",
+                                  width: 88.h,
+
+                                ),
+
+                              ]
+                          )
+
+
+                      ),
+
+                      Spacer(),
+                      Text(title, style: secondaryTextStyle(
+                        color: Colors.white,
+                        weight: FontWeight.w700,
+                        size: 18.sp.round(),
+                      ),),
+                      Spacer(),
+                      IconButton(
+                          onPressed: () {
+
+                          },
+                          icon:
+                          Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/images/close-circle.svg",
+
+
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    myFunction;
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(bottom: 4.h),
+                                    child: SvgPicture.asset(
+                                      svgPath,
+                                      // "assets/images/shopping-cart.svg",
+                                      width: 22.h,
+
+                                    ),
+                                  ),
+                                ),
+
+                              ]
+                          )
+
+
+                      ),
+
+
+                    ],
                   ),
                 ),
-        
-              ]
-          )
-        
-        
-            ),
-        
-        
-        
-          ],
-        ),
               )
             ],
           ),
         ),
       );
 
-      AppBar(
+    AppBar(
 
       flexibleSpace:
       ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: 400.h,
-        ),
-        child: SizedBox(
-          height: 300, // Set your desired height
-          child: SvgPicture.asset('assets/images/eclipseAppBar.svg',
-            fit: BoxFit.contain,
-
-
+          constraints: BoxConstraints(
+            minHeight: 400.h,
           ),
-        )
+          child: SizedBox(
+            height: 300, // Set your desired height
+            child: SvgPicture.asset('assets/images/eclipseAppBar.svg',
+              fit: BoxFit.contain,
+
+
+            ),
+          )
 
 
         // SvgPicture.asset("assets/images/eclipseAppBar.svg",
@@ -1364,7 +1594,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         //
         // ),
       ),
-
 
 
       // leading: back ?? true
@@ -1400,12 +1629,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       //     )
       //     : const SizedBox(),
       title: Text(
-          // title ??
-              'Product',
+        // title ??
+          'Product',
           style: TextStyle(
             color: Colors.red,
             fontSize: 22.sp,
-            fontFamily: GoogleFonts.cormorant().fontFamily,
+            fontFamily: GoogleFonts
+                .cormorant()
+                .fontFamily,
             fontWeight: FontWeight.w700,
             height: 0,
           )),
@@ -1445,7 +1676,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
               color: Colors.red,
               fontSize: 22.sp,
-              fontFamily: GoogleFonts.cormorant().fontFamily,
+              fontFamily: GoogleFonts
+                  .cormorant()
+                  .fontFamily,
               fontWeight: FontWeight.w700,
               height: 0,
             )),
@@ -1469,7 +1702,9 @@ Widget LoadingWidget(Widget child) {
 }
 
 String GetMaxChar(String value, int max) {
-  return value.toString().length > max
+  return value
+      .toString()
+      .length > max
       ? value.toString().substring(0, max) + '..'
       : value.toString();
 }
@@ -1665,10 +1900,10 @@ String GetMaxChar(String value, int max) {
 Widget loadingIndicatorWidget() {
   return Center(
       child: LoadingAnimationWidget.flickr(
-    leftDotColor: primaryColor,
-    rightDotColor: const Color(0xFFFF0084),
-    size: 50,
-  ));
+        leftDotColor: primaryColor,
+        rightDotColor: const Color(0xFFFF0084),
+        size: 50,
+      ));
 }
 
 Widget placeHolderWidget() {
@@ -1881,6 +2116,62 @@ class VideoLoading extends StatelessWidget {
       ),
     );
   }
+}
+
+class BottomWaveClipperCart extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    // رسم الخطوط الجانبية والزوايا العلوية المستقيمة
+    path.lineTo(0, size.height - 20); // ترك مساحة للانحناء من الأسفل
+
+    // إضافة المنحنى في الجزء السفلي
+    var firstControlPoint =
+    Offset(size.width * 0.5, size.height + 20); // نقطة التحكم للانحناء
+    var firstEndPoint = Offset(size.width, size.height - 20); // نهاية المنحنى
+
+    // رسم المنحنى السفلي
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    // رسم الخط السفلي المنحني
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class BottomWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    // رسم الجزء العلوي المستقيم
+    path.lineTo(0.0, size.height - 50); // تقليل ارتفاع المنحنى
+
+    // التحكم في المنحنى في الأسفل
+    var firstControlPoint = Offset(size.width / 2, size.height);
+    var firstEndPoint = Offset(size.width, size.height - 50);
+
+    // إنشاء منحنى باستخدام النقطة التحكم والنهاية
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    // رسم الخط المستقيم إلى الأعلى
+    path.lineTo(size.width, 0.0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // class buildProductCard extends StatefulWidget {
@@ -3300,5 +3591,651 @@ myCustomDivider() {
     margin: EdgeInsets.symmetric(horizontal: 7.w),
     height: 1,
     color: Colors.grey[300],
+  );
+}
+
+
+customSearchField() {
+  return Expanded(
+
+    child: Container(
+
+
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 22,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ]
+      ),
+      child:
+      Obx(() {
+        return TextField(
+          onChanged: (v) {
+            // search with keywords in products
+            var bodyRequest = {'keywords': v};
+            customSearchController.getProducts(bodyRequest);
+          },
+          controller: customSearchController.searchController.value,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(8.w),
+              border: InputBorder.none,
+              hintText: 'Search',
+
+              hintStyle: primaryTextStyle(
+                color: Color(0xFF4F0099).withOpacity(0.3),
+                size: 14.sp.round(),
+                weight: FontWeight.w400,
+                letterSpacing: -0.41,
+              ),
+              suffixIconConstraints: BoxConstraints(
+                maxWidth: 52.w,
+                maxHeight: 52.h,
+              ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  "assets/images/home/search.svg",
+                  fit: BoxFit.cover,
+
+                ),
+              )
+
+          ),
+        );
+      }),
+    ),
+  );
+}
+
+buildFloatingButton({required String buttonName,
+  required BuildContext context, required dynamic onPressed,
+  bool isPlainBackground = false
+
+
+}) {
+  return SizedBox(
+    height: 91.h,
+    width: MediaQuery
+        .of(context)
+        .size
+        .width - 60.w,
+    child: FloatingActionButton(onPressed: () {},
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        child: ShowUp(
+            delay: 200,
+            child: GestureDetector(
+              onTap: () async {
+
+              },
+              child: SizedBox(
+
+                  child: MyDefaultButton(
+                    isPlainBackground: isPlainBackground,
+                    height: 75.h,
+                    btnWidth: 350,
+                    onPressed: onPressed,
+
+                    isloading: false,
+                    btnText: buttonName,
+                    isSecondaryTextStyle: true,
+                    borderRadius: 50,
+
+
+                  )),
+            )
+        )
+    ),
+  );
+}
+
+
+Widget globalProductCard(Product product, int index) {
+  return GestureDetector(
+    onTap: () async {
+      ProductController productController = Get.put(ProductController());
+      await productController.getProduct(product.id!);
+      Get.to(const ProductView());
+    },
+    child: SizedBox(
+        width: 165.w,
+        height: 259.h + 100.h,
+        child: Stack(children: [
+          PositionedDirectional(
+              top: 10,
+              child: ClipPath(
+                  clipper: BottomWaveClipper(),
+                  child: Container(
+                    width: 170.w,
+                    height: 259.h + 55.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 120.h,
+                                  child: CachedNetworkImage(
+                                    imageUrl: product.image,
+                                    placeholder: (context, url) =>
+                                        SizedBox(
+                                            height: 120.h,
+                                            child: Center(
+                                                child:
+                                                CircularProgressIndicator())),
+                                    // مؤشر تحميل
+                                    errorWidget: (context, url, error) =>
+                                        Image.network(
+                                          'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+                                          // صورة بديلة عند فشل التحميل
+                                          height: 120.h,
+                                        ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                // صورة المنتج
+
+                                Text(
+                                  GetMaxChar(product.name, 12),
+                                  textAlign: TextAlign.center,
+                                  style: secondaryTextStyle(
+                                    color: Color(0xFF20003D),
+                                    size: 16.sp.round(),
+                                    weight: FontWeight.w600,
+                                    letterSpacing: -0.41,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+
+                                Text(
+                                  '${product.size ?? 300} gm',
+                                  style: secondaryTextStyle(
+                                    color: Color(0xFF20003D),
+                                    size: 12.sp.round(),
+                                    weight: FontWeight.w300,
+                                    letterSpacing: -0.41,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                              ]),
+                          FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    if (index == 1)
+                                      Opacity(
+                                        opacity: 0.50,
+                                        child: Text(
+                                          '24.40',
+                                          textAlign: TextAlign.start,
+                                          style: secondaryTextStyle(
+                                            color: Color(0xFFA1A1A1),
+                                            size: 12.sp.round(),
+                                            fontFamily: 'MuseoModerno',
+                                            weight: FontWeight.w400,
+                                            height: 3,
+                                            letterSpacing: -0.41,
+                                            decoration: TextDecoration
+                                                .lineThrough,
+                                            // تحديد الخط السفلي
+                                            decorationColor: Colors
+                                                .red,
+                                            // تحديد لون الخط السفلي
+                                            decorationThickness:
+                                            2, // يمكنك تغيير سمك الخط إذا رغبت
+                                          ),
+                                        ),
+                                      ),
+                                    if (index == 1) SizedBox(width: 10.w),
+                                    Text(
+                                      '\$${product.price ?? ""}',
+                                      textAlign: TextAlign.center,
+                                      style: secondaryTextStyle(
+                                        color: Color(0xFF4F0099),
+                                        size: 22.sp.round(),
+                                        weight: FontWeight.w600,
+                                        letterSpacing: -0.41,
+                                      ),
+                                    ),
+                                    if (index == 1) SizedBox(width: 20.w),
+                                  ])),
+                          SizedBox(height: 8),
+                        ]),
+                  ))),
+
+          PositionedDirectional(
+            top: 20,
+            end: 10.w,
+            child: LikeButton(
+              onTap: onLikeButtonTapped,
+              isLiked: wishListController.isProductInWishList(product.id),
+              size: 20.sp,
+              circleColor:
+              CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+              bubblesColor: BubblesColor(
+                dotPrimaryColor: Color(0xff33b5e5),
+                dotSecondaryColor: Color(0xff0099cc),
+              ),
+              likeBuilder: (bool isLiked) {
+                return SvgPicture.asset(
+                  'assets/images/home/heart.svg',
+                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                  width: 15.w,
+                );
+              },
+            ),
+          ),
+          if (index == 1)
+            PositionedDirectional(
+              top: 0,
+              start: 5.w,
+              child: ShowUp(
+                  child: Container(
+                      width: 38.w * 1.8,
+                      height: 44.h * 1.8,
+                      child: Stack(children: [
+                        SvgPicture.asset(
+                          'assets/images/home/off.svg',
+                          width: 38.w * 1.8,
+                          height: 44.h * 1.8,
+                          fit: BoxFit.cover,
+                        ),
+                        PositionedDirectional(
+                            bottom: 35.h,
+                            start: 17.w,
+                            child: ShowUp(
+                              child: Text(
+                                '${50}%',
+                                style: secondaryTextStyle(
+                                  color: Colors.white,
+                                  size: 12.sp.round(),
+                                  weight: FontWeight.w800,
+                                  letterSpacing: -0.41,
+                                ),
+                              ),
+                            )),
+                      ]))),
+            ),
+
+          // Add cart controls for each product
+          PositionedDirectional(
+            bottom: -15.h,
+            end: 10.w,
+            start: 0,
+            child: SizedBox(
+                height: 250.h,
+                child: Stack(
+                  children: [
+                    // الخلفية SVG
+                    PositionedDirectional(
+                      bottom: 0,
+                      end: 0,
+                      start: 0,
+                      child: SvgPicture.asset(
+                        'assets/images/home/borderCart.svg',
+                        height: 155.h,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Cart controls
+                    PositionedDirectional(
+                      bottom: 71.h,
+                      end: 0,
+                      start: 0,
+                      child: SizedBox(
+                          width: 80.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                  padding:
+                                  EdgeInsetsDirectional.only(start: 10.w),
+                                  child: InkWell(
+                                      onTap: () {
+                                        cartController.updateQuantity(
+                                            cartController.cartItems[
+                                            cartController.cartItems
+                                                .indexWhere((item) =>
+                                            item.product.id ==
+                                                product.id)],
+                                            cartController
+                                                .cartItems[cartController
+                                                .cartItems
+                                                .indexWhere((item) =>
+                                            item.product.id ==
+                                                product.id)]
+                                                .quantity -
+                                                1);
+                                      },
+                                      child: SvgPicture.asset(
+                                        'assets/images/home/minus.svg',
+                                        width: 20.w,
+                                        height: 20.h,
+                                      ))),
+                              Obx(() =>
+                                  Text(
+                                    cartController.cartItems.isEmpty ||
+                                        cartController.cartItems.indexWhere(
+                                                (item) =>
+                                            item.product.id ==
+                                                product.id) ==
+                                            -1
+                                        ? '0'
+                                        : '${cartController
+                                        .cartItems[cartController.cartItems
+                                        .indexWhere((item) =>
+                                    item.product.id == product.id)].quantity}',
+                                    textAlign: TextAlign.center,
+                                    style: primaryTextStyle(
+                                      color: Color(0xFFFEFEFE),
+                                      size: 20.sp.round(),
+                                      weight: FontWeight.w900,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  )),
+                              InkWell(
+                                  onTap: () {
+                                    if (!cartController
+                                        .isProductInCart(product)) {
+                                      cartController.addToCart(
+                                        product,
+                                      );
+                                      return;
+                                    }
+                                    if (cartController
+                                        .isProductInCart(product) &&
+                                        cartController.cartItems.isNotEmpty) {
+                                      cartController.updateQuantity(
+                                          cartController.cartItems[
+                                          cartController.cartItems
+                                              .indexWhere((item) =>
+                                          item.product.id ==
+                                              product.id)],
+                                          cartController
+                                              .cartItems[cartController
+                                              .cartItems
+                                              .indexWhere((item) =>
+                                          item.product.id ==
+                                              product.id)]
+                                              .quantity +
+                                              1);
+                                    } // زيادة الكمية
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/images/home/plus.svg',
+                                    width: 20.w,
+                                    height: 20.h,
+                                  )),
+                            ],
+                          )),
+                    )
+                  ],
+                )),
+          ),
+        ])),
+  );
+}
+
+Widget placeHolderProductCard() {
+  return GestureDetector(
+    onTap: () async {
+
+    },
+    child: SizedBox(
+        width: 165.w,
+        height: 259.h + 100.h,
+        child: Stack(children: [
+          PositionedDirectional(
+              top: 10,
+              child: ClipPath(
+                  clipper: BottomWaveClipper(),
+                  child: Container(
+                    width: 170.w,
+                    height: 259.h + 55.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 120.h,
+                                  child: Image.asset(
+                                      "assets/images/placeholder.png"),
+
+                                ),
+                                // صورة المنتج
+
+                                Text(
+                                  GetMaxChar("    ", 12),
+                                  textAlign: TextAlign.center,
+                                  style: secondaryTextStyle(
+                                    color: Color(0xFF20003D),
+                                    size: 16.sp.round(),
+                                    weight: FontWeight.w600,
+                                    letterSpacing: -0.41,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+
+                                Text(
+                                  ' gm',
+                                  style: secondaryTextStyle(
+                                    color: Color(0xFF20003D),
+                                    size: 12.sp.round(),
+                                    weight: FontWeight.w300,
+                                    letterSpacing: -0.41,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                              ]),
+                          FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Opacity(
+                                      opacity: 0.50,
+                                      child: Text(
+                                        '  ',
+                                        textAlign: TextAlign.start,
+                                        style: secondaryTextStyle(
+                                          color: Color(0xFFA1A1A1),
+                                          size: 12.sp.round(),
+                                          fontFamily: 'MuseoModerno',
+                                          weight: FontWeight.w400,
+                                          height: 3,
+                                          letterSpacing: -0.41,
+                                          decoration: TextDecoration
+                                              .lineThrough,
+                                          // تحديد الخط السفلي
+                                          decorationColor: Colors
+                                              .red,
+                                          // تحديد لون الخط السفلي
+                                          decorationThickness:
+                                          2, // يمكنك تغيير سمك الخط إذا رغبت
+                                        ),
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 10.w),
+                                    Text(
+                                      '',
+                                      textAlign: TextAlign.center,
+                                      style: secondaryTextStyle(
+                                        color: Color(0xFF4F0099),
+                                        size: 22.sp.round(),
+                                        weight: FontWeight.w600,
+                                        letterSpacing: -0.41,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20.w),
+                                  ])),
+                          SizedBox(height: 8),
+                        ]),
+                  ))),
+
+          PositionedDirectional(
+            top: 20,
+            end: 10.w,
+            child: LikeButton(
+              onTap: onLikeButtonTapped,
+              isLiked: wishListController.isProductInWishList(""),
+              size: 20.sp,
+              circleColor:
+              CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+              bubblesColor: BubblesColor(
+                dotPrimaryColor: Color(0xff33b5e5),
+                dotSecondaryColor: Color(0xff0099cc),
+              ),
+              likeBuilder: (bool isLiked) {
+                return SvgPicture.asset(
+                  'assets/images/home/heart.svg',
+                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                  width: 15.w,
+                );
+              },
+            ),
+          ),
+          PositionedDirectional(
+            top: 0,
+            start: 5.w,
+            child: ShowUp(
+                child: Container(
+                    width: 38.w * 1.8,
+                    height: 44.h * 1.8,
+                    child: Stack(children: [
+                      SvgPicture.asset(
+                        'assets/images/home/off.svg',
+                        width: 38.w * 1.8,
+                        height: 44.h * 1.8,
+                        fit: BoxFit.cover,
+                      ),
+                      PositionedDirectional(
+                          bottom: 35.h,
+                          start: 17.w,
+                          child: ShowUp(
+                            child: Text(
+                              '${50}%',
+                              style: secondaryTextStyle(
+                                color: Colors.white,
+                                size: 12.sp.round(),
+                                weight: FontWeight.w800,
+                                letterSpacing: -0.41,
+                              ),
+                            ),
+                          )),
+                    ]))),
+          ),
+
+
+          // Add cart controls for each product
+          PositionedDirectional(
+            bottom: -15.h,
+            end: 10.w,
+            start: 0,
+            child: SizedBox(
+                height: 250.h,
+                child: Stack(
+                  children: [
+                    // الخلفية SVG
+                    PositionedDirectional(
+                      bottom: 0,
+                      end: 0,
+                      start: 0,
+                      child: SvgPicture.asset(
+                        'assets/images/home/borderCart.svg',
+                        height: 155.h,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Cart controls
+                    PositionedDirectional(
+                      bottom: 71.h,
+                      end: 0,
+                      start: 0,
+                      child: SizedBox(
+                          width: 80.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                  padding:
+                                  EdgeInsetsDirectional.only(start: 10.w),
+                                  child: InkWell(
+                                      onTap: () {
+
+                                      },
+                                      child: SvgPicture.asset(
+                                        'assets/images/home/minus.svg',
+                                        width: 20.w,
+                                        height: 20.h,
+                                      ))),
+                              Text(
+                                '0',
+                                textAlign: TextAlign.center,
+                                style: primaryTextStyle(
+                                  color: Color(0xFFFEFEFE),
+                                  size: 20.sp.round(),
+                                  weight: FontWeight.w900,
+                                  letterSpacing: -0.41,
+                                ),
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    // زيادة الكمية
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/images/home/plus.svg',
+                                    width: 20.w,
+                                    height: 20.h,
+                                  )),
+                            ],
+                          )),
+                    )
+                  ],
+                )),
+          ),
+        ])),
   );
 }
