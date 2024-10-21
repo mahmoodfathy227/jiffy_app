@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:delayed_widget/delayed_widget.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
+import 'package:jiffy/app/modules/home/views/home_view.dart';
+import 'package:jiffy/app/routes/app_pages.dart';
 
 import '../controllers/onboarding_controller.dart';
 
@@ -23,10 +25,9 @@ class OnboardingView extends StatelessWidget {
       body: Obx(() {
         print(controller.previousPage.value.toString() + 'test cval');
         return controller.currentPage.value == 3
-            ? GestureDetector(
+            ? InkWell(
                 onTap: () {
-                  // controller.restartOnboarding();
-                  controller.navigateToLogin();
+                  controller.restartOnboarding();
                 },
                 child: buildWelcomeScreen(context))
             : Stack(
@@ -287,52 +288,14 @@ class OnboardingView extends StatelessWidget {
                                   Shadow(
                                     offset: Offset(2, 2), // اتجاه الظل
                                     blurRadius: 4, // درجة التمويه
-                                    color: Colors.black
+                                    color: Colors.grey
                                         .withOpacity(0.15), // لون الظل الخفيف
                                   ),
                                   // Shadow 2: medium shadow
-                                  Shadow(
-                                    offset: Offset(4, 4),
-                                    blurRadius: 8,
-                                    color: Colors.black
-                                        .withOpacity(0.10), // لون الظل المتوسط
-                                  ),
-                                  // Shadow 3: strong shadow
-                                  Shadow(
-                                    offset: Offset(6, 6),
-                                    blurRadius: 12,
-                                    color: Colors.black
-                                        .withOpacity(0.05), // لون الظل الأقوى
-                                  ),
                                 ],
                               ),
                             ),
                             // Inner shadow using Gradient
-                            ShaderMask(
-                              shaderCallback: (bounds) {
-                                return LinearGradient(
-                                  colors: [
-                                    Colors.black
-                                        .withOpacity(0.2), // يبدأ بلون داكن
-                                    Colors.transparent, // تدريجيًا إلى الشفافية
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                ).createShader(bounds);
-                              },
-                              blendMode: BlendMode.dstIn,
-                              child: Text(
-                                'Get Started!',
-                                textAlign: TextAlign.center,
-                                style: primaryTextStyle(
-                                  size: 48.sp.round(),
-                                  weight: FontWeight.w700,
-                                  color: Colors
-                                      .white, // Main text color (can be changed or omitted)
-                                  letterSpacing: -1.20,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                         SizedBox(height: 10.h),
@@ -349,52 +312,63 @@ class OnboardingView extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 38.h),
-                        Container(
-                          width: 336.77.w,
-                          height: 50.87.h,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 50.52.w, vertical: 11.43.w),
-                          decoration: ShapeDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment(1.00, 0.04),
-                              end: Alignment(-1, -0.04),
-                              colors: [
-                                Color(0xFF20003D),
-                                Color(0xFF6900CC),
-                              ],
-                            ),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(width: 1, color: Colors.white),
-                              borderRadius: BorderRadius.circular(12.47),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0x66000000),
-                                blurRadius: 20.79,
-                                offset: Offset(0, 9.35),
-                                spreadRadius: 0,
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Start',
-                                textAlign: TextAlign.center,
-                                style: primaryTextStyle(
-                                  color: Colors.white,
-                                  size: 16.63.sp.round(),
-                                  weight: FontWeight.w500,
-                                  height: 0.10,
-                                  letterSpacing: -0.52,
+                        InkWell(
+                            onTap: () {
+                              Get.to(
+                                () => HomeView(),
+                                transition: Transition
+                                    .fadeIn, // استخدام تأثير التكبير (Zoom)
+                                duration: Duration(
+                                    milliseconds: 400), // مدة الأنيميشن
+                              );
+                            },
+                            child: Container(
+                              width: 336.77.w,
+                              height: 50.87.h,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 50.52.w, vertical: 11.43.w),
+                              decoration: ShapeDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment(1.00, 0.04),
+                                  end: Alignment(-1, -0.04),
+                                  colors: [
+                                    Color(0xFF20003D),
+                                    Color(0xFF6900CC),
+                                  ],
                                 ),
+                                shape: RoundedRectangleBorder(
+                                  side:
+                                      BorderSide(width: 1, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(12.47),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0x66000000),
+                                    blurRadius: 20.79,
+                                    offset: Offset(0, 9.35),
+                                    spreadRadius: 0,
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Start',
+                                    textAlign: TextAlign.center,
+                                    style: primaryTextStyle(
+                                      color: Colors.white,
+                                      size: 16.63.sp.round(),
+                                      weight: FontWeight.w500,
+                                      height: 0.10,
+                                      letterSpacing: -0.52,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -481,11 +455,8 @@ class OnboardingView extends StatelessWidget {
                 ),
               ),
               buildDots(controller),
-              GestureDetector(
-                onTap: () {
-                  controller.nextPage();
-                  HapticFeedback.selectionClick();
-                },
+              InkWell(
+                onTap: () => controller.nextPage(),
                 child: SvgPicture.asset(
                   'assets/images/onboarding/next.svg',
                   width: 42.w,

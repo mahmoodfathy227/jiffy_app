@@ -98,22 +98,6 @@ class ApiResponse {
   }
 }
 
-class ApiDataResponse {
-  final String? status;
-  final String? message;
-  final dynamic data;
-
-  ApiDataResponse({required this.status, required this.message, this.data});
-
-  factory ApiDataResponse.fromJson(Map<String, dynamic> json) {
-    return ApiDataResponse(
-      status: json['status'] ?? json['status'],
-      message: json['message'] ?? json['message'],
-      data: json['data'] ?? json['data'],
-    );
-  }
-}
-
 class ApiCategoryResponse {
   String? status;
   String? message;
@@ -146,7 +130,7 @@ class ApiCategoryResponse {
 class ApiHomeResponse {
   final String status;
   final String message;
-  final HomeModel? data;
+  final HomePageData? data;
 
   ApiHomeResponse({required this.status, required this.message, this.data});
 
@@ -154,7 +138,7 @@ class ApiHomeResponse {
     return ApiHomeResponse(
       status: json['status'],
       message: json['message'],
-      data: json['data'] != null ? HomeModel.fromJson(json['data']) : null,
+      data: json['data'] != null ? HomePageData.fromJson(json['data']) : null,
     );
   }
 }
@@ -236,50 +220,43 @@ class User {
   }
 }
 
-class HomeModel {
-  List<String>? setting;
-  int? totalPoints;
-  List<Categories>? categories;
-  List<dynamic>? banners;
-  List<Product>? product;
+class HomePageData {
+  final List<Brands> categories;
+  final List<Brands> brands;
+  final List<Product> latestProducts;
+  final List<Product> featuredProducts;
+  final List<Product> premiumProducts;
 
-  HomeModel(
-      {this.setting,
-      this.totalPoints,
-      this.categories,
-      this.banners,
-      this.product});
+  HomePageData({
+    required this.categories,
+    required this.brands,
+    required this.latestProducts,
+    required this.featuredProducts,
+    required this.premiumProducts,
+  });
 
-  HomeModel.fromJson(Map<String, dynamic> json) {
-    setting = json['setting'].cast<String>();
-    totalPoints = json['total_points'];
-    if (json['categories'] != null) {
-      categories = <Categories>[];
-      json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
-      });
-    }
-    banners = json['banners'].cast<String>();
-    if (json['product'] != null) {
-      product = <Product>[];
-      json['product'].forEach((v) {
-        product!.add(new Product.fromJson(v));
-      });
-    }
-  }
+  factory HomePageData.fromJson(Map<String, dynamic> json) {
+    var categoriesList =
+        (json['categories'] as List).map((i) => Brands.fromJson(i)).toList();
+    var brandsList =
+        (json['brands'] as List).map((i) => Brands.fromJson(i)).toList();
+    var latestProductsList = (json['latest_products'] as List)
+        .map((i) => Product.fromJson(i))
+        .toList();
+    var featuredProductsList = (json['featured_products'] as List)
+        .map((i) => Product.fromJson(i))
+        .toList();
+    var premiumProductsList = (json['premium_products'] as List)
+        .map((i) => Product.fromJson(i))
+        .toList();
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['setting'] = this.setting;
-    data['total_points'] = this.totalPoints;
-    if (this.categories != null) {
-      data['categories'] = this.categories!.map((v) => v.toJson()).toList();
-    }
-    data['banners'] = this.banners;
-    if (this.product != null) {
-      data['product'] = this.product!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return HomePageData(
+      categories: categoriesList,
+      brands: brandsList,
+      latestProducts: latestProductsList,
+      featuredProducts: featuredProductsList,
+      premiumProducts: premiumProductsList,
+    );
   }
 }
 
@@ -458,7 +435,28 @@ class Unit {
   }
 }
 
+class Category {
+  int? id;
+  String? name;
+  Null? image;
 
+  Category({this.id, this.name, this.image});
+
+  Category.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+
+    image = json['image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['image'] = this.image;
+    return data;
+  }
+}
 
 class ApiCollectionsResponse {
   String? status;

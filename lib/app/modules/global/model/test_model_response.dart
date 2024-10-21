@@ -140,39 +140,53 @@ class Banners {
 }
 
 class Product {
-  int? id;
-  String? name;
-  String? description;
-  String? image;
-  String? price;
-  String? discountedPrice;
+  final int id;
+  final String name;
+  final String description;
+  final String image;
+  final double? price;
+  final double? old_price;
+  final double? size;
+  final int outOfStock;
+  final double rating;
 
-  Product(
-      {this.id,
-      this.name,
-      this.description,
-      this.image,
-      this.price,
-      this.discountedPrice});
+  Product({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.price,
+    required this.old_price,
+    required this.size,
+    required this.outOfStock,
+    required this.rating,
+  });
 
-  Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    description = json['description'];
-    image = json['image'];
-    price = json['price'];
-    discountedPrice = json['discounted_price'];
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      image: json['image'] ?? '',
+      price: json['price'] != null ? json['price'].toDouble() : null,
+      size: json['size'] != null ? json['size'].toDouble() : null,
+      old_price: json['old_price'] != null ? json['old_price'].toDouble() : 0,
+      outOfStock: json['out_of_stock'] ?? 0,
+      rating: json['rating']?.toDouble() ?? 0.0,
+    );
   }
-
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['image'] = this.image;
-    data['price'] = this.price;
-    data['discounted_price'] = this.discountedPrice;
-    return data;
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'image': image,
+      'price': price,
+      'old_price': old_price,
+      'size': size,
+      'out_of_stock': outOfStock,
+      'rating': rating,
+    };
   }
 }
 

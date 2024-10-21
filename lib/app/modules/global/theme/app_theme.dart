@@ -85,7 +85,6 @@ BorderRadius radiusOnly({
 const double textPrimarySizeGlobal = 18.0; // حجم النص الأساسي
 const FontWeight fontWeightPrimaryGlobal =
     FontWeight.w700; // وزن خط النص الأساسي
-
 TextStyle secondaryTextStyle({
   int? size,
   Color? color,
@@ -96,16 +95,17 @@ TextStyle secondaryTextStyle({
   double? wordSpacing,
   TextDecoration? decoration,
   TextDecorationStyle? textDecorationStyle,
-  TextBaseline? textBaseline,
+   TextBaseline? textBaseline,
   Color? decorationColor,
   Color? backgroundColor,
   double? height,
+  double? decorationThickness,
 }) {
   return TextStyle(
     fontSize: size != null ? size.toDouble() : textSecondarySizeGlobal,
     color: color ?? textSecondaryColorGlobal,
     fontWeight: weight ?? fontWeightSecondaryGlobal,
-    fontFamily: fontFamily ?? 'museomoderno',
+    fontFamily: GoogleFonts.museoModerno().fontFamily,
     letterSpacing: letterSpacing,
     fontStyle: fontStyle,
     decoration: decoration,
@@ -113,6 +113,7 @@ TextStyle secondaryTextStyle({
     decorationColor: decorationColor,
     wordSpacing: wordSpacing,
     textBaseline: textBaseline,
+    decorationThickness : decorationThickness,
     backgroundColor: backgroundColor,
     height: height,
   );
@@ -131,7 +132,7 @@ TextStyle primaryTextStyle({
   TextBaseline? textBaseline,
   Color? decorationColor,
   Color? backgroundColor,
-  List<Shadow>? shadows ,
+  List<Shadow>? shadows,
   double? height,
 }) {
   return TextStyle(

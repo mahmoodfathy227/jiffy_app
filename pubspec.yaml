@@ -57,6 +57,7 @@ dependencies:
   path_provider: 2.1.3
   google_fonts: any
   modal_bottom_sheet: any
+  circle_wheel_scroll: ^0.0.3
   sign_in_with_apple: ^6.1.0
   image_picker: any
   geocoding: ^3.0.0
@@ -68,9 +69,6 @@ dependencies:
   share_plus:
   app_links:
   public_ip_address:
-  dotted_border:
-  auto_size_text:
-
   image: ^3.0.1
   scrollable_positioned_list:
   smooth_page_indicator:
@@ -78,22 +76,9 @@ dependencies:
 
 flutter:
   fonts:
-    - family: CircularStd
+    - family: circularStd
       fonts:
-        - asset: assets/fonts/CircularStd-Medium.ttf
-        - asset: assets/fonts/CircularStd-Book.ttf
-        - asset: assets/fonts/CircularStd-Black.ttf
-        - asset: assets/fonts/CircularStd-Bold.ttf
-
-
-
-    - family: museomoderno
-      fonts:
-        - asset: assets/fonts/museomoderno/MuseoModerno-Medium.ttf
-        - asset: assets/fonts/museomoderno/MuseoModerno-Regular.ttf
-        - asset: assets/fonts/museomoderno/MuseoModerno-Black.ttf
-        - asset: assets/fonts/museomoderno/MuseoModerno-Bold.ttf
-
+        - asset: assets/fonts/circular-std-medium-500.ttf
 
   uses-material-design: true
 
@@ -101,13 +86,12 @@ flutter:
 
 
 
+
   assets:
-    - assets/images/
+    - assets/images/home/
     - assets/icons/
-    - assets/images/auth/
     - assets/images/splash/
+    - assets/fonts/
     - assets/images/onboarding/
     - assets/images/forgot_password/
-    - assets/images/help/
-    - assets/images/address/
     - shorebird.yaml

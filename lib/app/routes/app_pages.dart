@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../modules/address/bindings/address_binding.dart';
-import '../modules/address/views/address_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/bindings/forgot_password_binding.dart';
 import '../modules/auth/views/forgot_password_view.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
-import '../modules/help/bindings/help_binding.dart';
-import '../modules/help/views/help_view.dart';
+import '../modules/home/bindings/home_binding.dart';
+import '../modules/home/views/home_view.dart';
+ 
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
-import '../modules/search/bindings/search_binding.dart';
-import '../modules/search/views/search_view.dart';
+import '../modules/product/bindings/product_binding.dart';
+import '../modules/product/views/product_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
@@ -163,19 +162,15 @@ class AppPages {
     //   binding: CouponBinding(),
     // )
     GetPage(
-      name: _Paths.HELP,
-      page: () => const HelpView(),
-      binding: HelpBinding(),
+      name: _Paths.HOME,
+      page: () => HomeView(),
+      binding: HomeBinding(),
       children: [
+ 
         GetPage(
-          name: _Paths.SEARCH,
-          page: () => const SearchView(),
-          binding: SearchBinding(),
-        ),
-        GetPage(
-          name: _Paths.ADDRESS,
-          page: () => const AddressView(),
-          binding: AddressBinding(),
+          name: _Paths.PRODUCT,
+          page: () => const ProductView(),
+          binding: ProductBinding(),
         ),
       ],
     ),
