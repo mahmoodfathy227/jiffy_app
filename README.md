@@ -37,7 +37,7 @@ To get started with jiffy Outfit, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/GenixLB0/jiffy.git
+   git clone https://github.com/mahmoodfathy227/jiffy_app
    cd jiffy
    flutter pub get
    flutter run
