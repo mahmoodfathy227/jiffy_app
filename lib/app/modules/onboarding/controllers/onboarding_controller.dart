@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:jiffy/app/modules/onboarding/views/onboarding_view.dart';
 import 'package:flutter/animation.dart';
 
+import '../../../routes/app_pages.dart';
+
 class OnboardingController extends GetxController
     with SingleGetTickerProviderMixin {
   // Observable variables for page tracking
@@ -221,6 +223,11 @@ class OnboardingController extends GetxController
 
       currentPage.value = 3; // Set to welcome page
     }
+  }
+
+
+  navigateToLogin(){
+   Get.offAllNamed(Routes.LOGIN);
   }
 
   // Resets and starts all animations for the current page

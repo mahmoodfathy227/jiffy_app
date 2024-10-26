@@ -1,230 +1,309 @@
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jiffy/app/modules/auth/views/verification_code_view.dart';
-import 'package:jiffy/app/modules/global/config/helpers.dart';
-import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 
+
+// import 'package:ecommerceapp/app/modules/main/views/main_view.dart';
+
+import 'package:jiffy/app/modules/auth/views/register_view.dart';
+import '../../../routes/app_pages.dart';
+import '../../global/config/configs.dart';
+import '../../global/config/helpers.dart';
+import '../../global/theme/app_theme.dart';
+import '../../global/theme/colors.dart';
 import '../../global/widget/widget.dart';
-import '../controllers/forgot_password_controller.dart';
+import 'forgot_password_view.dart';
+import '../controllers/auth_controller.dart';
+import 'login_view.dart';
 
-class ForgotPasswordView extends GetView<ForgotPasswordController> {
+class ForgotPasswordView extends GetView<AuthController> {
   const ForgotPasswordView({Key? key}) : super(key: key);
+
+  Widget loginbyPasswordView(context) {
+    return SizedBox(
+      height: MediaQuery
+          .of(context)
+          .size
+          .height - 300.h,
+      child: Column(
+        children: [
+
+
+          ShowUp(
+              delay: 600,
+              child: CustomTextField(
+                labelText: 'Email or Phone',
+                onChanged: (value) {
+                  controller.email.value = value;
+                },
+                errorText: controller.emailError.value,
+                obscureText: false,
+              )),
+
+
+          SizedBox(height: 80.h),
+          ShowUp(
+              delay: 800,
+              child: MyDefaultButton(
+                errorText: controller.errorMessage.value,
+                isloading: controller.isLoading.value,
+                btnText: 'Send',
+                onPressed: () => controller.forgotPassword(),
+              )),
+          SizedBox(height: 35.h),
+          ShowUp(
+            delay: 400,
+            child: GestureDetector(
+              onTap: () {
+                Get.off(LoginView());
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                      "assets/images/forgot_password/arrow-left.svg"),
+                  SizedBox(width: 5.w,),
+                  Text(
+                    'Back to login',
+                    textAlign: TextAlign.center,
+                    style: primaryTextStyle(
+                      color: const Color(0xFF555662),
+                      size: 15.sp.round(),
+                      weight: FontWeight.w700,
+
+
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 35.h),
+
+
+        ],
+      ),
+    );
+  }
+
+  Widget socialMediaView() {
+    return Column(
+      children: [
+        ShowUp(
+            delay: 400,
+            child: Text(
+              'Welcome to Marianella',
+              textAlign: TextAlign.center,
+              style: boldTextStyle(
+                  color: const Color(0xFF090A0A),
+                  size: 32.sp.round(),
+                  weight: FontWeight.w400),
+            )),
+        Text(
+          'Please log in or sign up to continue shopping',
+          textAlign: TextAlign.center,
+          style: secondaryTextStyle(
+            color: const Color(0xFFCDCFD0),
+            size: 16.sp.round(),
+            weight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(
+          height: 32.h,
+        ),
+        // if (!GetPlatform.isIOS)
+        InkWell(
+            onTap: () {
+              print('dsadsa');
+              controller.googleLogin();
+            },
+            child: buttonSocialMedia(
+                icon: 'assets/icons/google.svg',
+                index: 0,
+                text: 'Continue with Google',
+                color: 0xffFFFFFF,
+                txtColor: 0xFF090A0A,
+                borderColor: 0xFFE3E4E5)),
+
+        if (GetPlatform.isIOS)
+          SizedBox(
+            height: 16.h,
+          ),
+        if (GetPlatform.isIOS)
+          InkWell(
+              onTap: () {
+                print('dsadsa');
+                controller.appleLogin();
+              },
+              child: buttonSocialMedia(
+                  icon: 'assets/icons/apple.svg',
+                  index: 2,
+                  text: 'Continue with Apple',
+                  color: 0xFF090A0A,
+                  txtColor: 0xffFFFFFF,
+                  borderColor: 0xFFE3E4E5)),
+        SizedBox(
+          height: 35.h,
+        ),
+        DividerSocial(),
+        SizedBox(
+          height: 34.h,
+        ),
+        InkWell(
+            onTap: () {
+              controller.socialView.value = false;
+              controller.password.value = '';
+              controller.email.value = '';
+            },
+            child: buttonSocialMedia(
+                icon: 'assets/icons/login.svg',
+                index: 3,
+                text: 'Sign in with password',
+                color: 0xFFD4B0FF,
+                txtColor: 0xFF21034F,
+                borderColor: 0xFFD4B0FF)),
+        SizedBox(
+          height: 34.h,
+        ),
+        InkWell(
+            onTap: () {
+              controller.isGuest.value = true;
+              Get.snackbar('Guest Mode', 'You\'re Acting As A Guest');
+              // Get.to(MainView());
+              Get.offNamedUntil(Routes.MAIN, (Route) => false);
+            },
+            child: buttonSocialMedia(
+                icon: 'assets/images/onboarding/person.svg',
+                index: 3,
+                text: 'Sign in As a Guest',
+                color: 0xFFD4B0FF,
+                txtColor: 0xFF21034F,
+                borderColor: 0xFFD4B0FF)),
+        SizedBox(
+          height: 26.h,
+        ),
+        ShowUp(
+            delay: 500,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Don’t have an account?',
+                    style: primaryTextStyle(
+                      color: const Color(0xFFCDCFD0),
+                      size: 16.sp.round(),
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' ',
+                    style: primaryTextStyle(
+                      color: const Color(0xFF979C9E),
+                      size: 16.sp.round(),
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'Sign up',
+                    style: primaryTextStyle(
+                      color: const Color(0xFFAA61FF),
+                      size: 16.sp.round(),
+                      weight: FontWeight.w400,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        controller.clearFields();
+                        Get.to(() => RegisterView());
+                      },
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            )),
+      ],
+    );
+  }
+
+  void back() {
+    controller.socialView.value = true;
+
+    controller.password.value = '';
+    controller.email.value = '';
+  }
 
   @override
   Widget build(BuildContext context) {
+    final AuthController controller = Get.put(AuthController());
     return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(),
-        body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       right: MediaQuery.of(context).size.width / 1.3),
-              //   child: InkWell(
-              //     onTap: () {
-              //       Get.back();
-              //     },
-              //     child: Container(
-              //       height: 40.h,
-              //       width: 40.w,
-              //       decoration: BoxDecoration(
-              //         color: Colors.white,
-              //         borderRadius: const BorderRadius.all(Radius.circular(30)),
-              //         boxShadow: [
-              //           BoxShadow(
-              //             color: Colors.grey.withOpacity(0.4),
-              //             spreadRadius: 5,
-              //             blurRadius: 7,
-              //             offset:
-              //                 const Offset(0, 3), // changes position of shadow
-              //           ),
-              //         ],
-              //       ),
-              //       child: SvgPicture.asset(
-              //           "assets/images/forgot_password/BackBTN.svg"),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(
-                height: 45.h,
-              ),
-              Center(
-                  child: Text('Forgot password?',
-                      style: boldTextStyle(
-                        color: Colors.black,
-                        size: 24.sp.round(),
-                        weight: FontWeight.w400,
-                        height: 0.08.h,
-                      ))),
-              SizedBox(
-                height: 35.h,
-              ),
-              SizedBox(
-                width: 350.w,
-                child:
-                    Text('Enter email associated with your account and  we’ll',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.lato(
-                          color: Colors.black,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                          height: 0.12.h,
-                        )),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              SizedBox(
-                width: 308.w,
-                child: Text(' send and email with intructions to reset your ',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(
-                      color: Colors.black,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 0.12.h,
-                    )),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              SizedBox(
-                width: 308.w,
-                child: Text('password',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(
-                      color: Colors.black,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 0.12.h,
-                    )),
-              ),
-              SizedBox(
-                height: 100.h,
-              ),
-              CustomTextField(
-                labelText: 'Enter your email here',
-                onChanged: (String value) {},
-                icon: 'assets/icons/email 1.svg',
-                onSubmitted: (input) {
-                  if (controller.isEmail(input)) {
-                    controller.sendOTP(input, true).then((value) {
-                      if (value.toString() == "OK") {
-                        Get.to(() => const VerificationCodeView());
-                      } else {
-                        Get.snackbar('Error', 'Email Not Found!');
-                        // AppHelpers.showCustomSnackBar(
-                        //     context,
-                        //     'Email Not Found!',
-                        //     'Please Check your Email and try again!');
-                      }
-                    });
-                  } else {
-                    Get.snackbar('Error', 'Invalid Email!');
-                    // AppHelpers.showCustomSnackBar(
-                    //   context,
-                    //   'Invalid Email',
-                    //   'Please Check your Email Expression!',
-                    // );
-                  }
-                },
-              ),
-              SizedBox(
-                height: 100.h,
-              ),
-              Obx(() => controller.isLoading.value
-                  ? loadingIndicatorWidget()
-                  : SizedBox())
-            ],
-          ),
-        ));
-  }
+        backgroundColor: primaryBackgroundColor,
+        body: Obx(() {
+          return SafeArea(
+            child: SizedBox(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
+                      ShowUp(
+                          delay: 200,
+                          child: SvgPicture.asset(
+                            LOGO,
+                            width: 40.w,
+                            height: 30.h,
+                            fit: BoxFit.cover,
+                          )),
+                      SizedBox(
+                        height: kDefaultPadding,
+                      ),
 
-// customTextField(context) {
-//   return  Padding(
-//     padding: EdgeInsets.symmetric(horizontal: 20.w),
-//     child:
-//
-//
-//     // Material(
-//     //
-//     //   elevation: 0.5,
-//     //   color: Colors.white,
-//     //   shadowColor: Colors.blue,
-//     //   child: Container(
-//     //     padding: EdgeInsets.all(8.0),
-//     //     child:
-//     //
-//     //     TextFormField(
-//     //       style: GoogleFonts.lato(
-//     //           color: Colors.black ,
-//     //           fontWeight: FontWeight.w400,
-//     //           fontSize: 12.sp
-//     //
-//     //       ),
-//     //       onFieldSubmitted: (input){
-//     //         if( controller.isEmail(input) ) {
-//     //           controller.sendOTP(input , true).then((value){
-//     //             if(value.toString() == "OK"){
-//     //               Get.to(()=> const VerificationCodeView());
-//     //             } else {
-//     //               AppHelpers.showCustomSnackBar(context, 'Email Not Found!',  'Please Check your Email and try again!');
-//     //
-//     //             }
-//     //
-//     //
-//     //
-//     //
-//     //           });
-//     //
-//     //         } else{
-//     //           AppHelpers.showCustomSnackBar(context,
-//     //             'Invalid Email',
-//     //             'Please Check your Email Expression!',
-//     //           );
-//     //
-//     //
-//     //         }
-//     //       }  ,
-//     //
-//     //       autofocus: false,
-//     //
-//     //       decoration: InputDecoration(
-//     //         enabledBorder: const UnderlineInputBorder(
-//     //           borderSide: BorderSide(color: Colors.white),
-//     //         ),
-//     //         focusedBorder: const UnderlineInputBorder(
-//     //           borderSide: BorderSide(color: Colors.white),
-//     //         ),
-//     //         icon:  const Icon(Icons.email_outlined, color: Colors.grey),
-//     //         hintText: 'enter your email here ',
-//     //         fillColor: Colors.white,
-//     //         hintStyle: GoogleFonts.lato(
-//     //             color: Colors.black ,
-//     //             fontWeight: FontWeight.w400,
-//     //             fontSize: 12.sp
-//     //
-//     //         ),
-//     //         filled: true,
-//     //
-//     //         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-//     //
-//     //       ),
-//     //     ),
-//     //   ),
-//     // ),
-//   );
-//
-// }
+                      SizedBox(
+
+
+                        child: Text(
+                          "Forgot Password?", overflow: TextOverflow.ellipsis,
+                          style: primaryTextStyle(
+                              weight: FontWeight.w700,
+                              size: 32.sp.round(),
+                              color: primaryColor
+                          ),),
+                      ),
+                      SizedBox(height: 10.h,),
+                      Text("No Worries we'll send you reset \n instructions",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: primaryTextStyle(
+                            weight: FontWeight.w100,
+                            size: 16.sp.round(),
+                            color: Colors.black
+                        ),),
+
+                      SizedBox(
+                        height: 60.h,
+                      ),
+
+                      loginbyPasswordView(context),
+
+                    ],
+                  )),
+            ),
+          );
+        }));
+  }
 }

@@ -408,9 +408,9 @@ class _FadeInDemoState extends State<FadeInFilterBar>
                   customSearchController.getProducts(bodyRequest);
                 },
                 child: Icon(Icons.keyboard_arrow_down_outlined, size: 20,
-                  color: customSearchController.isHighToLowFilter.value
-                      ? Colors.grey[300]
-                      : primaryColor,),
+                  color: !customSearchController.isHighToLowFilter.value
+                      ? primaryColor
+                      : Colors.grey[300],),
               ),
 
             ],

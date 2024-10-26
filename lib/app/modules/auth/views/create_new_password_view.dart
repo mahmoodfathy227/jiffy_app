@@ -1,427 +1,378 @@
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jiffy/app/modules/auth/controllers/forgot_password_controller.dart';
-import 'package:jiffy/app/modules/global/config/helpers.dart';
-import 'package:jiffy/app/modules/global/theme/app_theme.dart';
-// import 'package:jiffy/app/modules/main/views/main_view.dart';
+import 'package:jiffy/app/modules/auth/views/password_updated.dart';
 
+
+// import 'package:ecommerceapp/app/modules/main/views/main_view.dart';
+
+import 'package:jiffy/app/modules/auth/views/register_view.dart';
 import '../../../routes/app_pages.dart';
+import '../../global/config/configs.dart';
+import '../../global/config/helpers.dart';
+import '../../global/theme/app_theme.dart';
+import '../../global/theme/colors.dart';
 import '../../global/widget/widget.dart';
-// import '../../home/views/home_view.dart';
+import 'forgot_password_view.dart';
+import '../controllers/auth_controller.dart';
+import 'login_view.dart';
 
-class CreateNewPasswordView extends GetView<ForgotPasswordController> {
+class CreateNewPasswordView extends GetView<AuthController> {
   const CreateNewPasswordView({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(),
-        body: Obx(() => SafeArea(
+  Widget loginbyPasswordView(context) {
+    return SizedBox(
+      height: MediaQuery
+          .of(context)
+          .size
+          .height - 300.h,
+      child: Column(
+        children: [
+
+
+          ShowUp(
+              delay: 600,
+              child: CustomTextField(
+                labelText: 'Password',
+                onChanged: (value) {
+                  controller.password.value = value;
+                  controller.checkPasswordStrength(value);
+                },
+                errorText: controller.passwordError.value,
+                obscureText: true,
+              )),
+          SizedBox(height: 15.h,),
+
+
+
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: kDefaultPadding  ),
+            child: Row(
+              children:
+              List.generate(4, (index) =>
+                  Obx(() {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 13.w),
+                      child: Container(
+                        height: 7.h,
+                        width: 63.w,
+                        decoration: BoxDecoration(
+                          color: controller.passwordStrength.value >= index
+                              ? controller.strengthColor.value
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                      ),
+                    );
+                  }),),
+
+            ),
+          ),
+          Obx(() {
+            return Align(
+              alignment: Alignment.centerRight,
               child: Padding(
-                padding: EdgeInsets.only(left: 50.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding:  EdgeInsets.only(right: kDefaultPadding * 2,
+
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      height: 35.h,
-                    ),
-                    // Padding(
-                    //   padding: EdgeInsets.only(
-                    //       right: MediaQuery.of(context).size.width / 1.3),
-                    //   child: InkWell(
-                    //     onTap: () {
-                    //       Get.back();
-                    //     },
-                    //     child: Container(
-                    //       height: 40.h,
-                    //       width: 40.w,
-                    //       decoration: BoxDecoration(
-                    //         color: Colors.white,
-                    //         borderRadius:
-                    //             BorderRadius.all(Radius.circular(30)),
-                    //         boxShadow: [
-                    //           BoxShadow(
-                    //             color: Colors.grey.withOpacity(0.4),
-                    //             spreadRadius: 5,
-                    //             blurRadius: 7,
-                    //             offset: Offset(
-                    //                 0, 3), // changes position of shadow
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       child: SvgPicture.asset(
-                    //           "assets/images/forgot_password/Bac.svg"),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 60.h,
-                    // ),
-                    Text('Create new password',
-                        style: boldTextStyle(
-                          color: Colors.black,
-                          size: 24.sp.round(),
-                          weight: FontWeight.w400,
-                          height: 0.08.h,
-                        )),
-                    SizedBox(
-                      height: 35.h,
-                    ),
-                    Text('Your new password must be different',
-                        textAlign: TextAlign.center,
-                        style: primaryTextStyle(
-                          color: Colors.black,
+                    Text(controller.passwordDescription.value,
+                      style: primaryTextStyle(color: primaryColor,
                           size: 12.sp.round(),
-                          weight: FontWeight.w400,
-                          height: 0.12.h,
-                        )),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Text('from previously used password',
-                        textAlign: TextAlign.center,
-                        style: primaryTextStyle(
-                          color: Colors.black,
-                          size: 14.sp.round(),
-                          weight: FontWeight.w400,
-                          height: 0.12.h,
-                        )),
-                    SizedBox(
-                      height: 59.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 30.w),
-
-                      child: CustomTextField(
-                        width: 327,
-                        LabelStyle: Colors.black,
-                        customTextEditingController:
-                            controller.newPasswordController,
-                        labelText: 'New Password',
-                        onChanged: (String value) {
-                          controller.validatePassword(
-                              controller.newPasswordController.text,
-                              controller.confirmPasswordController.text);
-                          if (value.isNotEmpty) {
-                            controller.changeConfirmPasswordTypingStatus();
-                          } else {
-                            controller.endConfirmPasswordTypingStatus();
-                          }
-                        },
-                        obscureText: true,
-                      ),
-
-                      // Material(
-                      //
-                      //   elevation: 0.2,
-                      //   color: Colors.white,
-                      //   shadowColor: Colors.blue,
-                      //   child: Container(
-                      //
-                      //     padding: EdgeInsets.all(8.0),
-                      //     child: TextFormField(
-                      //       obscureText: controller.isNewPasswordObsecure.value,
-                      //
-                      //       onTap: (){
-                      //         controller.changeNewPasswordTypingStatus();
-                      //       },
-                      //       controller: controller.newPasswordController,
-                      //       onChanged: (value){
-                      //         if(value.isNotEmpty){
-                      //           controller.changeNewPasswordTypingStatus();
-                      //         }else{
-                      //           controller.endNewPasswordTypingStatus();
-                      //         }
-                      //
-                      //       },
-                      //       style: GoogleFonts.lato(
-                      //           color: Colors.black ,
-                      //           fontWeight: FontWeight.w400,
-                      //           fontSize: 12.sp
-                      //
-                      //       ),
-                      //
-                      //       autofocus: false,
-                      //
-                      //       decoration: InputDecoration(
-                      //
-                      //
-                      //         enabledBorder: const UnderlineInputBorder(
-                      //           borderSide: BorderSide(color: Colors.white),
-                      //         ),
-                      //         focusedBorder: const UnderlineInputBorder(
-                      //           borderSide: BorderSide(color: Colors.white),
-                      //         ),
-                      //
-                      //
-                      //         hintText: 'New Password',
-                      //         labelText: "New Password",
-                      //         suffixIcon:  IconButton(
-                      //           icon:   Icon(
-                      //               controller.isNewPasswordObsecure.value ?
-                      //               Icons.visibility
-                      //                   :
-                      //
-                      //               Icons.visibility_off), color: Colors.grey,
-                      //           onPressed: () {
-                      //             controller.switchNewPasswordVisibility();
-                      //
-                      //           },),
-                      //
-                      //
-                      //         labelStyle: GoogleFonts.lato(
-                      //             color: const Color(0xFFA6AAC3),
-                      //             fontSize: 13.sp
-                      //         ),
-                      //         floatingLabelBehavior:
-                      //         controller.isNewPasswordTyping.value?
-                      //         FloatingLabelBehavior.always
-                      //             :
-                      //         FloatingLabelBehavior.never
-                      //         ,
-                      //         fillColor: Colors.white,
-                      //         hintStyle: GoogleFonts.lato(
-                      //             color: Colors.black ,
-                      //             fontWeight: FontWeight.w400,
-                      //             fontSize: 12.sp
-                      //
-                      //         ),
-                      //         filled: true,
-                      //
-                      //         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      //
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ),
-                    SizedBox(
-                      height: 40.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 30.w),
-                      child: CustomTextField(
-                        width: 327,
-                        customTextEditingController:
-                            controller.confirmPasswordController,
-                        labelText: 'Confirm Password',
-                        onChanged: (String value) {
-                          controller.validatePassword(
-                              controller.newPasswordController.text,
-                              controller.confirmPasswordController.text);
-                          if (value.isNotEmpty) {
-                            controller.changeConfirmPasswordTypingStatus();
-                          } else {
-                            controller.endConfirmPasswordTypingStatus();
-                          }
-                        },
-                        obscureText: true,
-                      ),
-                      // Material(
-                      //
-                      //
-                      //   elevation: 0.2,
-                      //   color: Colors.white,
-                      //   shadowColor: Colors.blue,
-                      //   child: Container(
-                      //
-                      //     padding: EdgeInsets.all(8.0),
-                      //     child: TextFormField(
-                      //       obscureText: controller.isConfirmPasswordObsecure.value,
-                      //       controller: controller.confirmPasswordController,
-                      //       onTap: (){
-                      //         controller.changeConfirmPasswordTypingStatus();
-                      //       },
-                      //       style: GoogleFonts.lato(
-                      //           color: Colors.black ,
-                      //           fontWeight: FontWeight.w400,
-                      //           fontSize: 12.sp
-                      //
-                      //       ),
-                      //       onFieldSubmitted: (input){
-                      //
-                      //       }  ,
-                      //
-                      //       autofocus: false,
-                      //       onChanged: (value){
-                      //         controller.validatePassword(
-                      //             controller.newPasswordController.text,
-                      //             controller.confirmPasswordController.text);
-                      //         if(value.isNotEmpty){
-                      //           controller.changeConfirmPasswordTypingStatus();
-                      //         }else{
-                      //           controller.endConfirmPasswordTypingStatus();
-                      //         }
-
-                      //       },
-                      //       decoration: InputDecoration(
-                      //
-                      //         enabledBorder: const UnderlineInputBorder(
-                      //           borderSide: BorderSide(color: Colors.white),
-                      //         ),
-                      //         focusedBorder: const UnderlineInputBorder(
-                      //           borderSide: BorderSide(color: Colors.white),
-                      //         ),
-                      //         suffixIcon:  IconButton(
-                      //           icon:   Icon(
-                      //               controller.isConfirmPasswordObsecure.value ?
-                      //               Icons.visibility
-                      //                   :
-                      //
-                      //               Icons.visibility_off), color: Colors.grey,
-                      //           onPressed: () {
-                      //             controller.switcConfirmPasswordVisibility();
-                      //           },),
-                      //         hintText: 'Confirm Password',
-                      //         labelText: "Confirm Password",
-                      //         labelStyle: GoogleFonts.lato(
-                      //             color: const Color(0xFFA6AAC3),
-                      //             fontSize: 13.sp
-                      //         ),
-                      //         floatingLabelBehavior:
-                      //         controller.isConfirmPasswordTyping.value?
-                      //         FloatingLabelBehavior.always
-                      //             :
-                      //         FloatingLabelBehavior.never
-                      //         ,
-                      //         fillColor: Colors.white,
-                      //         hintStyle: GoogleFonts.lato(
-                      //             color: Colors.black ,
-                      //             fontWeight: FontWeight.w400,
-                      //             fontSize: 12.sp
-                      //
-                      //         ),
-                      //         filled: true,
-                      //
-                      //         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      //
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ),
-                    SizedBox(
-                      height: 100.h,
-                    ),
-                    Obx(() => Padding(
-                          padding: EdgeInsets.only(right: 30.w),
-                          child: InkWell(
-                            onTap: () {
-                              controller.changePassword().then((value) {
-                                if (value.toString() == "OK") {
-                                  controller.changeReset();
-                                  print('teasdsadsadsa');
-                                  showModalBottomSheet(
-                                      backgroundColor: Colors.transparent,
-                                      context: context,
-                                      builder: (ctx) {
-                                        return Container(
-                                          height: 300.h,
-                                          width: double.infinity,
-                                          decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              // or some other color
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(40.0),
-                                                  topRight:
-                                                      Radius.circular(40.0))),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: 15.h,
-                                              ),
-                                              Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  Image.asset(
-                                                    "assets/images/forgot_password/Oval.png",
-                                                    width: 120.w,
-                                                    height: 120.h,
-                                                    color: Color(0xffFAFAFA),
-                                                  ),
-                                                  Image.asset(
-                                                    "assets/images/forgot_password/wired-gradient-1676-telephone-call-hand 1.png",
-                                                    width: 100.w,
-                                                    height: 100.h,
-                                                  )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 5.h,
-                                              ),
-                                              Text(
-                                                  'Your password has been changed',
-                                                  textAlign: TextAlign.center,
-                                                  style: GoogleFonts.lato(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 15.sp,
-                                                      color: Colors.black)),
-                                              SizedBox(
-                                                height: 5.h,
-                                              ),
-                                              Text(
-                                                  'Welcome back! Discover now!',
-                                                  textAlign: TextAlign.center,
-                                                  style: GoogleFonts.lato(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 12.sp,
-                                                    color: Colors.grey,
-                                                  )),
-                                              SizedBox(
-                                                height: 20.h,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  // Get.offAll(() => MainView());
-                                                  Get.offNamedUntil(Routes.MAIN,
-                                                      (Route) => false);
-                                                },
-                                                child: SvgPicture.asset(
-                                                  "assets/images/forgot_password/BUTTON (5).svg",
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      80.w,
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      });
-                                } else {
-                                  Get.snackbar('Error',
-                                      'Something went Wrong please try again!');
-                                  // AppHelpers.showCustomSnackBar(
-                                  //     context,
-                                  //     'Error !',
-                                  //     'Something went Wrong please try again!');
-                                }
-                              });
-                            },
-                            child: SvgPicture.asset(
-                              controller.isValid.value
-                                  ? "assets/images/forgot_password/BUTTON (4).svg"
-                                  : "assets/images/forgot_password/BUTTON (3).svg",
-                              width: MediaQuery.of(context).size.width - 44.w,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        )),
+                          weight: FontWeight.w400),),
+                    controller.passwordDescription.value== "Strong" ?
+                    ShowUp(
+                      delay: 300,
+                        child: const Icon(Icons.check_circle,color: Color(0xFF2EB070),))
+                        : SizedBox(),
                   ],
                 ),
               ),
-            )));
+            );
+          }),
+          SizedBox(height: 30.h),
+
+          ShowUp(
+            delay: 600,
+            child: CustomTextField(
+              labelText: 'Confirm Password',
+              onChanged: (value) => controller.confirmPassword.value = value,
+              errorText:  controller.confirmPasswordError.value,
+              obscureText: true,
+            ),
+          ),
+
+
+          SizedBox(height: 40.h),
+          ShowUp(
+              delay: 800,
+              child: MyDefaultButton(
+errorText: controller.errorMessage.value,
+                isloading: controller.isLoading.value,
+                btnText: 'Reset Password',
+                onPressed: () {
+
+                  controller.resetPassword();
+
+
+                },
+              )),
+          SizedBox(height: 35.h),
+          ShowUp(
+            delay: 400,
+            child: InkWell(
+              onTap: (){
+                Get.off(LoginView());
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                      "assets/images/forgot_password/arrow-left.svg"),
+                  SizedBox(width: 5.w,),
+                  Text(
+                    'Back to login',
+                    textAlign: TextAlign.center,
+                    style: primaryTextStyle(
+                      color: const Color(0xFF555662),
+                      size: 15.sp.round(),
+                      weight: FontWeight.w700,
+
+
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 35.h),
+
+
+        ],
+      ),
+    );
   }
+
+  Widget socialMediaView() {
+    return Column(
+      children: [
+        ShowUp(
+            delay: 400,
+            child: Text(
+              'Welcome to Marianella',
+              textAlign: TextAlign.center,
+              style: boldTextStyle(
+                  color: const Color(0xFF090A0A),
+                  size: 32.sp.round(),
+                  weight: FontWeight.w400),
+            )),
+        Text(
+          'Please log in or sign up to continue shopping',
+          textAlign: TextAlign.center,
+          style: secondaryTextStyle(
+            color: const Color(0xFFCDCFD0),
+            size: 16.sp.round(),
+            weight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(
+          height: 32.h,
+        ),
+        // if (!GetPlatform.isIOS)
+        InkWell(
+            onTap: () {
+              print('dsadsa');
+              controller.googleLogin();
+            },
+            child: buttonSocialMedia(
+                icon: 'assets/icons/google.svg',
+                index: 0,
+                text: 'Continue with Google',
+                color: 0xffFFFFFF,
+                txtColor: 0xFF090A0A,
+                borderColor: 0xFFE3E4E5)),
+
+        if (GetPlatform.isIOS)
+          SizedBox(
+            height: 16.h,
+          ),
+        if (GetPlatform.isIOS)
+          InkWell(
+              onTap: () {
+                print('dsadsa');
+                controller.appleLogin();
+              },
+              child: buttonSocialMedia(
+                  icon: 'assets/icons/apple.svg',
+                  index: 2,
+                  text: 'Continue with Apple',
+                  color: 0xFF090A0A,
+                  txtColor: 0xffFFFFFF,
+                  borderColor: 0xFFE3E4E5)),
+        SizedBox(
+          height: 35.h,
+        ),
+        DividerSocial(),
+        SizedBox(
+          height: 34.h,
+        ),
+        InkWell(
+            onTap: () {
+              controller.socialView.value = false;
+              controller.password.value = '';
+              controller.email.value = '';
+            },
+            child: buttonSocialMedia(
+                icon: 'assets/icons/login.svg',
+                index: 3,
+                text: 'Sign in with password',
+                color: 0xFFD4B0FF,
+                txtColor: 0xFF21034F,
+                borderColor: 0xFFD4B0FF)),
+        SizedBox(
+          height: 34.h,
+        ),
+        InkWell(
+            onTap: () {
+              controller.isGuest.value = true;
+              Get.snackbar('Guest Mode', 'You\'re Acting As A Guest');
+              // Get.to(MainView());
+              Get.offNamedUntil(Routes.MAIN, (Route) => false);
+            },
+            child: buttonSocialMedia(
+                icon: 'assets/images/onboarding/person.svg',
+                index: 3,
+                text: 'Sign in As a Guest',
+                color: 0xFFD4B0FF,
+                txtColor: 0xFF21034F,
+                borderColor: 0xFFD4B0FF)),
+        SizedBox(
+          height: 26.h,
+        ),
+        ShowUp(
+            delay: 500,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Don’t have an account?',
+                    style: primaryTextStyle(
+                      color: const Color(0xFFCDCFD0),
+                      size: 16.sp.round(),
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' ',
+                    style: primaryTextStyle(
+                      color: const Color(0xFF979C9E),
+                      size: 16.sp.round(),
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'Sign up',
+                    style: primaryTextStyle(
+                      color: const Color(0xFFAA61FF),
+                      size: 16.sp.round(),
+                      weight: FontWeight.w400,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        controller.clearFields();
+                        Get.to(() => RegisterView());
+                      },
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            )),
+      ],
+    );
+  }
+
+  void back() {
+    controller.socialView.value = true;
+
+    controller.password.value = '';
+    controller.email.value = '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthController controller = Get.put(AuthController());
+
+    return Scaffold(
+        backgroundColor: primaryBackgroundColor,
+        body: SafeArea(
+          child: SizedBox(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: kDefaultPadding,
+                    ),
+                    ShowUp(
+                        delay: 200,
+                        child: SvgPicture.asset(
+                          LOGO,
+                          width: 40.w,
+                          height: 30.h,
+                          fit: BoxFit.cover,
+                        )),
+                    SizedBox(
+                      height: kDefaultPadding,
+                    ),
+
+                    SizedBox(
+
+
+                      child: Text(
+                        "Set New Password", overflow: TextOverflow.ellipsis,
+                        style: primaryTextStyle(
+                            weight: FontWeight.w700,
+                            size: 32.sp.round(),
+                            color: primaryColor
+                        ),),
+                    ),
+                    SizedBox(height: 10.h,),
+                    Text("Must be at least 8 characters",
+                      overflow: TextOverflow.ellipsis, style: primaryTextStyle(
+                          weight: FontWeight.w100,
+                          size: 16.sp.round(),
+                          color: Colors.black
+                      ),),
+
+                    SizedBox(
+                      height: 60.h,
+                    ),
+
+                    loginbyPasswordView(context),
+
+                  ],
+                )),
+          ),
+        ));
+  }
+
+
 }
