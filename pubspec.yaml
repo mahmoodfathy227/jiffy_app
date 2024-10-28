@@ -107,6 +107,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/home/
+    - assets/images/profile/
     - assets/icons/
     - assets/images/auth/
     - assets/images/splash/
@@ -114,5 +115,6 @@ flutter:
     - assets/images/onboarding/
     - assets/images/forgot_password/
     - assets/images/help/
+    - assets/images/payment/
     - assets/images/address/
     - shorebird.yaml

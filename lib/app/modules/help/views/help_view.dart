@@ -16,6 +16,7 @@ class HelpView extends GetView<HelpController> {
 
   @override
   Widget build(BuildContext context) {
+   Get.put(HelpController());
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
         body: SingleChildScrollView(
@@ -97,7 +98,7 @@ SizedBox(height: 70.h,),
                           btnText: "Send a Message",
                         isSecondaryTextStyle: true,
                        borderRadius: 30.sp,
-                     btnWidth: 240,
+                     btnWidth: 245,
                           height: 60.h,
                           iconPadding: 15,
                           Icon: "assets/images/help/send.svg",

@@ -28,6 +28,7 @@ abstract class Routes {
   static const PRODUCT = _Paths.PRODUCT;
   static const CART = _Paths.CART;
   static const HELP = _Paths.HELP;
+  static const CHANGEPASSWORD = _Paths.CHANGEPASSWORD;
 
 }
 
@@ -52,6 +53,7 @@ abstract class _Paths {
   static const ADDRESS = '/address';
   static const AddADDRESS = '/AddADDRESS';
   static const MYWISHLIST = '/wishlist';
+  static const CHANGEPASSWORD = '/changepassword';
   static const UPDATEADDRESS = '/UPDATEADDRESS';
   static const ADDREVIEW = '/addreview';
   static const SHOP = '/shop';
@@ -59,5 +61,5 @@ abstract class _Paths {
   static const CART = '/cart';
   static const Checkout = '/checkout';
   static const HELP = '/help';
-
+  static const CHECKOUT = '/checkout';
 }

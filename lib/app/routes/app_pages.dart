@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/profile/bindings/profile_binding.dart';
+import 'package:jiffy/app/modules/profile/views/change_password.dart';
+import 'package:jiffy/app/modules/profile/views/profile_view.dart';
+import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 
 import '../modules/address/bindings/address_binding.dart';
 import '../modules/address/views/address_view.dart';
@@ -9,6 +13,8 @@ import '../modules/auth/bindings/forgot_password_binding.dart';
 import '../modules/auth/views/forgot_password_view.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
+import '../modules/checkout/bindings/checkout_binding.dart';
+import '../modules/checkout/views/checkout_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -112,16 +118,21 @@ class AppPages {
     //   page: () => SearchView(),
     //   binding: SearchBinding(),
     // ),
-    // GetPage(
-    //   name: _Paths.PROFILE,
-    //   page: () => ProfileView(),
-    //   binding: ProfileBinding(),
-    // ),
-    // GetPage(
-    //   name: _Paths.ProfileUpdate,
-    //   page: () => ProfileUpdate(),
-    //   binding: ProfileBinding(),
-    // ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.ProfileUpdate,
+      page: () => ProfileUpdate(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGEPASSWORD,
+      page: () => ChangePasswordScreen(),
+      binding: ProfileBinding(),
+    ),
     // GetPage(
     //   name: _Paths.HOME,
     //   page: () => HomeView(),
@@ -178,6 +189,11 @@ class AppPages {
           binding: AddressBinding(),
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => const CheckoutView(),
+      binding: CheckoutBinding(),
     ),
   ];
 }

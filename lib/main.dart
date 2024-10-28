@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jiffy/app/modules/address/bindings/address_binding.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
+import 'package:jiffy/app/modules/checkout/bindings/checkout_binding.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
@@ -32,6 +33,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 import 'app/modules/address/views/address_view.dart';
+import 'app/modules/checkout/views/payment_method.dart';
 import 'app/modules/global/model/test_model_response.dart';
 import 'app/modules/onboarding/controllers/onboarding_controller.dart';
 
@@ -208,11 +210,11 @@ class MyApp extends StatelessWidget {
                               useInheritedMediaQuery: true,
                               title: APP_NAME,
                               theme: AppTheme.lightTheme(color: snap.data),
-                              initialRoute: Routes.SPLASH,
-                              initialBinding: SplashBinding(),
+                              // initialRoute: Routes.SPLASH,
+                              // initialBinding: SplashBinding(),
                            // initialRoute: Routes.ADDRESS,
                            // initialBinding: AddressBinding(),
-                           //      home: const AddressView(),
+                                home: const PaymentMethod(),
                               getPages: AppPages.routes,
                             ));
                   });

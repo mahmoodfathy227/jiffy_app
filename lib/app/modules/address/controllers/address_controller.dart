@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jiffy/app/modules/address/views/address_view.dart';
 
 import 'package:public_ip_address/public_ip_address.dart';
 
@@ -17,14 +18,8 @@ import '../../services/api_service.dart';
 import '../model/address_model.dart';
 
 class AddressController extends GetxController {
-  RxList<Address> addressList = <Address>[
-   Address(id: 0, label: "Home", apartment: "test",
-       floor: "Home", building: "test", address: "x2715 Ash Dr. San, South Dak...",
-       phone: "01252525255", city: "test", country: "test", state: "test", latitude: 23423, longitude: 3454353, isDefault: 1),
 
-    Address(id: 0, label: "Home", apartment: "test",
-        floor: "Home", building: "test", address: "x2715 Ash Dr. San, South Dak...",
-        phone: "01252525255", city: "test", country: "test", state: "test", latitude: 23423, longitude: 3454353, isDefault: 1)
+  RxList<Address> addressList = <Address>[
 
   ].obs;
   var isLoading = true.obs;
@@ -45,7 +40,7 @@ class AddressController extends GetxController {
   var state = ''.obs;
   var latitude = ''.obs;
   var markers = <String, Marker>{}.obs;
-
+var addressTextEditingController = TextEditingController(text: "").obs;
   var longitude = ''.obs;
   var latLng = const LatLng(37.42796133580664, -122.085749655962).obs;
   var labelError = ''.obs;
@@ -111,6 +106,7 @@ class AddressController extends GetxController {
         );
     });
     nextScreen(location, context);
+
   }
 
 
@@ -206,7 +202,7 @@ class AddressController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // fetchAddresses();
+    fetchAddresses();
     // fetchCountries();
     // getPermission();
   }
@@ -268,6 +264,16 @@ class AddressController extends GetxController {
 
   void addAddress() async {
     print('tsadsad');
+    if(phone.value.isEmpty || state.value.isEmpty || address.value.isEmpty){
+     Get.snackbar("Error", "Please Check all the required fields",
+     colorText: Colors.white
+
+     );
+      return;
+    }
+
+
+
     final newAddress = Address(
       id: 0,
       label: label.value,
@@ -291,14 +297,18 @@ class AddressController extends GetxController {
         body: newAddress.toJson(),
       );
       print('tsadsad2');
-
+Get.back();
       fetchAddresses();
 
-      //addressList.add(Address.fromJson(response.data));
-      Get.snackbar('Success', 'Address added successfully');
+
+      Get.snackbar('Success', 'Address added successfully' , colorText: Colors.white);
+      isLoading(false);
+      clearFieldsAndErrors();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to add address');
+      Get.snackbar('Error', 'Failed to add address', colorText: Colors.white);
+      isLoading(false);
     } finally {
+      isLoading(false);
       isLoading(false);
     }
   }
@@ -440,24 +450,21 @@ class AddressController extends GetxController {
   }
 
   void updateAddress(Address addressToUpdate) async {
-    if (!validateField(label.value, labelError) ||
-        !validateField(apartment.value, apartmentError) ||
-        !validateField(phone.value, phoneError) ||
-        !validateField(state.value, stateError)) {
-      return;
-    }
+
+
+print("updating....");
 
     final updatedAddress = Address(
       id: addressToUpdate.id,
-      label: label.value,
-      apartment: apartment.value,
-      floor: floor.value,
-      building: building.value,
-      address: address.value,
-      phone: phone.value,
-      city: city.value,
-      country: selectedCountry.value,
-      state: state.value,
+      label: label.value.isEmpty ? addressToUpdate.label : label.value,
+      apartment: apartment.value.isEmpty ? addressToUpdate.apartment : apartment.value,
+      floor: floor.value.isEmpty ? addressToUpdate.floor : floor.value,
+      building: building.value.isEmpty ? addressToUpdate.building : building.value,
+      address: address.value.isEmpty ? addressToUpdate.address : address.value,
+      phone: phone.value.isEmpty ? addressToUpdate.phone : phone.value,
+      city: city.value.isEmpty ? addressToUpdate.city : city.value,
+      country: selectedCountry.value.isEmpty ? addressToUpdate.country : selectedCountry.value,
+      state: state.value.isEmpty ? addressToUpdate.state : state.value,
       latitude: latitude.value.isEmpty || latitude.value == null
           ? '33.888630'
           : latitude.value,
@@ -469,15 +476,25 @@ class AddressController extends GetxController {
 
     try {
       isLoading(true);
-      await apiConsumer.post(
+      final response = await apiConsumer.post(
         'profile/address-update/${addressToUpdate.id}',
         body: updatedAddress.toJson(),
       );
-      fetchAddresses();
-      clearFieldsAndErrors();
-      Get.snackbar('Success', 'Address updated successfully');
+      if(response['status'] == "success"){
+        print("updated!!!!!!!");
+        Get.snackbar('Success', 'Address updated successfully',colorText: Colors.white);
+        // Get.back();
+        Get.to(AddressView());
+        fetchAddresses();
+        clearFieldsAndErrors();
+      } else {
+        print("error happened here ...");
+      }
+
+
     } catch (e) {
       Get.snackbar('Error', 'Failed to update address');
+      print('your error here is' + e.toString());
     } finally {
       isLoading(false);
     }
@@ -512,7 +529,7 @@ class AddressController extends GetxController {
     phone.value = '';
     city.value = '';
     state.value = '';
-
+addressTextEditingController.value.text = '';
     labelError.value = '';
     apartmentError.value = '';
     floorError.value = '';
@@ -530,13 +547,15 @@ class AddressController extends GetxController {
       isLoading(true);
       await apiConsumer.post('profile/default-address', body: {'id': id});
       fetchAddresses();
-      // Get.snackbar('Success', 'Default address set successfully');
+       Get.snackbar('Success', 'Default address set successfully');
+       print("default address set successfully");
     } catch (e) {
       Get.snackbar('Error', 'Failed to set default address');
     } finally {
       isLoading(false);
     }
   }
+
 
   bool isFirstOpen = true;
 
@@ -1367,7 +1386,11 @@ RxString addressPlace = "".obs;
     Placemark place = placemarks[0];
     addressPlace.value = place.name.toString() + place.street.toString() + place.locality.toString()+ place.country.toString();
     addressGoventmant.value = "${place.locality}, ${place.country}";
-    print(place);
+
+    address.value = addressPlace.value;
+    addressTextEditingController.value = TextEditingController(text: address.value);
+    Get.back();
+    print("your place his ${address.value}");
   }
 
 

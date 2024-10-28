@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,11 +13,11 @@ import '../../global/config/helpers.dart';
 import '../controllers/address_controller.dart';
 
 class AddAddress extends GetView<AddressController> {
-  const AddAddress ({super.key});
+  const AddAddress({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AddressController());
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: Stack(
@@ -29,35 +28,42 @@ class AddAddress extends GetView<AddressController> {
 
           ),
           Padding(
-            padding:  EdgeInsets.only(top: 160.h),
-            child:      _buildAddressFields(context),
+            padding: EdgeInsets.only(top: 160.h),
+            child: _buildAddressFields(context),
           ),
         ],
       ),
 
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          buildFloatingButton(
+      floatingActionButton: Obx(() {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            buildFloatingButton(
 
-            buttonName: 'Select on Map', context: context,
-            onPressed: () {
-              Get.to(SelectFromMap());
-            },
-            isPlainBackground: true
+                buttonName: 'Select on Map', context: context,
+                onPressed: () {
+                  Get.to(SelectFromMap());
+                },
+                isPlainBackground: true
 
 
-          ),
+            ),
 
-          buildFloatingButton(
+            buildFloatingButton(
 
-            buttonName: 'Save Address', context: context,
-            onPressed: () {},
+              buttonName: 'Save Address', context: context,
+              isLoading: controller.isLoading.value,
+              onPressed: () {
+                controller.addAddress();
+                controller.validateField(
+                    controller.label.value, controller.labelError);
+              },
 
-          ),
-        ],
-      ),
-resizeToAvoidBottomInset: false,
+            ),
+          ],
+        );
+      }),
+      resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
     );
@@ -65,6 +71,7 @@ resizeToAvoidBottomInset: false,
 
   _buildAddressFields(context) {
     return Padding(
+
       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding * 1.5),
       child: SingleChildScrollView(
         child: Column(
@@ -75,11 +82,12 @@ resizeToAvoidBottomInset: false,
             Row(
               children: [
                 Expanded(child: CustomTextField(
-                  height: 60.h,
+                    height: 60.h,
                     labelText: "Apartment", onChanged: (value) {
+                  controller.apartment.value = value;
 
                 })),
-                SizedBox(width:  kDefaultPadding * 0.8,),
+                SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
                     height: 60.h,
                     decoration: BoxDecoration(
@@ -90,196 +98,166 @@ resizeToAvoidBottomInset: false,
                       ],
                     ),
 
-                    child: Obx(() => InputDecorator(
-                      decoration: InputDecoration(
+                    child: Obx(() =>
+                        InputDecorator(
+                          decoration: InputDecoration(
 
-                        filled: true,
-                        fillColor:
+                            filled: true,
+                            fillColor:
 
-
-                        Colors.white ,
-
-
-
-                        enabledBorder: OutlineInputBorder(
-
-                          borderRadius: BorderRadius.circular(10),
-
-                          borderSide:  const BorderSide(
-
-                            color:
 
                             Colors.white,
-                            width: 1,
+
+
+                            enabledBorder: OutlineInputBorder(
+
+                              borderRadius: BorderRadius.circular(10),
+
+                              borderSide: const BorderSide(
+
+                                color:
+
+                                Colors.white,
+                                width: 1,
+                              ),
+                            ),
+
+                            focusedBorder: OutlineInputBorder(
+
+                              borderRadius: BorderRadius.circular(10),
+
+                              borderSide: BorderSide(
+                                color:
+
+                                primaryColor
+                                ,
+                                width: 1,
+                              ),
+                            ),
+
+                            hintStyle: secondaryTextStyle(
+                              color: Colors.black,
+                              size: 14.sp.round(),
+                              weight: FontWeight.w400,
+                              height: 1,
+                            ),
+
+
+                            helperStyle: secondaryTextStyle(
+
+                              color: Colors.red,
+                              size: 12.sp.round(),
+                              weight: FontWeight.w400,
+                              height: 1,
+
+                            ),
+
+
                           ),
-                        ),
-
-                        focusedBorder: OutlineInputBorder(
-
-                          borderRadius: BorderRadius.circular(10),
-
-                          borderSide:  BorderSide(
-                            color:
-
-                            primaryColor
-                            ,
-                            width: 1,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              underline: Container(
+                                height: 1,
+                                color: const Color(0xFFA6AAC3),
+                              ),
+                              isDense: true,
+                              icon: SvgPicture.asset(
+                                  "assets/images/address/arrow-down.svg"),
+                              value: controller.selectedCountry.value,
+                              isExpanded: true,
+                              onChanged: (String? newValue) {
+                                controller.selectedCountry.value = newValue!;
+                              },
+                              items: controller.countriesList
+                                  .map<DropdownMenuItem<String>>(
+                                      (Country country) {
+                                    return DropdownMenuItem<String>(
+                                      value: country.name,
+                                      child: Text(
+                                        country.name ?? "",
+                                        style: primaryTextStyle(
+                                          color: greyishColor,
+                                          size: 14.sp.round(),
+                                          weight: FontWeight.w400,
+                                          height: 1,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                            ),
                           ),
-                        ),
-
-                        hintStyle: secondaryTextStyle(
-                          color: Colors.black,
-                          size: 14.sp.round(),
-                          weight: FontWeight.w400,
-                          height: 1,
-                        ),
-
-
-                        helperStyle: secondaryTextStyle(
-
-                          color: Colors.red,
-                          size: 12.sp.round(),
-                          weight: FontWeight.w400,
-                          height: 1,
-
-                        ),
-                        // label:
-                        // FittedBox(
-                        //   child: Container(
-                        //
-                        //     width: 250.w,
-                        //     height: 40.h,
-                        //     color: Colors.transparent,
-                        //     child:  Align(
-                        //       alignment: Alignment.centerLeft,
-                        //       child:
-                        //
-                        //       Align(
-                        //         alignment:
-                        //
-                        //         Alignment.centerLeft,
-                        //         child: AutoSizeText(
-                        //
-                        //
-                        //           widget.labelText,
-                        //           style:  secondaryTextStyle(
-                        //             size:  8.sp.round(),
-                        //
-                        //             color:
-                        //
-                        //             widget.errorText.isNotEmpty?
-                        //             Colors.red
-                        //                 :
-                        //             !isValueEmpty?
-                        //             primaryColor
-                        //                 :
-                        //
-                        //             Colors.grey[300]
-                        //             ,
-                        //             weight: FontWeight.w400,
-                        //
-                        //           ), // Set an initial font size
-                        //           maxLines: 2, // Adjust as needed
-                        //         ),
-                        //       ),
-                        //
-                        //
-                        //     ),
-                        //   ),
-                        // ),
-
-
-
-
-
-
-
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          underline: Container(
-                            height: 1,
-                            color: const Color(0xFFA6AAC3),
-                          ),
-                          isDense: true,
-                          icon: SvgPicture.asset("assets/images/address/arrow-down.svg") ,
-                          value: controller.selectedCountry.value,
-                          isExpanded: true,
-                          onChanged: (String? newValue) {
-                            controller.selectedCountry.value = newValue!;
-                          },
-                          items: controller.countriesList
-                              .map<DropdownMenuItem<String>>(
-                                  (Country country) {
-                                return DropdownMenuItem<String>(
-                                  value: country.name,
-                                  child: Text(
-                                    country.name ?? "",
-                                    style: primaryTextStyle(
-                                      color: greyishColor,
-                                      size: 14.sp.round(),
-                                      weight: FontWeight.w400,
-                                      height: 1,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                        ),
-                      ),
-                    ))),)
+                        ))),)
               ],
             ),
             SizedBox(height: kDefaultPadding,),
             //state and city
-            Row(
-              children: [
-                Expanded(child: CustomTextField(
-                    height: 60.h,
-                    labelText: "State*", onChanged: (value) {
+            Obx(() {
+              return Row(
+                children: [
+                  Expanded(
+                      child: CustomTextField(
 
-                })),
-                SizedBox(width: kDefaultPadding * 0.8,),
-                Expanded(child: CustomTextField(
-                    height: 60.h,
-                    labelText: "City", onChanged: (value) {
+                          height: 60.h,
 
-                })),
-              ],
-            ),
+                          labelText: "State*", onChanged: (value) {
+                        controller.state.value = value;
+                      })),
+                  SizedBox(width: kDefaultPadding * 0.8,),
+
+                  Expanded(
+                      child: CustomTextField(
+
+                          errorText: controller.cityError.value,
+                          height: 60.h,
+                          labelText: "City", onChanged: (value) {
+                        controller.city.value = value;
+                      })),
+                ],
+              );
+            }),
             SizedBox(height: kDefaultPadding,),
             //Address
 
-            Row(
-              children: [
-                Expanded(child: CustomTextField(
-                    height: 60.h,
-                    labelText: "Address*", onChanged: (value) {
+            Obx(() {
+              return Row(
+                children: [
+                  Expanded(child: CustomTextField(
+                      customTextEditingController: controller.addressTextEditingController.value,
+                      errorText: controller.addressError.value,
+                      height: 60.h,
 
-                })),
+                      labelText:controller.address.value == "" ? "Address*" : controller.address.value, onChanged: (value) {
+                    controller.address.value = value;
+                  })),
 
-              ],
-            ),
+                ],
+              );
+            }),
             SizedBox(height: kDefaultPadding,),
             //Flat Floor Building
 
             Row(
               children: [
                 Expanded(child: CustomTextField(
+                    errorText: controller.floorError.value,
                     height: 60.h,
                     labelText: "Flat", onChanged: (value) {
 
+
                 })),
-                SizedBox(width: kDefaultPadding*0.7,),
+                SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
+                    errorText: controller.floorError.value,
                     height: 60.h,
                     labelText: "Floor", onChanged: (value) {
-
+                  controller.floor.value = value;
                 })),
-                SizedBox(width: kDefaultPadding*0.7,),
+                SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
+                    errorText: controller.buildingError.value,
                     height: 60.h,
                     labelText: "Building", onChanged: (value) {
-
+                  controller.building.value = value;
                 })),
 
 
@@ -289,16 +267,24 @@ resizeToAvoidBottomInset: false,
 
             SizedBox(height: kDefaultPadding,),
             //Phone
-            Row(
-              children: [
-                Expanded(child: CustomTextField(
-                    height: 60.h,
-                    labelText: "Phone*", onChanged: (value) {
+            Obx(() {
+              return Row(
+                children: [
+                  Expanded(child: CustomTextField(
+                      keyboardType: TextInputType.number,
+                      errorText: controller.phoneError.value,
+                      height: 60.h,
+                      labelText: "Phone*",
+                      onChanged: (value) {
+                        controller.phone.value = value;
+                      })),
 
-                })),
+                ],
+              );
+            }),
+            SizedBox(height: kDefaultPadding,),
 
-              ],
-            ),
+            WorkHomeSwitcher()
           ],
         ),
       ),
@@ -306,6 +292,41 @@ resizeToAvoidBottomInset: false,
   }
 
 
+}
 
 
+class WorkHomeSwitcher extends StatefulWidget {
+  @override
+  _WorkHomeSwitcherState createState() => _WorkHomeSwitcherState();
+}
+
+class _WorkHomeSwitcherState extends State<WorkHomeSwitcher> {
+  List<bool> isSelected = [true, false];
+
+  @override
+  Widget build(BuildContext context) {
+    return ToggleButtons(
+      borderRadius: BorderRadius.circular(30),
+      isSelected: isSelected,
+      onPressed: (int index) {
+       AddressController myAddressController = Get.find<AddressController>();
+       myAddressController.label.value = index == 1 ? "Home" : "Work";
+        setState(() {
+          for (int i = 0; i < isSelected.length; i++) {
+            isSelected[i] = i == index;
+          }
+        });
+      },
+      children: const <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text('Work'),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text('Home'),
+        ),
+      ],
+    );
+  }
 }

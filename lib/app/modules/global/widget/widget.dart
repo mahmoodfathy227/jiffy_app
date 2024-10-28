@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:lottie/lottie.dart';
 
@@ -20,7 +21,8 @@ import 'package:jiffy/app/modules/auth/controllers/auth_controller.dart';
 
 // import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
-import 'package:jiffy/app/modules/global/model/model_response.dart' hide Colors
+import 'package:jiffy/app/modules/global/model/model_response.dart'
+    hide Colors
     hide Material;
 
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
@@ -39,6 +41,92 @@ import '../../product/views/product_view.dart';
 import '../config/helpers.dart';
 import '../model/test_model_response.dart';
 
+class CustomNavBar extends StatelessWidget {
+  final NavigationsBarController _tabController = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    HomeController homeController =
+        HomeController().initialized ? Get.find() : Get.put(HomeController());
+    return Obx(() {
+      return Stack(alignment: Alignment.bottomCenter, children: [
+        // الخلفية الرئيسية لــ BottomNavigationBar
+        Container(
+          width: 274.w, // عرض الخلفية
+          height: 58.h, // ارتفاع الخلفية
+          decoration: ShapeDecoration(
+            color: Color(0x7FE9E3EE),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: Color(0xFF6900CC)),
+              borderRadius: BorderRadius.circular(43.r),
+            ),
+            shadows: [
+              BoxShadow(
+                color: Color(0x4C000000),
+                blurRadius: 30,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child:
+              // BottomNavigationBar
+              Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                  onTap: () => {_tabController.selectedIndex.value = 0},
+                  child: _buildBottomNavigationBarItem(0, "Home", "home")),
+              InkWell(
+                  onTap: () => {_tabController.selectedIndex.value = 1},
+                  child:
+                      _buildBottomNavigationBarItem(1, "wishlist", "wishlist")),
+              InkWell(
+                  onTap: () => {_tabController.selectedIndex.value = 2},
+                  child: _buildBottomNavigationBarItem(2, "Cart", "bag")),
+              InkWell(
+                  onTap: () => {_tabController.selectedIndex.value = 3},
+                  child:
+                      _buildBottomNavigationBarItem(3, "Profile", "profile")),
+            ],
+          ),
+        )
+      ]);
+    });
+  }
+
+  Widget _buildBottomNavigationBarItem(
+      int tabIndex, String label, String iconName) {
+    final isSelected = _tabController.selectedIndex.value == tabIndex;
+    return isSelected
+        ? _buildSelectedIcon(tabIndex, iconName, label)
+        : _buildUnselectedIcon(tabIndex, iconName, label);
+  }
+
+  Widget _buildSelectedIcon(index, String iconName, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          "assets/icons/${iconName}_active.svg",
+          height: 24.h,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUnselectedIcon(index, String iconName, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          "assets/icons/$iconName.svg",
+          height: 24.h,
+        ),
+      ],
+    );
+  }
+}
+
 final AuthController authcontroller = Get.put(AuthController());
 
 class TitleWithSeeAll extends StatelessWidget {
@@ -56,10 +144,7 @@ class TitleWithSeeAll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 23.w),
           child: Row(
@@ -112,7 +197,7 @@ Widget SearchHomeBar({HomeController? homeController}) {
                 position: homeController!.slideAnimation,
                 child: FadeTransition(
                     opacity:
-                    homeController!.fadeInAnimation, // GetX controlled fade
+                        homeController!.fadeInAnimation, // GetX controlled fade
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -182,77 +267,77 @@ Widget SearchHomeBar({HomeController? homeController}) {
 
 Widget SearchBar() {
   return // Search Text Field inside the rounded container
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: Row(
-        children: [
-          Container(
-            width: 287.w,
-            height: 44.h,
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(31),
+      Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+    child: Row(
+      children: [
+        Container(
+          width: 287.w,
+          height: 44.h,
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(31),
+            ),
+            shadows: const [
+              BoxShadow(
+                color: Color(0x19000000),
+                blurRadius: 30,
+                offset: Offset(0, 4),
+                spreadRadius: -5,
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.SEARCH);
+                  },
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
+                    child: customSearchField(),
+                  ),
+                ),
               ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x19000000),
-                  blurRadius: 30,
-                  offset: Offset(0, 4),
-                  spreadRadius: -5,
-                )
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.SEARCH);
-                    },
-                    child: Padding(
-                      padding:
-                      EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
-                      child: customSearchField(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
-          SizedBox(width: 11.w), // Space between the search field and the icon
-          // Search Icon next to the search field
-          GestureDetector(
-            onTap: () {
-              Get.to(SearchView());
-            },
-            child: Container(
-                width: 44.w,
-                height: 44.h,
-                decoration: const ShapeDecoration(
-                  color: Colors.white,
-                  shape: OvalBorder(),
-                  shadows: [
-                    BoxShadow(
-                      color: Color(0x19000000),
-                      blurRadius: 30,
-                      offset: Offset(0, 4),
-                      spreadRadius: -5,
-                    )
-                  ],
+        ),
+        SizedBox(width: 11.w), // Space between the search field and the icon
+        // Search Icon next to the search field
+        GestureDetector(
+          onTap: () {
+            Get.to(SearchView());
+          },
+          child: Container(
+              width: 44.w,
+              height: 44.h,
+              decoration: const ShapeDecoration(
+                color: Colors.white,
+                shape: OvalBorder(),
+                shadows: [
+                  BoxShadow(
+                    color: Color(0x19000000),
+                    blurRadius: 30,
+                    offset: Offset(0, 4),
+                    spreadRadius: -5,
+                  )
+                ],
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/home/search.svg',
+                  width: 18.w,
+                  height: 18.h,
                 ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    'assets/images/home/search.svg',
-                    width: 18.w,
-                    height: 18.h,
-                  ),
-                )),
-          ),
-        ],
-      ),
-    );
+              )),
+        ),
+      ],
+    ),
+  );
 }
 
 Widget gridSocialIcon() {
@@ -393,51 +478,148 @@ class SecondMyDefaultButtonState extends State<SecondMyDefaultButton> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var screenWidth = MediaQuery.of(context).size.width;
 
     return widget.isloading!
         ? Center(
-        child: LoadingAnimationWidget.flickr(
-          leftDotColor: primaryColor,
-          rightDotColor: const Color(0xFFFF0084),
-          size: 50,
-        ))
+            child: LoadingAnimationWidget.flickr(
+            leftDotColor: primaryColor,
+            rightDotColor: const Color(0xFFFF0084),
+            size: 50,
+          ))
         : InkWell(
-      onTap: () =>
-      {
-        widget.onPressed(),
-      },
-      child: Container(
-        width: 315,
-        height: 48,
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          color: Color(0xFF21034F),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-                widget.localeText
-                    ? widget.btnText!.toUpperCase()
-                    : widget.btnText!,
-                textAlign: TextAlign.center,
-                style: primaryTextStyle(
-                  color: widget.textColor ?? Colors.white,
-                  size: 16.sp.round(),
-                  weight: FontWeight.w700,
-                )),
-          ],
-        ),
-      ),
-    );
+            onTap: () => {
+              widget.onPressed(),
+            },
+            child: Container(
+              width: 315,
+              height: 48,
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                color: Color(0xFF21034F),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                      widget.localeText
+                          ? widget.btnText!.toUpperCase()
+                          : widget.btnText!,
+                      textAlign: TextAlign.center,
+                      style: primaryTextStyle(
+                        color: widget.textColor ?? Colors.white,
+                        size: 16.sp.round(),
+                        weight: FontWeight.w700,
+                      )),
+                ],
+              ),
+            ),
+          );
+  }
+}
+
+class JiffyDefaultButton extends StatefulWidget {
+  final String? btnText;
+  final bool localeText;
+  final Function() onPressed;
+  final Color? color;
+  final Color? textColor;
+  final bool isSelected;
+  final String? Icon;
+  final double? height;
+  final bool isloading;
+  final double? width;
+
+  const JiffyDefaultButton({
+    Key? key,
+    this.btnText,
+    required this.onPressed,
+    this.color,
+    this.isSelected = true,
+    this.localeText = false,
+    required this.isloading,
+    this.textColor,
+    this.height,
+    this.width,
+    this.Icon,
+  }) : super(key: key);
+
+  @override
+  JiffyDefaultButtonState createState() => JiffyDefaultButtonState();
+}
+
+class JiffyDefaultButtonState extends State<JiffyDefaultButton> {
+  bool isloading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isloading = widget.isloading!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+
+    return widget.isloading!
+        ? Center(
+            child: LoadingAnimationWidget.flickr(
+            leftDotColor: primaryColor,
+            rightDotColor: const Color(0xFFFF0084),
+            size: 50,
+          ))
+        : InkWell(
+            onTap: () => {
+              widget.onPressed(),
+            },
+            child: Container(
+              width: widget.width ?? 181.w,
+              height: widget.height ?? 64.h,
+              decoration: ShapeDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(1.00, 0.04),
+                  end: Alignment(-1, -0.04),
+                  colors: [
+                    Color(0xFF20003D),
+                    Color(0xFF6900CC),
+                  ],
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(43),
+                ),
+                shadows: const [
+                  BoxShadow(
+                    color: Color(0x4C000000),
+                    blurRadius: 30,
+                    offset: Offset(0, 4),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                      widget.localeText
+                          ? widget.btnText!.toUpperCase()
+                          : widget.btnText!,
+                      textAlign: TextAlign.center,
+                      style: secondaryTextStyle(
+                        color: Colors.white,
+                        size: 18.sp.round(),
+                        weight: FontWeight.w700,
+                        letterSpacing: -0.41,
+                      )),
+                ],
+              ),
+            ),
+          );
   }
 }
 
@@ -483,50 +665,46 @@ class MySecondDefaultButtonState extends State<MySecondDefaultButton> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var screenWidth = MediaQuery.of(context).size.width;
 
     return widget.isloading!
         ? Center(
-        child: LoadingAnimationWidget.flickr(
-          leftDotColor: primaryColor,
-          rightDotColor: const Color(0xFFFF0084),
-          size: 50,
-        ))
+            child: LoadingAnimationWidget.flickr(
+            leftDotColor: primaryColor,
+            rightDotColor: const Color(0xFFFF0084),
+            size: 50,
+          ))
         : InkWell(
-      onTap: () =>
-      {
-        widget.onPressed(),
-      },
-      child: Container(
-        width: 315.w,
-        height: 48.h,
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-            color: widget.color ?? Color(0xFF21034F),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            )),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-                widget.localeText
-                    ? widget.btnText!.toUpperCase()
-                    : widget.btnText!,
-                textAlign: TextAlign.center,
-                style: primaryTextStyle(
-                  color: Colors.white,
-                  size: 16.sp.round(),
-                  weight: FontWeight.w700,
-                )),
-          ],
-        ),
-      ),
-    );
+            onTap: () => {
+              widget.onPressed(),
+            },
+            child: Container(
+              width: 315.w,
+              height: 48.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                  color: widget.color ?? Color(0xFF21034F),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  )),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                      widget.localeText
+                          ? widget.btnText!.toUpperCase()
+                          : widget.btnText!,
+                      textAlign: TextAlign.center,
+                      style: primaryTextStyle(
+                        color: Colors.white,
+                        size: 16.sp.round(),
+                        weight: FontWeight.w700,
+                      )),
+                ],
+              ),
+            ),
+          );
   }
 }
 
@@ -536,18 +714,18 @@ Widget MainLoading({double? width, double? height}) {
       height: height ?? 812.h,
       child: Center(
           child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
-            size: 50,
-          )));
+        leftDotColor: primaryColor,
+        rightDotColor: const Color(0xFFFF0084),
+        size: 50,
+      )));
 }
 
 Color getColorStatusOrder(status) {
   return status == 'PENDING'
       ? const Color(0xFFCF6112)
       : status == 'Delivered'
-      ? const Color(0xFF33C200)
-      : const Color(0xFFC40000);
+          ? const Color(0xFF33C200)
+          : const Color(0xFFC40000);
 }
 
 Widget orderCard(Order order) {
@@ -1186,13 +1364,14 @@ Widget DividerSocial() {
   );
 }
 
-Widget buttonSocialMedia({txtColor,
-  bool? axis,
-  required index,
-  required text,
-  required icon,
-  required color,
-  required borderColor}) {
+Widget buttonSocialMedia(
+    {txtColor,
+    bool? axis,
+    required index,
+    required text,
+    required icon,
+    required color,
+    required borderColor}) {
   return ShowUp(
       delay: index * 100,
       child: Container(
@@ -1207,49 +1386,50 @@ Widget buttonSocialMedia({txtColor,
           ),
           child: axis == null || axis == false
               ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                icon,
-                width: 25.w,
-                height: 25.h,
-                fit: BoxFit.cover,
-              ),
-              Text(
-                text,
-                style: primaryTextStyle(
-                  size: 16.sp.round(),
-                  color: Color(txtColor),
-                  weight: FontWeight.w500,
-                  height: 0.06,
-                ),
-              ),
-              const SizedBox()
-            ],
-          )
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      icon,
+                      width: 25.w,
+                      height: 25.h,
+                      fit: BoxFit.cover,
+                    ),
+                    Text(
+                      text,
+                      style: primaryTextStyle(
+                        size: 16.sp.round(),
+                        color: Color(txtColor),
+                        weight: FontWeight.w500,
+                        height: 0.06,
+                      ),
+                    ),
+                    const SizedBox()
+                  ],
+                )
               : Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(),
-                SvgPicture.asset(icon),
-                Text(
-                  text,
-                  style: primaryTextStyle(
-                    size: 16.sp.round(),
-                    color: Color(txtColor),
-                    weight: FontWeight.w500,
-                    height: 0.06,
-                  ),
-                ),
-              ])));
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                      const SizedBox(),
+                      SvgPicture.asset(icon),
+                      Text(
+                        text,
+                        style: primaryTextStyle(
+                          size: 16.sp.round(),
+                          color: Color(txtColor),
+                          weight: FontWeight.w500,
+                          height: 0.06,
+                        ),
+                      ),
+                    ])));
 }
 
-void buildCustomShowModel({required BuildContext context,
-  required Widget child,
-  double? height,
-  EdgeInsets? padding}) async {
+void buildCustomShowModel(
+    {required BuildContext context,
+    required Widget child,
+    double? height,
+    EdgeInsets? padding}) async {
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
     context: context,
@@ -1289,26 +1469,22 @@ void imagesSourcesShowModel({
           child: TextButton(
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Take a Photo",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
               ),
             ),
             onPressed: onCameraPressed != null
                 ? () {
-              onCameraPressed();
-            }
+                    onCameraPressed();
+                  }
                 : null,
           ),
         ),
@@ -1318,26 +1494,22 @@ void imagesSourcesShowModel({
           child: TextButton(
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Select from Gallery",
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
               ),
             ),
             onPressed: onGalleryPressed != null
                 ? () {
-              onGalleryPressed();
-            }
+                    onGalleryPressed();
+                  }
                 : null,
           ),
         ),
@@ -1367,7 +1539,7 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
     _animController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     final curve =
-    CurvedAnimation(curve: Curves.decelerate, parent: _animController);
+        CurvedAnimation(curve: Curves.decelerate, parent: _animController);
     _animOffset =
         Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero)
             .animate(curve);
@@ -1458,7 +1630,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.function,
     this.back,
-    this.svgPath = "assets/images/shopping-cart.svg",
+    this.svgPath = "assets/images/back_btn.svg",
     required this.myFunction,
   });
 
@@ -1467,133 +1639,98 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      SingleChildScrollView(
-        child: SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          height: 230.h,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SvgPicture.asset("assets/images/eclipseAppBar.svg",
-
-                fit: BoxFit.cover,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 100.h),
-
-                child: Padding(
-                  padding: EdgeInsets.only(top: 10.h),
-                  child: Row(
-                    children: [
-
-                      IconButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          icon:
-                          Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/images/close-circle.svg",
-
-
-                                ),
-                                SvgPicture.asset(
-                                  "assets/images/back_btn.svg",
-                                  width: 88.h,
-
-                                ),
-
-                              ]
-                          )
-
-
-                      ),
-
-                      Spacer(),
-                      Text(title, style: secondaryTextStyle(
+    return SingleChildScrollView(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 230.h,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            SvgPicture.asset(
+              "assets/images/eclipseAppBar.svg",
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 100.h),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Stack(alignment: Alignment.center, children: [
+                          SvgPicture.asset(
+                            "assets/images/close-circle.svg",
+                          ),
+                          SvgPicture.asset(
+                            "assets/images/back_btn.svg",
+                            width: 88.h,
+                          ),
+                        ])),
+                    Spacer(),
+                    Text(
+                      title,
+                      style: secondaryTextStyle(
                         color: Colors.white,
                         weight: FontWeight.w700,
                         size: 18.sp.round(),
-                      ),),
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {
-
-                          },
-                          icon:
-                          Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/images/close-circle.svg",
-
-
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    myFunction;
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(bottom: 4.h),
-                                    child: SvgPicture.asset(
-                                      svgPath,
-                                      // "assets/images/shopping-cart.svg",
-                                      width: 22.h,
-
-                                    ),
-                                  ),
-                                ),
-
-                              ]
-                          )
-
-
                       ),
-
-
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    if (svgPath == null) Spacer(),
+                    if (svgPath != null)
+                      IconButton(
+                          onPressed: () {},
+                          icon: Stack(alignment: Alignment.center, children: [
+                            SvgPicture.asset(
+                              "assets/images/close-circle.svg",
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                myFunction;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 4.h),
+                                child: SvgPicture.asset(
+                                  svgPath!,
+                                  // "assets/images/shopping-cart.svg",
+                                  width: 22.h,
+                                ),
+                              ),
+                            ),
+                          ])),
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-      );
+      ),
+    );
 
     AppBar(
-
-      flexibleSpace:
-      ConstrainedBox(
+      flexibleSpace: ConstrainedBox(
           constraints: BoxConstraints(
             minHeight: 400.h,
           ),
           child: SizedBox(
             height: 300, // Set your desired height
-            child: SvgPicture.asset('assets/images/eclipseAppBar.svg',
+            child: SvgPicture.asset(
+              'assets/images/eclipseAppBar.svg',
               fit: BoxFit.contain,
-
-
             ),
           )
 
-
-        // SvgPicture.asset("assets/images/eclipseAppBar.svg",
-        //
-        //   width: MediaQuery.of(context).size.width,
-        //   fit: BoxFit.cover,
-        //
-        // ),
-      ),
+          // SvgPicture.asset("assets/images/eclipseAppBar.svg",
+          //
+          //   width: MediaQuery.of(context).size.width,
+          //   fit: BoxFit.cover,
+          //
+          // ),
+          ),
 
 
       // leading: back ?? true
@@ -1629,63 +1766,59 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       //     )
       //     : const SizedBox(),
       title: Text(
-        // title ??
+          // title ??
           'Product',
           style: TextStyle(
             color: Colors.red,
             fontSize: 22.sp,
-            fontFamily: GoogleFonts
-                .cormorant()
-                .fontFamily,
+            fontFamily: GoogleFonts.cormorant().fontFamily,
             fontWeight: FontWeight.w700,
             height: 0,
           )),
-      actions: actions ?? [
-        SizedBox(width: 16.w),
-        IconButton(
-          icon: Container(
-            height: 50.h,
-            width: 50.w,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.4),
-                  spreadRadius: 0,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
+      actions: actions ??
+          [
+            SizedBox(width: 16.w),
+            IconButton(
+              icon: Container(
+                height: 50.h,
+                width: 50.w,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      spreadRadius: 0,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ],
+                child: SvgPicture.asset("assets/images/back_btn.svg"),
+              ),
+              onPressed: () {
+                if (function != null) {
+                  function!();
+                } else {
+                  Get.back();
+                }
+              },
             ),
-            child: SvgPicture.asset(
-                "assets/images/back_btn.svg"),
-          ),
-          onPressed: () {
-            if (function != null) {
-              function!();
-            } else {
-              Get.back();
-            }
-          },
-        ),
-        Spacer(),
-        Text(
-          // title ??
-            'Product',
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 22.sp,
-              fontFamily: GoogleFonts
-                  .cormorant()
-                  .fontFamily,
-              fontWeight: FontWeight.w700,
-              height: 0,
-            )),
-        Spacer(),
-        Text("test"),
-        SizedBox(width: 16.w),
-      ],
+            Spacer(),
+            Text(
+                // title ??
+                'Product',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 22.sp,
+                  fontFamily: GoogleFonts.cormorant().fontFamily,
+                  fontWeight: FontWeight.w700,
+                  height: 0,
+                )),
+            Spacer(),
+            Text("test"),
+            SizedBox(width: 16.w),
+          ],
       centerTitle: true,
       backgroundColor: const Color(0xffFDFDFD),
     );
@@ -1702,9 +1835,7 @@ Widget LoadingWidget(Widget child) {
 }
 
 String GetMaxChar(String value, int max) {
-  return value
-      .toString()
-      .length > max
+  return value.toString().length > max
       ? value.toString().substring(0, max) + '..'
       : value.toString();
 }
@@ -1900,10 +2031,10 @@ String GetMaxChar(String value, int max) {
 Widget loadingIndicatorWidget() {
   return Center(
       child: LoadingAnimationWidget.flickr(
-        leftDotColor: primaryColor,
-        rightDotColor: const Color(0xFFFF0084),
-        size: 50,
-      ));
+    leftDotColor: primaryColor,
+    rightDotColor: const Color(0xFFFF0084),
+    size: 50,
+  ));
 }
 
 Widget placeHolderWidget() {
@@ -2128,7 +2259,7 @@ class BottomWaveClipperCart extends CustomClipper<Path> {
 
     // إضافة المنحنى في الجزء السفلي
     var firstControlPoint =
-    Offset(size.width * 0.5, size.height + 20); // نقطة التحكم للانحناء
+        Offset(size.width * 0.5, size.height + 20); // نقطة التحكم للانحناء
     var firstEndPoint = Offset(size.width, size.height - 20); // نهاية المنحنى
 
     // رسم المنحنى السفلي
@@ -3655,7 +3786,9 @@ customSearchField() {
 
 buildFloatingButton({required String buttonName,
   required BuildContext context, required dynamic onPressed,
-  bool isPlainBackground = false
+  bool isPlainBackground = false,
+  bool isLoading = false,
+
 
 
 }) {
@@ -3665,7 +3798,9 @@ buildFloatingButton({required String buttonName,
         .of(context)
         .size
         .width - 60.w,
-    child: FloatingActionButton(onPressed: () {},
+    child: FloatingActionButton(
+
+        onPressed: () {},
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         child: ShowUp(
@@ -3676,19 +3811,23 @@ buildFloatingButton({required String buttonName,
               },
               child: SizedBox(
 
-                  child: MyDefaultButton(
+                  child:
+
+                  MyDefaultButton(
                     isPlainBackground: isPlainBackground,
                     height: 75.h,
                     btnWidth: 350,
                     onPressed: onPressed,
 
-                    isloading: false,
+                    isloading: isLoading,
                     btnText: buttonName,
                     isSecondaryTextStyle: true,
                     borderRadius: 50,
 
 
-                  )),
+                  )
+
+        ),
             )
         )
     ),
@@ -3936,14 +4075,13 @@ Widget globalProductCard(Product product, int index) {
                                         width: 20.w,
                                         height: 20.h,
                                       ))),
-                              Obx(() =>
-                                  Text(
+                              Obx(() => Text(
                                     cartController.cartItems.isEmpty ||
-                                        cartController.cartItems.indexWhere(
-                                                (item) =>
-                                            item.product.id ==
-                                                product.id) ==
-                                            -1
+                                            cartController.cartItems.indexWhere(
+                                                    (item) =>
+                                                        item.product.id ==
+                                                        product.id) ==
+                                                -1
                                         ? '0'
                                         : '${cartController
                                         .cartItems[cartController.cartItems
