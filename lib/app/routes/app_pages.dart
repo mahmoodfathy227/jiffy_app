@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/profile/bindings/profile_binding.dart';
+import 'package:jiffy/app/modules/profile/views/change_password.dart';
+import 'package:jiffy/app/modules/profile/views/profile_view.dart';
+import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 
 import '../modules/address/bindings/address_binding.dart';
 import '../modules/address/views/address_view.dart';
@@ -112,16 +116,21 @@ class AppPages {
     //   page: () => SearchView(),
     //   binding: SearchBinding(),
     // ),
-    // GetPage(
-    //   name: _Paths.PROFILE,
-    //   page: () => ProfileView(),
-    //   binding: ProfileBinding(),
-    // ),
-    // GetPage(
-    //   name: _Paths.ProfileUpdate,
-    //   page: () => ProfileUpdate(),
-    //   binding: ProfileBinding(),
-    // ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.ProfileUpdate,
+      page: () => ProfileUpdate(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGEPASSWORD,
+      page: () => ChangePasswordScreen(),
+      binding: ProfileBinding(),
+    ),
     // GetPage(
     //   name: _Paths.HOME,
     //   page: () => HomeView(),

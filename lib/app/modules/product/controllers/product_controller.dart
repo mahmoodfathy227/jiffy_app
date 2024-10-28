@@ -5,6 +5,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:jiffy/app/modules/home/views/home_view.dart';
+import 'package:jiffy/app/modules/main/views/main_view.dart';
 
 
 import '../../../../main.dart';
@@ -266,7 +267,7 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
       isProductLoading.value = false;
       product.value = testProduct;
       Get.snackbar("Error", "Product Not Found Redirect..");
-      Get.off(() => HomeView());
+      Get.off(() => MainView());
     }
   }
 

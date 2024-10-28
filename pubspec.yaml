@@ -107,6 +107,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/home/
+    - assets/images/profile/
     - assets/icons/
     - assets/images/auth/
     - assets/images/splash/
