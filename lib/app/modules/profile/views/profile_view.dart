@@ -112,7 +112,7 @@ class _ProfileViewState extends State<ProfileView>
                                     'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
                               }
                             }, 19, 4),
-                            _buildMenuItem('call.svg', 'Help Center', () {
+                            _buildMenuItem('help.svg', 'Help Center', () {
                              Get.to(HelpView());
                             }, 19, 5),
 

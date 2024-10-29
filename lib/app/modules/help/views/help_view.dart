@@ -129,6 +129,7 @@ SizedBox(height: 70.h,),
                 myFunction: () {},
                 svgPath: "assets/images/notification.svg",
                 title: 'Help Center',
+                isHelp: true,
 
               ),
             ],

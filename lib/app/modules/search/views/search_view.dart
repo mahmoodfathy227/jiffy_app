@@ -522,6 +522,15 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
                                 .image!,
 
                             fit: BoxFit.cover,
+                            errorWidget: (context, url, error) =>
+                                Image.asset(
+                                  "assets/images/placeholder.png",
+                                  fit: BoxFit.contain,
+                                ),
+                            placeholder: (context, url) => Image.asset(
+                              "assets/images/placeholder.png",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
 

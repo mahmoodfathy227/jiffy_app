@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -120,4 +121,17 @@ class AppConstants {
 
   static String placeHolderImage = "assets/images/placeholder.png";
 
+
+   static final sampleProduct = Product(
+    id: 1,
+    name: 'Product 1',
+    description: 'This is product 1',
+    price: 10.0,
+   size: 'XL',
+    rating: 4.5,
+    outOfStock: false,
+    image: 'https://picsum.photos/200/300',
+    old_price: 20.0,
+
+  );
 }

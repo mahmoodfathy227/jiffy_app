@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/checkout/views/checkout_view.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/home/views/home_view.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
@@ -13,7 +14,7 @@ class MainView extends StatelessWidget {
   final List<Widget> _screens = [
     HomeView(),
     ProfileView(),
-    ProfileView(),
+   CheckoutView(),
     // const WishlistView(),
     ProfileView(),
     // WishlistView(),
@@ -30,7 +31,8 @@ class MainView extends StatelessWidget {
           right: 0,
           child: Align(
             alignment: Alignment.center,
-            child: CustomNavBar(),
+            child:
+            CustomNavBar(),
           ),
         ),
       ]),

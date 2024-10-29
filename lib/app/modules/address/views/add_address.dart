@@ -82,14 +82,15 @@ class AddAddress extends GetView<AddressController> {
             Row(
               children: [
                 Expanded(child: CustomTextField(
-                    height: 60.h,
+
                     labelText: "Apartment", onChanged: (value) {
                   controller.apartment.value = value;
+
 
                 })),
                 SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
-                    height: 60.h,
+
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14.r),
@@ -197,7 +198,7 @@ class AddAddress extends GetView<AddressController> {
                   Expanded(
                       child: CustomTextField(
 
-                          height: 60.h,
+
 
                           labelText: "State*", onChanged: (value) {
                         controller.state.value = value;
@@ -208,7 +209,9 @@ class AddAddress extends GetView<AddressController> {
                       child: CustomTextField(
 
                           errorText: controller.cityError.value,
-                          height: 60.h,
+
+
+
                           labelText: "City", onChanged: (value) {
                         controller.city.value = value;
                       })),
@@ -224,7 +227,7 @@ class AddAddress extends GetView<AddressController> {
                   Expanded(child: CustomTextField(
                       customTextEditingController: controller.addressTextEditingController.value,
                       errorText: controller.addressError.value,
-                      height: 60.h,
+
 
                       labelText:controller.address.value == "" ? "Address*" : controller.address.value, onChanged: (value) {
                     controller.address.value = value;
@@ -240,7 +243,7 @@ class AddAddress extends GetView<AddressController> {
               children: [
                 Expanded(child: CustomTextField(
                     errorText: controller.floorError.value,
-                    height: 60.h,
+
                     labelText: "Flat", onChanged: (value) {
 
 
@@ -248,14 +251,14 @@ class AddAddress extends GetView<AddressController> {
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
                     errorText: controller.floorError.value,
-                    height: 60.h,
+
                     labelText: "Floor", onChanged: (value) {
                   controller.floor.value = value;
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
                     errorText: controller.buildingError.value,
-                    height: 60.h,
+
                     labelText: "Building", onChanged: (value) {
                   controller.building.value = value;
                 })),
@@ -273,7 +276,7 @@ class AddAddress extends GetView<AddressController> {
                   Expanded(child: CustomTextField(
                       keyboardType: TextInputType.number,
                       errorText: controller.phoneError.value,
-                      height: 60.h,
+
                       labelText: "Phone*",
                       onChanged: (value) {
                         controller.phone.value = value;

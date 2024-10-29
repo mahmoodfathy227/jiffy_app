@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:lottie/lottie.dart';
@@ -971,7 +972,7 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: widget.iconPadding * 1.5.w,),
+                SizedBox(width: widget.iconPadding * 1.2.w,),
                 ConstrainedBox(
                   constraints: BoxConstraints(
 
@@ -1103,7 +1104,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           Container(
 
-            height: widget.height ?? 55.h,
+            height: widget.height ?? 50.h,
 
             child: Focus(
               onFocusChange: (hasFocus) {
@@ -1622,6 +1623,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Function()? function;
   final bool? back;
+  final bool isHelp;
   final String svgPath;
   final VoidCallback myFunction;
 
@@ -1632,6 +1634,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.back,
     this.svgPath = "assets/images/back_btn.svg",
     required this.myFunction,
+     this.isHelp = false,
   });
 
   @override
@@ -1659,6 +1662,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     IconButton(
                         onPressed: () {
+                          print("tapped");
                           Get.back();
                         },
                         icon: Stack(alignment: Alignment.center, children: [
@@ -1682,6 +1686,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Spacer(),
                     if (svgPath == null) Spacer(),
                     if (svgPath != null)
+                      isHelp?
+                          SizedBox(
+                            width: 80.w,
+                          )
+                      :
                       IconButton(
                           onPressed: () {},
                           icon: Stack(alignment: Alignment.center, children: [
@@ -1690,12 +1699,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                myFunction;
+                                // myFunction;
+                                Get.to(()=> HelpView());
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(bottom: 4.h),
                                 child: SvgPicture.asset(
-                                  svgPath!,
+                                  // svgPath,
+                                  "assets/images/help.svg",
                                   // "assets/images/shopping-cart.svg",
                                   width: 22.h,
                                 ),

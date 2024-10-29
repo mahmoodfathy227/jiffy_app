@@ -1,4 +1,3 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/app/modules/address/model/address_model.dart';
 import 'package:jiffy/app/modules/address/views/add_address.dart';
+import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:jiffy/app/modules/checkout/views/payment_method.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
@@ -16,30 +17,33 @@ import '../controllers/address_controller.dart';
 import 'edit_address.dart';
 
 class AddressView extends GetView<AddressController> {
-  const AddressView({super.key,  bool isFromCheckout = false});
-final bool isFromCheckout = false;
+  AddressView({super.key, this.isFromCheckout = false,});
+
+  final bool isFromCheckout;
+
 
   @override
   Widget build(BuildContext context) {
+    print("idFromCheckout $isFromCheckout");
     Get.put(AddressController());
     return Scaffold(
-backgroundColor: primaryBackgroundColor,
+      backgroundColor: primaryBackgroundColor,
       body: Stack(
         children: [
           CustomAppBar(myFunction: () {},
-          title: 'All Addresses',
+            title: 'All Addresses',
             svgPath: "assets/images/notification.svg",
 
           ),
           Padding(
-            padding:  EdgeInsets.only(top: 160.h),
+            padding: EdgeInsets.only(top: 160.h),
             child: Obx(() {
               return
-              controller.isLoading.value?
-              const Center(child: CircularProgressIndicator(),)
+                controller.isLoading.value ?
+                const Center(child: CircularProgressIndicator(),)
 
-                  :
-                controller.addressList.isEmpty  ?
+                    :
+                controller.addressList.isEmpty ?
                 _buildEmptyAddressView(context) :
                 _buildAddressListView(context)
 
@@ -53,12 +57,24 @@ backgroundColor: primaryBackgroundColor,
       floatingActionButton: buildFloatingButton(
 
 
-        buttonName:  isFromCheckout ? 'Select Address'  : 'Add New Address',
+        buttonName: isFromCheckout ?
+        controller.addressList.isEmpty ?
+        'Add New Address' :
+        'Select Address' :
+
+        'Select Address',
         context: context,
         onPressed: () {
+          if (controller.addressList.isEmpty) {
+            Get.to(()=>const AddAddress() );
 
-          print("pressed");
-          Get.to(const AddAddress());
+          } else {
+            var defaultAddressId = controller.addressList.where( (address) => address.isDefault == 1).first;
+            CheckoutController checkoutController = Get.put(CheckoutController());
+            checkoutController.assignDefaultAddress(defaultAddressId.id.toString());
+            Get.to(()=>const PaymentMethod() );
+
+          }
         },
 
       ),
@@ -113,12 +129,14 @@ backgroundColor: primaryBackgroundColor,
 
   _buildAddressListView(context) {
     return SizedBox(
-      height: MediaQuery.sizeOf(context).height - 300.h,
+      height: MediaQuery
+          .sizeOf(context)
+          .height - 300.h,
       child: SingleChildScrollView(
         child: Column(
-        
+
           children: [
-        
+
             Text("Your Default Address", style: primaryTextStyle(
                 weight: FontWeight.w400,
                 size: 18.sp.round(),
@@ -130,15 +148,18 @@ backgroundColor: primaryBackgroundColor,
 
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemBuilder: (context, index) => AddressCard(
-                    address: controller.addressList[index],
-                    context: context,
-                  ),
-                  separatorBuilder: (context, index) => Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                    height: 0.2,
-                    color: primaryColor,
-                  ),
+                  itemBuilder: (context, index) =>
+                      AddressCard(
+                        address: controller.addressList[index],
+                        context: context,
+                      ),
+                  separatorBuilder: (context, index) =>
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 20.h),
+                        height: 0.2,
+                        color: primaryColor,
+                      ),
                   itemCount: controller.addressList.length
               );
             }),
@@ -152,97 +173,106 @@ backgroundColor: primaryBackgroundColor,
 
   AddressCard({required Address address, context}) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         controller.setDefaultAddress(address.id);
       },
       child: Container(
 
-        height: 130.h,
-        width: MediaQuery.of(context).size.width - 30.w,
-        margin: EdgeInsets.symmetric(horizontal: 20.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30.r),
-          boxShadow: [
-            customBoxShadow
-          ],
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-           SvgPicture.asset(
-             address.isDefault == 1 ? "assets/images/address/address_selected.svg":
-               "assets/images/address/address_not_selected.svg"),
+          height: 130.h,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width - 30.w,
+          margin: EdgeInsets.symmetric(horizontal: 20.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30.r),
+            boxShadow: [
+              customBoxShadow
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                    address.isDefault == 1
+                        ? "assets/images/address/address_selected.svg"
+                        :
+                    "assets/images/address/address_not_selected.svg"),
 
-      SizedBox(width: 20.w,),
-            SvgPicture.asset("assets/images/address/home_address.svg"),
-            SizedBox(width: 20.w,),
+                SizedBox(width: 20.w,),
+                SvgPicture.asset("assets/images/address/home_address.svg"),
+                SizedBox(width: 20.w,),
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(address.label ?? "Home", style: primaryTextStyle(
-                      weight: FontWeight.w700,
-                      size: 20.sp.round()
-                  )),
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(address.label ?? "Home", style: primaryTextStyle(
+                            weight: FontWeight.w700,
+                            size: 20.sp.round()
+                        )),
 
-                  Row(
-                    children: [
-                      AutoSizeText(address.address ?? "Address",
-                          style: primaryTextStyle(
-                              weight: FontWeight.w400,
-                              size: 12.sp.round(),
-                              color: accentGreyishColor
-                          )
-                      ),
+                        Row(
+                          children: [
+                            AutoSizeText(address.address ?? "Address",
+                                style: primaryTextStyle(
+                                    weight: FontWeight.w400,
+                                    size: 12.sp.round(),
+                                    color: accentGreyishColor
+                                )
+                            ),
 
-      Spacer(),
-                      SizedBox(width: 15.w,),
-                      GestureDetector(
-                        onTap: (){
-                          _showDeleteDialog(context, address);
-                        },
-                          child: Icon(Icons.delete, color: primaryColor,)),
-                      SizedBox(width: 15.w,),
-                      GestureDetector(
-                        onTap: (){
-                          Get.to(EditAddress(address));
-                        },
-                        child: SvgPicture.asset("assets/images/address/edit.svg",
-                          width: 30.w,
-                          height: 30.h,
-                          fit: BoxFit.cover,
+                            Spacer(),
+                            SizedBox(width: 15.w,),
+                            GestureDetector(
+                                onTap: () {
+                                  _showDeleteDialog(context, address);
+                                },
+                                child: Icon(
+                                  Icons.delete, color: primaryColor,)),
+                            SizedBox(width: 15.w,),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(EditAddress(address));
+                              },
+                              child: SvgPicture.asset(
+                                "assets/images/address/edit.svg",
+                                width: 30.w,
+                                height: 30.h,
+                                fit: BoxFit.cover,
 
+                              ),
+                            ),
+
+
+                          ],
                         ),
-                      ),
 
-
-                    ],
+                        Row(
+                          children: [
+                            Text("Phone: ", style: primaryTextStyle(
+                                weight: FontWeight.w400,
+                                size: 12.sp.round(),
+                                color: accentGreyishColor
+                            )),
+                            Text(address.phone ?? "Phone",
+                                style: primaryTextStyle(
+                                    weight: FontWeight.w500,
+                                    size: 12.sp.round(),
+                                    color: Colors.black
+                                )),
+                          ],
+                        )
+                      ]
                   ),
-
-                  Row(
-                    children: [
-                      Text("Phone: ", style: primaryTextStyle(
-                          weight: FontWeight.w400,
-                          size: 12.sp.round(),
-                        color: accentGreyishColor
-                      )),
-                      Text(address.phone ?? "Phone", style: primaryTextStyle(
-                          weight: FontWeight.w500,
-                          size: 12.sp.round(),
-                        color: Colors.black
-                      )),
-                    ],
-                  )
-                  ]
-                  ),
-            ),
-         ] )),
+                ),
+              ])),
     );
   }
+
   void _showDeleteDialog(BuildContext context, Address address) {
     showDialog(
       context: context,
