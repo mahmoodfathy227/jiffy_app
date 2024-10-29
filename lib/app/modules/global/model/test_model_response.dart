@@ -149,6 +149,8 @@ class Product {
   final dynamic size;
   final dynamic outOfStock;
   final dynamic rating;
+  final dynamic d_limit;
+  final dynamic sd_limit;
 
   Product({
     required this.id,
@@ -160,6 +162,8 @@ class Product {
     required this.size,
     required this.outOfStock,
     required this.rating,
+     this.d_limit,
+     this.sd_limit,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -168,11 +172,14 @@ class Product {
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       image: json['image'] ?? '',
-      price: json['price'] != null ? json['price'] : null,
+      price: json['price'] != null ? json['price'] : json['sd_price'],
       size: json['size'] != null ? json['size'] : null,
-      old_price: json['old_price'] != null ? json['old_price']: 0,
+      old_price:
+          json['old_price'] != null ? json['old_price'] : json['d_price'],
       outOfStock: json['out_of_stock'] ?? 0,
       rating: json['rating'] ?? 0.0,
+      d_limit: json['d_limit'] ?? 0,
+      sd_limit: json['sd_limit'] ?? 0,
     );
   }
   Map<String, dynamic> toJson() {
@@ -186,6 +193,8 @@ class Product {
       'size': size,
       'out_of_stock': outOfStock,
       'rating': rating,
+      'sd_limit': sd_limit,
+      'd_limit': d_limit,
     };
   }
 }
@@ -250,20 +259,19 @@ class ViewProductData {
   final dynamic rating;
   final dynamic ratings_count;
   final dynamic rating_percentages;
-  ViewProductData(
-      {
-        required this.id,
-        required this.name,
-        required this.description,
-        required this.image,
-        required this.price,
-        required this.old_price,
-        required this.size,
-        required this.outOfStock,
-        required this.rating,
-        this.ratings_count,
-        this.rating_percentages,
-      });
+  ViewProductData({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.price,
+    required this.old_price,
+    required this.size,
+    required this.outOfStock,
+    required this.rating,
+    this.ratings_count,
+    this.rating_percentages,
+  });
 
   factory ViewProductData.fromJson(Map<String, dynamic> json) {
     return ViewProductData(
@@ -272,15 +280,12 @@ class ViewProductData {
       description: json['description'],
       image: json['image'],
       rating: json['rating'],
-
       price: json['price'],
       old_price: json['old_price'] ?? null,
       size: json['size'],
       outOfStock: json['out_of_stock'] ?? null,
       ratings_count: json['ratings_count'] ?? null,
       rating_percentages: json['rating_percentages'] ?? null,
-
-
     );
   }
 

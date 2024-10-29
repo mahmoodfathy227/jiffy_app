@@ -28,6 +28,7 @@ class SendAMessageView extends GetView<HelpController> {
               myFunction: () {},
               svgPath: "assets/images/notification.svg",
               title: 'Send a Message',
+              isHelp: true,
 
             ),
 

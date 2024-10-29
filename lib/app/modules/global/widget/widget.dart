@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:lottie/lottie.dart';
@@ -299,7 +300,7 @@ Widget SearchBar() {
                   child: Padding(
                     padding:
                         EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
-                    child: customSearchField(),
+                    child: customHomeSearchField(),
                   ),
                 ),
               ),
@@ -971,7 +972,7 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: widget.iconPadding * 1.5.w,),
+                SizedBox(width: widget.iconPadding * 1.2.w,),
                 ConstrainedBox(
                   constraints: BoxConstraints(
 
@@ -1103,7 +1104,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           Container(
 
-            height: widget.height ?? 55.h,
+            height: widget.height ?? 50.h,
 
             child: Focus(
               onFocusChange: (hasFocus) {
@@ -1622,6 +1623,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Function()? function;
   final bool? back;
+  final bool isHelp;
   final String svgPath;
   final VoidCallback myFunction;
 
@@ -1632,6 +1634,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.back,
     this.svgPath = "assets/images/back_btn.svg",
     required this.myFunction,
+     this.isHelp = false,
   });
 
   @override
@@ -1659,6 +1662,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     IconButton(
                         onPressed: () {
+                          print("tapped");
                           Get.back();
                         },
                         icon: Stack(alignment: Alignment.center, children: [
@@ -1682,6 +1686,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Spacer(),
                     if (svgPath == null) Spacer(),
                     if (svgPath != null)
+                      isHelp?
+                          SizedBox(
+                            width: 80.w,
+                          )
+                      :
                       IconButton(
                           onPressed: () {},
                           icon: Stack(alignment: Alignment.center, children: [
@@ -1690,12 +1699,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                myFunction;
+                                // myFunction;
+                                Get.to(()=> HelpView());
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(bottom: 4.h),
                                 child: SvgPicture.asset(
-                                  svgPath!,
+                                  // svgPath,
+                                  "assets/images/help.svg",
                                   // "assets/images/shopping-cart.svg",
                                   width: 22.h,
                                 ),
@@ -2027,6 +2038,99 @@ String GetMaxChar(String value, int max) {
 //     );
 //   }
 // }
+Widget EmptyScreen({nameImage, title, desc, txtbutton}) {
+  return Center(
+      child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Image.asset(
+        "assets/images/cart/shopping-cart.png",
+        width: 168.w,
+        height: 168.h,
+        fit: BoxFit.fill,
+      ),
+      SizedBox(
+        height: 56.h,
+      ),
+      Text(
+        title,
+        textAlign: TextAlign.center,
+        style: primaryTextStyle(
+          color: Color(0xFF20003D),
+          size: 26.sp.round(),
+          weight: FontWeight.w600,
+          letterSpacing: -0.41,
+        ),
+      ),
+      SizedBox(
+        height: 20.h,
+      ),
+      SizedBox(
+        width: 280.49.w,
+        child: Transform(
+          transform: Matrix4.identity()
+            ..translate(0.0, 0.0)
+            ..rotateZ(0.01),
+          child: Text(
+            desc,
+            textAlign: TextAlign.center,
+            style: primaryTextStyle(
+              color: Color(0x7F20003D),
+              size: 16.sp.round(),
+              weight: FontWeight.w500,
+              letterSpacing: -0.41,
+            ),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 35.h,
+      ),
+      InkWell(
+        onTap: () {
+          // Get.toNamed(Routes.CHECKOUT);
+          Get.to(() => const SearchView());
+        },
+        child: Container(
+          width: 181.w,
+          height: 64.h,
+          decoration: ShapeDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(1.00, 0.04),
+              end: Alignment(-1, -0.04),
+              colors: [
+                Color(0xFF20003D),
+                Color(0xFF6900CC),
+              ],
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(43),
+            ),
+            shadows: [
+              BoxShadow(
+                color: Color(0x4C000000),
+                blurRadius: 30,
+                offset: Offset(0, 4),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+          child: Center(
+            child: Text(
+              txtbutton,
+              style: primaryTextStyle(
+                size: 18.sp.round(),
+                weight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      )
+    ],
+  ));
+}
 
 Widget loadingIndicatorWidget() {
   return Center(
@@ -3726,7 +3830,7 @@ myCustomDivider() {
 }
 
 
-customSearchField() {
+customSearchField(isHome) {
   return Expanded(
 
     child: Container(
@@ -3747,6 +3851,15 @@ customSearchField() {
       child:
       Obx(() {
         return TextField(
+          onSubmitted: (v){
+            print("submitted");
+            print("isHome $isHome");
+            if(isHome){
+        Navigator.push(Get.context!,
+            MaterialPageRoute(builder: (context) =>
+                const SearchView()));
+            }
+          },
           onChanged: (v) {
             // search with keywords in products
             var bodyRequest = {'keywords': v};
@@ -3783,7 +3896,69 @@ customSearchField() {
     ),
   );
 }
+customHomeSearchField() {
+  return Expanded(
 
+    child: Container(
+
+
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 22,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ]
+      ),
+      child:
+      Obx(() {
+        return TextField(
+          onSubmitted: (v){
+            print("submitted");
+         Navigator.push(Get.context!,
+             MaterialPageRoute(builder: (context) =>
+                 const SearchView()));
+          },
+          onChanged: (v) {
+            // search with keywords in products
+            var bodyRequest = {'keywords': v};
+            customSearchController.getProducts(bodyRequest);
+          },
+          controller: customSearchController.searchController.value,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(8.w),
+              border: InputBorder.none,
+              hintText: 'Search',
+
+              hintStyle: primaryTextStyle(
+                color: Color(0xFF4F0099).withOpacity(0.3),
+                size: 14.sp.round(),
+                weight: FontWeight.w400,
+                letterSpacing: -0.41,
+              ),
+              suffixIconConstraints: BoxConstraints(
+                maxWidth: 52.w,
+                maxHeight: 52.h,
+              ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  "assets/images/home/search.svg",
+                  fit: BoxFit.cover,
+
+                ),
+              )
+
+          ),
+        );
+      }),
+    ),
+  );
+}
 buildFloatingButton({required String buttonName,
   required BuildContext context, required dynamic onPressed,
   bool isPlainBackground = false,
@@ -3971,7 +4146,7 @@ Widget globalProductCard(Product product, int index) {
             end: 10.w,
             child: LikeButton(
               onTap: onLikeButtonTapped,
-              isLiked: wishListController.isProductInWishList(product.id),
+              isLiked: wishListController.isProductInWishList(product.id).value,
               size: 20.sp,
               circleColor:
               CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
@@ -4052,22 +4227,22 @@ Widget globalProductCard(Product product, int index) {
                             children: [
                               Padding(
                                   padding:
-                                  EdgeInsetsDirectional.only(start: 10.w),
+                                      EdgeInsetsDirectional.only(start: 10.w),
                                   child: InkWell(
                                       onTap: () {
                                         cartController.updateQuantity(
                                             cartController.cartItems[
-                                            cartController.cartItems
-                                                .indexWhere((item) =>
-                                            item.product.id ==
-                                                product.id)],
+                                                cartController.cartItems
+                                                    .indexWhere((item) =>
+                                                        item.product.id ==
+                                                        product.id)],
                                             cartController
-                                                .cartItems[cartController
-                                                .cartItems
-                                                .indexWhere((item) =>
-                                            item.product.id ==
-                                                product.id)]
-                                                .quantity -
+                                                    .cartItems[cartController
+                                                        .cartItems
+                                                        .indexWhere((item) =>
+                                                            item.product.id ==
+                                                            product.id)]
+                                                    .quantity -
                                                 1);
                                       },
                                       child: SvgPicture.asset(
@@ -4083,10 +4258,7 @@ Widget globalProductCard(Product product, int index) {
                                                         product.id) ==
                                                 -1
                                         ? '0'
-                                        : '${cartController
-                                        .cartItems[cartController.cartItems
-                                        .indexWhere((item) =>
-                                    item.product.id == product.id)].quantity}',
+                                        : '${cartController.cartItems[cartController.cartItems.indexWhere((item) => item.product.id == product.id)].quantity}',
                                     textAlign: TextAlign.center,
                                     style: primaryTextStyle(
                                       color: Color(0xFFFEFEFE),
@@ -4138,11 +4310,387 @@ Widget globalProductCard(Product product, int index) {
   );
 }
 
+class buildProductCard extends StatefulWidget {
+  buildProductCard(
+      {super.key, required this.product, this.isInWishlist = false});
+
+  final Product product;
+  bool isInWishlist;
+
+  @override
+  State<buildProductCard> createState() => _buildCardProductState();
+}
+
+class _buildCardProductState extends State<buildProductCard> {
+  HomeController homeController = Get.put<HomeController>(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        ProductController productController = Get.put(ProductController());
+        await productController.getProduct(widget.product.id!);
+        Get.to(const ProductView());
+      },
+      child: SizedBox(
+          width: 165.w,
+          height: 259.h + 100.h,
+          child: Stack(children: [
+            PositionedDirectional(
+                top: 10,
+                child: ClipPath(
+                    clipper: BottomWaveClipper(),
+                    child: Container(
+                      width: 170.w,
+                      height: 259.h + 55.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 120.h,
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.product.image,
+                                      placeholder: (context, url) => SizedBox(
+                                          height: 120.h,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator())), // مؤشر تحميل
+                                      errorWidget: (context, url, error) =>
+                                          Image.network(
+                                        'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png', // صورة بديلة عند فشل التحميل
+                                        height: 120.h,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  // صورة المنتج
+
+                                  Text(
+                                    GetMaxChar(widget.product.name, 12),
+                                    textAlign: TextAlign.center,
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF20003D),
+                                      size: 16.sp.round(),
+                                      weight: FontWeight.w600,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+
+                                  Text(
+                                    '${GetMaxChar(widget.product.description, 7) ?? 300} gm',
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF20003D),
+                                      size: 12.sp.round(),
+                                      weight: FontWeight.w300,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                ]),
+                            FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '\$${widget.product.price ?? ""}',
+                                        textAlign: TextAlign.center,
+                                        style: secondaryTextStyle(
+                                          color: Color(0xFF4F0099),
+                                          size: 22.sp.round(),
+                                          weight: FontWeight.w600,
+                                          letterSpacing: -0.41,
+                                        ),
+                                      ),
+                                    ])),
+                            SizedBox(height: 8),
+                          ]),
+                    ))),
+            PositionedDirectional(
+                top: 20,
+                end: 10.w,
+                child: Obx(
+                  () => LikeButton(
+                    onTap: onLikeButtonTapped,
+                    product: widget.product,
+                    isLiked: wishListController
+                        .isProductInWishList(widget.product.id)
+                        .value,
+                    size: 20.sp,
+                    circleColor: const CircleColor(
+                        start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                    bubblesColor: BubblesColor(
+                      dotPrimaryColor: Color(0xff33b5e5),
+                      dotSecondaryColor: Color(0xff0099cc),
+                    ),
+                    likeCountAnimationDuration: Duration(seconds: 1),
+                    likeCountAnimationType: LikeCountAnimationType.all,
+                    countBuilder: (int? count, bool isLiked, String text) {
+                      var color =
+                          isLiked ? Colors.deepPurpleAccent : Colors.grey;
+
+                      return Text(
+                        '',
+                        style: TextStyle(color: color),
+                      );
+                    },
+                    likeBuilder: (bool isLiked) {
+                      return SvgPicture.asset(
+                        wishListController
+                                .isProductInWishList(widget.product.id)
+                                .value
+                            ? 'assets/images/addwish.svg'
+                            : 'assets/images/home/heart.svg',
+                        color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                        width: 20.w,
+                      );
+                    },
+                  ),
+                )),
+            // if (index == 1)
+            //   PositionedDirectional(
+            //     top: -4.h,
+            //     start: 5.w,
+            //     child: ShowUp(
+            //         child: Container(
+            //             width: 38.w * 1.8,
+            //             height: 44.h * 1.8,
+            //             child: Stack(children: [
+            //               SvgPicture.asset(
+            //                 'assets/images/home/off.svg',
+            //                 width: 38.w * 1.8,
+            //                 height: 44.h * 1.8,
+            //                 fit: BoxFit.cover,
+            //               ),
+            //               PositionedDirectional(
+            //                   bottom: 35.h,
+            //                   start: 17.w,
+            //                   child: ShowUp(
+            //                     child: Text(
+            //                       '${50}%',
+            //                       style: secondaryTextStyle(
+            //                         color: Colors.white,
+            //                         size: 12.sp.round(),
+            //                         weight: FontWeight.w800,
+            //                         letterSpacing: -0.41,
+            //                       ),
+            //                     ),
+            //                   )),
+            //             ]))),
+            //   ),
+            PositionedDirectional(
+              bottom: -15.h,
+              end: 0.w,
+              start: -10.w,
+              child: SizedBox(
+                height: 250.h,
+                child: Stack(
+                  children: [
+                    // الخلفية SVG
+                    PositionedDirectional(
+                      bottom: 0,
+                      end: 0,
+                      start: 0,
+                      child: SvgPicture.asset(
+                        'assets/images/home/borderCart.svg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Cart controls
+                    PositionedDirectional(
+                      bottom: 71.h,
+                      end: 0,
+                      start: 0,
+                      child: SizedBox(
+                        width: 80.w,
+                        child: Obx(
+                          () => AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: cartController.cartItems.isEmpty ||
+                                    cartController.cartItems.indexWhere(
+                                            (item) =>
+                                                item.product.id ==
+                                                widget.product.id) ==
+                                        -1
+                                ? InkWell(
+                                    onTap: () {
+                                      int initialQty =
+                                          widget.product.d_limit > 0
+                                              ? widget.product.d_limit
+                                              : 1;
+                                      cartController.addToCart(widget.product,
+                                          quantity: initialQty);
+                                    },
+                                    child: Text(
+                                      'Add to Cart',
+                                      style: secondaryTextStyle(
+                                        color: Color(0xFFFFFFFF),
+                                        size: 15.sp.round(),
+                                        weight: FontWeight.w900,
+                                        height: 1.8.h,
+                                      ),
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(children: [
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                              start: 10.w),
+                                          child: InkWell(
+                                            onTap: () {
+                                              var index = cartController
+                                                  .cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      widget.product.id);
+                                              var currentItem = cartController
+                                                  .cartItems[index];
+
+                                              // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+                                              if (widget.product.d_limit != 0 &&
+                                                      currentItem.quantity >
+                                                          widget.product
+                                                              .d_limit ||
+                                                  widget.product.d_limit == 0 &&
+                                                      currentItem.quantity >
+                                                          1) {
+                                                cartController.updateQuantity(
+                                                  currentItem,
+                                                  currentItem.quantity - 1,
+                                                );
+                                              } else if (widget.product
+                                                              .d_limit ==
+                                                          0 &&
+                                                      currentItem.quantity ==
+                                                          1 ||
+                                                  currentItem.quantity ==
+                                                      widget.product.d_limit) {
+                                                print('teasdsadsadsa');
+                                                cartController
+                                                    .removeItem(currentItem);
+                                                // cartController.updateQuantity(
+                                                //   currentItem,
+                                                //   currentItem.quantity -
+                                                //       product.d_limit,
+                                                // );
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              'assets/images/home/minus.svg',
+                                              width: 20.w,
+                                              height: 20.h,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.h,
+                                        )
+                                      ]),
+                                      Column(children: [
+                                        Text(
+                                          '${cartController.cartItems[cartController.cartItems.indexWhere((item) => item.product.id == widget.product.id)].quantity}',
+                                          textAlign: TextAlign.center,
+                                          style: primaryTextStyle(
+                                            color: Color(0xFFFEFEFE),
+                                            size: 20.sp.round(),
+                                            height: 1.05,
+                                            weight: FontWeight.w900,
+                                            letterSpacing: -0.41,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2.h,
+                                        )
+                                      ]),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              var index = cartController
+                                                  .cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      widget.product.id);
+                                              var currentItem = cartController
+                                                  .cartItems[index];
+                                              cartController.updateQuantity(
+                                                currentItem,
+                                                currentItem.quantity + 1,
+                                              );
+                                            },
+                                            child: SvgPicture.asset(
+                                              'assets/images/home/plus.svg',
+                                              width: 20.w,
+                                              height: 20.h,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ])),
+    );
+  }
+}
+
+Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
+  try {
+    // Check if the product is in the wishlist
+    if (wishListController.isProductInWishList(product.id).value) {
+      // Remove from wishlist
+      wishListController.wishlistProductIds
+          .removeWhere((item) => item == product.id);
+      wishListController.removeFromWishlist(product.id!);
+    } else {
+      // Add to wishlist
+      wishListController.wishlistProductIds!.value.add(product.id);
+      wishListController.addToWishlist(product.id);
+    }
+    return !isLiked;
+    // Return the updated liked state (toggle)
+  } catch (e) {
+    return false;
+  }
+}
+
 Widget placeHolderProductCard() {
   return GestureDetector(
-    onTap: () async {
-
-    },
+    onTap: () async {},
     child: SizedBox(
         width: 165.w,
         height: 259.h + 100.h,
@@ -4258,10 +4806,10 @@ Widget placeHolderProductCard() {
             end: 10.w,
             child: LikeButton(
               onTap: onLikeButtonTapped,
-              isLiked: wishListController.isProductInWishList(""),
+              isLiked: wishListController.isProductInWishList("").value,
               size: 20.sp,
               circleColor:
-              CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                  CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
               bubblesColor: BubblesColor(
                 dotPrimaryColor: Color(0xff33b5e5),
                 dotSecondaryColor: Color(0xff0099cc),

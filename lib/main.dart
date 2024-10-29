@@ -210,11 +210,11 @@ class MyApp extends StatelessWidget {
                               useInheritedMediaQuery: true,
                               title: APP_NAME,
                               theme: AppTheme.lightTheme(color: snap.data),
-                              // initialRoute: Routes.SPLASH,
-                              // initialBinding: SplashBinding(),
-                           // initialRoute: Routes.ADDRESS,
-                           // initialBinding: AddressBinding(),
-                                home: const PaymentMethod(),
+                              initialRoute: Routes.SPLASH,
+                              initialBinding: SplashBinding(),
+                           // initialRoute: Routes.CHECKOUT,
+                           // initialBinding: CheckoutBinding(),
+                                // home: const PaymentMethod(),
                               getPages: AppPages.routes,
                             ));
                   });

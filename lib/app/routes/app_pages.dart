@@ -185,7 +185,7 @@ class AppPages {
         ),
         GetPage(
           name: _Paths.ADDRESS,
-          page: () => const AddressView(),
+          page: () =>  AddressView(),
           binding: AddressBinding(),
         ),
       ],

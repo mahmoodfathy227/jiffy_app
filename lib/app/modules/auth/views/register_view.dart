@@ -13,6 +13,7 @@ import '../../global/config/helpers.dart';
 import '../../global/theme/app_theme.dart';
 import '../../global/theme/colors.dart';
 import '../../global/widget/widget.dart';
+import '../../help/views/help_view.dart';
 import '../controllers/auth_controller.dart';
 import 'login_view.dart';
 
@@ -214,11 +215,65 @@ String randomId = "123";
                             .width / 5),
                         SvgPicture.asset(
                           LOGO,
-                          width: 40.w,
+                          width: 41.w,
                           height: 30.h,
                           fit: BoxFit.cover,
                         ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(()=> const HelpView());
+                          },
+                          child: ConstrainedBox(
 
+                              constraints: BoxConstraints(
+
+                                  maxWidth: 100.w,
+                                  maxHeight: 50.h
+                              ),
+                              child: Container(
+
+                                width: 80.w,
+                                height: 35.h,
+                                decoration: BoxDecoration(
+                                    color:   Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        spreadRadius: 3,
+                                        blurRadius: 5,
+                                        offset: Offset(0, 1), // changes position of shadow
+                                      ),
+                                    ]
+                                ),
+                                child: Row(
+
+                                    children: [
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/images/help.svg',
+                                        width: 20.w,
+                                        height: 20.h,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      SizedBox(width: 5.w,),
+                                      Text("Help",
+                                        style: secondaryTextStyle(
+                                          weight: FontWeight.w500,
+                                          size: 12.sp.round(),
+                                        ),
+                                      )
+
+                                    ]),
+                              )
+
+
+                          ),
+                        ),
+                        SizedBox(width: 10.w,)
                       ],
                     )),
 

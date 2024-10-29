@@ -11,6 +11,7 @@ import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart'
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
+import 'package:jiffy/app/modules/main/views/main_view.dart';
 
 import '../../global/config/helpers.dart';
 
@@ -61,7 +62,7 @@ Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
 isPlainBackground: true,
         context: context,
         onPressed: () {
-
+Get.offAll(MainView());
           print("pressed");
 
         },

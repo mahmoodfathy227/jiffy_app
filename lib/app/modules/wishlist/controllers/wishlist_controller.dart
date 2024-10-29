@@ -6,10 +6,7 @@ import 'package:jiffy/app/modules/global/model/test_model_response.dart';
 
 import 'package:jiffy/main.dart';
 
-
 import 'package:http/http.dart' as http;
-
-
 
 import 'package:flutter/rendering.dart';
 import 'package:dio/dio.dart' as dio;
@@ -34,13 +31,15 @@ class WishlistController extends GetxController {
     } else {
       isAuth.value = true;
     }
-
+    getWishlistProducts();
+    print('init wish');
     super.onInit();
   }
 
   @override
   void onReady() {
     super.onReady();
+    getWishlistProducts();
   }
 
   @override
@@ -63,8 +62,8 @@ class WishlistController extends GetxController {
   }
 
   final wishlistProductIds = <int>[].obs;
-  bool isProductInWishList(id) {
-    return wishlistProductIds.any((element) => id == element);
+  Rx<bool> isProductInWishList(id) {
+    return wishlistProductIds.any((element) => id == element).obs;
   }
 
 //////////////////////Wishlist/////////////////////////////////
@@ -83,6 +82,7 @@ class WishlistController extends GetxController {
           print('Wishlist data successful');
           for (var id in apiResponse.data!.wishlist!) {
             wishlistProductIds.addNonNull(id);
+            print(id.toString() + 'tesasdsa');
           }
           WishlistController wishlistController =
               Get.put<WishlistController>(WishlistController());
@@ -173,12 +173,7 @@ class WishlistController extends GetxController {
       Get.closeCurrentSnackbar();
       Get.snackbar('Added', 'Added To Wishlist',
           // backgroundColor: primaryColor,
-          icon: SvgPicture.asset(
-            "assets/images/home/wishlisted.svg",
-            width: 43.w,
-            height: 43.h,
-            fit: BoxFit.cover,
-          ),
+
           isDismissible: true);
 
       print('removing from Wishlist api loading ...');
@@ -244,7 +239,7 @@ class WishlistController extends GetxController {
     };
 
     final response = await http.post(
-      Uri.parse('https://panel.mariannella.com/api/products'),
+      Uri.parse('https://jiffy.abadr.work/api/products'),
       headers: headers,
       body: bodyFields,
     );

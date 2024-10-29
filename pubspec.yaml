@@ -13,6 +13,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_native_splash:
+
+  color: "#4F0099"  # Background color
+  image: assets/images/my_native_splash_logo.png  # Path to your splash image
+  android: true
+  ios: true
+
+
 dependencies:
   cupertino_icons: ^1.0.6
   lottie: ^3.1.2
@@ -67,7 +75,7 @@ dependencies:
   json_annotation:
   google_maps_flutter: 2.5.3
   share_plus:
-
+  flutter_native_splash:
   app_links:
   public_ip_address:
   dotted_border:
@@ -117,4 +125,5 @@ flutter:
     - assets/images/help/
     - assets/images/payment/
     - assets/images/address/
+    - assets/images/cart/
     - shorebird.yaml

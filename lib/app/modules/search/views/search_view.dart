@@ -115,13 +115,15 @@ class SearchView extends GetView<CustomSearchController> {
                       ),
                     ),
 
-                    customSearchField(),
+                    customSearchField(false),
 
                     Container(
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
+
+                              color: primaryColor ,
+                              // Colors.grey.withOpacity(0.1),
                               spreadRadius: 1,
                               blurRadius: 22,
                               offset: Offset(
@@ -522,6 +524,15 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
                                 .image!,
 
                             fit: BoxFit.cover,
+                            errorWidget: (context, url, error) =>
+                                Image.asset(
+                                  "assets/images/placeholder.png",
+                                  fit: BoxFit.contain,
+                                ),
+                            placeholder: (context, url) => Image.asset(
+                              "assets/images/placeholder.png",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
 
