@@ -16,16 +16,6 @@ class CartController extends GetxController {
   var selectedMethod = ''.obs;
   var loading = true.obs;
   var couponCode = ''.obs;
-  RxBool isSharing = false.obs;
-
-  startSharing() {
-    isSharing.value = true; 
-  }
-
-  endSharing() {
-    isSharing.value = false;
-  }
-
   var giftCardCode = ''.obs;
   var discount = Rx<dynamic>(0);
   var subTotal = Rx<dynamic>(0);
@@ -48,7 +38,7 @@ class CartController extends GetxController {
     cartItems[index].isDismissible = !cartItems[index].isDismissible;
     cartItems.refresh();
   }
-
+ 
   @override
   void onInit() async {
     if (userToken == null) {
@@ -120,29 +110,29 @@ class CartController extends GetxController {
       final response = await apiConsumer.post('cart/details');
 
       if (response['status'] == 'success') {
-        // List<dynamic> items = response['data']['items'];
-        // total.value = response['data']['total'];
-        // print(total.value.toString() + 'test total value');
-        //
-        // // Update current cart items from API data
-        // List<CartItem> apiCartItems =
-        //     items.map((e) => CartItem.fromJson(e)).toList();
-        // cartItems.assignAll(apiCartItems);
-        //
-        // // Retrieve cached cart items
-        // List<CartItem> cachedCartItems = getCacheCartDetails();
-        //
-        // // Remove items from cache that are not present in API cart details
-        // cachedCartItems.removeWhere((cachedItem) => !apiCartItems
-        //     .any((apiItem) => apiItem.product.id == cachedItem.product.id));
-        //
-        // // Update the cache with the remaining items
-        // saveCartItemsToCache(cachedCartItems);
-        //
-        // cartItems.refresh(); // Ensure the UI is updated
-        //
-        // loading.value = false;
-        // update();
+        List<dynamic> items = response['data']['items'];
+        total.value = response['data']['total'];
+        print(total.value.toString() + 'test total value');
+        
+        // Update current cart items from API data
+        List<CartItem> apiCartItems =
+            items.map((e) => CartItem.fromJson(e)).toList();
+        cartItems.assignAll(apiCartItems);
+        
+        // Retrieve cached cart items
+        List<CartItem> cachedCartItems = getCacheCartDetails();
+        
+        // Remove items from cache that are not present in API cart details
+        cachedCartItems.removeWhere((cachedItem) => !apiCartItems
+            .any((apiItem) => apiItem.product.id == cachedItem.product.id));
+        
+        // Update the cache with the remaining items
+        saveCartItemsToCache(cachedCartItems);
+        
+        cartItems.refresh(); // Ensure the UI is updated
+        
+        loading.value = false;
+        update();
       } else {
         print('Failed to fetch cart details: ${response['data']}');
         loading.value = false;

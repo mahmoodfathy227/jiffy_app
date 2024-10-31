@@ -9,7 +9,6 @@ import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/help/views/send_a_message_view.dart';
 import 'package:dio/dio.dart' as dio;
 import '../../../../main.dart';
-import '../../global/config/constant.dart';
 import '../../global/model/model_response.dart';
 import '../../services/api_service.dart';
 import 'package:flutter/services.dart';
@@ -49,13 +48,6 @@ class HelpController extends GetxController {
   changeEmailStatus(bool status){
     //adding navigation to adding message
     emailStatus.value = status;
-    if(AppConstants.userData == null){
-      Get.snackbar("Error", "No Email is Logged In", colorText: Colors.white);
-    } else {
-      email.text = AppConstants.userData!.user.email;
-      print("email is ${AppConstants.userData!.user.email}");
-    }
-
 
 }
 

@@ -21,7 +21,7 @@ BoxShadow customBoxShadow = BoxShadow(
 Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
   try {
     // Check if the product is in the wishlist
-    if (wishListController.isProductInWishList(product.id)) {
+    if (wishListController.isProductInWishList(product.id).value) {
       // Remove from wishlist
       wishListController.wishlistProductIds
           .removeWhere((item) => item == product.id);

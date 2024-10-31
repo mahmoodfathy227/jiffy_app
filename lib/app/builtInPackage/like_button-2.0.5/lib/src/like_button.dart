@@ -17,7 +17,7 @@ class LikeButton extends StatefulWidget {
     double? bubblesSize,
     double? circleSize,
     this.likeCount,
-    this.Address,
+    this.product,
     this.object,
     this.isLiked = false,
     this.mainAxisAlignment = MainAxisAlignment.center,
@@ -51,7 +51,7 @@ class LikeButton extends StatefulWidget {
 
   /// total size of bubbles
   final double bubblesSize;
-  final dynamic Address;
+  final dynamic product;
 
   /// colors of bubbles
   final BubblesColor bubblesColor;
@@ -426,11 +426,11 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
       return;
     }
     if (widget.onTap != null) {
-      widget.onTap!(_isLiked ?? true, object).then((bool? isLiked) {
-        _handleIsLikeChanged(isLiked, object);
+      widget.onTap!(_isLiked ?? true, widget.product).then((bool? isLiked) {
+        _handleIsLikeChanged(isLiked, widget.product);
       });
     } else {
-      _handleIsLikeChanged(!(_isLiked ?? true), object);
+      _handleIsLikeChanged(!(_isLiked ?? true), widget.product);
     }
   }
 

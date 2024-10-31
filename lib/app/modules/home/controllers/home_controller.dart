@@ -1,10 +1,11 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/global/model/model_response.dart';
 import 'package:jiffy/app/modules/home/controllers/model.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
- import 'package:jiffy/main.dart';
+import 'package:jiffy/main.dart';
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Observable state for animations
@@ -29,7 +30,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   var currentPage = 0.obs;
 
   ScrollController scrollController = ScrollController();
- 
+
   List<String> categories = [
     'Styling',
     'Makeup',
@@ -41,13 +42,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     'Category 8',
   ];
   final WishlistController wishListController = Get.put(WishlistController());
+  final CartController cartController =
+      Get.put(CartController()); // Remove this line
 
   @override
   void onInit() {
     super.onInit();
     fetchHomePageData();
-    wishListController.getWishlistProducts();
-    //Initialize main animation controller
+     //Initialize main animation controller
     controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
@@ -97,6 +99,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
           pageController.value.page! * (3.14159 / 2); // Adjust rotation
     });
     currentPage.value = 0;
+    wishListController.getWishlistProducts();
   }
 
   @override
@@ -114,34 +117,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     currentPage.value = 0;
   }
 
-  List<Product> products = [
-    Product(
-      name: 'Fragrance 1',
-      imageUrl: 'https://example.com/image1.jpg',
-      weight: 300,
-      price: 18.20,
-      oldPrice: 24.40,
-      discount: 50,
-      inStock: true,
-    ),
-    Product(
-      name: 'Fragrance 2',
-      imageUrl: 'https://example.com/image2.jpg',
-      weight: 300,
-      price: 18.20,
-      inStock: false,
-    ),
-    Product(
-      name: 'Fragrance 3',
-      imageUrl: 'https://example.com/image3.jpg',
-      weight: 300,
-      price: 18.20,
-      oldPrice: 20.00,
-      discount: 10,
-      inStock: true,
-    ),
-    // Add more products up to 10
-  ];
   var homePageData = HomePageData(
     categories: [],
     brands: [],
@@ -161,6 +136,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       if (response['status'] == 'success') {
         var jsonData = response['data'];
         homePageData.value = HomePageData.fromJson(jsonData);
+        cartController.fetchCartDetailsFromAPI();
+
         print("your length is ${homePageData.value.latestProducts.length}");
       } else {
         print('Failed to load data: ${response['data']}');

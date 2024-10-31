@@ -1,13 +1,10 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-
 import 'package:jiffy/app/modules/auth/views/register_view.dart';
-import 'package:jiffy/app/modules/help/views/help_view.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../global/config/configs.dart';
@@ -30,27 +27,23 @@ class LoginView extends StatelessWidget {
   Widget loginbyPasswordView(context) {
     return Obx(() {
       return SizedBox(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height - 300.h,
+        height: MediaQuery.of(context).size.height - 300.h,
         child: Column(
           children: [
-
-
             ShowUp(
                 delay: 400,
                 child: CustomTextField(
                   labelText: 'Your Email',
                   onChanged: (value) => controller.email.value = value,
-                  errorText:  controller.emailError.value,
+                  errorText: controller.emailError.value,
                 )),
-SizedBox(height:25.h ,),
+            SizedBox(
+              height: 25.h,
+            ),
 
             ShowUp(
                 delay: 600,
                 child: CustomTextField(
-
                   labelText: 'Password',
                   onChanged: (value) => controller.password.value = value,
                   errorText: controller.passwordError.value,
@@ -95,7 +88,9 @@ SizedBox(height:25.h ,),
             //         ),
             //       ),
             //     ),
-            SizedBox(height: 5.h,),
+            SizedBox(
+              height: 5.h,
+            ),
             MyDefaultButton(
               errorText: controller.errorMessage.value,
               isloading: controller.isLoading.value,
@@ -115,8 +110,6 @@ SizedBox(height:25.h ,),
                       color: Color(0xFF555662),
                       size: 13.sp.round(),
                       weight: FontWeight.w400,
-
-
                     ),
                   ),
                   InkWell(
@@ -128,7 +121,6 @@ SizedBox(height:25.h ,),
                         color: primaryColor,
                         size: 13.sp.round(),
                         weight: FontWeight.w400,
-
                       ),
                     ),
                   ),
@@ -136,16 +128,19 @@ SizedBox(height:25.h ,),
               ),
             ),
             SizedBox(height: 35.h),
-            Text("Sign Up With", style: primaryTextStyle(color: Colors.black,
-                size: 13.sp.round(),
-                weight: FontWeight.w400),),
+            Text(
+              "Sign Up With",
+              style: primaryTextStyle(
+                  color: Colors.black,
+                  size: 13.sp.round(),
+                  weight: FontWeight.w400),
+            ),
 
-            SizedBox(height: 10.h,),
             SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width - 60.w,
+              height: 10.h,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 60.w,
               height: 80.h,
               child: Row(
                 children: [
@@ -169,18 +164,27 @@ SizedBox(height:25.h ,),
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SvgPicture.asset(
-                              "assets/icons/facebook.svg", color: Colors.blue,),
-                            SizedBox(width: 10.w,),
-                            Text("Facebook",
-                              style: primaryTextStyle(color: Colors.black,
-                                  size: 13.sp.round(), weight: FontWeight.w100
-                              ),),
+                              "assets/icons/facebook.svg",
+                              color: Colors.blue,
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              "Facebook",
+                              style: primaryTextStyle(
+                                  color: Colors.black,
+                                  size: 13.sp.round(),
+                                  weight: FontWeight.w100),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 15.w,),
+                  SizedBox(
+                    width: 15.w,
+                  ),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -201,22 +205,24 @@ SizedBox(height:25.h ,),
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SvgPicture.asset("assets/icons/google.svg"),
-                            SizedBox(width: 10.w,),
-                            Text("Google", style: primaryTextStyle(
-                                color: Colors.black,
-                                size: 13.sp.round(),
-                                weight: FontWeight.w400),),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              "Google",
+                              style: primaryTextStyle(
+                                  color: Colors.black,
+                                  size: 13.sp.round(),
+                                  weight: FontWeight.w400),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   )
-
                 ],
               ),
             )
-
-
           ],
         ),
       );
@@ -375,129 +381,61 @@ SizedBox(height:25.h ,),
         backgroundColor: primaryBackgroundColor,
         body: SafeArea(
           child: SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: kDefaultPadding,
-                    ),
-                    ShowUp(
-                        delay: 200,
-                        child: Row(
-
-                          children: [
-                            Spacer(),
-                            SvgPicture.asset(
-                              LOGO,
-                              width: 41.w,
-                              height: 30.h,
-                              fit: BoxFit.cover,
-                            ),
-SizedBox(width: 90.w,),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(()=> const HelpView());
-                              },
-                              child: ConstrainedBox(
-
-                                constraints: BoxConstraints(
-
-                                  maxWidth: 100.w,
-                                  maxHeight: 50.h
-                                ),
-                                child: Container(
-                                  width: 80.w,
-                                  height: 35.h,
-                                  decoration: BoxDecoration(
-                                  color:   Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        spreadRadius: 3,
-                                        blurRadius: 5,
-                                        offset: Offset(0, 1), // changes position of shadow
-                                      ),
-                                    ]
-                                  ),
-                                  child: Row(
-
-                                    children: [
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      SvgPicture.asset(
-                                        'assets/images/help.svg',
-                                        width: 20.w,
-                                        height: 20.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      SizedBox(width: 5.w,),
-                                      Text("Help",
-                                        style: secondaryTextStyle(
-                                          weight: FontWeight.w500,
-                                          size: 12.sp.round(),
-                                        ),
-                                      )
-
-                                  ]),
-                                )
-
-
-                              ),
-                            ),
-                            SizedBox(width: 10.w,),
-                          ],
-                        )),
-                    SizedBox(
-                      height: kDefaultPadding,
-                    ),
-
-                    SizedBox(
-
-                      width: 255.w,
-                      height: 120.h,
-                      child: Column(
-                        children: [
-                          Text("Login to", overflow: TextOverflow.ellipsis,
-                            style: primaryTextStyle(
-                                weight: FontWeight.w700,
-                                size: 32.sp.round(),
-                                color: primaryColor
-                            ),),
-                          Text("your account", overflow: TextOverflow.ellipsis,
-                            style: primaryTextStyle(
-                                weight: FontWeight.w700,
-                                size: 32.sp.round(),
-                                color: primaryColor
-                            ),),
-                        ],
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: kDefaultPadding,
+                ),
+                ShowUp(
+                    delay: 200,
+                    child: SvgPicture.asset(
+                      LOGO,
+                      width: 40.w,
+                      height: 30.h,
+                      fit: BoxFit.cover,
+                    )),
+                SizedBox(
+                  height: kDefaultPadding,
+                ),
+                SizedBox(
+                  width: 255.w,
+                  height: 120.h,
+                  child: Column(
+                    children: [
+                      Text(
+                        "Login to",
+                        overflow: TextOverflow.ellipsis,
+                        style: primaryTextStyle(
+                            weight: FontWeight.w700,
+                            size: 32.sp.round(),
+                            color: primaryColor),
                       ),
-                    ),
-
-                    SizedBox(
-                      height: 60.h,
-                    ),
-
-                    loginbyPasswordView(context),
-
-                  ],
-                )),
+                      Text(
+                        "your account",
+                        overflow: TextOverflow.ellipsis,
+                        style: primaryTextStyle(
+                            weight: FontWeight.w700,
+                            size: 32.sp.round(),
+                            color: primaryColor),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 60.h,
+                ),
+                loginbyPasswordView(context),
+              ],
+            )),
           ),
         ));
   }
 }
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -511,9 +449,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Welcome Home", style: primaryTextStyle(),),
+        child: Text(
+          "Welcome Home",
+          style: primaryTextStyle(),
+        ),
       ),
     );
   }
 }
-

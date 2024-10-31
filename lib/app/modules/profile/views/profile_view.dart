@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/app/modules/address/views/address_view.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
-import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 
 import '../../auth/views/register_view.dart';
@@ -99,10 +97,8 @@ class _ProfileViewState extends State<ProfileView>
                               ),
                             ),
                             _buildMenuItem(
-                                'address.svg', 'Address', () {
-                                  Get.to(AddressView());
-                            }, 19, 1),
-                            _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
+                                'address.svg', 'Address', () {}, 19, 1),
+                            // _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
                             _buildMenuItem('rate.svg', 'Rate this app', () {
                               if (GetPlatform.isAndroid) {
                                 _launchURL(
@@ -112,10 +108,6 @@ class _ProfileViewState extends State<ProfileView>
                                     'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
                               }
                             }, 19, 4),
-                            _buildMenuItem('help.svg', 'Help Center', () {
-                             Get.to(HelpView());
-                            }, 19, 5),
-
                             _buildMenuItem('terms.svg', 'Terms of Use', () {
                               _launchURL(
                                   'https://mariannella.genixarea.pro/terms.html');
@@ -360,7 +352,7 @@ class _ProfileViewState extends State<ProfileView>
                             Get.to(() => ProfileUpdate());
                           },
                           child: Container(
-                              width: 117.w,
+                              width: 120.w,
                               height: 34.h,
                               decoration: ShapeDecoration(
                                 gradient: LinearGradient(
@@ -384,12 +376,14 @@ class _ProfileViewState extends State<ProfileView>
                                 ],
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/images/profile/edit.png',
                                     width: 16.w,
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
                                   ),
                                   Text(
                                     'Edit Profile',

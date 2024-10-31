@@ -55,7 +55,7 @@ class ChangePasswordScreen extends StatelessWidget {
             controller.validatePassword(value);
           },
           errorText: controller.passwordError.value.isEmpty
-              ? ""
+              ? null
               : controller.passwordError.value,
           obscureText: true,
         ),
@@ -67,7 +67,7 @@ class ChangePasswordScreen extends StatelessWidget {
             controller.validateNewPassword(value);
           },
           errorText: controller.newPasswordError.value.isEmpty
-              ? ""
+              ? null
               : controller.newPasswordError.value,
           obscureText: true,
         ),
@@ -80,7 +80,7 @@ class ChangePasswordScreen extends StatelessWidget {
                 value, controller.newPassword.value);
           },
           errorText: controller.confirmPasswordError.value.isEmpty
-              ? ""
+              ? null
               : controller.confirmPasswordError.value,
           obscureText: true,
         ),

@@ -15,7 +15,6 @@ import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart'
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
-
 class HomeView extends StatelessWidget {
   // Inject HomeController using GetX
   final HomeController homeController = Get.put(HomeController());
@@ -28,9 +27,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
         backgroundColor: const Color(0xFFF8F3FF),
         body: SingleChildScrollView(
-            child:
-
-            Column(
+            child: Column(
                 // استخدام Column لضمان التمرير
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -297,11 +294,7 @@ class HomeView extends StatelessWidget {
               SizedBox(
                 height: 9.h,
               ),
-            ])
-        )
-
-
-    );
+            ])));
   }
 
   Widget BannerAd() {
@@ -364,7 +357,7 @@ class HomeView extends StatelessWidget {
   Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
     try {
       // Check if the product is in the wishlist
-      if (wishListController.isProductInWishList(product.id)) {
+      if (wishListController.isProductInWishList(product.id).value) {
         // Remove from wishlist
         wishListController.wishlistProductIds
             .removeWhere((item) => item == product.id);
@@ -374,12 +367,10 @@ class HomeView extends StatelessWidget {
         wishListController.wishlistProductIds!.value.add(product.id);
         wishListController.addToWishlist(product.id);
       }
-      return false;
+      return !isLiked;
       // Return the updated liked state (toggle)
     } catch (e) {
       return false;
-
-
     }
   }
 
@@ -387,9 +378,9 @@ class HomeView extends StatelessWidget {
     int index = homeController.homePageData.value.latestProducts
         .indexWhere((item) => item.id == product.id);
     return GestureDetector(
-      onTap: () async{
-      ProductController productController =  Get.put(ProductController());
-      await productController.getProduct(product.id!);
+      onTap: () async {
+        ProductController productController = Get.put(ProductController());
+        await productController.getProduct(product.id!);
         Get.to(const ProductView());
       },
       child: SizedBox(
@@ -405,7 +396,7 @@ class HomeView extends StatelessWidget {
                       height: 259.h + 55.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(5),
                             topRight: Radius.circular(5)),
                         boxShadow: [
@@ -469,7 +460,8 @@ class HomeView extends StatelessWidget {
                             FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       if (index == 1)
@@ -510,32 +502,48 @@ class HomeView extends StatelessWidget {
                             SizedBox(height: 8),
                           ]),
                     ))),
-
             PositionedDirectional(
-              top: 20,
-              end: 10.w,
-              child: LikeButton(
-                onTap: onLikeButtonTapped,
-                isLiked: wishListController.isProductInWishList(product.id),
-                size: 20.sp,
-                circleColor:
-                    CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                bubblesColor: BubblesColor(
-                  dotPrimaryColor: Color(0xff33b5e5),
-                  dotSecondaryColor: Color(0xff0099cc),
-                ),
-                likeBuilder: (bool isLiked) {
-                  return SvgPicture.asset(
-                    'assets/images/home/heart.svg',
-                    color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                    width: 20.w,
-                  );
-                },
-              ),
-            ),
+                top: 20,
+                end: 10.w,
+                child: Obx(
+                  () => LikeButton(
+                    onTap: onLikeButtonTapped,
+                    product: product,
+                    isLiked: wishListController
+                        .isProductInWishList(product.id)
+                        .value,
+                    size: 20.sp,
+                    circleColor: const CircleColor(
+                        start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                    bubblesColor: BubblesColor(
+                      dotPrimaryColor: Color(0xff33b5e5),
+                      dotSecondaryColor: Color(0xff0099cc),
+                    ),
+                    likeCountAnimationDuration: Duration(seconds: 1),
+                    likeCountAnimationType: LikeCountAnimationType.all,
+                    countBuilder: (int? count, bool isLiked, String text) {
+                      var color =
+                          isLiked ? Colors.deepPurpleAccent : Colors.grey;
+
+                      return Text(
+                        '',
+                        style: TextStyle(color: color),
+                      );
+                    },
+                    likeBuilder: (bool isLiked) {
+                      return SvgPicture.asset(
+                        wishListController.isProductInWishList(product.id).value
+                            ? 'assets/images/addwish.svg'
+                            : 'assets/images/home/heart.svg',
+                        color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                        width: 20.w,
+                      );
+                    },
+                  ),
+                )),
             if (index == 1)
               PositionedDirectional(
-                top: 0,
+                top: -4.h,
                 start: 5.w,
                 child: ShowUp(
                     child: Container(
@@ -564,118 +572,166 @@ class HomeView extends StatelessWidget {
                               )),
                         ]))),
               ),
-
-            // Add cart controls for each product
             PositionedDirectional(
               bottom: -15.h,
-              end: 10.w,
-              start: 0,
+              end: 0.w,
+              start: -10.w,
               child: SizedBox(
-                  height: 250.h,
-                  child: Stack(
-                    children: [
-                      // الخلفية SVG
-                      PositionedDirectional(
-                        bottom: 0,
-                        end: 0,
-                        start: 0,
-                        child: SvgPicture.asset(
-                          'assets/images/home/borderCart.svg',
-                          height: 155.h,
-                          fit: BoxFit.cover,
+                height: 250.h,
+                child: Stack(
+                  children: [
+                    // الخلفية SVG
+                    PositionedDirectional(
+                      bottom: 0,
+                      end: 0,
+                      start: 0,
+                      child: SvgPicture.asset(
+                        'assets/images/home/borderCart.svg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Cart controls
+                    PositionedDirectional(
+                      bottom: 71.h,
+                      end: 0,
+                      start: 0,
+                      child: SizedBox(
+                        width: 80.w,
+                        child: Obx(
+                          () => AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: cartController.cartItems.isEmpty ||
+                                    cartController.cartItems.indexWhere(
+                                            (item) =>
+                                                item.product.id ==
+                                                product.id) ==
+                                        -1
+                                ? InkWell(
+                                    onTap: () {
+                                      int initialQty = product.d_limit > 0
+                                          ? product.d_limit
+                                          : 1;
+                                      cartController.addToCart(product,
+                                          quantity: initialQty);
+                                    },
+                                    child: Text(
+                                      'Add to Cart',
+                                      style: secondaryTextStyle(
+                                        color: Color(0xFFFFFFFF),
+                                        size: 15.sp.round(),
+                                        weight: FontWeight.w900,
+                                        height: 1.8.h,
+                                      ),
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(children: [
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                              start: 10.w),
+                                          child: InkWell(
+                                            onTap: () {
+                                              var index = cartController
+                                                  .cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      product.id);
+                                              var currentItem = cartController
+                                                  .cartItems[index];
+
+                                              // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+                                              if (product.d_limit != 0 &&
+                                                      currentItem.quantity >
+                                                          product.d_limit ||
+                                                  product.d_limit == 0 &&
+                                                      currentItem.quantity >
+                                                          1) {
+                                                cartController.updateQuantity(
+                                                  currentItem,
+                                                  currentItem.quantity - 1,
+                                                );
+                                              } else if (product.d_limit == 0 &&
+                                                      currentItem.quantity ==
+                                                          1 ||
+                                                  currentItem.quantity ==
+                                                      product.d_limit) {
+                                                print('teasdsadsadsa');
+                                                cartController
+                                                    .removeItem(currentItem);
+                                                // cartController.updateQuantity(
+                                                //   currentItem,
+                                                //   currentItem.quantity -
+                                                //       product.d_limit,
+                                                // );
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              'assets/images/home/minus.svg',
+                                              width: 20.w,
+                                              height: 20.h,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.h,
+                                        )
+                                      ]),
+                                      Column(children: [
+                                        Text(
+                                          '${cartController.cartItems[cartController.cartItems.indexWhere((item) => item.product.id == product.id)].quantity}',
+                                          textAlign: TextAlign.center,
+                                          style: primaryTextStyle(
+                                            color: Color(0xFFFEFEFE),
+                                            size: 20.sp.round(),
+                                            height: 1.05,
+                                            weight: FontWeight.w900,
+                                            letterSpacing: -0.41,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2.h,
+                                        )
+                                      ]),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              var index = cartController
+                                                  .cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      product.id);
+                                              var currentItem = cartController
+                                                  .cartItems[index];
+                                              cartController.updateQuantity(
+                                                currentItem,
+                                                currentItem.quantity + 1,
+                                              );
+                                            },
+                                            child: SvgPicture.asset(
+                                              'assets/images/home/plus.svg',
+                                              width: 20.w,
+                                              height: 20.h,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                          ),
                         ),
                       ),
-                      // Cart controls
-                      PositionedDirectional(
-                        bottom: 71.h,
-                        end: 0,
-                        start: 0,
-                        child: SizedBox(
-                            width: 80.w,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Padding(
-                                    padding:
-                                        EdgeInsetsDirectional.only(start: 10.w),
-                                    child: InkWell(
-                                        onTap: () {
-                                          cartController.updateQuantity(
-                                              cartController.cartItems[
-                                                  cartController.cartItems
-                                                      .indexWhere((item) =>
-                                                          item.product.id ==
-                                                          product.id)],
-                                              cartController
-                                                      .cartItems[cartController
-                                                          .cartItems
-                                                          .indexWhere((item) =>
-                                                              item.product.id ==
-                                                              product.id)]
-                                                      .quantity -
-                                                  1);
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/images/home/minus.svg',
-                                          width: 20.w,
-                                          height: 20.h,
-                                        ))),
-                                Obx(() => Text(
-                                      cartController.cartItems.isEmpty ||
-                                              cartController.cartItems.indexWhere(
-                                                      (item) =>
-                                                          item.product.id ==
-                                                          product.id) ==
-                                                  -1
-                                          ? '0'
-                                          : '${cartController.cartItems[cartController.cartItems.indexWhere((item) => item.product.id == product.id)].quantity}',
-                                      textAlign: TextAlign.center,
-                                      style: primaryTextStyle(
-                                        color: Color(0xFFFEFEFE),
-                                        size: 20.sp.round(),
-                                        weight: FontWeight.w900,
-                                        letterSpacing: -0.41,
-                                      ),
-                                    )),
-                                InkWell(
-                                    onTap: () {
-                                      if (!cartController
-                                          .isProductInCart(product)) {
-                                        cartController.addToCart(
-                                          product,
-                                        );
-                                        return;
-                                      }
-                                      if (cartController
-                                              .isProductInCart(product) &&
-                                          cartController.cartItems.isNotEmpty) {
-                                        cartController.updateQuantity(
-                                            cartController.cartItems[
-                                                cartController.cartItems
-                                                    .indexWhere((item) =>
-                                                        item.product.id ==
-                                                        product.id)],
-                                            cartController
-                                                    .cartItems[cartController
-                                                        .cartItems
-                                                        .indexWhere((item) =>
-                                                            item.product.id ==
-                                                            product.id)]
-                                                    .quantity +
-                                                1);
-                                      } // زيادة الكمية
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/images/home/plus.svg',
-                                      width: 20.w,
-                                      height: 20.h,
-                                    )),
-                              ],
-                            )),
-                      )
-                    ],
-                  )),
-            ),
+                    )
+                  ],
+                ),
+              ),
+            )
           ])),
     );
   }
@@ -712,10 +768,9 @@ class HomeView extends StatelessWidget {
                       Get.toNamed(Routes.SEARCH);
                     },
                     child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
-                      child: customSearchField()
-                    ),
+                        padding: EdgeInsetsDirectional.only(
+                            start: 16.0.w, bottom: 5.h),
+                        child: customSearchField()),
                   ),
                 ),
               ],
@@ -724,7 +779,7 @@ class HomeView extends StatelessWidget {
           SizedBox(width: 11.w), // Space between the search field and the icon
           // Search Icon next to the search field
           GestureDetector(
-            onTap: (){
+            onTap: () {
               print("tapped");
               Get.toNamed(Routes.SEARCH);
             },
@@ -745,7 +800,7 @@ class HomeView extends StatelessWidget {
                 ),
                 child: Center(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       print("tapped");
                       Get.toNamed(Routes.SEARCH);
                     },

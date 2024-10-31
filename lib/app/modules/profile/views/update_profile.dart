@@ -266,7 +266,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
       InkWell(
           onTap: () => onPickImage(),
           child: Container(
-            width: 163.w,
+            width: 175.w,
             height: 34.h,
             decoration: ShapeDecoration(
               gradient: LinearGradient(
@@ -353,7 +353,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   onChanged: (value) =>
                       controller.userModel.value.firstName = value,
                   errorText: controller.firstNameError.value.isEmpty
-                      ? ""
+                      ? null
                       : controller.firstNameError.value,
                 ),
               ),
@@ -366,7 +366,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   onChanged: (value) =>
                       controller.userModel.value.lastName = value,
                   errorText: controller.lastNameError.value.isEmpty
-                      ? ""
+                      ? null
                       : controller.lastNameError.value,
                 ),
               ),
@@ -377,7 +377,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 labelText: 'Phone',
                 onChanged: (value) => controller.userModel.value.phone = value,
                 errorText: controller.phoneError.value.isEmpty
-                    ? ""
+                    ? null
                     : controller.phoneError.value,
               ),
               SizedBox(height: 20.h),
@@ -474,7 +474,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     Get.toNamed(Routes.CHANGEPASSWORD);
                   },
                   child: Container(
-                      width: 181.w,
+                      width: 200.w,
                       height: 64.h,
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
@@ -547,7 +547,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   controller.validatePassword(value);
                 },
                 errorText: controller.passwordError.value.isEmpty
-                    ? ""
+                    ? null
                     : controller.passwordError.value,
                 obscureText: true,
               ),
@@ -559,7 +559,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   controller.validateNewPassword(value);
                 },
                 errorText: controller.newPasswordError.value.isEmpty
-                    ? ""
+                    ? null
                     : controller.newPasswordError.value,
                 obscureText: true,
               ),
@@ -572,7 +572,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       value, controller.newPassword.value);
                 },
                 errorText: controller.confirmPasswordError.value.isEmpty
-                    ? ""
+                    ? null
                     : controller.confirmPasswordError.value,
                 obscureText: true,
               ),

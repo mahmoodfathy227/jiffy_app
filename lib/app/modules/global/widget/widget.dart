@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:lottie/lottie.dart';
@@ -483,9 +482,8 @@ class SecondMyDefaultButtonState extends State<SecondMyDefaultButton> {
 
     return widget.isloading!
         ? Center(
-            child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
+            child: LoadingAnimationWidget.inkDrop(
+            color: primaryColor,
             size: 50,
           ))
         : InkWell(
@@ -569,9 +567,8 @@ class JiffyDefaultButtonState extends State<JiffyDefaultButton> {
 
     return widget.isloading!
         ? Center(
-            child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
+            child: LoadingAnimationWidget.inkDrop(
+            color: primaryColor,
             size: 50,
           ))
         : InkWell(
@@ -670,9 +667,8 @@ class MySecondDefaultButtonState extends State<MySecondDefaultButton> {
 
     return widget.isloading!
         ? Center(
-            child: LoadingAnimationWidget.flickr(
-            leftDotColor: primaryColor,
-            rightDotColor: const Color(0xFFFF0084),
+            child: LoadingAnimationWidget.inkDrop(
+            color: primaryColor,
             size: 50,
           ))
         : InkWell(
@@ -714,9 +710,8 @@ Widget MainLoading({double? width, double? height}) {
       width: width ?? 375.w,
       height: height ?? 812.h,
       child: Center(
-          child: LoadingAnimationWidget.flickr(
-        leftDotColor: primaryColor,
-        rightDotColor: const Color(0xFFFF0084),
+          child: LoadingAnimationWidget.inkDrop(
+        color: primaryColor,
         size: 50,
       )));
 }
@@ -846,6 +841,7 @@ class MyDefaultButton extends StatefulWidget {
   final Function() onPressed;
   final Color? color;
   final Color? textColor;
+  final double? txtSize;
   final bool isSelected;
   final String Icon;
   final double? height;
@@ -856,7 +852,6 @@ class MyDefaultButton extends StatefulWidget {
   final int btnWidth;
   final bool isPlainBackground;
   final int iconPadding;
-
 
   const MyDefaultButton({
     Key? key,
@@ -869,6 +864,7 @@ class MyDefaultButton extends StatefulWidget {
     required this.isloading,
     this.textColor,
     this.height,
+    this.txtSize,
     this.width,
     this.Icon = "",
     this.errorText = "",
@@ -895,141 +891,128 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
-        widget.errorText.isEmpty ?
-        SizedBox()
-            :
-        Text(widget.errorText, style: primaryTextStyle(color: Colors.red,
-          size: 12.sp.round(),
-
-        ), maxLines: 2, overflow: TextOverflow.ellipsis,),
-        SizedBox(height: 10.h,),
-
+        widget.errorText.isEmpty
+            ? SizedBox()
+            : Text(
+                widget.errorText,
+                style: primaryTextStyle(
+                  color: Colors.red,
+                  size: 12.sp.round(),
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+        SizedBox(
+          height: 10.h,
+        ),
         InkWell(
-          onTap: () =>
-          {
-            if(isloading){
-            } else
+          onTap: () => {
+            if (isloading)
+              {}
+            else
               {
                 widget.onPressed(),
               }
           },
           child: Container(
-
             width: widget.btnWidth.w,
             height: widget.height ?? 50.h,
             clipBehavior: Clip.antiAlias,
-
             decoration: ShapeDecoration(
-
-              gradient:
-              widget.isPlainBackground ?
-              LinearGradient(
-                colors: [
-                  Colors.transparent, // Starting color (dark purple)
-                  Colors.transparent, // Ending color (light purple)
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              )
-                  :
-
-              widget.isActive ? const LinearGradient(
-                colors: [
-                  Color(0xFF6900CC), // Starting color (dark purple)
-                  Color(0xFF20003D), // Ending color (light purple)
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ) :
-              const LinearGradient(
-                colors: [
-                  Color(0xFF575757), // Starting color (dark purple)
-                  Color(0xFF575757), // Ending color (light purple)
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              )
-
-              ,
+              gradient: widget.isPlainBackground
+                  ? LinearGradient(
+                      colors: [
+                        Colors.transparent, // Starting color (dark purple)
+                        Colors.transparent, // Ending color (light purple)
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    )
+                  : widget.isActive
+                      ? const LinearGradient(
+                          colors: [
+                            Color(0xFF6900CC), // Starting color (dark purple)
+                            Color(0xFF20003D), // Ending color (light purple)
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        )
+                      : const LinearGradient(
+                          colors: [
+                            Color(0xFF575757), // Starting color (dark purple)
+                            Color(0xFF575757), // Ending color (light purple)
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
               // color: primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(widget.borderRadius),
-                side:
-                widget.isPlainBackground ?
-                BorderSide(color: primaryColor, width: 1)
-                    :
-                BorderSide(color: Colors.transparent),
+                side: widget.isPlainBackground
+                    ? BorderSide(color: primaryColor, width: 1)
+                    : BorderSide(color: Colors.transparent),
               ),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: widget.iconPadding * 1.2.w,),
+                SizedBox(
+                  width: widget.iconPadding * 1.5.w,
+                ),
                 ConstrainedBox(
-                  constraints: BoxConstraints(
-
-                      maxWidth: screenWidth * 0.5
-
-                  ),
+                  constraints: BoxConstraints(maxWidth: screenWidth * 0.5),
                   child: Text(
                       widget.localeText
                           ? widget.btnText!.toUpperCase()
                           : widget.btnText!,
                       textAlign: TextAlign.center,
-                      style: !widget.isSecondaryTextStyle ?
-                      primaryTextStyle(
-                        color: Colors.white,
-                        // color: widget.textColor ?? Color(0xFF21034F),
-                        size: 16.sp.round(),
-                        weight: FontWeight.w500,
-                      )
-                          :
-                      secondaryTextStyle(
-                        weight:
-                        widget.isPlainBackground ?
-                        FontWeight.w500
-                            :
-                        FontWeight.w700,
-                        size: 17.sp.round(),
-                        color:
-                        widget.isPlainBackground ?
-                        primaryColor
-                            :
-                        Colors.white,
-                      )
-
-
-                  ),
+                      style: !widget.isSecondaryTextStyle
+                          ? primaryTextStyle(
+                              color: Colors.white,
+                              // color: widget.textColor ?? Color(0xFF21034F),
+                              size: 16.sp.round(),
+                              weight: FontWeight.w500,
+                            )
+                          : secondaryTextStyle(
+                              weight: widget.isPlainBackground
+                                  ? FontWeight.w500
+                                  : FontWeight.w700,
+                              size: widget.txtSize!.round() ?? 17.sp.round(),
+                              color: widget.isPlainBackground
+                                  ? primaryColor
+                                  : Colors.white,
+                            )),
                 ),
-
-
-                widget.Icon.isEmpty ?
-                const SizedBox() :
-                Padding(
-                    padding: EdgeInsets.only(left: widget.iconPadding.w),
-                    child: SvgPicture.asset(widget.Icon)),
-                SizedBox(width: 12.w,),
-                widget.isloading ? SizedBox(width: 5.w,) : SizedBox(),
-                widget.isloading ?
-                Padding(
-                  padding: EdgeInsets.only(right: 5.0.w),
-                  child: SizedBox(
-                      width: 20.w,
-                      height: 20.h,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 4, color: Colors.grey[300],)),
-                )
-                    :
-                SizedBox(),
-
+                widget.Icon.isEmpty
+                    ? const SizedBox()
+                    : Padding(
+                        padding: EdgeInsets.only(left: widget.iconPadding.w),
+                        child: SvgPicture.asset(widget.Icon)),
+                SizedBox(
+                  width: 12.w,
+                ),
+                widget.isloading
+                    ? SizedBox(
+                        width: 5.w,
+                      )
+                    : SizedBox(),
+                widget.isloading
+                    ? Padding(
+                        padding: EdgeInsets.only(right: 5.0.w),
+                        child: SizedBox(
+                            width: 20.w,
+                            height: 20.h,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 4,
+                              color: Colors.grey[300],
+                            )),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
@@ -1042,7 +1025,7 @@ class MyDefaultButtonState extends State<MyDefaultButton> {
 class CustomTextField extends StatefulWidget {
   final String labelText;
   final ValueChanged<String> onChanged;
-  final String errorText;
+  final String? errorText;
   final String? initialValue;
   final bool obscureText;
   final Color? LabelStyle;
@@ -1079,7 +1062,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   late bool _obscureText;
   bool isValueEmpty = true;
 
-
   late FocusNode _focusNode;
   bool isFocused = false;
 
@@ -1093,19 +1075,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
     _obscureText = widget.obscureText;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width ?? 320.w,
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-
-            height: widget.height ?? 50.h,
-
+            height: widget.height ?? 55.h,
             child: Focus(
               onFocusChange: (hasFocus) {
                 setState(() {
@@ -1114,16 +1092,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 print("changed focus now ${hasFocus} ");
               },
               child: Container(
-
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20.r),
-                  boxShadow: [
-                    customBoxShadow
-                  ],
+                  boxShadow: [customBoxShadow],
                 ),
                 child: TextFormField(
-
+                  initialValue: widget.initialValue ?? '',
                   controller: widget.customTextEditingController,
                   onChanged: (value) {
                     widget.onChanged(value);
@@ -1143,191 +1118,143 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   ),
 
                   decoration: InputDecoration(
-
                     filled: true,
-                    fillColor:
-
-
-                    Colors.white,
-
-
+                    fillColor: Colors.white,
                     enabledBorder: OutlineInputBorder(
-
                       borderRadius: BorderRadius.circular(10),
-
                       borderSide: BorderSide(
-
-                        color:
-                        widget.errorText.isNotEmpty ?
-                        Colors.red
-                            :
-                        Colors.white,
+                        color: widget.errorText != null &&
+                                widget.errorText!.isNotEmpty
+                            ? Colors.red
+                            : Colors.white,
                         width: 1,
                       ),
                     ),
-
                     focusedBorder: OutlineInputBorder(
-
                       borderRadius: BorderRadius.circular(10),
-
                       borderSide: BorderSide(
-                        color:
-                        widget.errorText.isNotEmpty ?
-                        Colors.red
-                            :
-                        primaryColor
-                        ,
+                        color: widget.errorText != null &&
+                                widget.errorText!.isNotEmpty
+                            ? Colors.red
+                            : primaryColor,
                         width: 1,
                       ),
                     ),
-
                     hintStyle: secondaryTextStyle(
                       color: Colors.black,
                       size: 14.sp.round(),
                       weight: FontWeight.w400,
                       height: 1,
                     ),
-
-
                     helperStyle: secondaryTextStyle(
-
                       color: Colors.red,
                       size: 12.sp.round(),
                       weight: FontWeight.w400,
                       height: 1,
-
                     ),
-                    label:
-                    !isFocused ?
-                    FittedBox(
-                      child: Container(
-
-
-                        color: Colors.transparent,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child:
-
-                          Align(
-                            alignment:
-
-                            Alignment.centerLeft,
-                            child: AutoSizeText(
-
-
-                              widget.labelText,
-                              style: secondaryTextStyle(
-                                size: 14.sp.round(),
-
-                                color:
-
-                                widget.errorText.isNotEmpty ?
-                                Colors.red
-                                    :
-                                !isValueEmpty ?
-                                primaryColor
-                                    :
-
-                                greyishColor
-                                ,
-                                weight: FontWeight.w400,
-
-                              ), // Set an initial font size
-                              maxLines: 2, // Adjust as needed
-                              minFontSize: 8.sp,
-                              stepGranularity: 8.sp,
-                            ),
-                          ),
-
-
-                        ),
-                      ),
-                    )
-                        :
-                    FittedBox(
-                      child: Container(
-
-                          width: 80.w,
-                          height: 40.h,
-                          color:
-                          Colors.transparent,
-                          child:
-                          Center(
-                            child: AutoSizeText(
-
-
-                              widget.labelText,
-                              style: secondaryTextStyle(
-                                  size: 12.sp.round(),
-                                  color: widget.errorText.isNotEmpty ?
-                                  Colors.red
-                                      : primaryColor,
-                                  weight: FontWeight.w400
-                              ), // Set an initial font size
-                              maxLines: 2,
-                              minFontSize: 8.sp,
-                              stepGranularity: 8.sp,
-                              // Adjust as needed
+                    label: !isFocused
+                        ? FittedBox(
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AutoSizeText(
+                                    widget.labelText,
+                                    style: secondaryTextStyle(
+                                      size: 14.sp.round(),
+                                      color: widget.errorText != null &&
+                                              widget.errorText!.isNotEmpty
+                                          ? Colors.red
+                                          : !isValueEmpty
+                                              ? primaryColor
+                                              : greyishColor,
+                                      weight: FontWeight.w400,
+                                    ), // Set an initial font size
+                                    maxLines: 2, // Adjust as needed
+                                    minFontSize: 8.sp,
+                                    stepGranularity: 8.sp,
+                                  ),
+                                ),
+                              ),
                             ),
                           )
-
-
-                      ),
-                    ),
-
-
+                        : FittedBox(
+                            child: Container(
+                                width: 80.w,
+                                height: 40.h,
+                                color: Colors.transparent,
+                                child: Center(
+                                  child: AutoSizeText(
+                                    widget.labelText,
+                                    style: secondaryTextStyle(
+                                        size: 12.sp.round(),
+                                        color: widget.errorText != null &&
+                                                widget.errorText!.isNotEmpty
+                                            ? Colors.red
+                                            : primaryColor,
+                                        weight: FontWeight
+                                            .w400), // Set an initial font size
+                                    maxLines: 2,
+                                    minFontSize: 8.sp,
+                                    stepGranularity: 8.sp,
+                                    // Adjust as needed
+                                  ),
+                                )),
+                          ),
                     prefixIcon: widget.icon != null
                         ? Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: SvgPicture.asset(
-                        widget.icon!,
-                        width: 13.w,
-                        height: 13.h,
-                      ),
-                    )
+                            padding: EdgeInsets.all(12.w),
+                            child: SvgPicture.asset(
+                              widget.icon!,
+                              width: 13.w,
+                              height: 13.h,
+                            ),
+                          )
                         : null,
                     suffixIcon: widget.obscureText
                         ? Padding(
-                      padding: EdgeInsets.only(right: 5.w),
-                      child: IconButton(
-                        icon: SvgPicture.asset(
-                          _obscureText
-                              ? 'assets/images/auth/eye-slash.svg'
-                              : 'assets/images/auth/eye.svg',
-                          width: _obscureText ? 24.w : 24.w,
-                          height: _obscureText ? 24.h : 24.h,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      ),
-                    )
+                            padding: EdgeInsets.only(right: 5.w),
+                            child: IconButton(
+                              icon: SvgPicture.asset(
+                                _obscureText
+                                    ? 'assets/images/auth/eye-slash.svg'
+                                    : 'assets/images/auth/eye.svg',
+                                width: _obscureText ? 24.w : 24.w,
+                                height: _obscureText ? 24.h : 24.h,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                            ),
+                          )
                         : null,
                   ),
                 ),
               ),
             ),
           ),
-
-
-          widget.errorText.isEmpty ? const SizedBox() : SizedBox(height: 5.h),
-          widget.errorText.isEmpty ?
-          SizedBox()
-              :
-          ShowUp(
-            child: Text(widget.errorText ?? "", style: primaryTextStyle(
-                weight: FontWeight.w400,
-                size: 12.sp.round(),
-                color: Colors.red
-            ),),
-          )
+          widget.errorText == null || widget.errorText!.isEmpty
+              ? const SizedBox()
+              : SizedBox(height: 5.h),
+          widget.errorText == null || widget.errorText!.isEmpty
+              ? SizedBox()
+              : ShowUp(
+                  child: Text(
+                    widget.errorText ?? "",
+                    style: primaryTextStyle(
+                        weight: FontWeight.w400,
+                        size: 12.sp.round(),
+                        color: Colors.red),
+                  ),
+                )
         ],
       ),
     );
   }
-
 }
 
 Widget DividerSocial() {
@@ -1623,18 +1550,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Function()? function;
   final bool? back;
-  final bool isHelp;
-  final String svgPath;
-  final VoidCallback myFunction;
+  final String? svgPath;
+  final String? svgPathFull;
+  final VoidCallback? myFunction;
 
   const CustomAppBar({
     this.title = "",
     this.actions,
     this.function,
     this.back,
-    this.svgPath = "assets/images/back_btn.svg",
-    required this.myFunction,
-     this.isHelp = false,
+    this.svgPath,
+    this.svgPathFull,
+    this.myFunction,
   });
 
   @override
@@ -1662,7 +1589,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     IconButton(
                         onPressed: () {
-                          print("tapped");
                           Get.back();
                         },
                         icon: Stack(alignment: Alignment.center, children: [
@@ -1684,13 +1610,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                     Spacer(),
-                    if (svgPath == null) Spacer(),
+                    if (svgPath == null && svgPathFull == null) Spacer(),
                     if (svgPath != null)
-                      isHelp?
-                          SizedBox(
-                            width: 80.w,
-                          )
-                      :
                       IconButton(
                           onPressed: () {},
                           icon: Stack(alignment: Alignment.center, children: [
@@ -1699,20 +1620,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // myFunction;
-                                Get.to(()=> HelpView());
+                                myFunction;
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(bottom: 4.h),
                                 child: SvgPicture.asset(
-                                  // svgPath,
-                                  "assets/images/help.svg",
+                                  svgPath!,
                                   // "assets/images/shopping-cart.svg",
                                   width: 22.h,
                                 ),
                               ),
                             ),
                           ])),
+                    if (svgPathFull != null)
+                      GestureDetector(
+                        onTap: () {
+                          myFunction!();
+                        },
+                        child: SvgPicture.asset(
+                          svgPathFull!,
+                          // "assets/images/shopping-cart.svg",
+                          width: 85.w,
+                          height: 85.h,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -1742,7 +1673,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           //
           // ),
           ),
-
 
       // leading: back ?? true
       //     ? Padding(
@@ -2038,12 +1968,103 @@ String GetMaxChar(String value, int max) {
 //     );
 //   }
 // }
+Widget EmptyScreen({nameImage, title, desc, txtbutton}) {
+  return Center(
+      child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Image.asset(
+        "assets/images/cart/shopping-cart.png",
+        width: 168.w,
+        height: 168.h,
+        fit: BoxFit.fill,
+      ),
+      SizedBox(
+        height: 56.h,
+      ),
+      Text(
+        title,
+        textAlign: TextAlign.center,
+        style: primaryTextStyle(
+          color: Color(0xFF20003D),
+          size: 26.sp.round(),
+          weight: FontWeight.w600,
+          letterSpacing: -0.41,
+        ),
+      ),
+      SizedBox(
+        height: 20.h,
+      ),
+      SizedBox(
+        width: 280.49.w,
+        child: Transform(
+          transform: Matrix4.identity()
+            ..translate(0.0, 0.0)
+            ..rotateZ(0.01),
+          child: Text(
+            desc,
+            textAlign: TextAlign.center,
+            style: primaryTextStyle(
+              color: Color(0x7F20003D),
+              size: 16.sp.round(),
+              weight: FontWeight.w500,
+              letterSpacing: -0.41,
+            ),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 35.h,
+      ),
+      InkWell(
+        onTap: () {
+          Get.toNamed(Routes.CHECKOUT);
+        },
+        child: Container(
+          width: 181.w,
+          height: 64.h,
+          decoration: ShapeDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(1.00, 0.04),
+              end: Alignment(-1, -0.04),
+              colors: [
+                Color(0xFF20003D),
+                Color(0xFF6900CC),
+              ],
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(43),
+            ),
+            shadows: [
+              BoxShadow(
+                color: Color(0x4C000000),
+                blurRadius: 30,
+                offset: Offset(0, 4),
+                spreadRadius: 0,
+              )
+            ],
+          ),
+          child: Center(
+            child: Text(
+              txtbutton,
+              style: primaryTextStyle(
+                size: 18.sp.round(),
+                weight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      )
+    ],
+  ));
+}
 
 Widget loadingIndicatorWidget() {
   return Center(
-      child: LoadingAnimationWidget.flickr(
-    leftDotColor: primaryColor,
-    rightDotColor: const Color(0xFFFF0084),
+      child: LoadingAnimationWidget.inkDrop(
+    color: primaryColor,
     size: 50,
   ));
 }
@@ -3736,13 +3757,9 @@ myCustomDivider() {
   );
 }
 
-
 customSearchField() {
   return Expanded(
-
     child: Container(
-
-
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
@@ -3753,98 +3770,71 @@ customSearchField() {
               blurRadius: 22,
               offset: Offset(0, 1), // changes position of shadow
             ),
-          ]
-      ),
-      child:
-      Obx(() {
+          ]),
+      child: Obx(() {
         return TextField(
-          onChanged: (v) {
-            // search with keywords in products
-            var bodyRequest = {'keywords': v};
-            customSearchController.getProducts(bodyRequest);
-          },
-          controller: customSearchController.searchController.value,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(8.w),
+            onChanged: (v) {
+              // search with keywords in products
+              var bodyRequest = {'keywords': v};
+              customSearchController.getProducts(bodyRequest);
+            },
+            controller: customSearchController.searchController.value,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(bottom: 7.h),
               border: InputBorder.none,
               hintText: 'Search',
-
               hintStyle: primaryTextStyle(
                 color: Color(0xFF4F0099).withOpacity(0.3),
                 size: 14.sp.round(),
                 weight: FontWeight.w400,
                 letterSpacing: -0.41,
               ),
-              suffixIconConstraints: BoxConstraints(
-                maxWidth: 52.w,
-                maxHeight: 52.h,
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  "assets/images/home/search.svg",
-                  fit: BoxFit.cover,
-
-                ),
-              )
-
-          ),
-        );
+              // suffixIconConstraints: BoxConstraints(
+              //   maxWidth: 52.w,
+              //   maxHeight: 52.h,
+              // ),
+              // suffixIcon: Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: SvgPicture.asset(
+              //     "assets/images/home/search.svg",
+              //     fit: BoxFit.cover,
+              //   ),
+            ));
       }),
     ),
   );
 }
 
-buildFloatingButton({required String buttonName,
-  required BuildContext context, required dynamic onPressed,
-  bool isPlainBackground = false,
-  bool isLoading = false,
-
-
-
-}) {
+buildFloatingButton(
+    {required String buttonName,
+    required BuildContext context,
+    required dynamic onPressed,
+    bool isPlainBackground = false}) {
   return SizedBox(
     height: 91.h,
-    width: MediaQuery
-        .of(context)
-        .size
-        .width - 60.w,
+    width: MediaQuery.of(context).size.width - 60.w,
     child: FloatingActionButton(
-
         onPressed: () {},
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         child: ShowUp(
             delay: 200,
             child: GestureDetector(
-              onTap: () async {
-
-              },
+              onTap: () async {},
               child: SizedBox(
-
-                  child:
-
-                  MyDefaultButton(
-                    isPlainBackground: isPlainBackground,
-                    height: 75.h,
-                    btnWidth: 350,
-                    onPressed: onPressed,
-
-                    isloading: isLoading,
-                    btnText: buttonName,
-                    isSecondaryTextStyle: true,
-                    borderRadius: 50,
-
-
-                  )
-
-        ),
-            )
-        )
-    ),
+                  child: MyDefaultButton(
+                isPlainBackground: isPlainBackground,
+                height: 75.h,
+                btnWidth: 350,
+                onPressed: onPressed,
+                isloading: false,
+                btnText: buttonName,
+                isSecondaryTextStyle: true,
+                borderRadius: 50,
+              )),
+            ))),
   );
 }
-
 
 Widget globalProductCard(Product product, int index) {
   return GestureDetector(
@@ -3889,19 +3879,18 @@ Widget globalProductCard(Product product, int index) {
                                   height: 120.h,
                                   child: CachedNetworkImage(
                                     imageUrl: product.image,
-                                    placeholder: (context, url) =>
-                                        SizedBox(
-                                            height: 120.h,
-                                            child: Center(
-                                                child:
+                                    placeholder: (context, url) => SizedBox(
+                                        height: 120.h,
+                                        child: Center(
+                                            child:
                                                 CircularProgressIndicator())),
                                     // مؤشر تحميل
                                     errorWidget: (context, url, error) =>
                                         Image.network(
-                                          'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-                                          // صورة بديلة عند فشل التحميل
-                                          height: 120.h,
-                                        ),
+                                      'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+                                      // صورة بديلة عند فشل التحميل
+                                      height: 120.h,
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -3949,14 +3938,13 @@ Widget globalProductCard(Product product, int index) {
                                             weight: FontWeight.w400,
                                             height: 3,
                                             letterSpacing: -0.41,
-                                            decoration: TextDecoration
-                                                .lineThrough,
+                                            decoration:
+                                                TextDecoration.lineThrough,
                                             // تحديد الخط السفلي
-                                            decorationColor: Colors
-                                                .red,
+                                            decorationColor: Colors.red,
                                             // تحديد لون الخط السفلي
                                             decorationThickness:
-                                            2, // يمكنك تغيير سمك الخط إذا رغبت
+                                                2, // يمكنك تغيير سمك الخط إذا رغبت
                                           ),
                                         ),
                                       ),
@@ -3982,10 +3970,10 @@ Widget globalProductCard(Product product, int index) {
             end: 10.w,
             child: LikeButton(
               onTap: onLikeButtonTapped,
-              isLiked: wishListController.isProductInWishList(product.id),
+              isLiked: wishListController.isProductInWishList(product.id).value,
               size: 20.sp,
               circleColor:
-              CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                  CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
               bubblesColor: BubblesColor(
                 dotPrimaryColor: Color(0xff33b5e5),
                 dotSecondaryColor: Color(0xff0099cc),
@@ -4063,22 +4051,22 @@ Widget globalProductCard(Product product, int index) {
                             children: [
                               Padding(
                                   padding:
-                                  EdgeInsetsDirectional.only(start: 10.w),
+                                      EdgeInsetsDirectional.only(start: 10.w),
                                   child: InkWell(
                                       onTap: () {
                                         cartController.updateQuantity(
                                             cartController.cartItems[
-                                            cartController.cartItems
-                                                .indexWhere((item) =>
-                                            item.product.id ==
-                                                product.id)],
+                                                cartController.cartItems
+                                                    .indexWhere((item) =>
+                                                        item.product.id ==
+                                                        product.id)],
                                             cartController
-                                                .cartItems[cartController
-                                                .cartItems
-                                                .indexWhere((item) =>
-                                            item.product.id ==
-                                                product.id)]
-                                                .quantity -
+                                                    .cartItems[cartController
+                                                        .cartItems
+                                                        .indexWhere((item) =>
+                                                            item.product.id ==
+                                                            product.id)]
+                                                    .quantity -
                                                 1);
                                       },
                                       child: SvgPicture.asset(
@@ -4094,10 +4082,7 @@ Widget globalProductCard(Product product, int index) {
                                                         product.id) ==
                                                 -1
                                         ? '0'
-                                        : '${cartController
-                                        .cartItems[cartController.cartItems
-                                        .indexWhere((item) =>
-                                    item.product.id == product.id)].quantity}',
+                                        : '${cartController.cartItems[cartController.cartItems.indexWhere((item) => item.product.id == product.id)].quantity}',
                                     textAlign: TextAlign.center,
                                     style: primaryTextStyle(
                                       color: Color(0xFFFEFEFE),
@@ -4116,21 +4101,21 @@ Widget globalProductCard(Product product, int index) {
                                       return;
                                     }
                                     if (cartController
-                                        .isProductInCart(product) &&
+                                            .isProductInCart(product) &&
                                         cartController.cartItems.isNotEmpty) {
                                       cartController.updateQuantity(
                                           cartController.cartItems[
-                                          cartController.cartItems
-                                              .indexWhere((item) =>
-                                          item.product.id ==
-                                              product.id)],
+                                              cartController.cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      product.id)],
                                           cartController
-                                              .cartItems[cartController
-                                              .cartItems
-                                              .indexWhere((item) =>
-                                          item.product.id ==
-                                              product.id)]
-                                              .quantity +
+                                                  .cartItems[cartController
+                                                      .cartItems
+                                                      .indexWhere((item) =>
+                                                          item.product.id ==
+                                                          product.id)]
+                                                  .quantity +
                                               1);
                                     } // زيادة الكمية
                                   },
@@ -4149,11 +4134,387 @@ Widget globalProductCard(Product product, int index) {
   );
 }
 
+class buildProductCard extends StatefulWidget {
+  buildProductCard(
+      {super.key, required this.product, this.isInWishlist = false});
+
+  final Product product;
+  bool isInWishlist;
+
+  @override
+  State<buildProductCard> createState() => _buildCardProductState();
+}
+
+class _buildCardProductState extends State<buildProductCard> {
+  HomeController homeController = Get.put<HomeController>(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        ProductController productController = Get.put(ProductController());
+        await productController.getProduct(widget.product.id!);
+        Get.to(const ProductView());
+      },
+      child: SizedBox(
+          width: 165.w,
+          height: 259.h + 100.h,
+          child: Stack(children: [
+            PositionedDirectional(
+                top: 10,
+                child: ClipPath(
+                    clipper: BottomWaveClipper(),
+                    child: Container(
+                      width: 170.w,
+                      height: 259.h + 55.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 120.h,
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.product.image,
+                                      placeholder: (context, url) => SizedBox(
+                                          height: 120.h,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator())), // مؤشر تحميل
+                                      errorWidget: (context, url, error) =>
+                                          Image.network(
+                                        'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png', // صورة بديلة عند فشل التحميل
+                                        height: 120.h,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  // صورة المنتج
+
+                                  Text(
+                                    GetMaxChar(widget.product.name, 12),
+                                    textAlign: TextAlign.center,
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF20003D),
+                                      size: 16.sp.round(),
+                                      weight: FontWeight.w600,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+
+                                  Text(
+                                    '${GetMaxChar(widget.product.description, 7) ?? 300} gm',
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF20003D),
+                                      size: 12.sp.round(),
+                                      weight: FontWeight.w300,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                ]),
+                            FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '\$${widget.product.price ?? ""}',
+                                        textAlign: TextAlign.center,
+                                        style: secondaryTextStyle(
+                                          color: Color(0xFF4F0099),
+                                          size: 22.sp.round(),
+                                          weight: FontWeight.w600,
+                                          letterSpacing: -0.41,
+                                        ),
+                                      ),
+                                    ])),
+                            SizedBox(height: 8),
+                          ]),
+                    ))),
+            PositionedDirectional(
+                top: 20,
+                end: 10.w,
+                child: Obx(
+                  () => LikeButton(
+                    onTap: onLikeButtonTapped,
+                    product: widget.product,
+                    isLiked: wishListController
+                        .isProductInWishList(widget.product.id)
+                        .value,
+                    size: 20.sp,
+                    circleColor: const CircleColor(
+                        start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                    bubblesColor: BubblesColor(
+                      dotPrimaryColor: Color(0xff33b5e5),
+                      dotSecondaryColor: Color(0xff0099cc),
+                    ),
+                    likeCountAnimationDuration: Duration(seconds: 1),
+                    likeCountAnimationType: LikeCountAnimationType.all,
+                    countBuilder: (int? count, bool isLiked, String text) {
+                      var color =
+                          isLiked ? Colors.deepPurpleAccent : Colors.grey;
+
+                      return Text(
+                        '',
+                        style: TextStyle(color: color),
+                      );
+                    },
+                    likeBuilder: (bool isLiked) {
+                      return SvgPicture.asset(
+                        wishListController
+                                .isProductInWishList(widget.product.id)
+                                .value
+                            ? 'assets/images/addwish.svg'
+                            : 'assets/images/home/heart.svg',
+                        color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                        width: 20.w,
+                      );
+                    },
+                  ),
+                )),
+            // if (index == 1)
+            //   PositionedDirectional(
+            //     top: -4.h,
+            //     start: 5.w,
+            //     child: ShowUp(
+            //         child: Container(
+            //             width: 38.w * 1.8,
+            //             height: 44.h * 1.8,
+            //             child: Stack(children: [
+            //               SvgPicture.asset(
+            //                 'assets/images/home/off.svg',
+            //                 width: 38.w * 1.8,
+            //                 height: 44.h * 1.8,
+            //                 fit: BoxFit.cover,
+            //               ),
+            //               PositionedDirectional(
+            //                   bottom: 35.h,
+            //                   start: 17.w,
+            //                   child: ShowUp(
+            //                     child: Text(
+            //                       '${50}%',
+            //                       style: secondaryTextStyle(
+            //                         color: Colors.white,
+            //                         size: 12.sp.round(),
+            //                         weight: FontWeight.w800,
+            //                         letterSpacing: -0.41,
+            //                       ),
+            //                     ),
+            //                   )),
+            //             ]))),
+            //   ),
+            PositionedDirectional(
+              bottom: -15.h,
+              end: 0.w,
+              start: -10.w,
+              child: SizedBox(
+                height: 250.h,
+                child: Stack(
+                  children: [
+                    // الخلفية SVG
+                    PositionedDirectional(
+                      bottom: 0,
+                      end: 0,
+                      start: 0,
+                      child: SvgPicture.asset(
+                        'assets/images/home/borderCart.svg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Cart controls
+                    PositionedDirectional(
+                      bottom: 71.h,
+                      end: 0,
+                      start: 0,
+                      child: SizedBox(
+                        width: 80.w,
+                        child: Obx(
+                          () => AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: cartController.cartItems.isEmpty ||
+                                    cartController.cartItems.indexWhere(
+                                            (item) =>
+                                                item.product.id ==
+                                                widget.product.id) ==
+                                        -1
+                                ? InkWell(
+                                    onTap: () {
+                                      int initialQty =
+                                          widget.product.d_limit > 0
+                                              ? widget.product.d_limit
+                                              : 1;
+                                      cartController.addToCart(widget.product,
+                                          quantity: initialQty);
+                                    },
+                                    child: Text(
+                                      'Add to Cart',
+                                      style: secondaryTextStyle(
+                                        color: Color(0xFFFFFFFF),
+                                        size: 15.sp.round(),
+                                        weight: FontWeight.w900,
+                                        height: 1.8.h,
+                                      ),
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(children: [
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                              start: 10.w),
+                                          child: InkWell(
+                                            onTap: () {
+                                              var index = cartController
+                                                  .cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      widget.product.id);
+                                              var currentItem = cartController
+                                                  .cartItems[index];
+
+                                              // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+                                              if (widget.product.d_limit != 0 &&
+                                                      currentItem.quantity >
+                                                          widget.product
+                                                              .d_limit ||
+                                                  widget.product.d_limit == 0 &&
+                                                      currentItem.quantity >
+                                                          1) {
+                                                cartController.updateQuantity(
+                                                  currentItem,
+                                                  currentItem.quantity - 1,
+                                                );
+                                              } else if (widget.product
+                                                              .d_limit ==
+                                                          0 &&
+                                                      currentItem.quantity ==
+                                                          1 ||
+                                                  currentItem.quantity ==
+                                                      widget.product.d_limit) {
+                                                print('teasdsadsadsa');
+                                                cartController
+                                                    .removeItem(currentItem);
+                                                // cartController.updateQuantity(
+                                                //   currentItem,
+                                                //   currentItem.quantity -
+                                                //       product.d_limit,
+                                                // );
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              'assets/images/home/minus.svg',
+                                              width: 20.w,
+                                              height: 20.h,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5.h,
+                                        )
+                                      ]),
+                                      Column(children: [
+                                        Text(
+                                          '${cartController.cartItems[cartController.cartItems.indexWhere((item) => item.product.id == widget.product.id)].quantity}',
+                                          textAlign: TextAlign.center,
+                                          style: primaryTextStyle(
+                                            color: Color(0xFFFEFEFE),
+                                            size: 20.sp.round(),
+                                            height: 1.05,
+                                            weight: FontWeight.w900,
+                                            letterSpacing: -0.41,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2.h,
+                                        )
+                                      ]),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              var index = cartController
+                                                  .cartItems
+                                                  .indexWhere((item) =>
+                                                      item.product.id ==
+                                                      widget.product.id);
+                                              var currentItem = cartController
+                                                  .cartItems[index];
+                                              cartController.updateQuantity(
+                                                currentItem,
+                                                currentItem.quantity + 1,
+                                              );
+                                            },
+                                            child: SvgPicture.asset(
+                                              'assets/images/home/plus.svg',
+                                              width: 20.w,
+                                              height: 20.h,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5.h,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ])),
+    );
+  }
+}
+
+Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
+  try {
+    // Check if the product is in the wishlist
+    if (wishListController.isProductInWishList(product.id).value) {
+      // Remove from wishlist
+      wishListController.wishlistProductIds
+          .removeWhere((item) => item == product.id);
+      wishListController.removeFromWishlist(product.id!);
+    } else {
+      // Add to wishlist
+      wishListController.wishlistProductIds!.value.add(product.id);
+      wishListController.addToWishlist(product.id);
+    }
+    return !isLiked;
+    // Return the updated liked state (toggle)
+  } catch (e) {
+    return false;
+  }
+}
+
 Widget placeHolderProductCard() {
   return GestureDetector(
-    onTap: () async {
-
-    },
+    onTap: () async {},
     child: SizedBox(
         width: 165.w,
         height: 259.h + 100.h,
@@ -4190,7 +4551,6 @@ Widget placeHolderProductCard() {
                                   height: 120.h,
                                   child: Image.asset(
                                       "assets/images/placeholder.png"),
-
                                 ),
                                 // صورة المنتج
 
@@ -4235,18 +4595,16 @@ Widget placeHolderProductCard() {
                                           weight: FontWeight.w400,
                                           height: 3,
                                           letterSpacing: -0.41,
-                                          decoration: TextDecoration
-                                              .lineThrough,
+                                          decoration:
+                                              TextDecoration.lineThrough,
                                           // تحديد الخط السفلي
-                                          decorationColor: Colors
-                                              .red,
+                                          decorationColor: Colors.red,
                                           // تحديد لون الخط السفلي
                                           decorationThickness:
-                                          2, // يمكنك تغيير سمك الخط إذا رغبت
+                                              2, // يمكنك تغيير سمك الخط إذا رغبت
                                         ),
                                       ),
                                     ),
-
                                     SizedBox(width: 10.w),
                                     Text(
                                       '',
@@ -4269,10 +4627,10 @@ Widget placeHolderProductCard() {
             end: 10.w,
             child: LikeButton(
               onTap: onLikeButtonTapped,
-              isLiked: wishListController.isProductInWishList(""),
+              isLiked: wishListController.isProductInWishList("").value,
               size: 20.sp,
               circleColor:
-              CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                  CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
               bubblesColor: BubblesColor(
                 dotPrimaryColor: Color(0xff33b5e5),
                 dotSecondaryColor: Color(0xff0099cc),
@@ -4317,7 +4675,6 @@ Widget placeHolderProductCard() {
                     ]))),
           ),
 
-
           // Add cart controls for each product
           PositionedDirectional(
             bottom: -15.h,
@@ -4350,11 +4707,9 @@ Widget placeHolderProductCard() {
                             children: [
                               Padding(
                                   padding:
-                                  EdgeInsetsDirectional.only(start: 10.w),
+                                      EdgeInsetsDirectional.only(start: 10.w),
                                   child: InkWell(
-                                      onTap: () {
-
-                                      },
+                                      onTap: () {},
                                       child: SvgPicture.asset(
                                         'assets/images/home/minus.svg',
                                         width: 20.w,

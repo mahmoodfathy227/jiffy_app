@@ -46,14 +46,13 @@ class AuthController extends GetxController {
   var firstNameError = ''.obs;
   var lastNameError = ''.obs;
   var googleSignIn = GoogleSignIn();
-  var  errorMessage = ''.obs;
+  var errorMessage = ''.obs;
 
   authTest.FirebaseAuth auth = authTest.FirebaseAuth.instance;
 
   String fcmToken = '';
   String deviceId = '';
   FirebaseMessaging? messaging;
-
 
   RxBool isEnded = false.obs;
   RxInt timer = 20.obs;
@@ -176,7 +175,6 @@ class AuthController extends GetxController {
     });
   }
 
-
   bool isUser = true;
   Future<void> getUserType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -259,7 +257,7 @@ class AuthController extends GetxController {
         if (apiResponse.status == 'success') {
           isGuest.value = false;
           await cacheUserData(apiResponse.data!);
-          AppConstants.userData = apiResponse.data!;
+          AppConstants.userData = apiResponse.data;
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
@@ -279,10 +277,12 @@ class AuthController extends GetxController {
       }
     }
   }
- String userType = "user";
-  setUser(value){
+
+  String userType = "user";
+  setUser(value) {
     userType = value;
   }
+
   void register() async {
     bool isValid = validateFirstName() &
         validateLastName() &
@@ -320,7 +320,7 @@ class AuthController extends GetxController {
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
-Get.toNamed(Routes.LOGIN);
+          Get.toNamed(Routes.LOGIN);
           // Get.offNamedUntil(Routes.MAIN, (Route) => false);
         } else {
           handleApiErrorUser(apiResponse.message);
@@ -424,9 +424,10 @@ Get.toNamed(Routes.LOGIN);
           AppConstants.userData = apiResponse.data!;
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
-          clearFields();
-          Get.offAll(MainView());
-           // Get.offUntil(LoginView(), (Route) => false);
+          await Future.delayed(Duration(milliseconds: 500));
+
+          // clearFields();
+          Get.offAllNamed(Routes.MAIN);
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
@@ -436,7 +437,7 @@ Get.toNamed(Routes.LOGIN);
       } catch (e, stackTrace) {
         isLoading.value = false;
         isGuest.value = false;
-        print('Login failed: ${e}');
+        print('Login failed: ${e} $stackTrace');
         // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
         // handleApiErrorUser(apiResponse.message);
         errorMessage.value = "Please Check Email and Password and Try Again";
@@ -446,14 +447,11 @@ Get.toNamed(Routes.LOGIN);
   }
 
   void forgotPassword() async {
-
-
     if (validateEmail()) {
       isLoading.value = true;
       globalController.errorMessage.value = '';
       var formData = dio.FormData.fromMap({
         'email': email.value,
-
       });
       try {
         await saveStringToPrefs("reset_email", email.value);
@@ -470,7 +468,6 @@ Get.toNamed(Routes.LOGIN);
           print("sent successful");
           clearFields();
           Get.off(const VerificationCodeView());
-
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
@@ -489,6 +486,7 @@ Get.toNamed(Routes.LOGIN);
       }
     }
   }
+
   Future<void> cacheUserData(UserData data) async {
     final prefs = await SharedPreferences.getInstance();
     final userDataString = jsonEncode(data.toJson());
@@ -496,57 +494,54 @@ Get.toNamed(Routes.LOGIN);
     print('User data cached: $userDataString');
   }
 
+  RxString myPassword = "".obs;
 
-   RxString myPassword = "".obs;
-
- RxInt passwordStrength = 0.obs;
- Rx<Color> strengthColor = const Color(0xFFBBBBBB).obs;
- RxString passwordDescription = "".obs;
+  RxInt passwordStrength = 0.obs;
+  Rx<Color> strengthColor = const Color(0xFFBBBBBB).obs;
+  RxString passwordDescription = "".obs;
   void checkPasswordStrength(String value) {
     myPassword.value = value.trim();
 
     if (myPassword.isEmpty) {
       passwordStrength.value = 0;
       passwordDescription.value = "Very Weak";
-strengthColor.value =  Color(0xFFB80F28);
+      strengthColor.value = Color(0xFFB80F28);
     } else if (myPassword.value.length > 5 && myPassword.value.length < 8) {
       passwordStrength.value = 1;
 
-      strengthColor.value =  Color(0xFFF79B00);
+      strengthColor.value = Color(0xFFF79B00);
       passwordDescription.value = "Weak";
     } else if (myPassword.value.length == 8) {
       passwordStrength.value = 2;
       passwordDescription.value = "Moderate";
-      strengthColor.value =  Color(0xFFCBF7B8);
-    } else if (myPassword.value.length > 8 && myPassword.contains(RegExp(r'[0-9]')) && myPassword.contains(RegExp(r'[a-zA-Z]'))) {
+      strengthColor.value = Color(0xFFCBF7B8);
+    } else if (myPassword.value.length > 8 &&
+        myPassword.contains(RegExp(r'[0-9]')) &&
+        myPassword.contains(RegExp(r'[a-zA-Z]'))) {
       passwordStrength.value = 3;
       passwordDescription.value = "Strong";
-      strengthColor.value =  Color(0xFF2EB070);
-    } else {
-
-    }
+      strengthColor.value = Color(0xFF2EB070);
+    } else {}
   }
-
 
   startTimer() async {
     randomTheId();
     tweenId.value = randomId;
     isEnded.value = false;
-
-
   }
+
   endTimer() {
     isEnded.value = true;
   }
+
   randomTheId() {
     randomId = Random().nextInt(999999);
   }
 
-RxBool isValidOTP = false.obs;
+  RxBool isValidOTP = false.obs;
   RxBool isCorrectOTP = false.obs;
   RxBool isTyping = true.obs;
   String otpValue = "";
-
 
   validateOTP(otp) {
     isTyping.value = true;
@@ -558,16 +553,14 @@ RxBool isValidOTP = false.obs;
     } else {
       isValidOTP.value = false;
       print("isvalid false");
-
     }
     // if (otp == "11111") {
     //   Get.to(() => const CreateNewPasswordView());
     // }
   }
 
-
-  resetPassword() async{
-    if(validateConfirmPassword() && validatePassword()){
+  resetPassword() async {
+    if (validateConfirmPassword() && validatePassword()) {
       isLoading.value = true;
       String? email = await getStringFromPrefs("reset_email");
       String? otp = await getStringFromPrefs("reset_otp");
@@ -590,7 +583,6 @@ RxBool isValidOTP = false.obs;
         if (apiResponse.status == 'success') {
           print("reset successful");
 
-
           clearFields();
           Get.offAll(const PasswordUpdated());
           isLoading.value = false;
@@ -601,7 +593,8 @@ RxBool isValidOTP = false.obs;
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
-          errorMessage.value = apiResponse.message ?? "Error Happened Please Try Again";
+          errorMessage.value =
+              apiResponse.message ?? "Error Happened Please Try Again";
           HapticFeedback.vibrate();
           isLoading.value = false;
           return false;
@@ -620,16 +613,16 @@ RxBool isValidOTP = false.obs;
       Get.off(const PasswordUpdated());
     }
   }
+
   Future<dynamic> sendOTP(isFromButton) async {
     isLoading.value = true;
     isTyping.value = false;
     print("isTyping ${isTyping.value}");
 
-    if(await checkOTP()){
-
+    if (await checkOTP()) {
       isCorrectOTP.value = true;
       print("correct otp yes");
-      if(isFromButton){
+      if (isFromButton) {
         Get.offAll(const CreateNewPasswordView());
       }
       isLoading.value = false;
@@ -638,14 +631,9 @@ RxBool isValidOTP = false.obs;
       print("correct otp no");
       isLoading.value = false;
     }
-
-
-
-
-
   }
 
-  Future<bool> checkOTP() async{
+  Future<bool> checkOTP() async {
     String? email = await getStringFromPrefs("reset_email");
     saveStringToPrefs("reset_otp", otpValue);
     var formData = dio.FormData.fromMap({
@@ -665,7 +653,6 @@ RxBool isValidOTP = false.obs;
       if (apiResponse.status == 'success') {
         print("otp successful");
 
-
         clearFields();
         return true;
         // Get.offAll(const CreateNewPasswordView());
@@ -674,7 +661,8 @@ RxBool isValidOTP = false.obs;
       } else {
         handleApiErrorUser(apiResponse.message);
         handleApiError(response.statusCode);
-        errorMessage.value = apiResponse.message ?? "Please Check OTP and Try Again";
+        errorMessage.value =
+            apiResponse.message ?? "Please Check OTP and Try Again";
         HapticFeedback.vibrate();
         return false;
       }
@@ -704,11 +692,4 @@ RxBool isValidOTP = false.obs;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
   }
-
-
-
-
-
 }
-
-

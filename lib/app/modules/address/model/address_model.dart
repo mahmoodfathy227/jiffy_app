@@ -16,15 +16,15 @@ class Country {
 
 class Address {
   int id;
-  String? label;
-  String? apartment;
-  String? floor;
-  String? building;
-  String? address;
-  String? phone;
-  String? city;
-  String? country;
-  String? state;
+  String label;
+  String apartment;
+  String floor;
+  String building;
+  String address;
+  String phone;
+  String city;
+  String country;
+  String state;
   dynamic latitude;
   dynamic longitude;
   int isDefault;
@@ -66,15 +66,15 @@ class Address {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'label': label?? '',
-      'apartment': apartment ?? '',
-      'floor': floor ?? '',
-      'building': building?? '',
-      'address': address?? '',
-      'phone': phone?? '',
-      'city': city?? '',
-      'country': country?? '',
-      'state': state?? '',
+      'label': label,
+      'apartment': apartment,
+      'floor': floor,
+      'building': building,
+      'address': address,
+      'phone': phone,
+      'city': city,
+      'country': country,
+      'state': state,
       'latitude': latitude == '' || latitude == null ? '33.888630' : latitude,
       'longitude':
       longitude == '' || longitude == null ? '35.495480' : longitude,
