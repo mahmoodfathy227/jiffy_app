@@ -15,6 +15,7 @@ import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/help/bindings/help_binding.dart';
+import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:restart_app/restart_app.dart';
 
@@ -132,12 +133,10 @@ void showFlutterNotification(RemoteMessage message) {
       color: primaryColor,
       body: message.notification!.body.toString(), // body
     ));
-    print(" test notification2" + message.notification!.title.toString());
+    print(" test notification2${message.notification!.title}");
   }
 
-  if (message.data != null) {
-    print('Message also contained a notification: ${message.data}');
-  }
+  print('Message also contained a notification: ${message.data}');
 }
 
 void navigateToOnboarding() {
@@ -159,6 +158,8 @@ void main() async {
   Get.put(ApiService());
 
   runApp(MyApp());
+
+
 }
 
 bool isDeepLink = false;
@@ -176,20 +177,17 @@ _handleUri() {
     if (id == null) {
       isDeepLink = false;
     } else {
-      // deepLinkproduct = ViewProductData(id: int.parse(id));
+
     }
 
-    // Get.toNamed(
-    //   Routes.PRODUCT,
-    //   arguments: ViewProductData(
-    //     id: 1,
-    //   ),
-    // );
+
   });
 }
+
 CustomSearchController customSearchController = Get.put(CustomSearchController());
 WishlistController wishListController = Get.put(WishlistController());
 CartController cartController = Get.put(CartController());
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -76,16 +76,12 @@ class WishlistView extends GetView<WishlistController> {
                     height: MediaQuery.sizeOf(context).height,
                     width: MediaQuery.sizeOf(context).width,
                     child: Stack(children: [
-                      CustomAppBar(
-                        title: "WishList", myFunction: () {  },
-                      ),
-                      Positioned(
-                          top: 100.h,
-                          left: 0,
-                          right: 0,
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: socialMediaPlaceHolder())),
+                      // CustomAppBar(
+                      //   title: "WishList", myFunction: () {  },
+                      // ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: socialMediaPlaceHolder()),
                     ]))));
   }
 

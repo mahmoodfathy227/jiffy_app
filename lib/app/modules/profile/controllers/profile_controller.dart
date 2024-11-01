@@ -158,6 +158,7 @@ class ProfileController extends GetxController {
   Future<void> clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_data');
+    await prefs.clear();
     print('User data cleared');
   }
 
@@ -176,7 +177,7 @@ class ProfileController extends GetxController {
       if (await GoogleSignIn().isSignedIn()) {
         GoogleSignIn().disconnect();
       }
-
+      reset();
       firebase.FirebaseAuth.instance.signOut();
       if (firebase.FirebaseAuth.instance.currentUser != null) {
         firebase.FirebaseAuth.instance.currentUser!.delete();
@@ -184,9 +185,14 @@ class ProfileController extends GetxController {
       Get.snackbar('Success', 'Logged out successfully');
       reset();
     } finally {
+
       isLoading(false);
     }
   }
+
+
+
+
 
   void deleteAccount() async {
     try {

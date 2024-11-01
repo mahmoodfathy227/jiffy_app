@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/help/views/send_a_message_view.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../main.dart';
 import '../../global/config/constant.dart';
 import '../../global/model/model_response.dart';
@@ -65,6 +66,8 @@ class HelpController extends GetxController {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController message = TextEditingController();
+
+  RxBool isPhoneLoading = false.obs;
   Future getImage(ImageSource img) async {
     final pickedFile = await picker.pickImage(source: img);
     if (pickedFile != null) {
@@ -164,6 +167,46 @@ Get.snackbar("Success", "Ticket Send Successful",snackPosition: SnackPosition.TO
     errorMessage.value = '';
   }
 
+
+  Future<String> getSupportPhoneNumber() async{
+    try {
+      isPhoneLoading.value = true;
+      final response = await apiConsumer.get(
+        'support/',
+      );
+
+
+      final apiResponse = ApiDataResponse.fromJson(response);
+      if (apiResponse.status == 'success') {
+        print("phone number gotten successful");
+        isPhoneLoading.value = false;
+        _launchCaller(apiResponse.data['phone']);
+        return apiResponse.data['phone'];
+      } else {
+        isPhoneLoading.value = false;
+        handleApiErrorUser(apiResponse.message);
+        handleApiError(response.statusCode);
+        print("the message is ${apiResponse.message}");
+        errorMessage.value = apiResponse.message.toString() ?? "Error Happened";
+        Get.snackbar("Error", "Service Not Available Yet",snackPosition: SnackPosition.TOP, colorText: Colors.white);
+        HapticFeedback.vibrate();
+        return "";
+      }
+    }catch(e){
+      isPhoneLoading.value = false;
+      Get.snackbar("Error", "Service Not Available Yet",snackPosition: SnackPosition.BOTTOM, colorText: Colors.white);
+      return "";
+    }
+  }
+
+  _launchCaller(phone) async {
+    final url = "tel:${phone}";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
 
 

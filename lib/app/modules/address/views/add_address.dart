@@ -35,6 +35,7 @@ class AddAddress extends GetView<AddressController> {
       ),
 
       floatingActionButton: Obx(() {
+        Get.put(AddressController());
         return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

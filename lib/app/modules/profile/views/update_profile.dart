@@ -86,8 +86,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     );
   }
 
-  void _showDeleteConfirmation(
-      BuildContext context, ProfileController controller) {
+  void _showDeleteConfirmation(BuildContext context,
+      ProfileController controller) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -133,7 +133,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                             color: Colors.red,
                             border: Border.all(color: Colors.black12),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
+                            BorderRadius.all(Radius.circular(12))),
                         child: Center(
                             child: Text('Yes',
                                 style: primaryTextStyle(
@@ -151,7 +151,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         decoration: BoxDecoration(
                             color: Colors.grey,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
+                            BorderRadius.all(Radius.circular(12))),
                         child: Center(
                             child: Text('No',
                                 style: primaryTextStyle(
@@ -192,6 +192,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   }
 
   File? avatarImageFile;
+
   _onGalleryTapped() async {
     Navigator.pop(context);
     final XFile? xImage = await _picker.pickImage(
@@ -227,36 +228,37 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   child: CircleAvatar(
                     radius: 48.r,
                     backgroundImage: controller.userModel.value.photo == null ||
-                            controller.userModel.value.photo!.isEmpty
+                        controller.userModel.value.photo!.isEmpty
                         ? const AssetImage(
-                            'assets/images/profile/profile_placeholder.png')
+                        'assets/images/profile/profile_placeholder.png')
                         : null,
                     child: controller.userModel.value.photo == null ||
-                            controller.userModel.value.photo!.isEmpty
+                        controller.userModel.value.photo!.isEmpty
                         ? null
                         : CachedNetworkImage(
-                            imageUrl: controller.userModel.value.photo!,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => CircleAvatar(
-                              radius: 48.r,
-                              backgroundImage: const AssetImage(
-                                  'assets/images/profile/profile_placeholder.png'),
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Icon(
-                                  Icons.error,
-                                  color: Colors.red,
-                                  size: 22.r,
-                                ),
+                      imageUrl: controller.userModel.value.photo!,
+                      placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          CircleAvatar(
+                            radius: 48.r,
+                            backgroundImage: const AssetImage(
+                                'assets/images/profile/profile_placeholder.png'),
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Icon(
+                                Icons.error,
+                                color: Colors.red,
+                                size: 22.r,
                               ),
                             ),
-                            imageBuilder: (context, imageProvider) =>
-                                CircleAvatar(
-                              radius: 46.r,
-                              backgroundImage: imageProvider,
-                            ),
                           ),
+                      imageBuilder: (context, imageProvider) =>
+                          CircleAvatar(
+                            radius: 46.r,
+                            backgroundImage: imageProvider,
+                          ),
+                    ),
                   )),
             ],
           )),
@@ -289,28 +291,31 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 )
               ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Update Your Photo',
-                  style: primaryTextStyle(
-                    color: Colors.white,
-                    size: 14.sp.round(),
-                    weight: FontWeight.w500,
-                    letterSpacing: -0.41,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Update Your Photo',
+                    style: primaryTextStyle(
+                      color: Colors.white,
+                      size: 14.sp.round(),
+                      weight: FontWeight.w500,
+                      letterSpacing: -0.41,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                SvgPicture.asset(
-                  'assets/images/profile/camera.svg',
-                  width: 16.w,
-                  height: 16.h,
-                ),
-              ],
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  SvgPicture.asset(
+                    'assets/images/profile/camera.svg',
+                    width: 16.w,
+                    height: 16.h,
+                  ),
+                ],
+              ),
             ),
           )),
     ]);
@@ -338,196 +343,204 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     blurRadius: 7,
     offset: const Offset(0, 3), // changes position of shadow
   );
+
   Widget _buildUpdateInfoForm() {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
-          child: Column(
-            children: [
-              ShowUp(
-                delay: 400,
-                child: CustomTextField(
-                  initialValue: controller.userModel.value.firstName,
-                  labelText: 'First Name',
-                  onChanged: (value) =>
-                      controller.userModel.value.firstName = value,
-                  errorText: controller.firstNameError.value.isEmpty
-                      ? ""
-                      : controller.firstNameError.value,
-                ),
-              ),
-              SizedBox(height: 20.h),
-              ShowUp(
-                delay: 400,
-                child: CustomTextField(
-                  initialValue: controller.userModel.value.lastName,
-                  labelText: 'Last Name',
-                  onChanged: (value) =>
-                      controller.userModel.value.lastName = value,
-                  errorText: controller.lastNameError.value.isEmpty
-                      ? ""
-                      : controller.lastNameError.value,
-                ),
-              ),
-              SizedBox(height: 20.h),
-              CustomTextField(
-                initialValue:
-                    controller.userModel.value.phone ?? '(+961) 123321',
-                labelText: 'Phone',
-                onChanged: (value) => controller.userModel.value.phone = value,
-                errorText: controller.phoneError.value.isEmpty
-                    ? ""
-                    : controller.phoneError.value,
-              ),
-              SizedBox(height: 20.h),
-              ShowUp(
+          child: Obx(() {
+            return Column(
+              children: [
+                ShowUp(
                   delay: 400,
-                  child: Container(
-                      height: 55.h,
-                      width: 320.w,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.r),
-                        boxShadow: [customBoxShadow],
-                      ),
-                      child: TextFormField(
-                        controller: dobController,
-                        readOnly: true,
-                        style: secondaryTextStyle(
-                          color: Colors.black,
-                          size: 14.sp.round(),
-                          weight: FontWeight.w400,
+                  child: CustomTextField(
+                    initialValue: controller.userModel.value.firstName,
+                    labelText: "first name",
+                    onChanged: (value) =>
+                    controller.userModel.value.firstName = value,
+                    errorText: controller.firstNameError.value.isEmpty
+                        ? ""
+                        : controller.firstNameError.value,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                ShowUp(
+                  delay: 400,
+                  child: CustomTextField(
+                    initialValue: controller.userModel.value.lastName,
+                    labelText: "last name",
+                    onChanged: (value) =>
+                    controller.userModel.value.lastName = value,
+                    errorText: controller.lastNameError.value.isEmpty
+                        ? ""
+                        : controller.lastNameError.value,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                CustomTextField(
+                  initialValue:
+                  controller.userModel.value.phone ?? '(+961) 123321',
+                  labelText:  "phone",
+                  onChanged: (value) =>
+                  controller.userModel.value.phone = value,
+                  errorText: controller.phoneError.value.isEmpty
+                      ? ""
+                      : controller.phoneError.value,
+                ),
+                SizedBox(height: 20.h),
+                ShowUp(
+                    delay: 400,
+                    child: Container(
+                        height: 55.h,
+                        width: 320.w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.r),
+                          boxShadow: [customBoxShadow],
                         ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: primaryColor,
-                              width: 1,
-                            ),
-                          ),
-                          hintStyle: secondaryTextStyle(
+                        child: TextFormField(
+                          controller: dobController,
+                          readOnly: true,
+                          style: secondaryTextStyle(
                             color: Colors.black,
                             size: 14.sp.round(),
                             weight: FontWeight.w400,
-                            height: 1,
                           ),
-                          helperStyle: secondaryTextStyle(
-                            color: Colors.red,
-                            size: 12.sp.round(),
-                            weight: FontWeight.w400,
-                            height: 1,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: primaryColor,
+                                width: 1,
+                              ),
+                            ),
+                            hintStyle: secondaryTextStyle(
+                              color: Colors.black,
+                              size: 14.sp.round(),
+                              weight: FontWeight.w400,
+                              height: 1,
+                            ),
+                            helperStyle: secondaryTextStyle(
+                              color: Colors.red,
+                              size: 12.sp.round(),
+                              weight: FontWeight.w400,
+                              height: 1,
+                            ),
+                            labelText: 'Date of Birth',
+                            suffixIcon: Icon(
+                              Icons.calendar_today,
+                              size: 20.sp,
+                            ),
                           ),
-                          labelText: 'Date of Birth',
-                          suffixIcon: Icon(
-                            Icons.calendar_today,
-                            size: 20.sp,
-                          ),
-                        ),
-                        onTap: () => _selectDate(context),
-                      ))),
-              SizedBox(height: 20.h),
-              Container(
-                  width: 324.w,
-                  height: 52.h,
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFFF4141),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(42),
-                    ),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 20,
-                        offset: Offset(0, 4),
-                        spreadRadius: -10,
-                      )
-                    ],
-                  ),
-                  child: InkWell(
-                      onTap: () {
-                        _showDeleteConfirmation(context, controller);
-                      },
-                      child: Center(
-                        child: Text(
-                          'Delete Account',
-                          style: secondaryTextStyle(
-                            color: Colors.white,
-                            size: 14.sp.round(),
-                            weight: FontWeight.w400,
-                          ),
-                        ),
-                      ))),
-              SizedBox(height: 40.h),
-              InkWell(
-                  onTap: () {
-                    Get.toNamed(Routes.CHANGEPASSWORD);
-                  },
-                  child: Container(
-                      width: 181.w,
-                      height: 64.h,
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1, color: Color(0xFF6900CC)),
-                          borderRadius: BorderRadius.circular(43),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x4C000000),
-                            blurRadius: 150,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          )
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Change Password ',
-                          style: primaryTextStyle(
-                            color: Color(0xFF4F0099),
-                            size: 18.sp.round(),
-                            weight: FontWeight.w500,
-                            letterSpacing: -0.41,
-                          ),
-                        ),
-                      ))),
-              SizedBox(height: 20.h),
-              JiffyDefaultButton(
-                onPressed: () {
-                  bool isFirstNameValid = controller
-                      .validateFirstName(controller.userModel.value.firstName!);
-                  bool isLastNameValid = controller
-                      .validateLastName(controller.userModel.value.lastName!);
-                  // bool isPhoneValid = controller
-                  //     .validatePhone(controller.userModel.value.phone!);
-                  // bool isDobValid = controller.validateDob(dobController.text);
+                          onTap: () => _selectDate(context),
+                        ))),
+                SizedBox(height: 20.h),
+                JiffyDefaultButton(
+                  onPressed: () {
+                    bool isFirstNameValid = controller
+                        .validateFirstName(controller.userModel.value
+                        .firstName!);
+                    bool isLastNameValid = controller
+                        .validateLastName(controller.userModel.value.lastName!);
+                    // bool isPhoneValid = controller
+                    //     .validatePhone(controller.userModel.value.phone!);
+                    // bool isDobValid = controller.validateDob(dobController.text);
 
-                  if (isFirstNameValid && isLastNameValid) {
-                    var data = controller.userModel.value.toJson();
-                    controller.updateUserProfile(data);
-                  } else {
-                    // Trigger UI updates to show error messages
-                    setState(() {});
-                  }
-                },
-                btnText: 'Update',
-                isloading: controller.isLoading.value,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-            ],
-          ),
+                    if (isFirstNameValid && isLastNameValid) {
+                      var data = controller.userModel.value.toJson();
+                      controller.updateUserProfile(data);
+                    } else {
+                      // Trigger UI updates to show error messages
+                      setState(() {});
+                    }
+                  },
+                  btnText: 'Update',
+                  isloading: controller.isLoading.value,
+                ),
+
+                SizedBox(height: 40.h),
+                InkWell(
+                    onTap: () {
+                      Get.toNamed(Routes.CHANGEPASSWORD);
+                    },
+                    child: Container(
+                        width: 181.w,
+                        height: 64.h,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                width: 1, color: Color(0xFF6900CC)),
+                            borderRadius: BorderRadius.circular(43),
+                          ),
+                          shadows: [
+                            BoxShadow(
+                              color: Color(0x4C000000),
+                              blurRadius: 150,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Change Password ',
+                            style: primaryTextStyle(
+                              color: Color(0xFF4F0099),
+                              size: 18.sp.round(),
+                              weight: FontWeight.w500,
+                              letterSpacing: -0.41,
+                            ),
+                          ),
+                        ))),
+
+                SizedBox(height: 20.h),
+                Container(
+                    width: 324.w,
+                    height: 52.h,
+                    decoration: ShapeDecoration(
+                      color: Color(0xFFFF4141),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(42),
+                      ),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 20,
+                          offset: Offset(0, 4),
+                          spreadRadius: -10,
+                        )
+                      ],
+                    ),
+                    child: InkWell(
+                        onTap: () {
+                          _showDeleteConfirmation(context, controller);
+                        },
+                        child: Center(
+                          child: Text(
+                            'Delete Account',
+                            style: secondaryTextStyle(
+                              color: Colors.white,
+                              size: 14.sp.round(),
+                              weight: FontWeight.w400,
+                            ),
+                          ),
+                        ))),
+                SizedBox(
+                  height: 20.h,
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
@@ -580,13 +593,13 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
               MySecondDefaultButton(
                 onPressed: () {
                   bool isOldPasswordValid =
-                      controller.validatePassword(controller.oldPassword.value);
+                  controller.validatePassword(controller.oldPassword.value);
                   bool isNewPasswordValid = controller
                       .validateNewPassword(controller.newPassword.value);
                   bool isConfirmPasswordValid =
-                      controller.validateConfirmPassword(
-                          controller.confirmPassword.value,
-                          controller.newPassword.value);
+                  controller.validateConfirmPassword(
+                      controller.confirmPassword.value,
+                      controller.newPassword.value);
 
                   if (isOldPasswordValid &&
                       isNewPasswordValid &&

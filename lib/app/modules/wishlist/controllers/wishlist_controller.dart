@@ -13,6 +13,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../auth/views/login_view.dart';
 import '../../services/api_service.dart';
 
 class WishlistController extends GetxController {
@@ -30,16 +31,17 @@ class WishlistController extends GetxController {
       isAuth.value = false;
     } else {
       isAuth.value = true;
+      // getWishlistProducts();
+      // print('init wish');
     }
-    getWishlistProducts();
-    print('init wish');
+
     super.onInit();
   }
 
   @override
   void onReady() {
     super.onReady();
-    getWishlistProducts();
+    // getWishlistProducts();
   }
 
   @override
@@ -84,9 +86,10 @@ class WishlistController extends GetxController {
             wishlistProductIds.addNonNull(id);
             print(id.toString() + 'tesasdsa');
           }
-          WishlistController wishlistController =
-              Get.put<WishlistController>(WishlistController());
-          wishlistController.setInitData(wishlistProductIds);
+          // WishlistController wishlistController =
+          //     Get.put<WishlistController>(WishlistController());
+          // wishlistController.
+          setInitData(wishlistProductIds);
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
@@ -101,30 +104,19 @@ class WishlistController extends GetxController {
   }
 
   removeFromWishlist(product_id) async {
-    // Get.snackbar('Removing ...', 'Removing From Wishlist',
-    //     showProgressIndicator: true,
-    //     progressIndicatorBackgroundColor: Colors.white,
-    //     backgroundColor: primaryColor,
-    //     duration: const Duration(milliseconds: 1200),
-    //     icon: Center(
-    //         child: LoadingAnimationWidget.flickr(
-    //       leftDotColor: Colors.purpleAccent,
-    //       rightDotColor: Colors.white,
-    //       size: 40.sp,
-    //     )),
-    //     isDismissible: true);
+
 
     if (userToken != null) {
-      Get.closeCurrentSnackbar();
-      Get.snackbar('Removed', 'Removed from Wishlist',
-          // backgroundColor: primaryColor,
-          icon: SvgPicture.asset(
-            "assets/images/home/add_to_wishlist.svg",
-            width: 43.w,
-            height: 43.h,
-            fit: BoxFit.cover,
-          ),
-          isDismissible: true);
+      // Get.closeCurrentSnackbar();
+      // Get.snackbar('Removed', 'Removed from Wishlist',
+      //     // backgroundColor: primaryColor,
+      //     icon: SvgPicture.asset(
+      //       "assets/images/home/add_to_wishlist.svg",
+      //       width: 43.w,
+      //       height: 43.h,
+      //       fit: BoxFit.cover,
+      //     ),
+      //     isDismissible: true);
 
       print('removing from Wishlist api loading ...');
       var formData = dio.FormData.fromMap({
@@ -152,31 +144,21 @@ class WishlistController extends GetxController {
 
         print(e.toString() + stackTrace.toString());
       }
+    } else {
+      Get.to(() => LoginView());
     }
   }
 
   addToWishlist(product_id) async {
-    // Get.snackbar('Adding ...', 'Adding To Wishlist',
-    //     showProgressIndicator: true,
-    //     duration: const Duration(milliseconds: 1200),
-    //     progressIndicatorBackgroundColor: Colors.white,
-    //     backgroundColor: primaryColor,
-    //     icon: Center(
-    //         child: LoadingAnimationWidget.flickr(
-    //       leftDotColor: Colors.purpleAccent,
-    //       rightDotColor: Colors.white,
-    //       size: 40.sp,
-    //     )),
-    //     isDismissible: true);
 
     if (userToken != null) {
-      Get.closeCurrentSnackbar();
-      Get.snackbar('Added', 'Added To Wishlist',
-          // backgroundColor: primaryColor,
+      // Get.closeCurrentSnackbar();
+      // Get.snackbar('Added', 'Added To Wishlist',
+      //     // backgroundColor: primaryColor,
+      //
+      //     isDismissible: true);
 
-          isDismissible: true);
-
-      print('removing from Wishlist api loading ...');
+      print('removing from Wishlist api loading ....');
 
       var formData = dio.FormData.fromMap({
         'product_id': product_id,
@@ -205,14 +187,7 @@ class WishlistController extends GetxController {
         print(e.toString() + stackTrace.toString());
       }
     } else {
-      Get.closeCurrentSnackbar();
-      Get.snackbar('System', 'Please Log in First',
-          showProgressIndicator: true,
-          duration: const Duration(milliseconds: 1200),
-          progressIndicatorBackgroundColor: Colors.white,
-          // backgroundColor: primaryColor,
-          icon: Center(child: Icon(Icons.login)),
-          isDismissible: true);
+      Get.to(() => LoginView());
     }
   }
 
@@ -225,6 +200,10 @@ class WishlistController extends GetxController {
 
     final Map<dynamic, dynamic> bodyFields = {};
 
+    if(product_ids.isEmpty){
+      isWishlistLoading.value = false;
+      return [];
+    }
     product_ids.forEach((id) {
       bodyFields["ids[${_index}]"] = id;
       _index++;

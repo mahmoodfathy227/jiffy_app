@@ -61,5 +61,5 @@ abstract class _Paths {
   static const CART = '/cart';
   static const Checkout = '/checkout';
   static const HELP = '/help';
-  static const CHECKOUT = '/checkout';
+
 }

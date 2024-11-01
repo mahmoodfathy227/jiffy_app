@@ -449,37 +449,37 @@ String randomId = "123";
           height: 80.h,
           child: Row(
             children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: SizedBox(
-                    height: 55.h,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icons/facebook.svg", color: Colors.blue,),
-                        SizedBox(width: 10.w,),
-                        Text("Facebook",
-                          style: primaryTextStyle(color: Colors.black,
-                              size: 15.sp.round(), weight: FontWeight.w300
-                          ),),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.circular(10),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Colors.grey.withOpacity(0.1),
+              //           spreadRadius: 5,
+              //           blurRadius: 7,
+              //           offset: Offset(0, 3), // changes position of shadow
+              //         ),
+              //       ],
+              //     ),
+              //     child: SizedBox(
+              //       height: 55.h,
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           SvgPicture.asset(
+              //             "assets/icons/facebook.svg", color: Colors.blue,),
+              //           SizedBox(width: 10.w,),
+              //           Text("Facebook",
+              //             style: primaryTextStyle(color: Colors.black,
+              //                 size: 15.sp.round(), weight: FontWeight.w300
+              //             ),),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(width: 15.w,),
               Expanded(
                 child: Container(

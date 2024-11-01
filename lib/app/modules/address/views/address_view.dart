@@ -17,14 +17,14 @@ import '../controllers/address_controller.dart';
 import 'edit_address.dart';
 
 class AddressView extends GetView<AddressController> {
-  AddressView({super.key, this.isFromCheckout = false,});
+  AddressView({super.key, });
 
-  final bool isFromCheckout;
+
 
 
   @override
   Widget build(BuildContext context) {
-    print("idFromCheckout $isFromCheckout");
+
     Get.put(AddressController());
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
@@ -57,22 +57,23 @@ class AddressView extends GetView<AddressController> {
       floatingActionButton: buildFloatingButton(
 
 
-        buttonName: !isFromCheckout ?
+        buttonName: controller.isFromCheckout.value ?
         controller.addressList.isEmpty ?
         'Add New Address' :
-        'Select Address' :
+        'Select Address'
+            :
 
-        'Select Address',
+        'Add New Address',
         context: context,
         onPressed: () {
           if (controller.addressList.isEmpty) {
-            Get.to(()=>const AddAddress() );
+            Get.to(()=> AddAddress() );
 
           } else {
             var defaultAddressId = controller.addressList.where( (address) => address.isDefault == 1).first;
             CheckoutController checkoutController = Get.put(CheckoutController());
             checkoutController.assignDefaultAddress(defaultAddressId.id.toString());
-            Get.to(()=>const PaymentMethod() );
+            Get.to(()=>const  PaymentMethod() );
 
           }
         },

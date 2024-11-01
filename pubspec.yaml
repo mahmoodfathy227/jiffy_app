@@ -119,11 +119,11 @@ flutter:
     - assets/icons/
     - assets/images/auth/
     - assets/images/splash/
+    - assets/images/cart/
     - assets/fonts/
     - assets/images/onboarding/
     - assets/images/forgot_password/
     - assets/images/help/
-    - assets/images/payment/
     - assets/images/address/
     - assets/images/cart/
     - shorebird.yaml

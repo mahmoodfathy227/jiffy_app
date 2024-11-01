@@ -99,7 +99,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
           pageController.value.page! * (3.14159 / 2); // Adjust rotation
     });
     currentPage.value = 0;
-    wishListController.getWishlistProducts();
+    // wishListController.getWishlistProducts();
   }
 
   @override
@@ -123,6 +123,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     latestProducts: [],
     featuredProducts: [],
     premiumProducts: [],
+    banners: [],
   ).obs;
 
   var isLoading = false.obs;

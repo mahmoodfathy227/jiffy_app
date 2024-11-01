@@ -16,7 +16,7 @@ class HelpView extends GetView<HelpController> {
 
   @override
   Widget build(BuildContext context) {
-   Get.put(HelpController());
+    Get.put(HelpController());
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
         body: SingleChildScrollView(
@@ -93,12 +93,13 @@ SizedBox(height: 70.h,),
                       ),
                       SizedBox(height: kDefaultPadding * 3,),
                       Obx(() {
-                        return MyDefaultButton(onPressed: () => controller.sendEmail(),
+                        return MyDefaultButton(
+                          onPressed: () => controller.sendEmail(),
                           isloading: controller.isLoading.value,
                           btnText: "Send a Message",
                         isSecondaryTextStyle: true,
                        borderRadius: 30.sp,
-                     btnWidth: 245,
+                     btnWidth: 240,
                           height: 60.h,
                           iconPadding: 15,
                           Icon: "assets/images/help/send.svg",
@@ -107,8 +108,9 @@ SizedBox(height: 70.h,),
                       }),
                       SizedBox(height: 10.h,),
                       Obx(() {
-                        return MyDefaultButton(onPressed: () => controller.sendEmail(),
-                          isloading: controller.isLoading.value,
+                        return MyDefaultButton(
+                          onPressed: () => controller.getSupportPhoneNumber(),
+                          isloading: controller.isPhoneLoading.value,
                           btnText: "Call Us",
                           isSecondaryTextStyle: true,
                           borderRadius: 30.sp,

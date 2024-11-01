@@ -54,7 +54,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                             border: Border.all(color: primaryColor),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
+                                color: Colors.grey.withOpacity(0.2),
                                 spreadRadius: 5,
                                 blurRadius: 7,
                                 offset: const Offset(
@@ -128,14 +128,13 @@ class PaymentMethod extends GetView<CheckoutController> {
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40.r),
             topRight: Radius.circular(40.r),
-            bottomLeft: Radius.circular(40.r),
-            bottomRight: Radius.circular(40.r),
+
           ),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 10,
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 7,
               blurRadius: 7,
               offset: const Offset(0, 3), // changes position of shadow
             ),

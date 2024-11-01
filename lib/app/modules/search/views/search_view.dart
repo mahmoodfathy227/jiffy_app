@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
+import 'package:lottie/lottie.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../main.dart';
@@ -122,10 +123,10 @@ class SearchView extends GetView<CustomSearchController> {
                           boxShadow: [
                             BoxShadow(
 
-                              color: primaryColor ,
-                              // Colors.grey.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 22,
+                              // color: primaryColor ,
+                            color:   Colors.white.withOpacity(0.5),
+                              spreadRadius: 6,
+                              blurRadius: 8,
                               offset: Offset(
                                   0, 1), // changes position of shadow
                             ),
@@ -225,14 +226,16 @@ class SearchView extends GetView<CustomSearchController> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 
             crossAxisCount: 2,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 5,
             // width / height: fixed for *all* items
             childAspectRatio: (1 / 1.8),
           ),
           itemCount: customSearchController.filteredProducts.length,
           itemBuilder: (context, index) {
-            return globalProductCard(
+            return
+              buildProductCard(product: customSearchController.filteredProducts[index],);
+              globalProductCard(
                 customSearchController.filteredProducts[index], index);
           },
         ),
@@ -497,6 +500,7 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
             child: Obx(() {
               return Column(
@@ -529,10 +533,9 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
                                   "assets/images/placeholder.png",
                                   fit: BoxFit.contain,
                                 ),
-                            placeholder: (context, url) => Image.asset(
-                              "assets/images/placeholder.png",
-                              fit: BoxFit.cover,
-                            ),
+                            placeholder: (context, url) => Lottie.asset(
+                              "assets/images/jiffy_placeholder.json",
+                            )
                           ),
                         ),
 

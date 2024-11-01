@@ -10,6 +10,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
+import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:jiffy/app/modules/checkout/views/checkout_view.dart';
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
@@ -18,6 +20,7 @@ import 'package:jiffy/app/modules/product/controllers/product_controller.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:jiffy/app/routes/app_pages.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -170,8 +173,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         Hero(
                           tag: product!.id.toString(),
                           child: Container(
-                            width: 97.88.w,
-                            height: 117.72.h,
+                            width: 100.88.w,
+                            height: 110.72.h,
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -182,46 +185,19 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                 )
                               ],
                             ),
-                            child: product!.image!.isEmpty
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          'https://via.assets.so/shoe.png?id=1&q=95&w=360&h=360&fit=fill',
-                                      fit: BoxFit.cover,
-                                      width: 102.w,
-                                      height: 96.h,
-                                      placeholder: (context, url) => Center(
-                                          child: CircularProgressIndicator()),
-                                      errorWidget: (context, url, error) =>
-                                          Image.network(
-                                        'https://via.assets.so/shoe.png?id=1&q=95&w=360&h=360&fit=fill',
-                                        fit: BoxFit.cover,
-                                        width: 97.88.w,
-                                        height: 117.72.h,
-                                      ),
-                                    ),
-                                  )
+                            child: product.image.isEmpty
+                                ? ClipRRect(child: Image.asset("assets/images/placeholder.png"))
                                 : ClipRRect(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(20),
                                     ),
                                     child: CachedNetworkImage(
-                                      imageUrl: product!.image!,
+                                      imageUrl: product.image!,
                                       fit: BoxFit.cover,
-                                      width: 102.w,
-                                      height: 96.h,
-                                      placeholder: (context, url) => Center(
-                                          child: CircularProgressIndicator()),
+
+                                      placeholder: (context, url) => Lottie.asset("assets/images/jiffy_placeholder.json"),
                                       errorWidget: (context, url, error) =>
-                                          Image.network(
-                                        'https://via.assets.so/shoe.png?id=1&q=95&w=360&h=360&fit=fill',
-                                        fit: BoxFit.cover,
-                                        width: 102.w,
-                                        height: 96.h,
-                                      ),
+                                          Image.asset("assets/images/placeholder.png", fit: BoxFit.contain,)
                                     ),
                                   ),
                           ),
@@ -281,7 +257,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                           ),
                           AnimatedContainer(
                             duration: Duration(milliseconds: 300),
-                            height: 86.h,
+                            height: 90.h,
                             padding: EdgeInsets.symmetric(horizontal: 15.w),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -294,8 +270,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                     },
                                     child: SvgPicture.asset(
                                       'assets/images/cart/plus.svg',
-                                      width: 24.w,
-                                      height: 24.h,
+                                      width: 27.w,
+                                      height: 27.h,
                                     )),
                                 AnimatedSwitcher(
                                   duration: Duration(milliseconds: 300),
@@ -325,8 +301,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                     },
                                     child: SvgPicture.asset(
                                       'assets/images/cart/minus.svg',
-                                      width: 24.w,
-                                      height: 24.h,
+                                      width: 27.w,
+                                      height: 27.h,
                                     )),
                               ],
                             ),
@@ -336,49 +312,55 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                       bottom: 0.h,
                       end: 0.w,
                       child: Observer(
-                        builder: (_) => Dismissible(
-                          key: Key(item.product.toString()),
-                          background: Container(
-                            color: Colors.transparent,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                child: Icon(Icons.check,
-                                    color: Colors.white, size: 30),
+                        builder: (_) => Row(
+                          children: [
+                            Dismissible(
+
+                              key: Key(item.product.toString()),
+
+                              background: Container(
+                                color: Colors.transparent,
+                                child: const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: Icon(Icons.check,
+                                        color: Colors.white, size: 30),
+                                  ),
+                                ),
+                              ),
+                              direction: DismissDirection.startToEnd,
+                              onUpdate: (details) {},
+                              confirmDismiss: (direction) async {
+                                cartController.cartItems[index].isDismissible =
+                                    false;
+                                cartController.cartItems.refresh();
+                                return false;
+                              },
+                              onDismissed: (direction) {
+                                //   cartController.removeItem(item);
+                              },
+                              child: InkWell(
+                                onTap: () {
+                                  cartController.removeItem(item);
+                                },
+                                child: Container(
+                                  width: item.isDismissible ? 50.w : 0,
+                                  height: 120.h,
+                                  decoration: BoxDecoration(
+                                    color: item.isDismissible
+                                        ? Colors.red
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Icon(Icons.delete,
+                                        color: Colors.white, size: 24.w),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          direction: DismissDirection.startToEnd,
-                          onUpdate: (details) {},
-                          confirmDismiss: (direction) async {
-                            cartController.cartItems[index].isDismissible =
-                                false;
-                            cartController.cartItems.refresh();
-                            return false;
-                          },
-                          onDismissed: (direction) {
-                            //   cartController.removeItem(item);
-                          },
-                          child: InkWell(
-                            onTap: () {
-                              cartController.removeItem(item);
-                            },
-                            child: Container(
-                              width: item.isDismissible ? 50.w : 0,
-                              height: 120.h,
-                              decoration: BoxDecoration(
-                                color: item.isDismissible
-                                    ? Colors.red
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Icon(Icons.delete,
-                                    color: Colors.white, size: 24.w),
-                              ),
-                            ),
-                          ),
+                          ],
                         ),
                       ),
                     ),
@@ -528,6 +510,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
+        backgroundColor: primaryBackgroundColor,
           body: cartController.isAuth.value
               ? SizedBox(
                   height: MediaQuery.sizeOf(context).height,
@@ -552,7 +535,8 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                   ))
               : Align(
                   alignment: Alignment.center,
-                  child: socialMediaPlaceHolder()));
+                  child: socialMediaPlaceHolder()
+          ));
     });
   }
 
@@ -582,6 +566,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
           width: 327.w,
           height: 670.h,
           child: Column(
+
             children: [
               SizedBox(
                 height: 30.h,
@@ -613,7 +598,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                               topRight: Radius.circular(20),
                                               bottomRight: Radius.circular(20)),
                                         ),
-                                        child: Center(
+                                        child: const Center(
                                           child: Icon(Icons.delete,
                                               color: Colors.white, size: 30),
                                         ),
@@ -657,6 +642,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                SizedBox(height:15.h ,),
                                 Text(
                                   'Total',
                                   textAlign: TextAlign.center,
@@ -682,7 +668,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.toNamed(Routes.CHECKOUT);
+                                Get.put(CheckoutController());
+                                Get.to(()=>const CheckoutView());
+                                // Get.toNamed(Routes.CHECKOUT);
                               },
                               child: Container(
                                 width: 181.w,
@@ -710,6 +698,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
+
                                   children: [
                                     Text(
                                       'Check Out',

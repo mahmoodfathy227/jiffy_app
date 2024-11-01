@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import 'package:jiffy/app/modules/auth/views/register_view.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
+import 'package:jiffy/app/modules/main/views/main_view.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../global/config/configs.dart';
@@ -77,24 +78,9 @@ SizedBox(height:25.h ,),
                       ),
                     ))),
             SizedBox(height: 60.h),
-            const Spacer(),
 
-            // controller.errorMessage.value.isEmpty?
-            //     SizedBox()
-            // :
-            //     ShowUp(
-            //       delay: 300,
-            //       child: Text(
-            //         controller.errorMessage.value,
-            //         maxLines: 2,
-            //         textAlign: TextAlign.center,
-            //         style: primaryTextStyle(
-            //           color: Colors.red,
-            //           size: 12.sp.round(),
-            //           weight: FontWeight.w400,
-            //         ),
-            //       ),
-            //     ),
+
+
             SizedBox(height: 5.h,),
             MyDefaultButton(
               errorText: controller.errorMessage.value,
@@ -135,8 +121,8 @@ SizedBox(height:25.h ,),
                 ],
               ),
             ),
-            SizedBox(height: 35.h),
-            Text("Sign Up With", style: primaryTextStyle(color: Colors.black,
+          Spacer(),
+            Text("Sign In With", style: primaryTextStyle(color: Colors.black,
                 size: 13.sp.round(),
                 weight: FontWeight.w400),),
 
@@ -149,37 +135,37 @@ SizedBox(height:25.h ,),
               height: 80.h,
               child: Row(
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: SizedBox(
-                        height: 50.h,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/facebook.svg", color: Colors.blue,),
-                            SizedBox(width: 10.w,),
-                            Text("Facebook",
-                              style: primaryTextStyle(color: Colors.black,
-                                  size: 13.sp.round(), weight: FontWeight.w100
-                              ),),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.grey.withOpacity(0.1),
+                  //           spreadRadius: 5,
+                  //           blurRadius: 7,
+                  //           offset: Offset(0, 3), // changes position of shadow
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: SizedBox(
+                  //       height: 50.h,
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           SvgPicture.asset(
+                  //             "assets/icons/facebook.svg", color: Colors.blue,),
+                  //           SizedBox(width: 10.w,),
+                  //           Text("Facebook",
+                  //             style: primaryTextStyle(color: Colors.black,
+                  //                 size: 13.sp.round(), weight: FontWeight.w100
+                  //             ),),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(width: 15.w,),
                   Expanded(
                     child: Container(
@@ -396,6 +382,57 @@ SizedBox(height:25.h ,),
                         child: Row(
 
                           children: [
+                            SizedBox(width: 10.w,),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(()=>  MainView());
+                              },
+                              child: ConstrainedBox(
+
+                                  constraints: BoxConstraints(
+
+                                      maxWidth: 110.w,
+                                      maxHeight: 50.h
+                                  ),
+                                  child: Container(
+                                    width: 90.w,
+                                    height: 35.h,
+                                    decoration: BoxDecoration(
+                                        color:   Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.4),
+                                            spreadRadius: 3,
+                                            blurRadius: 5,
+                                            offset: Offset(0, 1), // changes position of shadow
+                                          ),
+                                        ]
+                                    ),
+                                    child: Row(
+
+                                        children: [
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Icon(Icons.home_outlined, color: primaryColor, weight: 21.w, ),
+                                          SizedBox(width: 5.w,),
+                                          Text("Guest",
+                                            style: primaryTextStyle(
+                                              weight: FontWeight.w500,
+                                              size: 12.sp.round(),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+
+                                        ]),
+                                  )
+
+
+                              ),
+                            ),
                             Spacer(),
                             SvgPicture.asset(
                               LOGO,

@@ -19,6 +19,8 @@ class CheckoutView extends GetView<CheckoutController> {
 
   @override
   Widget build(BuildContext context) {
+   AddressController addressController = Get.put(AddressController());
+   addressController.changeAddressStatus(true);
     return Scaffold(
 
         body: SafeArea(child:
@@ -45,7 +47,7 @@ class CheckoutView extends GetView<CheckoutController> {
         //     ),
         //   ],
         // ),
-          AddressView(isFromCheckout: true,)
+          AddressView()
 
         )
     );

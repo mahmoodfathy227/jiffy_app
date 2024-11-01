@@ -70,11 +70,10 @@ Get.offAll(MainView());
       ),
 
 
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
     );
   }
-
-
 
 }

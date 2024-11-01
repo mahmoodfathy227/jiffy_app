@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiffy/app/modules/global/config/helpers.dart';
+import 'package:jiffy/app/modules/services/api_service.dart';
 
 import '../../global/theme/app_theme.dart';
 import '../../global/theme/colors.dart';
@@ -67,13 +68,23 @@ class SendAMessageView extends GetView<HelpController> {
                             size: 22.sp.round()),),
 
                       SizedBox(height: kDefaultPadding * 2,),
-                      CustomTextField(labelText: "Name", onChanged: (v) {},
-                        customTextEditingController: controller.name,
+                      CustomTextField(
+                        labelText: "Name",
+                        onChanged: (v) {},
+customTextEditingController: controller.name,
+
+
+
 
                       ),
-                      SizedBox(height: 20.h,),
+                      userToken == null ?
+                      const SizedBox() :   SizedBox(height: 20.h,),
                       Obx(() {
-                        return Row(
+                        return
+
+                          userToken == null ?
+                              const SizedBox():
+                          Row(
                           children: [
                             Checkbox(value: controller.emailStatus.value,
                               onChanged: (v) {
@@ -101,6 +112,7 @@ class SendAMessageView extends GetView<HelpController> {
 
 
                           CustomTextField(
+                            initialValue: "",
                               customTextEditingController: controller.email,
                               labelText: "Email", onChanged: (v) {})
                               :
@@ -109,7 +121,9 @@ class SendAMessageView extends GetView<HelpController> {
                       }),
                       SizedBox(height: kDefaultPadding),
                       CustomTextField(
+                        initialValue: "",
                         customTextEditingController: controller.message,
+
                         labelText: "Write your message",
                         maxLines: 4,
                         onChanged: (v) {},

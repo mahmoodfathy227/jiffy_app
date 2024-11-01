@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
+import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/home/views/home_view.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
 
@@ -21,17 +22,16 @@ class ProductController extends GetxController {
   RxBool isProductLoading = false.obs;
   RxBool isAddToCartActive = false.obs;
   List<Attachments> productImages = [
-Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425403c991effaf0d605dadc42842?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=D9o6NPrgMRF9l43Jr4n-YQxpH2ZBdusAQ6ILW7n9F7w2c0tLQVUt4dgAJ9V341F1tBbxAhA3QPSRXJpu9wdcd3NaBqv3vRCghsXGt1~m~1LIfcUPjea8N5KVZ-mE5KEsNnoiWiCDCRUyMJXwL2leEZYussnnroNWA4NyqqmbRn8Wfcs3QBIr43mnnRuGGitJbHZszJWvzjhwtEIQZYnKY03pIglyFwvvmOL75744EJVEWlSgkGcBC6PNpicohiKMHti6HAdm1VS2HOercx4npHoptbLZhP6Mxb-d92LlZwCj09e1DeH~oAHGjy5Wpzpy6Urnwk5tR4tvcgPpJcjL7g__", type: ""),
-    Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425403c991effaf0d605dadc42842?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=D9o6NPrgMRF9l43Jr4n-YQxpH2ZBdusAQ6ILW7n9F7w2c0tLQVUt4dgAJ9V341F1tBbxAhA3QPSRXJpu9wdcd3NaBqv3vRCghsXGt1~m~1LIfcUPjea8N5KVZ-mE5KEsNnoiWiCDCRUyMJXwL2leEZYussnnroNWA4NyqqmbRn8Wfcs3QBIr43mnnRuGGitJbHZszJWvzjhwtEIQZYnKY03pIglyFwvvmOL75744EJVEWlSgkGcBC6PNpicohiKMHti6HAdm1VS2HOercx4npHoptbLZhP6Mxb-d92LlZwCj09e1DeH~oAHGjy5Wpzpy6Urnwk5tR4tvcgPpJcjL7g__", type: ""),
-    Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425403c991effaf0d605dadc42842?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=D9o6NPrgMRF9l43Jr4n-YQxpH2ZBdusAQ6ILW7n9F7w2c0tLQVUt4dgAJ9V341F1tBbxAhA3QPSRXJpu9wdcd3NaBqv3vRCghsXGt1~m~1LIfcUPjea8N5KVZ-mE5KEsNnoiWiCDCRUyMJXwL2leEZYussnnroNWA4NyqqmbRn8Wfcs3QBIr43mnnRuGGitJbHZszJWvzjhwtEIQZYnKY03pIglyFwvvmOL75744EJVEWlSgkGcBC6PNpicohiKMHti6HAdm1VS2HOercx4npHoptbLZhP6Mxb-d92LlZwCj09e1DeH~oAHGjy5Wpzpy6Urnwk5tR4tvcgPpJcjL7g__", type: ""),
 
 
   ];
 
+
+  var cartIndex = 1.obs;
   // Rx<int> currentStock = 0.obs;
   List<ProductColor> colorsList = [];
   Rx<int> imageIndex = 0.obs;
-  Rx<ViewProductData> product = ViewProductData(
+  Rx<Product> product = Product(
     id: 0,
     name: "Perfume",
     price: 0.toString(),
@@ -56,16 +56,7 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
   @override
   void onInit() {
     super.onInit();
-    print('tesadasw5');
 
-    // if (Get.arguments != null && Get.arguments is ViewProductData) {
-    //   product = Get.arguments as ViewProductData;
-    // } else {
-    //   // Handle the case where no valid arguments are passed
-    //   // You can navigate back or show an error message
-    //   Get.back();
-    //   Get.snackbar('Error', 'No product data available');
-    // }
   }
 
   Rx<String> placeHolderImg = "".obs;
@@ -81,8 +72,8 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
       isDeepLink = false;
     }
 
-    if (Get.arguments != null && Get.arguments is ViewProductData) {
-      var myProduct = Get.arguments as ViewProductData;
+    if (Get.arguments != null && Get.arguments is Product) {
+      var myProduct = Get.arguments as Product;
       placeHolderImg.value = myProduct.image!;
       print("new product name 2 ${myProduct.name} ");
       getProduct(myProduct.id);
@@ -230,42 +221,36 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
     productSizeGuide.value = SizeGuide();
     // isProductLoading.value = true;
     isProductLoading.value = false;
-    var testProduct = ViewProductData(
-      id: 0,
-      name: "Perfume",
-      price: 0.toString(),
-      description: "Good Perfume",
-      image: "https://www.pngall.com/wp-content/uploads/2016/05/Perfume-Free-Download-PNG.png",
-      old_price: 0.toString(),
-      rating: 4,
-      size: "",
-      outOfStock: false,
 
-
-
-    );
     try {
       final response = await apiConsumer.post(
         'products/$id',
       );
 
-      product.value = ViewProduct.fromJson(response).data!;
+      product.value = Product.fromJson(response['data']);
 
+     print("you attachments are ${product.value.attachments!}");
 
+     for(var attachment in product.value.attachments!){
+       if(attachment['name'] == "app_show"){
+         productImages.addNonNull(Attachments(type: "image", name: "app_show", path: attachment['path']));
+       } else {
 
+       }
 
-
+     }
+      print("you attachments are 22 ${product.value.attachments!}");
       isProductLoading.value = false;
 
       setSelectedIndex(selectedIndex.value);
       changeImagesList(selectedColor.value);
       print("your product data is ${product.value}");
-      update();
+isAddToCartActive.value = false;
 
     } catch (e, stackTrace) {
       print(stackTrace.toString() + ' product test error' + '${e.toString()}');
       isProductLoading.value = false;
-      product.value = testProduct;
+      product.value = AppConstants.sampleProduct;
       Get.snackbar("Error", "Product Not Found Redirect..");
       Get.off(() => MainView());
     }
@@ -294,15 +279,19 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
   }
 
   changeAddToCartStatus() {
-    isAddToCartActive.value = true;
-    Future.delayed(Duration(milliseconds: 1900), () {
-      isAddToCartActive.value = false;
-    });
+
+    isAddToCartActive.value = !isAddToCartActive.value;
+    print("my produt id is ${product.value.id} ");
+    cartController.addToCart(product.value,
+        quantity: 1);
+
+    cartIndex.value = cartController.cartItems.indexWhere( (element) => element.product.id == product.value.id);
+
   }
 
-  List<ViewProductData> relatedProducts = <ViewProductData>[];
+  List<Product> relatedProducts = <Product>[];
   bool isRelatedProductsLoading = false;
-  List<ViewProductData> finalRelatedProducts = <ViewProductData>[];
+  List<Product> finalRelatedProducts = <Product>[];
 
   void getRelatedProducts(int? id) async {
     relatedProducts.clear();
@@ -320,7 +309,7 @@ Attachments(name: "", path: "https://s3-alpha-sig.figma.com/img/3d8a/2cf1/9cb425
       if (response['data'] != null) {
         for (var product in response['data']) {
           print("rach pro is ${product}");
-          relatedProducts.add(ViewProductData.fromJson(product));
+          relatedProducts.add(Product.fromJson(product));
         }
 
         if (relatedProducts.isNotEmpty) {

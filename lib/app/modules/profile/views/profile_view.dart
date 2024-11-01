@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/address/controllers/address_controller.dart';
 import 'package:jiffy/app/modules/address/views/address_view.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
@@ -100,6 +101,8 @@ class _ProfileViewState extends State<ProfileView>
                             ),
                             _buildMenuItem(
                                 'address.svg', 'Address', () {
+                                  AddressController addressController = Get.put(AddressController());
+                                  addressController.changeAddressStatus(false);
                                   Get.to(AddressView());
                             }, 19, 1),
                             _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
@@ -363,7 +366,7 @@ class _ProfileViewState extends State<ProfileView>
                               width: 117.w,
                               height: 34.h,
                               decoration: ShapeDecoration(
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   begin: Alignment(1.00, 0.04),
                                   end: Alignment(-1, -0.04),
                                   colors: [
@@ -374,7 +377,7 @@ class _ProfileViewState extends State<ProfileView>
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(43),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x4C000000),
                                     blurRadius: 30,
@@ -383,24 +386,27 @@ class _ProfileViewState extends State<ProfileView>
                                   )
                                 ],
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/profile/edit.png',
-                                    width: 16.w,
-                                  ),
-                                  Text(
-                                    'Edit Profile',
-                                    style: secondaryTextStyle(
-                                      color: Colors.white,
-                                      size: 14.sp.round(),
-                                      weight: FontWeight.w500,
-                                      letterSpacing: -0.41,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/profile/edit.png',
+                                      width: 16.w,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'Edit Profile',
+                                      style: secondaryTextStyle(
+                                        color: Colors.white,
+                                        size: 12.sp.round(),
+                                        weight: FontWeight.w500,
+                                        letterSpacing: -0.41,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               )))),
                 ],
               ),

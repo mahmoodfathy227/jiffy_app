@@ -244,13 +244,14 @@ class HomePageData {
   final List<Product> latestProducts;
   final List<Product> featuredProducts;
   final List<Product> premiumProducts;
-
+  final List<Banners>? banners;
   HomePageData({
     required this.categories,
     required this.brands,
     required this.latestProducts,
     required this.featuredProducts,
     required this.premiumProducts,
+    required this.banners,
   });
 
   factory HomePageData.fromJson(Map<String, dynamic> json) {
@@ -267,13 +268,16 @@ class HomePageData {
     var premiumProductsList = (json['premium_products'] as List)
         .map((i) => Product.fromJson(i))
         .toList();
-
+    var banners = (json['banners'] as List)
+        .map((i) => Banners.fromJson(i))
+        .toList();
     return HomePageData(
       categories: categoriesList,
       brands: brandsList,
       latestProducts: latestProductsList,
       featuredProducts: featuredProductsList,
       premiumProducts: premiumProductsList,
+      banners: banners,
     );
   }
 }
