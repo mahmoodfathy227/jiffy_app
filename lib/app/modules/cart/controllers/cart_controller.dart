@@ -106,6 +106,7 @@ class CartController extends GetxController {
 
   Future<void> fetchCartDetailsFromAPI() async {
     loading.value = true;
+    cartItems.clear();
     try {
       final response = await apiConsumer.post('cart/details');
 
@@ -119,29 +120,29 @@ class CartController extends GetxController {
             items.map((e) => CartItem.fromJson(e)).toList();
         cartItems.assignAll(apiCartItems);
         
-        // Retrieve cached cart items
-        List<CartItem> cachedCartItems = getCacheCartDetails();
+        // // Retrieve cached cart items
+        // List<CartItem> cachedCartItems = getCacheCartDetails();
         
         // Remove items from cache that are not present in API cart details
-        cachedCartItems.removeWhere((cachedItem) => !apiCartItems
-            .any((apiItem) => apiItem.product.id == cachedItem.product.id));
-        
-        // Update the cache with the remaining items
-        saveCartItemsToCache(cachedCartItems);
+        // cachedCartItems.removeWhere((cachedItem) => !apiCartItems
+        //     .any((apiItem) => apiItem.product.id == cachedItem.product.id));
+        //
+        // // Update the cache with the remaining items
+        // saveCartItemsToCache(cachedCartItems);
         
         cartItems.refresh(); // Ensure the UI is updated
         
         loading.value = false;
-        update();
+        // update();
       } else {
         print('Failed to fetch cart details: ${response['data']}');
         loading.value = false;
-        update();
+        // update();
       }
     } catch (e) {
       print('Error fetching cart details: $e');
       loading.value = false;
-      update();
+      // update();
     }
   }
 

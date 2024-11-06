@@ -22,34 +22,35 @@ class CheckoutView extends GetView<CheckoutController> {
    AddressController addressController = Get.put(AddressController());
    addressController.changeAddressStatus(true);
     return Scaffold(
-
-        body: SafeArea(child:
-        // Stack(
-        //   children: [
-        //     CustomAppBar(myFunction: () {},
-        //       title: 'All Addresses',
-        //       svgPath: "assets/images/notification.svg",
+body: AddressView(),
+        // body: SafeArea(
+        //     child:
+        // // Stack(
+        // //   children: [
+        // //     CustomAppBar(myFunction: () {},
+        // //       title: 'All Addresses',
+        // //       svgPath: "assets/images/notification.svg",
+        // //
+        // //     ),
+        // //     Padding(
+        // //       padding:  EdgeInsets.only(top: 160.h),
+        // //       child: Obx(() {
+        // //         return
+        // //           controller.isAddressLoading.value?
+        // //           Center(child: CircularProgressIndicator(color: primaryColor,),)
+        // //               :
+        // //           Column(
+        // //             children: [
+        // //               _buildAddress(context)
+        // //             ],
+        // //           );
+        // //       }),
+        // //     ),
+        // //   ],
+        // // ),
         //
-        //     ),
-        //     Padding(
-        //       padding:  EdgeInsets.only(top: 160.h),
-        //       child: Obx(() {
-        //         return
-        //           controller.isAddressLoading.value?
-        //           Center(child: CircularProgressIndicator(color: primaryColor,),)
-        //               :
-        //           Column(
-        //             children: [
-        //               _buildAddress(context)
-        //             ],
-        //           );
-        //       }),
-        //     ),
-        //   ],
-        // ),
-          AddressView()
-
-        )
+        //
+        // )
     );
   }
 

@@ -102,7 +102,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    cartController.fetchCartDetailsFromAPI();
+Future.delayed(Duration(milliseconds: 500), () {
+  cartController.fetchCartDetailsFromAPI();
+});
     // _handleIncomingLinks();
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
@@ -142,6 +144,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
     _scaleAnimationController.repeat(reverse: true);
   }
+
+
+
 
   @override
   void dispose() {
@@ -524,6 +529,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                         child: buildCartWidgets(),
                       ),
                       CustomAppBar(
+                        back: false,
                         myFunction: () {
                           print('sadsadsad');
                           showCustomBlurDialog();
@@ -669,7 +675,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             InkWell(
                               onTap: () {
                                 Get.put(CheckoutController());
-                                Get.to(()=>const CheckoutView());
+                                Get.to(()=> const CheckoutView());
                                 // Get.toNamed(Routes.CHECKOUT);
                               },
                               child: Container(

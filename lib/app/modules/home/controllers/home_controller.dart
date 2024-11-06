@@ -81,10 +81,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     );
 
     // Start animation after a delay
-    Future.delayed(const Duration(milliseconds: 800)).then((_) {
+    Future.delayed(const Duration(milliseconds: 500)).then((_) {
       controller.forward();
     });
-    Future.delayed(const Duration(milliseconds: 800)).then((_) {
+    Future.delayed(const Duration(milliseconds: 500)).then((_) {
       _fadecontroller.forward();
     });
 

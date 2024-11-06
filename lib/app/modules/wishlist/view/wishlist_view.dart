@@ -28,15 +28,17 @@ class WishlistView extends GetView<WishlistController> {
         "starting wishlist view with a list of ${controller.resultSearchProducts.length}");
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-            child: controller.isAuth.value
+        body:
+
+            controller.isAuth.value
                 ? SizedBox(
                     height: MediaQuery.sizeOf(context).height,
                     width: MediaQuery.sizeOf(context).width,
                     child: Stack(children: [
                       CustomAppBar(
-
+back: false,
                         title: "WishList", myFunction: () {  },
+
                       ),
                       Positioned(
                           top: 150.h,
@@ -82,7 +84,9 @@ class WishlistView extends GetView<WishlistController> {
                       Align(
                           alignment: Alignment.center,
                           child: socialMediaPlaceHolder()),
-                    ]))));
+                    ]))
+
+    );
   }
 
   buildProductGrid(context) {

@@ -51,6 +51,7 @@ class _ProfileViewState extends State<ProfileView>
                           children: [
                             CustomAppBar(
                               myFunction: () {},
+                              back: false,
                               title: "Profile",
                             ),
                             controller.isLoading.value

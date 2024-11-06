@@ -11,6 +11,7 @@ import 'package:jiffy/app/modules/checkout/views/payment_method.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
+import 'package:jiffy/app/modules/main/views/main_view.dart';
 
 import '../../global/config/helpers.dart';
 import '../controllers/address_controller.dart';
@@ -25,12 +26,19 @@ class AddressView extends GetView<AddressController> {
   @override
   Widget build(BuildContext context) {
 
-    Get.put(AddressController());
+    AddressController addressController = Get.put(AddressController());
+
+    addressController.fetchAddresses();
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: Stack(
         children: [
-          CustomAppBar(myFunction: () {},
+          CustomAppBar(
+            myFunction: () {
+
+print("fgdfg");
+            },
+            isAddress: true,
             title: 'All Addresses',
             svgPath: "assets/images/notification.svg",
 

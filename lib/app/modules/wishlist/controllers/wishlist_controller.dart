@@ -71,6 +71,7 @@ class WishlistController extends GetxController {
 //////////////////////Wishlist/////////////////////////////////
   getWishlistProducts() async {
     wishlistProductIds.clear();
+    resultSearchProducts.clear();
     print('Wishlist api loading ...');
     if (userToken != null) {
       final response = await apiConsumer.post(

@@ -26,6 +26,7 @@ final Address addressToUpdate ;
           CustomAppBar(myFunction: () {},
             title: 'Edit Address',
             svgPath: "assets/images/notification.svg",
+            isAddress: true,
 
           ),
           Padding(

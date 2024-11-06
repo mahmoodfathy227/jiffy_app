@@ -5,8 +5,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
+import 'package:jiffy/app/modules/main/views/main_view.dart';
 import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:lottie/lottie.dart';
 
@@ -1701,8 +1703,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final Function()? function;
-  final bool? back;
+  final bool back;
   final bool isHelp;
+  final bool isAddress;
   final String svgPath;
   final VoidCallback myFunction;
 
@@ -1710,10 +1713,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title = "",
     this.actions,
     this.function,
-    this.back,
+    this.back = true,
     this.svgPath = "assets/images/back_btn.svg",
     required this.myFunction,
     this.isHelp = false,
+     this.isAddress = false,
+
   });
 
   @override
@@ -1745,10 +1750,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 padding: EdgeInsets.only(top: 10.h),
                 child: Row(
                   children: [
+                    back?
+
+
                     IconButton(
                         onPressed: () {
-                          print("tapped");
-                          Get.back();
+                          print("tapped here");
+                          if(isAddress){
+                            print("going to home") ;
+                            Get.put(CartController());
+                            Get.off(() =>MainView());
+                          } else {
+                            print("going to home no") ;
+                            Get.back();
+                          }
+
+
                         },
                         icon: Stack(alignment: Alignment.center, children: [
                           SvgPicture.asset(
@@ -1758,8 +1775,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             "assets/images/back_btn.svg",
                             width: 88.h,
                           ),
-                        ])),
-                    Spacer(),
+                        ]))
+                    :
+                        SizedBox()
+                    ,
+                   Spacer() ,
+                   back?  SizedBox() :  Spacer()  ,
                     Text(
                       title,
                       style: secondaryTextStyle(
@@ -1768,6 +1789,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         size: 18.sp.round(),
                       ),
                     ),
+
                     Spacer(),
                     if (svgPath == null) Spacer(),
                     if (svgPath != null)

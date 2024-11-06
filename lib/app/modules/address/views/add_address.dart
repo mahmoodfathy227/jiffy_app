@@ -25,6 +25,7 @@ class AddAddress extends GetView<AddressController> {
           CustomAppBar(myFunction: () {},
             title: 'All Addresses',
             svgPath: "assets/images/notification.svg",
+            isAddress: true,
 
           ),
           Padding(
