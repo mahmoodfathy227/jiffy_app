@@ -1,21 +1,11 @@
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
-import 'package:jiffy/app/modules/address/model/address_model.dart';
-import 'package:jiffy/app/modules/address/views/add_address.dart';
 import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
-
-import '../../global/config/helpers.dart';
-
-
 
 class Completed extends GetView<CheckoutController> {
   const Completed({super.key,  bool isFromCheckout = false});
