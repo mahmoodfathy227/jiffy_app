@@ -52,7 +52,7 @@ Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
 isPlainBackground: true,
         context: context,
         onPressed: () {
-Get.offAll(MainView());
+Get.off(MainView());
           print("pressed");
 
         },

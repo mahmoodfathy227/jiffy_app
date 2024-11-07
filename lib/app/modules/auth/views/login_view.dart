@@ -385,7 +385,7 @@ SizedBox(height:25.h ,),
                             SizedBox(width: 10.w,),
                             GestureDetector(
                               onTap: () {
-                                Get.to(()=>  MainView());
+                                Get.off(()=>  MainView());
                               },
                               child: ConstrainedBox(
 

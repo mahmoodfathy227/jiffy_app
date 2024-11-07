@@ -91,7 +91,7 @@ class SplashController extends GetxController
         // Get.offAllNamed(Routes.HOME);
         fadeController.dispose();
         scaleController.dispose();
-        Get.offAll(() =>  MainView());
+        Get.off(() =>  MainView());
 
       } else {
         // If no user token is found, navigate to the onboarding screen.

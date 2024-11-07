@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jiffy/app/modules/auth/views/login_view.dart';
+import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/cart/views/cart_view.dart';
 import 'package:jiffy/app/modules/global/config/helpers.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -48,135 +49,133 @@ print("${"pro id is ${controller.product.value.id}"}");
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
 
-      body: SafeArea(
-        child: Obx(() {
-          return
-            // controller.product.value.image == null
-            //   ? SizedBox(
-            //       height: MediaQuery.of(context).size.height,
-            //       child: SingleChildScrollView(
-            //         child: Column(
-            //           children: [
-            //             //Search Bar
-            //             _buildSearchWidget(context),
-            //             //Carousel Images
-            //             Opacity(
-            //               opacity: 0.3,
-            //               child: controller.placeHolderImg.value.isEmpty
-            //                   ? SizedBox()
-            //                   : Image.network(
-            //                       controller.placeHolderImg.value,
-            //                       width: MediaQuery.of(context).size.width,
-            //                       height:
-            //                           MediaQuery.of(context).size.height / 2,
-            //                       fit: BoxFit.cover,
-            //                     ),
-            //             ),
-            //
-            //             LoadingWidget(
-            //               Column(
-            //                   mainAxisAlignment: MainAxisAlignment.start,
-            //                   crossAxisAlignment: CrossAxisAlignment.start,
-            //                   children: [
-            //                     //Product Name and Rating
-            //                     _buildProductNameAndStartRating(
-            //                         context, controller.product.value),
-            //                     //Product Price
-            //                     _buildProductPrice(
-            //                         context, controller.product.value),
-            //
-            //                     //Product Details
-            //                     _buildProductDetails(
-            //                         context, controller.product.value),
-            //
-            //                     //Product Reviews
-            //                     _buildProductReviews(
-            //                         context, controller.product.value),
-            //                   ]),
-            //             )
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            //   :
-            SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topCenter,
+      body:Obx(() {
+        return
+          // controller.product.value.image == null
+          //   ? SizedBox(
+          //       height: MediaQuery.of(context).size.height,
+          //       child: SingleChildScrollView(
+          //         child: Column(
+          //           children: [
+          //             //Search Bar
+          //             _buildSearchWidget(context),
+          //             //Carousel Images
+          //             Opacity(
+          //               opacity: 0.3,
+          //               child: controller.placeHolderImg.value.isEmpty
+          //                   ? SizedBox()
+          //                   : Image.network(
+          //                       controller.placeHolderImg.value,
+          //                       width: MediaQuery.of(context).size.width,
+          //                       height:
+          //                           MediaQuery.of(context).size.height / 2,
+          //                       fit: BoxFit.cover,
+          //                     ),
+          //             ),
+          //
+          //             LoadingWidget(
+          //               Column(
+          //                   mainAxisAlignment: MainAxisAlignment.start,
+          //                   crossAxisAlignment: CrossAxisAlignment.start,
+          //                   children: [
+          //                     //Product Name and Rating
+          //                     _buildProductNameAndStartRating(
+          //                         context, controller.product.value),
+          //                     //Product Price
+          //                     _buildProductPrice(
+          //                         context, controller.product.value),
+          //
+          //                     //Product Details
+          //                     _buildProductDetails(
+          //                         context, controller.product.value),
+          //
+          //                     //Product Reviews
+          //                     _buildProductReviews(
+          //                         context, controller.product.value),
+          //                   ]),
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //     )
+          //   :
+          SizedBox(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      _buildProductImagesCarousel(
+                          context, [controller.product.value.image], "", controller.productImages),
+                      CustomAppBar(
+                        myFunction: () {},
+                        title: "Product",
+                        svgPath: "assets/images/shopping-cart.svg",
+                      ),
+                    ],
+                  ),
+
+                  //Search Bar
+                  // _buildSearchWidget(context),
+                  //Carousel Images
+
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildProductImagesCarousel(
-                            context, [controller.product.value.image], "", controller.productImages),
-                        CustomAppBar(
-                          myFunction: () {},
-                          title: "Product",
-                          svgPath: "assets/images/shopping-cart.svg",
+                        //build Small Photos
+
+                        SizedBox(
+                          height: 90.h,
                         ),
-                      ],
-                    ),
+                        //Product Name and Rating
+                        _buildProductNameAndStartRating(
+                            context, controller.product.value),
+                        //Product Price
+                        _buildProductPrice(context, controller.product.value),
+                        //Description
+                        _buildProductDetails(
+                            context, controller.product.value),
 
-                    //Search Bar
-                    // _buildSearchWidget(context),
-                    //Carousel Images
+                        //Product rating
+                        _buildProductRating(),
+                        //Product Reviews
+                        _buildProductReviews(
+                            context, controller.product.value),
 
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //build Small Photos
-
-                          SizedBox(
-                            height: 90.h,
-                          ),
-                          //Product Name and Rating
-                          _buildProductNameAndStartRating(
-                              context, controller.product.value),
-                          //Product Price
-                          _buildProductPrice(context, controller.product.value),
-                          //Description
-                          _buildProductDetails(
-                              context, controller.product.value),
-
-                          //Product rating
-                          _buildProductRating(),
-                          //Product Reviews
-                          _buildProductReviews(
-                              context, controller.product.value),
-
-                          //Customer Reviews
-                          _buildCustomersReviews(context),
-                          SizedBox(
-                            height: 100.h,
-                          )
+                        //Customer Reviews
+                        _buildCustomersReviews(context),
+                        SizedBox(
+                          height: 100.h,
+                        )
 
 // //Product Colors
 //                           _buildProductColors(context),
 
-                          // //Product Sizes
-                          // _buildProductSizes(context),
-                          //Product Details
-                          // _buildProductDetails(
-                          //     context, controller.product.value),
-                          //Product Size Guide
+                        // //Product Sizes
+                        // _buildProductSizes(context),
+                        //Product Details
+                        // _buildProductDetails(
+                        //     context, controller.product.value),
+                        //Product Size Guide
 
-                          // _buildSizeGuide(
-                          //     context, controller.product.value),
+                        // _buildSizeGuide(
+                        //     context, controller.product.value),
 
-                          //See Also Products
-                          // _buildSeeAlsoProduct(
-                          //     context, controller.product.value),
-                        ]),
-                  ],
-                ),
+                        //See Also Products
+                        // _buildSeeAlsoProduct(
+                        //     context, controller.product.value),
+                      ]),
+                ],
               ),
-            );
-        }),
-      ),
+            ),
+          );
+      }),
       floatingActionButton: Obx(() {
         return
 
@@ -244,7 +243,15 @@ print("${"pro id is ${controller.product.value.id}"}");
                       ),
                     ),
                     Obx(() {
-                      return Text(
+                      return
+                        !controller.isAddToCartActive.value ?
+                        Text(
+                          "0",
+                          style: secondaryTextStyle(
+                              size: 15.sp.round()
+                          ),
+                        ):
+                        Text(
                         cartController.cartItems[controller.cartIndex.value]
                             .quantity.toString(),
                         style: secondaryTextStyle(

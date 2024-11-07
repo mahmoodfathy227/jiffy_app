@@ -126,4 +126,5 @@ flutter:
     - assets/images/help/
     - assets/images/address/
     - assets/images/cart/
+    - assets/images/payment/
     - shorebird.yaml

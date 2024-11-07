@@ -425,7 +425,7 @@ Get.toNamed(Routes.LOGIN);
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
-          Get.offAll(MainView());
+          Get.off(MainView());
            // Get.offUntil(LoginView(), (Route) => false);
         } else {
           handleApiErrorUser(apiResponse.message);

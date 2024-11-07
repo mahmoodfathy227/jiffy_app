@@ -303,7 +303,7 @@ void changeAddressStatus(status) {
       Get.snackbar('Success', 'Address added successfully', colorText: Colors.white);
      Get.offAndToNamed(Routes.MAIN);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to add address');
+      Get.snackbar('Error', 'Failed to add address Check All The Fields', colorText: Colors.white);
     } finally {
       isLoading(false);
     }
@@ -483,7 +483,7 @@ void changeAddressStatus(status) {
       clearFieldsAndErrors();
       Get.snackbar('Success', 'Address updated successfully');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update address');
+      Get.snackbar('Error', 'Failed to Update address Check All The Fields', colorText: Colors.white);
     } finally {
       isLoading(false);
     }

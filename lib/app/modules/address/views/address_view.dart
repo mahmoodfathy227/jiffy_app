@@ -18,14 +18,11 @@ import '../controllers/address_controller.dart';
 import 'edit_address.dart';
 
 class AddressView extends GetView<AddressController> {
-  AddressView({super.key, });
-
-
+  AddressView({super.key,});
 
 
   @override
   Widget build(BuildContext context) {
-
     AddressController addressController = Get.put(AddressController());
 
     addressController.fetchAddresses();
@@ -35,8 +32,7 @@ class AddressView extends GetView<AddressController> {
         children: [
           CustomAppBar(
             myFunction: () {
-
-print("fgdfg");
+              print("fgdfg");
             },
             isAddress: true,
             title: 'All Addresses',
@@ -62,31 +58,35 @@ print("fgdfg");
         ],
       ),
 
-      floatingActionButton: buildFloatingButton(
+      floatingActionButton: Obx(() {
+        return buildFloatingButton(
 
 
-        buttonName: controller.isFromCheckout.value ?
-        controller.addressList.isEmpty ?
-        'Add New Address' :
-        'Select Address'
-            :
+          buttonName: controller.isFromCheckout.value ?
+          controller.addressList.isEmpty ?
+          'Add New Address' :
+          'Select Address'
+              :
 
-        'Add New Address',
-        context: context,
-        onPressed: () {
-          if (controller.addressList.isEmpty) {
-            Get.to(()=> AddAddress() );
+          'Add New Address',
+          context: context,
+          onPressed: () {
+            if (controller.addressList.isEmpty) {
+              Get.to(() => AddAddress());
+            } else {
+              var defaultAddressId = controller.addressList
+                  .where((address) => address.isDefault == 1)
+                  .first;
+              CheckoutController checkoutController = Get.put(
+                  CheckoutController());
+              checkoutController.assignDefaultAddress(
+                  defaultAddressId.id.toString());
+              Get.to(() => const PaymentMethod());
+            }
+          },
 
-          } else {
-            var defaultAddressId = controller.addressList.where( (address) => address.isDefault == 1).first;
-            CheckoutController checkoutController = Get.put(CheckoutController());
-            checkoutController.assignDefaultAddress(defaultAddressId.id.toString());
-            Get.to(()=>const  PaymentMethod() );
-
-          }
-        },
-
-      ),
+        );
+      }),
 
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
