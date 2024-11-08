@@ -172,18 +172,18 @@ class TitleWithSeeAll extends StatelessWidget {
               ),
 
               // "See All" Text
-              GestureDetector(
-                onTap: onTap, // Action when "See All" is tapped
-                child: Text(
-                  actionText,
-                  style: secondaryTextStyle(
-                    color: Color(0xFF20003D),
-                    size: 14.sp.round(),
-                    weight: FontWeight.w300,
-                    letterSpacing: -0.41,
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: onTap, // Action when "See All" is tapped
+              //   child: Text(
+              //     actionText,
+              //     style: secondaryTextStyle(
+              //       color: Color(0xFF20003D),
+              //       size: 14.sp.round(),
+              //       weight: FontWeight.w300,
+              //       letterSpacing: -0.41,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ));
