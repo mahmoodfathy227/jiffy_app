@@ -426,94 +426,94 @@ String randomId = "123";
               ),
             ),
             SizedBox(width: 10.w,),
-            Text("Sign up with", style: primaryTextStyle(
-                weight: FontWeight.w400,
-                size: 16.sp.round(),
-                color: Color(0xff10001F)
-            ),),
-            SizedBox(width: 10.w,),
-            Expanded(
-              child: Container(
-                height: 1,
-
-                color: Colors.grey[300],
-              ),
-            )
+            // Text("Sign up with", style: primaryTextStyle(
+            //     weight: FontWeight.w400,
+            //     size: 16.sp.round(),
+            //     color: Color(0xff10001F)
+            // ),),
+            // SizedBox(width: 10.w,),
+            // Expanded(
+            //   child: Container(
+            //     height: 1,
+            //
+            //     color: Colors.grey[300],
+            //   ),
+            // )
           ],
         ),
-        SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width - 60.w,
-          height: 80.h,
-          child: Row(
-            children: [
-              // Expanded(
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(10),
-              //       boxShadow: [
-              //         BoxShadow(
-              //           color: Colors.grey.withOpacity(0.1),
-              //           spreadRadius: 5,
-              //           blurRadius: 7,
-              //           offset: Offset(0, 3), // changes position of shadow
-              //         ),
-              //       ],
-              //     ),
-              //     child: SizedBox(
-              //       height: 55.h,
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           SvgPicture.asset(
-              //             "assets/icons/facebook.svg", color: Colors.blue,),
-              //           SizedBox(width: 10.w,),
-              //           Text("Facebook",
-              //             style: primaryTextStyle(color: Colors.black,
-              //                 size: 15.sp.round(), weight: FontWeight.w300
-              //             ),),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(width: 15.w,),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: SizedBox(
-                    height: 55.h,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset("assets/icons/google.svg"),
-                        SizedBox(width: 10.w,),
-                        Text("Google", style: primaryTextStyle(
-                            color: Colors.black,
-                            size: 15.sp.round(), weight: FontWeight.w300),),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-
-            ],
-          ),
-        )
+        // SizedBox(
+        //   width: MediaQuery
+        //       .of(context)
+        //       .size
+        //       .width - 60.w,
+        //   height: 80.h,
+        //   child: Row(
+        //     children: [
+        //       // Expanded(
+        //       //   child: Container(
+        //       //     decoration: BoxDecoration(
+        //       //       color: Colors.white,
+        //       //       borderRadius: BorderRadius.circular(10),
+        //       //       boxShadow: [
+        //       //         BoxShadow(
+        //       //           color: Colors.grey.withOpacity(0.1),
+        //       //           spreadRadius: 5,
+        //       //           blurRadius: 7,
+        //       //           offset: Offset(0, 3), // changes position of shadow
+        //       //         ),
+        //       //       ],
+        //       //     ),
+        //       //     child: SizedBox(
+        //       //       height: 55.h,
+        //       //       child: Row(
+        //       //         mainAxisAlignment: MainAxisAlignment.center,
+        //       //         children: [
+        //       //           SvgPicture.asset(
+        //       //             "assets/icons/facebook.svg", color: Colors.blue,),
+        //       //           SizedBox(width: 10.w,),
+        //       //           Text("Facebook",
+        //       //             style: primaryTextStyle(color: Colors.black,
+        //       //                 size: 15.sp.round(), weight: FontWeight.w300
+        //       //             ),),
+        //       //         ],
+        //       //       ),
+        //       //     ),
+        //       //   ),
+        //       // ),
+        //       SizedBox(width: 15.w,),
+        //       Expanded(
+        //         child: Container(
+        //           decoration: BoxDecoration(
+        //             color: Colors.white,
+        //             borderRadius: BorderRadius.circular(10),
+        //             boxShadow: [
+        //               BoxShadow(
+        //                 color: Colors.grey.withOpacity(0.1),
+        //                 spreadRadius: 5,
+        //                 blurRadius: 7,
+        //                 offset: Offset(0, 3), // changes position of shadow
+        //               ),
+        //             ],
+        //           ),
+        //           child: SizedBox(
+        //             height: 55.h,
+        //             child: Row(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 SvgPicture.asset("assets/icons/google.svg"),
+        //                 SizedBox(width: 10.w,),
+        //                 Text("Google", style: primaryTextStyle(
+        //                     color: Colors.black,
+        //                     size: 15.sp.round(), weight: FontWeight.w300),),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //       )
+        //
+        //     ],
+        //   ),
+        // )
 
       ],
     );

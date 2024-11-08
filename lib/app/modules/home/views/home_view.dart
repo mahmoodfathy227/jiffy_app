@@ -632,6 +632,7 @@ class HomeView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Column(
+
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -806,50 +807,22 @@ class HomeView extends StatelessWidget {
                                 )),
                           ]))),
                 ),
-              PositionedDirectional(
-                bottom: -15.h,
-                end: 0.w,
-                start: -10.w,
-                child: SizedBox(
-                  height: 250.h,
-                  child: Stack(
-                    children: [
-                      // الخلفية SVG
-                      PositionedDirectional(
-                        bottom:
-                        cartController.cartItems.isEmpty ||
-                            cartController.cartItems.indexWhere(
-                                    (item) =>
-                                item.product.id ==
-                                    product.id) ==
-                                -1
-                            ?
-                        8
-                            :
-                        4
-                        ,
-                        end:
-                        cartController.cartItems.isEmpty ||
-                            cartController.cartItems.indexWhere(
-                                    (item) =>
-                                item.product.id ==
-                                    product.id) ==
-                                -1
-                            ?
-                        -12.w
-                            :
-                        15.w
-                        ,
-                        start:
-
-                        cartController.cartItems.isEmpty ||
-                            cartController.cartItems.indexWhere(
-                                    (item) =>
-                                item.product.id ==
-                                    item.product.id) ==
-                                -1
-                            ? 22.w : 15.w,
-                        child: SvgPicture.asset(
+              Padding(
+                padding:  EdgeInsets.only(
+                  top : MediaQuery.of(Get.context!).size.width >= 600 ?
+                      20.h : 0.h
+                ),
+                child: PositionedDirectional(
+                  bottom: -15.h,
+                  end: 0.w,
+                  start: -10.w,
+                  child: SizedBox(
+                    height: 250.h,
+                    child: Stack(
+                      children: [
+                        // الخلفية SVG
+                        PositionedDirectional(
+                          bottom:
                           cartController.cartItems.isEmpty ||
                               cartController.cartItems.indexWhere(
                                       (item) =>
@@ -857,148 +830,110 @@ class HomeView extends StatelessWidget {
                                       product.id) ==
                                   -1
                               ?
-                          "assets/images/home/add_background.svg"
+                          8
+                              :
+                          4
+                          ,
+                          end:
+                          cartController.cartItems.isEmpty ||
+                              cartController.cartItems.indexWhere(
+                                      (item) =>
+                                  item.product.id ==
+                                      product.id) ==
+                                  -1
+                              ?
+                          -12.w
+                              :
+                          15.w
+                          ,
+                          start:
+
+                          cartController.cartItems.isEmpty ||
+                              cartController.cartItems.indexWhere(
+                                      (item) =>
+                                  item.product.id ==
+                                      item.product.id) ==
+                                  -1
+                              ? 22.w : 15.w,
+                          child: SvgPicture.asset(
+                            cartController.cartItems.isEmpty ||
+                                cartController.cartItems.indexWhere(
+                                        (item) =>
+                                    item.product.id ==
+                                        product.id) ==
+                                    -1
+                                ?
+                            "assets/images/home/add_background.svg"
+
+                                :
+                            'assets/images/home/borderCart.svg'
+                            ,
+                            fit: BoxFit.cover,
+
+                            height: 134.h,
+
+                          ),
+                        ),
+                        // Cart controls
+                        PositionedDirectional(
+                          bottom: 66.h,
+                          end:
+                          cartController.cartItems.isEmpty ||
+                              cartController.cartItems.indexWhere(
+                                      (item) =>
+                                  item.product.id ==
+                                      product.id) ==
+                                  -1
+                              ?
+                          -3.w
 
                               :
-                          'assets/images/home/borderCart.svg'
-                          ,
-                          fit: BoxFit.cover,
-
-                          height: 134.h,
-
-                        ),
-                      ),
-                      // Cart controls
-                      PositionedDirectional(
-                        bottom: 66.h,
-                        end:
-                        cartController.cartItems.isEmpty ||
-                            cartController.cartItems.indexWhere(
-                                    (item) =>
-                                item.product.id ==
-                                    product.id) ==
-                                -1
-                            ?
-                        -3.w
-
-                            :
-                        0,
-                        start: 12,
-                        child: SizedBox(
-                          width: 80.w,
-                          child: Obx(
-                                () =>
-                                AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 300),
-                                  child: cartController.cartItems.isEmpty ||
-                                      cartController.cartItems.indexWhere(
-                                              (item) =>
-                                          item.product.id ==
-                                              product.id) ==
-                                          -1
-                                      ? InkWell(
-                                    onTap: () {
-                                      if (userToken == null) {
-                                        Get.to(() => LoginView());
-                                      } else {
-                                        int initialQty = product.d_limit > 0
-                                            ? product.d_limit
-                                            : 1;
-                                        cartController.addToCart(product,
-                                            quantity: initialQty);
-                                      }
-                                    },
-                                    child:
-                                    Center(
-                                      child: SvgPicture.asset(
-                                        'assets/images/home/add_icon.svg',
-                                        width: 40.w,
-                                        height: 40.h,
+                          0,
+                          start: 12,
+                          child: SizedBox(
+                            width: 80.w,
+                            child: Obx(
+                                  () =>
+                                  AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    child: cartController.cartItems.isEmpty ||
+                                        cartController.cartItems.indexWhere(
+                                                (item) =>
+                                            item.product.id ==
+                                                product.id) ==
+                                            -1
+                                        ? InkWell(
+                                      onTap: () {
+                                        if (userToken == null) {
+                                          Get.to(() => LoginView());
+                                        } else {
+                                          int initialQty = product.d_limit > 0
+                                              ? product.d_limit
+                                              : 1;
+                                          cartController.addToCart(product,
+                                              quantity: initialQty);
+                                        }
+                                      },
+                                      child:
+                                      Center(
+                                        child: SvgPicture.asset(
+                                          'assets/images/home/add_icon.svg',
+                                          width: 40.w,
+                                          height: 40.h,
+                                        ),
                                       ),
-                                    ),
 
-                                  )
-                                      : Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Column(children: [
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                            start: 10.w,
-
-                                          ),
-                                          child: InkWell(
-                                            onTap: () {
-                                              if (userToken == null) {
-                                                Get.to(() => LoginView());
-                                                return;
-                                              }
-                                              var index = cartController
-                                                  .cartItems
-                                                  .indexWhere((item) =>
-                                              item.product.id ==
-                                                  product.id);
-                                              var currentItem = cartController
-                                                  .cartItems[index];
-
-                                              // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
-                                              if (product.d_limit != 0 &&
-                                                  currentItem.quantity >
-                                                      product.d_limit ||
-                                                  product.d_limit == 0 &&
-                                                      currentItem.quantity >
-                                                          1) {
-                                                cartController.updateQuantity(
-                                                  currentItem,
-                                                  currentItem.quantity - 1,
-                                                );
-                                              } else if (product.d_limit == 0 &&
-                                                  currentItem.quantity ==
-                                                      1 ||
-                                                  currentItem.quantity ==
-                                                      product.d_limit) {
-                                                print('teasdsadsadsa');
-                                                cartController
-                                                    .removeItem(currentItem);
-                                              }
-                                            },
-                                            child: SvgPicture.asset(
-                                              'assets/images/home/minus.svg',
-                                              width: 20.w,
-                                              height: 20.h,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        )
-                                      ]),
-                                      Column(children: [
-                                        Text(
-                                          '${cartController
-                                              .cartItems[cartController
-                                              .cartItems.indexWhere((item) =>
-                                          item.product.id == product.id)]
-                                              .quantity}',
-                                          textAlign: TextAlign.center,
-                                          style: primaryTextStyle(
-                                            color: Color(0xFFFEFEFE),
-                                            size: 20.sp.round(),
-                                            height: 1.05,
-                                            weight: FontWeight.w900,
-                                            letterSpacing: -0.41,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 2.h,
-                                        )
-                                      ]),
-                                      Column(
-                                        children: [
+                                    )
+                                        : Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Column(children: [
                                           Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 5.w),
+                                            padding: EdgeInsetsDirectional.only(
+                                              start: 10.w,
+
+                                            ),
                                             child: InkWell(
                                               onTap: () {
                                                 if (userToken == null) {
@@ -1012,13 +947,30 @@ class HomeView extends StatelessWidget {
                                                     product.id);
                                                 var currentItem = cartController
                                                     .cartItems[index];
-                                                cartController.updateQuantity(
-                                                  currentItem,
-                                                  currentItem.quantity + 1,
-                                                );
+
+                                                // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+                                                if (product.d_limit != 0 &&
+                                                    currentItem.quantity >
+                                                        product.d_limit ||
+                                                    product.d_limit == 0 &&
+                                                        currentItem.quantity >
+                                                            1) {
+                                                  cartController.updateQuantity(
+                                                    currentItem,
+                                                    currentItem.quantity - 1,
+                                                  );
+                                                } else if (product.d_limit == 0 &&
+                                                    currentItem.quantity ==
+                                                        1 ||
+                                                    currentItem.quantity ==
+                                                        product.d_limit) {
+                                                  print('teasdsadsadsa');
+                                                  cartController
+                                                      .removeItem(currentItem);
+                                                }
                                               },
                                               child: SvgPicture.asset(
-                                                'assets/images/home/plus.svg',
+                                                'assets/images/home/minus.svg',
                                                 width: 20.w,
                                                 height: 20.h,
                                               ),
@@ -1027,15 +979,70 @@ class HomeView extends StatelessWidget {
                                           SizedBox(
                                             height: 5.h,
                                           )
-                                        ],
-                                      )
-                                    ],
+                                        ]),
+                                        Column(children: [
+                                          Text(
+                                            '${cartController
+                                                .cartItems[cartController
+                                                .cartItems.indexWhere((item) =>
+                                            item.product.id == product.id)]
+                                                .quantity}',
+                                            textAlign: TextAlign.center,
+                                            style: primaryTextStyle(
+                                              color: Color(0xFFFEFEFE),
+                                              size: 20.sp.round(),
+                                              height: 1.05,
+                                              weight: FontWeight.w900,
+                                              letterSpacing: -0.41,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 2.h,
+                                          )
+                                        ]),
+                                        Column(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 5.w),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  if (userToken == null) {
+                                                    Get.to(() => LoginView());
+                                                    return;
+                                                  }
+                                                  var index = cartController
+                                                      .cartItems
+                                                      .indexWhere((item) =>
+                                                  item.product.id ==
+                                                      product.id);
+                                                  var currentItem = cartController
+                                                      .cartItems[index];
+                                                  cartController.updateQuantity(
+                                                    currentItem,
+                                                    currentItem.quantity + 1,
+                                                  );
+                                                },
+                                                child: SvgPicture.asset(
+                                                  'assets/images/home/plus.svg',
+                                                  width: 20.w,
+                                                  height: 20.h,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5.h,
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )

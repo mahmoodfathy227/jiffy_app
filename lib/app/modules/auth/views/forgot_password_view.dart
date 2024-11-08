@@ -130,30 +130,30 @@ class ForgotPasswordView extends GetView<AuthController> {
                 txtColor: 0xFF090A0A,
                 borderColor: 0xFFE3E4E5)),
 
-        if (GetPlatform.isIOS)
-          SizedBox(
-            height: 16.h,
-          ),
-        if (GetPlatform.isIOS)
-          InkWell(
-              onTap: () {
-                print('dsadsa');
-                controller.appleLogin();
-              },
-              child: buttonSocialMedia(
-                  icon: 'assets/icons/apple.svg',
-                  index: 2,
-                  text: 'Continue with Apple',
-                  color: 0xFF090A0A,
-                  txtColor: 0xffFFFFFF,
-                  borderColor: 0xFFE3E4E5)),
-        SizedBox(
-          height: 35.h,
-        ),
-        DividerSocial(),
-        SizedBox(
-          height: 34.h,
-        ),
+        // if (GetPlatform.isIOS)
+        //   SizedBox(
+        //     height: 16.h,
+        //   ),
+        // if (GetPlatform.isIOS)
+        //   InkWell(
+        //       onTap: () {
+        //         print('dsadsa');
+        //         controller.appleLogin();
+        //       },
+        //       child: buttonSocialMedia(
+        //           icon: 'assets/icons/apple.svg',
+        //           index: 2,
+        //           text: 'Continue with Apple',
+        //           color: 0xFF090A0A,
+        //           txtColor: 0xffFFFFFF,
+        //           borderColor: 0xFFE3E4E5)),
+        // SizedBox(
+        //   height: 35.h,
+        // ),
+        // DividerSocial(),
+        // SizedBox(
+        //   height: 34.h,
+        // ),
         InkWell(
             onTap: () {
               controller.socialView.value = false;

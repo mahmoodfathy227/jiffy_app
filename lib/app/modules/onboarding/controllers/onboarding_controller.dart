@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/home/views/home_view.dart';
 import 'package:jiffy/app/modules/onboarding/views/onboarding_view.dart';
 import 'package:flutter/animation.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../main/views/main_view.dart';
 
 class OnboardingController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -227,7 +229,8 @@ class OnboardingController extends GetxController
 
 
   navigateToLogin(){
-   Get.offAllNamed(Routes.LOGIN);
+   // Get.off(Routes.HOME);
+    Get.off(MainView());
   }
 
   // Resets and starts all animations for the current page

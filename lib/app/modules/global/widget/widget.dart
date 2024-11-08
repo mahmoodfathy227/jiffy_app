@@ -172,18 +172,18 @@ class TitleWithSeeAll extends StatelessWidget {
               ),
 
               // "See All" Text
-              GestureDetector(
-                onTap: onTap, // Action when "See All" is tapped
-                child: Text(
-                  actionText,
-                  style: secondaryTextStyle(
-                    color: Color(0xFF20003D),
-                    size: 14.sp.round(),
-                    weight: FontWeight.w300,
-                    letterSpacing: -0.41,
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: onTap, // Action when "See All" is tapped
+              //   child: Text(
+              //     actionText,
+              //     style: secondaryTextStyle(
+              //       color: Color(0xFF20003D),
+              //       size: 14.sp.round(),
+              //       weight: FontWeight.w300,
+              //       letterSpacing: -0.41,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ));
@@ -404,26 +404,26 @@ Widget gridSocialIcon() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      if (GetPlatform.isIOS)
-        ShowUp(
-            delay: 400,
-            child: SocialMediaIcon(
-              assetPath: 'assets/icons/small_apple.svg',
-              onTap: () {
-                // Handle Apple login
-                authcontroller.appleLogin();
-              },
-            )),
-      if (GetPlatform.isIOS) SizedBox(width: 16.w),
-      ShowUp(
-          delay: 200,
-          child: SocialMediaIcon(
-            assetPath: 'assets/icons/small_google.svg',
-            onTap: () {
-              // Handle Google login
-              authcontroller.googleLogin();
-            },
-          )),
+      // if (GetPlatform.isIOS)
+      //   ShowUp(
+      //       delay: 400,
+      //       child: SocialMediaIcon(
+      //         assetPath: 'assets/icons/small_apple.svg',
+      //         onTap: () {
+      //           // Handle Apple login
+      //           authcontroller.appleLogin();
+      //         },
+      //       )),
+      // if (GetPlatform.isIOS) SizedBox(width: 16.w),
+      // ShowUp(
+      //     delay: 200,
+      //     child: SocialMediaIcon(
+      //       assetPath: 'assets/icons/small_google.svg',
+      //       onTap: () {
+      //         // Handle Google login
+      //         authcontroller.googleLogin();
+      //       },
+      //     )),
       // SizedBox(width: 16.w),
       // ShowUp(
       //     delay: 400,
@@ -3807,130 +3807,133 @@ class CustomDivider extends StatelessWidget {
 final AuthController Authcontroller = Get.put(AuthController());
 
 Widget socialMediaPlaceHolder() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      ShowUp(
-          delay: 200,
-          child: SvgPicture.asset(
-            LOGO,
-            width: 124.w,
-            height: 82.h,
-            fit: BoxFit.cover,
-          )),
-      SizedBox(
-        height: 32.h,
-      ),
-      Text(
-        'Please log in or sign up to continue shopping',
-        textAlign: TextAlign.center,
-        style: secondaryTextStyle(
-          color: const Color(0xFFCDCFD0),
-          size: 16.sp.round(),
-          weight: FontWeight.w400,
-        ),
-      ),
-      SizedBox(
-        height: 32.h,
-      ),
-      InkWell(
-          onTap: () {
-            Authcontroller.googleLogin();
-          },
-          child: buttonSocialMedia(
-              icon: 'assets/icons/google.svg',
-              index: 0,
-              text: 'Continue with Google',
-              color: 0xffFFFFFF,
-              txtColor: 0xFF090A0A,
-              borderColor: 0xFFE3E4E5)),
-      if (GetPlatform.isIOS)
+  return Container(
+
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ShowUp(
+            delay: 200,
+            child: SvgPicture.asset(
+              LOGO,
+              width: 124.w,
+              height: 82.h,
+              fit: BoxFit.cover,
+            )),
         SizedBox(
-          height: 16.h,
+          height: 32.h,
         ),
-      // buttonSocialMedia(
-      //     icon: 'assets/icons/facebook.svg',
-      //     index: 1,
-      //     text: 'Continue with Facebook',
-      //     color: 0xFF0066DA,
-      //     txtColor: 0xffFFFFFF,
-      //     borderColor: 0xFF0066DA),
-      if (GetPlatform.isIOS)
+        Text(
+          'Please log in or sign up to continue shopping',
+          textAlign: TextAlign.center,
+          style: secondaryTextStyle(
+            color:  Colors.black,
+            size: 16.sp.round(),
+            weight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(
+          height: 32.h,
+        ),
+        // InkWell(
+        //     onTap: () {
+        //       Authcontroller.googleLogin();
+        //     },
+        //     child: buttonSocialMedia(
+        //         icon: 'assets/icons/google.svg',
+        //         index: 0,
+        //         text: 'Continue with Google',
+        //         color: 0xffFFFFFF,
+        //         txtColor: 0xFF090A0A,
+        //         borderColor: 0xFFE3E4E5)),
+        // if (GetPlatform.isIOS)
+        //   SizedBox(
+        //     height: 16.h,
+        //   ),
+        // buttonSocialMedia(
+        //     icon: 'assets/icons/facebook.svg',
+        //     index: 1,
+        //     text: 'Continue with Facebook',
+        //     color: 0xFF0066DA,
+        //     txtColor: 0xffFFFFFF,
+        //     borderColor: 0xFF0066DA),
+        // if (GetPlatform.isIOS)
+        //   InkWell(
+        //       onTap: () {
+        //         print('dsadsa');
+        //         Authcontroller.appleLogin();
+        //       },
+        //       child: buttonSocialMedia(
+        //           icon: 'assets/icons/apple.svg',
+        //           index: 2,
+        //           text: 'Continue with Apple',
+        //           color: 0xFF090A0A,
+        //           txtColor: 0xffFFFFFF,
+        //           borderColor: 0xFFE3E4E5)),
+        // SizedBox(
+        //   height: 35.h,
+        // ),
+        // DividerSocial(),
+        // SizedBox(
+        //   height: 34.h,
+        // ),
         InkWell(
             onTap: () {
-              print('dsadsa');
-              Authcontroller.appleLogin();
+              Authcontroller.socialView.value = false;
+              Get.off(LoginView());
             },
             child: buttonSocialMedia(
-                icon: 'assets/icons/apple.svg',
-                index: 2,
-                text: 'Continue with Apple',
-                color: 0xFF090A0A,
-                txtColor: 0xffFFFFFF,
-                borderColor: 0xFFE3E4E5)),
-      SizedBox(
-        height: 35.h,
-      ),
-      DividerSocial(),
-      SizedBox(
-        height: 34.h,
-      ),
-      InkWell(
-          onTap: () {
-            Authcontroller.socialView.value = false;
-            Get.off(LoginView());
-          },
-          child: buttonSocialMedia(
-              icon: 'assets/icons/login.svg',
-              index: 3,
-              text: 'Sign in with password',
-              color: 0xFFD4B0FF,
-              txtColor: 0xFF21034F,
-              borderColor: 0xFFD4B0FF)),
-      SizedBox(
-        height: 34.h,
-      ),
-      ShowUp(
-          delay: 500,
-          child: InkWell(
-            onTap: () {
-              Get.off(() => RegisterView());
-            },
-            child: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Don’t have an account?',
-                    style: primaryTextStyle(
-                      color: const Color(0xFFCDCFD0),
-                      size: 16.sp.round(),
-                      weight: FontWeight.w400,
+                icon: 'assets/icons/login.svg',
+                index: 3,
+                text: 'Sign in with password',
+                color: 0xFFD4B0FF,
+                txtColor: 0xFF21034F,
+                borderColor: 0xFFD4B0FF)),
+        SizedBox(
+          height: 34.h,
+        ),
+        ShowUp(
+            delay: 500,
+            child: InkWell(
+              onTap: () {
+                Get.off(() => RegisterView());
+              },
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Don’t have an account?',
+                      style: primaryTextStyle(
+                        color: const Color(0xFFCDCFD0),
+                        size: 16.sp.round(),
+                        weight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: ' ',
-                    style: primaryTextStyle(
-                      color: const Color(0xFF979C9E),
-                      size: 16.sp.round(),
-                      weight: FontWeight.w400,
+                    TextSpan(
+                      text: ' ',
+                      style: primaryTextStyle(
+                        color: const Color(0xFF979C9E),
+                        size: 16.sp.round(),
+                        weight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: 'Sign up',
-                    style: primaryTextStyle(
-                      color: const Color(0xFFAA61FF),
-                      size: 16.sp.round(),
-                      weight: FontWeight.w400,
-                      decoration: TextDecoration.underline,
+                    TextSpan(
+                      text: 'Sign up',
+                      style: primaryTextStyle(
+                        color: const Color(0xFFAA61FF),
+                        size: 16.sp.round(),
+                        weight: FontWeight.w400,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          )),
-    ],
+            )),
+      ],
+    ),
   );
 }
 

@@ -106,28 +106,28 @@ class _ProfileViewState extends State<ProfileView>
                                   addressController.changeAddressStatus(false);
                                   Get.to(AddressView());
                             }, 19, 1),
-                            _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
-                            _buildMenuItem('rate.svg', 'Rate this app', () {
-                              if (GetPlatform.isAndroid) {
-                                _launchURL(
-                                    'https://play.google.com/store/apps/details?id=maryana.genixs.com.maryana');
-                              } else if (GetPlatform.isIOS) {
-                                _launchURL(
-                                    'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
-                              }
-                            }, 19, 4),
+                            // _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
+                            // _buildMenuItem('rate.svg', 'Rate this app', () {
+                            //   if (GetPlatform.isAndroid) {
+                            //     _launchURL(
+                            //         'https://play.google.com/store/apps/details?id=maryana.genixs.com.maryana');
+                            //   } else if (GetPlatform.isIOS) {
+                            //     _launchURL(
+                            //         'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
+                            //   }
+                            // }, 19, 4),
                             _buildMenuItem('help.svg', 'Help Center', () {
                              Get.to(HelpView());
                             }, 19, 5),
 
-                            _buildMenuItem('terms.svg', 'Terms of Use', () {
-                              _launchURL(
-                                  'https://mariannella.genixarea.pro/terms.html');
-                            }, 19, 5),
-                            _buildMenuItem('privacy.svg', 'Privacy Policy', () {
-                              _launchURL(
-                                  'https://mariannella.genixarea.pro/privacy.html');
-                            }, 19, 6),
+                            // _buildMenuItem('terms.svg', 'Terms of Use', () {
+                            //   _launchURL(
+                            //       'https://mariannella.genixarea.pro/terms.html');
+                            // }, 19, 5),
+                            // _buildMenuItem('privacy.svg', 'Privacy Policy', () {
+                            //   _launchURL(
+                            //       'https://mariannella.genixarea.pro/privacy.html');
+                            // }, 19, 6),
                             SizedBox(height: 10.h),
                           ],
                         ),

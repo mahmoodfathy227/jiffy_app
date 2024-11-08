@@ -122,85 +122,85 @@ SizedBox(height:25.h ,),
               ),
             ),
           Spacer(),
-            Text("Sign In With", style: primaryTextStyle(color: Colors.black,
-                size: 13.sp.round(),
-                weight: FontWeight.w400),),
-
-            SizedBox(height: 10.h,),
-            SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width - 60.w,
-              height: 80.h,
-              child: Row(
-                children: [
-                  // Expanded(
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.white,
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       boxShadow: [
-                  //         BoxShadow(
-                  //           color: Colors.grey.withOpacity(0.1),
-                  //           spreadRadius: 5,
-                  //           blurRadius: 7,
-                  //           offset: Offset(0, 3), // changes position of shadow
-                  //         ),
-                  //       ],
-                  //     ),
-                  //     child: SizedBox(
-                  //       height: 50.h,
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           SvgPicture.asset(
-                  //             "assets/icons/facebook.svg", color: Colors.blue,),
-                  //           SizedBox(width: 10.w,),
-                  //           Text("Facebook",
-                  //             style: primaryTextStyle(color: Colors.black,
-                  //                 size: 13.sp.round(), weight: FontWeight.w100
-                  //             ),),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(width: 15.w,),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: SizedBox(
-                        height: 50.h,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset("assets/icons/google.svg"),
-                            SizedBox(width: 10.w,),
-                            Text("Google", style: primaryTextStyle(
-                                color: Colors.black,
-                                size: 13.sp.round(),
-                                weight: FontWeight.w400),),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-
-                ],
-              ),
-            )
+            // Text("Sign In With", style: primaryTextStyle(color: Colors.black,
+            //     size: 13.sp.round(),
+            //     weight: FontWeight.w400),),
+            //
+            // SizedBox(height: 10.h,),
+            // SizedBox(
+            //   width: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .width - 60.w,
+            //   height: 80.h,
+            //   child: Row(
+            //     children: [
+            //       // Expanded(
+            //       //   child: Container(
+            //       //     decoration: BoxDecoration(
+            //       //       color: Colors.white,
+            //       //       borderRadius: BorderRadius.circular(10),
+            //       //       boxShadow: [
+            //       //         BoxShadow(
+            //       //           color: Colors.grey.withOpacity(0.1),
+            //       //           spreadRadius: 5,
+            //       //           blurRadius: 7,
+            //       //           offset: Offset(0, 3), // changes position of shadow
+            //       //         ),
+            //       //       ],
+            //       //     ),
+            //       //     child: SizedBox(
+            //       //       height: 50.h,
+            //       //       child: Row(
+            //       //         mainAxisAlignment: MainAxisAlignment.center,
+            //       //         children: [
+            //       //           SvgPicture.asset(
+            //       //             "assets/icons/facebook.svg", color: Colors.blue,),
+            //       //           SizedBox(width: 10.w,),
+            //       //           Text("Facebook",
+            //       //             style: primaryTextStyle(color: Colors.black,
+            //       //                 size: 13.sp.round(), weight: FontWeight.w100
+            //       //             ),),
+            //       //         ],
+            //       //       ),
+            //       //     ),
+            //       //   ),
+            //       // ),
+            //       SizedBox(width: 15.w,),
+            //       // Expanded(
+            //       //   child: Container(
+            //       //     decoration: BoxDecoration(
+            //       //       color: Colors.white,
+            //       //       borderRadius: BorderRadius.circular(10),
+            //       //       boxShadow: [
+            //       //         BoxShadow(
+            //       //           color: Colors.grey.withOpacity(0.1),
+            //       //           spreadRadius: 5,
+            //       //           blurRadius: 7,
+            //       //           offset: Offset(0, 3), // changes position of shadow
+            //       //         ),
+            //       //       ],
+            //       //     ),
+            //       //     child: SizedBox(
+            //       //       height: 50.h,
+            //       //       child: Row(
+            //       //         mainAxisAlignment: MainAxisAlignment.center,
+            //       //         children: [
+            //       //           SvgPicture.asset("assets/icons/google.svg"),
+            //       //           SizedBox(width: 10.w,),
+            //       //           Text("Google", style: primaryTextStyle(
+            //       //               color: Colors.black,
+            //       //               size: 13.sp.round(),
+            //       //               weight: FontWeight.w400),),
+            //       //         ],
+            //       //       ),
+            //       //     ),
+            //       //   ),
+            //       // )
+            //
+            //     ],
+            //   ),
+            // )
 
 
           ],
@@ -235,65 +235,66 @@ SizedBox(height:25.h ,),
           height: 32.h,
         ),
         // if (!GetPlatform.isIOS)
-        InkWell(
-            onTap: () {
-              print('dsadsa');
-              controller.googleLogin();
-            },
-            child: buttonSocialMedia(
-                icon: 'assets/icons/google.svg',
-                index: 0,
-                text: 'Continue with Google',
-                color: 0xffFFFFFF,
-                txtColor: 0xFF090A0A,
-                borderColor: 0xFFE3E4E5)),
+        // InkWell(
+        //     onTap: () {
+        //       print('dsadsa');
+        //       controller.googleLogin();
+        //     },
+        //     child: buttonSocialMedia(
+        //         icon: 'assets/icons/google.svg',
+        //         index: 0,
+        //         text: 'Continue with Google',
+        //         color: 0xffFFFFFF,
+        //         txtColor: 0xFF090A0A,
+        //         borderColor: 0xFFE3E4E5)),
 
-        if (GetPlatform.isIOS)
-          SizedBox(
-            height: 16.h,
-          ),
-        if (GetPlatform.isIOS)
-          InkWell(
-              onTap: () {
-                print('dsadsa');
-                controller.appleLogin();
-              },
-              child: buttonSocialMedia(
-                  icon: 'assets/icons/apple.svg',
-                  index: 2,
-                  text: 'Continue with Apple',
-                  color: 0xFF090A0A,
-                  txtColor: 0xffFFFFFF,
-                  borderColor: 0xFFE3E4E5)),
-        SizedBox(
-          height: 35.h,
-        ),
-        DividerSocial(),
-        SizedBox(
-          height: 34.h,
-        ),
-        InkWell(
-            onTap: () {
-              controller.socialView.value = false;
-              controller.password.value = '';
-              controller.email.value = '';
-            },
-            child: buttonSocialMedia(
-                icon: 'assets/icons/login.svg',
-                index: 3,
-                text: 'Sign in with password',
-                color: 0xFFD4B0FF,
-                txtColor: 0xFF21034F,
-                borderColor: 0xFFD4B0FF)),
-        SizedBox(
-          height: 34.h,
-        ),
+        // if (GetPlatform.isIOS)
+        //   SizedBox(
+        //     height: 16.h,
+        //   ),
+        // if (GetPlatform.isIOS)
+        //   InkWell(
+        //       onTap: () {
+        //         print('dsadsa');
+        //         controller.appleLogin();
+        //       },
+        //       child: buttonSocialMedia(
+        //           icon: 'assets/icons/apple.svg',
+        //           index: 2,
+        //           text: 'Continue with Apple',
+        //           color: 0xFF090A0A,
+        //           txtColor: 0xffFFFFFF,
+        //           borderColor: 0xFFE3E4E5)),
+        // SizedBox(
+        //   height: 35.h,
+        // ),
+        // DividerSocial(),
+        // SizedBox(
+        //   height: 34.h,
+        // ),
+        // InkWell(
+        //     onTap: () {
+        //       controller.socialView.value = false;
+        //       controller.password.value = '';
+        //       controller.email.value = '';
+        //     },
+        //     child: buttonSocialMedia(
+        //         icon: 'assets/icons/login.svg',
+        //         index: 3,
+        //         text: 'Sign in with password',
+        //         color: 0xFFD4B0FF,
+        //         txtColor: 0xFF21034F,
+        //         borderColor: 0xFFD4B0FF)),
+        // SizedBox(
+        //   height: 34.h,
+        // ),
         InkWell(
             onTap: () {
               controller.isGuest.value = true;
               Get.snackbar('Guest Mode', 'You\'re Acting As A Guest');
               // Get.to(MainView());
-              Get.offNamedUntil(Routes.MAIN, (Route) => false);
+              // Get.offNamedUntil(Routes.MAIN, (Route) => false);
+              Get.off(MainView());
             },
             child: buttonSocialMedia(
                 icon: 'assets/images/onboarding/person.svg',
