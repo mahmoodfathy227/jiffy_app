@@ -223,6 +223,10 @@ class OnboardingView extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 5.h,),
+              Text("Powered by @Mahmoud Trading", style: secondaryTextStyle(
+                color: Colors.white
+              ),)
             ],
           ))),
       Positioned(

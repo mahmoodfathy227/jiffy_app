@@ -72,7 +72,7 @@ class HomeView extends StatelessWidget {
                                               child: SvgPicture.asset(
                                                 'assets/images/home/circule.svg',
                                                 fit: BoxFit.contain,
-                                                width: 644.w,
+                                                width: 645.w,
                                                 height: 598.h,
                                               ),
                                             );
@@ -136,10 +136,16 @@ class HomeView extends StatelessWidget {
                                                           // Adjust to fit your curve
                                                           child: ListView
                                                               .builder(
+                                                            controller:
+                                                            homeController
+                                                                .scrollController
+                                                            ,
+
                                                             scrollDirection:
                                                             Axis.horizontal,
-                                                            physics:
-                                                            const NeverScrollableScrollPhysics(),
+
+                                                            // physics:
+                                                            // const NeverScrollableScrollPhysics(),
                                                             itemCount:
                                                             currentCategories
                                                                 .length,
@@ -817,7 +823,7 @@ class HomeView extends StatelessWidget {
                   end: 0.w,
                   start: -10.w,
                   child: SizedBox(
-                    height: 250.h,
+                    height: 350.h,
                     child: Stack(
                       children: [
                         // الخلفية SVG
@@ -1061,25 +1067,25 @@ class HomeView extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(
 
-            top: index.isOdd ? 0.h : 50.h),
+            top: 0.h),
         child: SizedBox(
-          height: index.isOdd ? 290.h : 160.h,
-          width: index.isOdd ? 180.w : 120.w,
+          height:  290.h,
+          width: 180.w,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               SvgPicture.asset("assets/images/home/premium_product.svg",
-                height: index.isOdd ? 320.h : 260.h,
+                height: 320.h ,
               ),
               SizedBox(
-                height: index.isOdd ? 340.h : 270.h,
+                height:  340.h,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 20.h,),
                     CachedNetworkImage(
-                      width: index.isOdd ? 100.w : 70.w,
-                      height: index.isOdd ? 80.h : 50.h,
+                      width: 100.w,
+                      height: 100.h,
                       imageUrl: "${product.image}",
                       placeholder: (context, url) =>
                           Lottie.asset(
@@ -1092,7 +1098,7 @@ class HomeView extends StatelessWidget {
 
 
                     ),
-                    SizedBox(height: 10.h,),
+
                     Container(
                       width: 100.w,
                       alignment: Alignment.center,
@@ -1100,48 +1106,55 @@ class HomeView extends StatelessWidget {
                         "${product.name}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
+                        maxLines: 2,
                         style: primaryTextStyle(
                           color: Color(0xFFFEFEFE),
-                          size: index.isOdd ? 20.sp.round() : 15.sp.round(),
+                          size: 20.sp.round(),
                           height: 1.05,
                           weight: FontWeight.w900,
                           letterSpacing: -0.41,
                         ),
                       ),
                     ),
-                    SizedBox(height: 5.h,),
-                    Container(
-                      width: 100.w,
-                      alignment: Alignment.center,
-                      child: Text(
-                        "300 gm",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: primaryTextStyle(
-                          color: Color(0xFFFEFEFE),
-                          size: index.isOdd ? 14.sp.round() : 10.sp.round(),
-                          height: 1.05,
-                          weight: FontWeight.w400,
-                          letterSpacing: -0.41,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 5.h,),
-                    Container(
+
+                    Transform.translate(
+                      offset: const Offset(0, 10),
+                      child: Container(
                         width: 100.w,
                         alignment: Alignment.center,
                         child: Text(
-                            "${product.price}",
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: primaryTextStyle(
-                              color: Color(0xFFFEFEFE),
-                              size: index.isOdd ? 22.sp.round() : 15.sp.round(),
-                            )
-                        )
+                          "300 gm",
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: primaryTextStyle(
+                            color: Color(0xFFFEFEFE),
+                            size: 14.sp.round(),
+                            height: 1.05,
+                            weight: FontWeight.w400,
+                            letterSpacing: -0.41,
+                          ),
+                        ),
+                      ),
                     ),
 
-                    SizedBox(height: index.isOdd ? 5.h : 20.h,),
+                    Transform.translate(
+                      offset: const Offset(0, 20),
+                      child: Container(
+                          width: 100.w,
+                          alignment: Alignment.center,
+                          child: Text(
+                              "\$ ${product.price}",
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: primaryTextStyle(
+                                color: Color(0xFFFEFEFE),
+                                size: 22.sp.round(),
+                              )
+                          )
+                      ),
+                    ),
+
+                    SizedBox(height: 5.h,),
                     Obx(() {
                       return AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
@@ -1166,8 +1179,8 @@ class HomeView extends StatelessWidget {
                                 alignment: Alignment.center,
                                 children: [
                                   SvgPicture.asset(
-                                      height: index.isOdd ? 100.h : 70.h,
-                                      color: primaryColor,
+                                      height: 100.h,
+                                      color: Colors.white,
                                       fit: BoxFit.cover,
                                       "assets/images/home/add_to_cart_premium.svg"),
                                   Padding(
@@ -1226,9 +1239,8 @@ class HomeView extends StatelessWidget {
                                               },
                                               child: SvgPicture.asset(
                                                 'assets/images/home/minus.svg',
-
-                                                height: index.isOdd ? 20.h : 15
-                                                    .h,
+color: primaryColor,
+                                                height: 20.h,
                                               ),
                                             ),
                                           ),
@@ -1245,11 +1257,12 @@ class HomeView extends StatelessWidget {
                                                 .quantity}',
                                             textAlign: TextAlign.center,
                                             style: primaryTextStyle(
-                                              color: Color(0xFFFEFEFE),
+
                                               size: 20.sp.round(),
                                               height: 1.05,
                                               weight: FontWeight.w900,
                                               letterSpacing: -0.41,
+                                              color: primaryColor,
                                             ),
                                           ),
                                           SizedBox(
@@ -1281,10 +1294,8 @@ class HomeView extends StatelessWidget {
                                                 },
                                                 child: SvgPicture.asset(
                                                   'assets/images/home/plus.svg',
-
-                                                  height: index.isOdd
-                                                      ? 20.h
-                                                      : 15.h,
+                                                  color: primaryColor,
+                                                  height: 20.h,
                                                 ),
                                               ),
                                             ),
@@ -1316,7 +1327,7 @@ class HomeView extends StatelessWidget {
                             }
                           },
                           child: SvgPicture.asset(
-                              height: index.isOdd ? 100.h : 80.h,
+                              height: 100.h,
                               fit: BoxFit.cover,
                               "assets/images/home/add_to_cart_premium.svg"),
                         ),

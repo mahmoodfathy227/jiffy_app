@@ -73,7 +73,6 @@ print("your map body request is ${combinedMap}");
 
         filteredProducts.assignAll(List<Product>.from(result['data'].map((x) => Product.fromJson(x))));
       }
-      print("your products data are ${filteredProducts.first.name}");
     } on DioError catch (e) {
       print(e.response!.data);
       print("your error products data aaaaaa are error${e.response!.data}");
@@ -120,7 +119,9 @@ print("your map body request is ${combinedMap}");
   }
 
   toggleSelectedCategory(category){
+
     selectedCategory.value = category;
+    print("toggled ${selectedCategory.value}");
   }
 
 

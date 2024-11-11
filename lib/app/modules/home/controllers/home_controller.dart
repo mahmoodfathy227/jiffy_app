@@ -6,7 +6,8 @@ import 'package:jiffy/app/modules/global/model/model_response.dart';
 import 'package:jiffy/app/modules/home/controllers/model.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:jiffy/main.dart';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Observable state for animations
   late AnimationController controller;
@@ -49,6 +50,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void onInit() {
     super.onInit();
     fetchHomePageData();
+    scrollController.addListener(_onScroll);
+
      //Initialize main animation controller
     controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
@@ -174,5 +177,23 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     scrollController.dispose();
     pageController.value.dispose();
     super.onClose();
+  }
+
+  double _previousScrollOffset = 0.0;
+  void _onScroll() {
+    double currentScrollOffset = scrollController.offset;
+
+    if (currentScrollOffset > _previousScrollOffset) {
+      print('Scrolling down!');
+    } else if (currentScrollOffset < _previousScrollOffset) {
+      print('Scrolling up!');
+    }
+
+    _previousScrollOffset = currentScrollOffset;
+
+    // Check if scrolled more than 100 pixels
+    if (currentScrollOffset > 100) {
+      print('Scrolled more than 100 pixels');
+    }
   }
 }

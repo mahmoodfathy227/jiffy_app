@@ -37,11 +37,11 @@ class SearchView extends GetView<CustomSearchController> {
                 Obx(() {
                   return AnimatedPadding(
                     padding: EdgeInsets.only(top:
-                        customSearchController.isExpanded.value ? 260.h :
+                    customSearchController.selectedCategory.value.isNotEmpty ? 260.h :
 
                     200.h
                     ),
-                    duration: Duration(milliseconds: 400),
+                    duration: Duration(milliseconds: 100),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -68,7 +68,7 @@ class SearchView extends GetView<CustomSearchController> {
       return AnimatedContainer(
           duration: Duration(milliseconds: 200),
 
-          height: customSearchController.isExpanded.value ? 260.h : 195.h,
+          height: customSearchController.selectedCategory.value.isNotEmpty ? 260.h : 195.h,
 
           decoration: BoxDecoration(
             boxShadow: [
@@ -89,6 +89,7 @@ class SearchView extends GetView<CustomSearchController> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                //Search Field
                 Row(
                   children: [
                     GestureDetector(
@@ -124,7 +125,7 @@ class SearchView extends GetView<CustomSearchController> {
                             BoxShadow(
 
                               // color: primaryColor ,
-                            color:   Colors.white.withOpacity(0.5),
+                              color: Colors.white.withOpacity(0.5),
                               spreadRadius: 6,
                               blurRadius: 8,
                               offset: Offset(
@@ -141,7 +142,7 @@ class SearchView extends GetView<CustomSearchController> {
                     ),
                   ],
                 ),
-
+//Categories Scroll
                 Obx(() {
                   return Container(
 
@@ -159,7 +160,7 @@ class SearchView extends GetView<CustomSearchController> {
                               ? 15.h
                               : 4.h
                       ),
-                      duration: const Duration(milliseconds: 250),
+                      duration: const Duration(milliseconds: 100),
                       child: SizedBox(
 
                           height: 85.h,
@@ -171,9 +172,10 @@ class SearchView extends GetView<CustomSearchController> {
                     ),
                   );
                 }),
+                //Filter Bar
                 Obx(() {
                   return
-                    customSearchController.isExpanded.value ?
+                    customSearchController.selectedCategory.value.isNotEmpty ?
 
                     FadeInFilterBar() :
                     SizedBox();
@@ -193,7 +195,7 @@ class SearchView extends GetView<CustomSearchController> {
       return AnimatedPadding(
 
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        duration: Duration(milliseconds: 600),
+        duration: Duration(milliseconds: 100),
         child:
         customSearchController.isProductsLoading.value ?
         Skeletonizer(
@@ -218,6 +220,17 @@ class SearchView extends GetView<CustomSearchController> {
         )
             :
 
+        customSearchController.filteredProducts.isEmpty ?
+        Center(child: Padding(
+          padding: EdgeInsets.only(
+            top: MediaQuery
+                .of(context)
+                .size
+                .height / 3,
+          ),
+          child: Text("No products found",
+            style: secondaryTextStyle(color: Colors.black),),
+        ),) :
         GridView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
@@ -234,8 +247,9 @@ class SearchView extends GetView<CustomSearchController> {
           itemCount: customSearchController.filteredProducts.length,
           itemBuilder: (context, index) {
             return
-              buildProductCard(product: customSearchController.filteredProducts[index],);
-              globalProductCard(
+              buildProductCard(
+                product: customSearchController.filteredProducts[index],);
+            globalProductCard(
                 customSearchController.filteredProducts[index], index);
           },
         ),
@@ -280,7 +294,7 @@ class _FadeInDemoState extends State<FadeInFilterBar>
   Widget build(BuildContext context) {
     return AnimatedPadding(
       padding: EdgeInsets.only(top: 15.h),
-      duration: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 100),
       child: Center(
         child: FadeTransition(
           opacity: _animation,
@@ -293,6 +307,7 @@ class _FadeInDemoState extends State<FadeInFilterBar>
 
               children: [
                 SizedBox(width: 30.w,),
+
                 MyDefaultButton(
                   onPressed: () {
                     customSearchController.reset();
@@ -474,24 +489,15 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
   _buildSingleCategoty(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        // search in products based on category
-        //toggle the value of selected Category
+        var bodyRequest = {
+          "category_ids[0]": customSearchController.categories[index].id
+              .toString(),
+          'orderBy': 'high-low',
 
-        if (customSearchController.isExpanded.value) {
-          customSearchController.isExpanded.toggle();
-          print("the value is 1 {${customSearchController.isExpanded.value}}");
-        } else {
-          customSearchController.isExpanded.toggle();
-          print("the value is  2{${customSearchController.isExpanded.value}}");
-          var bodyRequest = {
-            "category_ids[0]": customSearchController.categories[index].id
-                .toString(),
-          };
-          print("cat id is ${customSearchController.categories[index].id}");
-          customSearchController.toggleSelectedCategory(
-              customSearchController.categories[index].name);
-          customSearchController.getProducts(bodyRequest);
-        }
+        };
+        customSearchController.toggleSelectedCategory(
+            customSearchController.categories[index].name);
+        customSearchController.getProducts(bodyRequest);
       },
       child: SizedBox(
 
@@ -514,28 +520,23 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
                         child: AnimatedContainer(
 
                           // 3. pass the state variables as arguments
-                          width: customSearchController.isExpanded.value
-                              ? 65.h
-                              : 55
-                              .h,
-                          height: customSearchController.isExpanded.value
-                              ? 65.h
-                              : 55
-                              .h,
+                          width:  65.h,
+                          height:  65.h,
                           duration: const Duration(milliseconds: 250),
                           child: CachedNetworkImage(
-                            imageUrl: customSearchController.categories[index]
-                                .image!,
+                              imageUrl: customSearchController.categories[index]
+                                  .image!,
 
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) =>
-                                Image.asset(
-                                  "assets/images/placeholder.png",
-                                  fit: BoxFit.contain,
-                                ),
-                            placeholder: (context, url) => Lottie.asset(
-                              "assets/images/jiffy_placeholder.json",
-                            )
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) =>
+                                  Image.asset(
+                                    "assets/images/placeholder.png",
+                                    fit: BoxFit.contain,
+                                  ),
+                              placeholder: (context, url) =>
+                                  Lottie.asset(
+                                    "assets/images/jiffy_placeholder.json",
+                                  )
                           ),
                         ),
 
