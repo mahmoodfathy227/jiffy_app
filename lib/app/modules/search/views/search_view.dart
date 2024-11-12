@@ -221,7 +221,8 @@ class SearchView extends GetView<CustomSearchController> {
             :
 
         customSearchController.filteredProducts.isEmpty ?
-        Center(child: Padding(
+        Center(
+          child: Padding(
           padding: EdgeInsets.only(
             top: MediaQuery
                 .of(context)
@@ -239,14 +240,17 @@ class SearchView extends GetView<CustomSearchController> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 
             crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 5,
+
+            crossAxisSpacing: 1,
             // width / height: fixed for *all* items
-            childAspectRatio: (1 / 1.8),
+            childAspectRatio: (0.7 / 1.5),
           ),
           itemCount: customSearchController.filteredProducts.length,
           itemBuilder: (context, index) {
             return
+              SizedBox(
+
+                  child: productCard(customSearchController.filteredProducts[index] ,context, index));
               buildProductCard(
                 product: customSearchController.filteredProducts[index],);
             globalProductCard(

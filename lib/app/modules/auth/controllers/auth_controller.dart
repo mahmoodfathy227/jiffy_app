@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:jiffy/app/modules/home/views/home_view.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
+import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart' as authTest;
@@ -22,6 +23,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../global/config/constant.dart';
 import '../../global/model/model_response.dart';
+import '../../main/controllers/tab_controller.dart';
 import '../../services/api_service.dart';
 import '../views/create_new_password_view.dart';
 import '../views/login_view.dart';
@@ -425,6 +427,9 @@ Get.toNamed(Routes.LOGIN);
           user.value = apiResponse.data!.user;
           userToken = AppConstants.userData!.token;
           clearFields();
+          Get.put(NavBarController());
+      tabController.changeIndex(0);
+
           Get.off(MainView());
            // Get.offUntil(LoginView(), (Route) => false);
         } else {

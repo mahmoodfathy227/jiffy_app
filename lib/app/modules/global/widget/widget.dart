@@ -41,11 +41,11 @@ import '../../auth/views/register_view.dart';
 import '../../home/controllers/home_controller.dart';
 import '../../product/controllers/product_controller.dart';
 import '../../product/views/product_view.dart';
+import '../../services/api_service.dart';
 import '../config/helpers.dart';
 import '../model/test_model_response.dart';
 
 class CustomNavBar extends StatelessWidget {
-  final NavigationsBarController _tabController = Get.put(NavigationsBarController());
 
   @override
   Widget build(BuildContext context) {
@@ -77,17 +77,27 @@ class CustomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                  onTap: () => {_tabController.selectedIndex.value = 0},
+                  onTap: () => {
+
+                    tabController.changeIndex(0)
+                    },
                   child: _buildBottomNavigationBarItem(0, "Home", "home")),
               InkWell(
-                  onTap: () => {_tabController.selectedIndex.value = 1},
+                  onTap: () => {
+
+                    tabController.changeIndex(1)
+                  },
                   child:
                   _buildBottomNavigationBarItem(1, "wishlist", "wishlist")),
               InkWell(
-                  onTap: () => {_tabController.selectedIndex.value = 2},
+                  onTap: () => {
+                    tabController.changeIndex(2)
+                  },
                   child: _buildBottomNavigationBarItem(2, "Cart", "bag")),
               InkWell(
-                  onTap: () => {_tabController.selectedIndex.value = 3},
+                  onTap: () => {
+                    tabController.changeIndex(3)
+                    },
                   child:
                   _buildBottomNavigationBarItem(3, "Profile", "profile")),
             ],
@@ -99,10 +109,11 @@ class CustomNavBar extends StatelessWidget {
 
   Widget _buildBottomNavigationBarItem(int tabIndex, String label,
       String iconName) {
-    final isSelected = _tabController.selectedIndex.value == tabIndex;
-    return isSelected
-        ? _buildSelectedIcon(tabIndex, iconName, label)
-        : _buildUnselectedIcon(tabIndex, iconName, label);
+
+    final isSelected = tabController.selectedIndex.value == tabIndex;
+    return
+      Obx(() => tabController.selectedIndex.value == tabIndex ? _buildSelectedIcon(tabIndex, iconName, label) : _buildUnselectedIcon(tabIndex, iconName, label));
+
   }
 
   Widget _buildSelectedIcon(index, String iconName, String label) {
@@ -2524,7 +2535,7 @@ class BottomWaveClipperCart extends CustomClipper<Path> {
     var path = Path();
 
     // رسم الخطوط الجانبية والزوايا العلوية المستقيمة
-    path.lineTo(0, size.height - 20); // ترك مساحة للانحناء من الأسفل
+    path.lineTo(0, size.height - 90); // ترك مساحة للانحناء من الأسفل
 
     // إضافة المنحنى في الجزء السفلي
     var firstControlPoint =
@@ -3888,52 +3899,12 @@ Widget socialMediaPlaceHolder() {
         SizedBox(
           height: 32.h,
         ),
-        // InkWell(
-        //     onTap: () {
-        //       Authcontroller.googleLogin();
-        //     },
-        //     child: buttonSocialMedia(
-        //         icon: 'assets/icons/google.svg',
-        //         index: 0,
-        //         text: 'Continue with Google',
-        //         color: 0xffFFFFFF,
-        //         txtColor: 0xFF090A0A,
-        //         borderColor: 0xFFE3E4E5)),
-        // if (GetPlatform.isIOS)
-        //   SizedBox(
-        //     height: 16.h,
-        //   ),
-        // buttonSocialMedia(
-        //     icon: 'assets/icons/facebook.svg',
-        //     index: 1,
-        //     text: 'Continue with Facebook',
-        //     color: 0xFF0066DA,
-        //     txtColor: 0xffFFFFFF,
-        //     borderColor: 0xFF0066DA),
-        // if (GetPlatform.isIOS)
-        //   InkWell(
-        //       onTap: () {
-        //         print('dsadsa');
-        //         Authcontroller.appleLogin();
-        //       },
-        //       child: buttonSocialMedia(
-        //           icon: 'assets/icons/apple.svg',
-        //           index: 2,
-        //           text: 'Continue with Apple',
-        //           color: 0xFF090A0A,
-        //           txtColor: 0xffFFFFFF,
-        //           borderColor: 0xFFE3E4E5)),
-        // SizedBox(
-        //   height: 35.h,
-        // ),
-        // DividerSocial(),
-        // SizedBox(
-        //   height: 34.h,
-        // ),
+
         InkWell(
             onTap: () {
               Authcontroller.socialView.value = false;
-              Get.off(LoginView());
+
+              Get.to(LoginView());
             },
             child: buttonSocialMedia(
                 icon: 'assets/icons/login.svg',
@@ -3949,7 +3920,7 @@ Widget socialMediaPlaceHolder() {
             delay: 500,
             child: InkWell(
               onTap: () {
-                Get.off(() => RegisterView());
+                Get.to(() => RegisterView());
               },
               child: Text.rich(
                 TextSpan(
@@ -4115,14 +4086,14 @@ customHomeSearchField() {
               maxWidth: 52.w,
               maxHeight: 52.h,
             ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(
-                "assets/images/home/search.svg",
-                fit: BoxFit.cover,
-
-              ),
-            )
+            // suffixIcon: Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: SvgPicture.asset(
+            //     "assets/images/home/search.svg",
+            //     fit: BoxFit.cover,
+            //
+            //   ),
+            // )
 
         ),
       );
@@ -5404,5 +5375,1501 @@ Widget placeHolderProductCard() {
                 )),
           ),
         ])),
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+Widget productCard(Product product, context, int index) {
+  return Obx(() {
+    return GestureDetector(
+        onTap: () async {
+          ProductController productController = Get.put(ProductController());
+          await productController.getProduct(product.id!);
+          Get.to(const ProductView());
+        },
+        child: SizedBox(
+
+
+          child:
+          //product column stack
+          Stack(
+              alignment: Alignment.center,
+
+              children: [
+                //add to favourite stack
+                SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2,
+                  child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/home/product_background.svg",
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width / 1.0,
+
+                          fit: BoxFit.fitHeight,
+                        ),
+                        buildLikedButton(context, product),
+                      ]),
+                ),
+                //product details column
+                SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 1.9,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        right: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 12
+                    ),
+                    child: Column(
+
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: MediaQuery.of(context).
+                          size.width/7,),
+                          // product image
+                          Flexible(
+                            flex: 3,
+                            child: SizedBox(
+
+                              child: CachedNetworkImage(
+
+                                imageUrl: product.image,
+                                placeholder: (context, url) =>
+                                    Lottie.asset(
+                                        "assets/images/jiffy_placeholder.json"
+                                    ),
+
+                                errorWidget: (context, url, error) =>
+                                    Image.network(
+                                      'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+
+                                      height: 120.h,
+                                    ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+
+                          // product name
+                          Flexible(
+                            flex: 1,
+                            child: Text(
+                              maxLines: 2,
+                              GetMaxChar(product.name, 12),
+                              textAlign: TextAlign.center,
+                              style: secondaryTextStyle(
+                                color: const Color(0xFF20003D),
+                                size: 16.sp.round(),
+                                weight: FontWeight.w600,
+                                letterSpacing: -0.41,
+                              ),
+                            ),
+                          ),
+
+                          //product description
+                          Flexible(
+                            flex: 1,
+                            child: Text(
+                              '${product.size ?? 300} gm',
+                              style: secondaryTextStyle(
+                                color: Color(0xFF20003D),
+                                size: 12.sp.round(),
+                                weight: FontWeight.w300,
+                                letterSpacing: -0.41,
+                              ),
+                            ),
+                          ),
+
+
+                          //product details stack
+                          Stack(
+                            children: [
+
+
+                              //add to cart button with price stack
+                              Stack(
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  Padding(
+                                    padding:  EdgeInsets.only(
+                                        top: MediaQuery.of(context).size.width/25
+                                    ),
+                                    child: Text(
+                                      '\$${product.price ?? ""}',
+                                      textAlign: TextAlign.center,
+                                      style: secondaryTextStyle(
+                                        color: Color(0xFF4F0099),
+                                        size: 22.sp.round(),
+                                        weight: FontWeight.w600,
+                                        letterSpacing: -0.41,
+                                      ),
+                                    ),
+                                  ),
+                                  Obx(() {
+                                    return
+                                      isProductInCart(product) && userToken !=null
+                                          ?
+                                      buildShowAddToCartButton(context, product)
+
+                                          :
+                                      buildAddToCartButton(context, product);
+                                  }),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const Spacer(flex: 1,),
+
+                        ]),
+                  ),
+                ),
+
+              ]),
+
+
+          //             Stack(
+          //               alignment: Alignment.topCenter,
+          //               children: [
+          //                 SvgPicture.asset(
+          //                   "assets/images/home/product_background.svg",
+          //              height: 100.h,
+          //                   fit: BoxFit.fitWidth,
+          //                 ),
+          //                 Container(
+          //
+          //                   decoration: BoxDecoration(
+          //                     color: Colors.white,
+          //                     borderRadius: const BorderRadius.only(
+          //                         topLeft: Radius.circular(5),
+          //                         topRight: Radius.circular(5)),
+          //                     boxShadow: [
+          //                       BoxShadow(
+          //                         color: Colors.grey.withOpacity(0.5),
+          //                         blurRadius: 10,
+          //                         offset: Offset(0, 5),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                   child: Column(
+          //                       crossAxisAlignment: CrossAxisAlignment.center,
+          //                       mainAxisAlignment: MainAxisAlignment.start,
+          //                       children: [
+          //                         // product image
+          //                         Flexible(
+          //                           flex: 3,
+          //                           child: SizedBox(
+          //
+          //                             child: CachedNetworkImage(
+          //                               imageUrl: product.image,
+          //                               placeholder: (context, url) =>
+          //                                   Lottie.asset(
+          //                                       "assets/images/jiffy_placeholder.json"
+          //                                   ),
+          //
+          //                               errorWidget: (context, url, error) =>
+          //                                   Image.network(
+          //                                     'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+          //                                     // صورة بديلة عند فشل التحميل
+          //                                     height: 120.h,
+          //                                   ),
+          //                               fit: BoxFit.cover,
+          //                             ),
+          //                           ),
+          //                         ),
+          //
+          //                         // product name
+          //                         Flexible(
+          //                           flex: 1,
+          //                           child: Text(
+          //                             maxLines: 2,
+          //                             GetMaxChar(product.name, 16),
+          //                             textAlign: TextAlign.center,
+          //                             style: secondaryTextStyle(
+          //                               color: Color(0xFF20003D),
+          //                               size: 16.sp.round(),
+          //                               weight: FontWeight.w600,
+          //                               letterSpacing: -0.41,
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         Spacer(flex: 1,),
+          // //product description
+          //                         Flexible(
+          //                           flex: 1,
+          //                           child: Text(
+          //                             '${product.size ?? 300} gm',
+          //                             style: secondaryTextStyle(
+          //                               color: Color(0xFF20003D),
+          //                               size: 12.sp.round(),
+          //                               weight: FontWeight.w300,
+          //                               letterSpacing: -0.41,
+          //                             ),
+          //                           ),
+          //                         ),
+          // //       Column(
+          // //
+          // //       crossAxisAlignment: CrossAxisAlignment.center,
+          // //       mainAxisAlignment: MainAxisAlignment.start,
+          // //       children: [
+          // //       // product image
+          // //
+          // //       Spacer(flex: 1,),
+          // //       // product name
+          // //
+          // //       Text(
+          // //       GetMaxChar(product.name, 12),
+          // //       textAlign: TextAlign.center,
+          // //       style: secondaryTextStyle(
+          // //       color: Color(0xFF20003D),
+          // //       size: 16.sp.round(),
+          // //       weight: FontWeight.w600,
+          // //       letterSpacing: -0.41,
+          // //       ),
+          // //       ),
+          // //       Spacer(flex: 1,),
+          // // //product description
+          // //       Text(
+          // //       '${product.size ?? 300} gm',
+          // //       style: secondaryTextStyle(
+          // //       color: Color(0xFF20003D),
+          // //       size: 12.sp.round(),
+          // //       weight: FontWeight.w300,
+          // //       letterSpacing: -0.41,
+          // //       ),
+          // //       ),
+          // //       //product price
+          // //       Spacer(flex: 1,),
+          // //       ]),
+          //                         Text(
+          //                           '\$${product.price ?? ""}',
+          //                           textAlign: TextAlign.center,
+          //                           style: secondaryTextStyle(
+          //                             color: Color(0xFF4F0099),
+          //                             size: 22.sp.round(),
+          //                             weight: FontWeight.w600,
+          //                             letterSpacing: -0.41,
+          //                           ),
+          //                         ),
+          //                       ]),
+          //                 )
+          //               ],
+          //             )
+
+
+          //             ClipPath(
+          //                 clipper: BottomWaveClipper(),
+          //                 child: Container(
+          //
+          //                   decoration: BoxDecoration(
+          //                     color: Colors.white,
+          //                     borderRadius: const BorderRadius.only(
+          //                         topLeft: Radius.circular(5),
+          //                         topRight: Radius.circular(5)),
+          //                     boxShadow: [
+          //                       BoxShadow(
+          //                         color: Colors.grey.withOpacity(0.5),
+          //                         blurRadius: 10,
+          //                         offset: Offset(0, 5),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                   child: Column(
+          //                       crossAxisAlignment: CrossAxisAlignment.center,
+          //                       mainAxisAlignment: MainAxisAlignment.start,
+          //                       children: [
+          //                         // product image
+          //                         Flexible(
+          //                           flex: 3,
+          //                           child: SizedBox(
+          //
+          //                             child: CachedNetworkImage(
+          //                               imageUrl: product.image,
+          //                               placeholder: (context, url) =>
+          //                                   Lottie.asset(
+          //                                       "assets/images/jiffy_placeholder.json"
+          //                                   ),
+          //
+          //                               errorWidget: (context, url, error) =>
+          //                                   Image.network(
+          //                                     'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+          //                                     // صورة بديلة عند فشل التحميل
+          //                                     height: 120.h,
+          //                                   ),
+          //                               fit: BoxFit.cover,
+          //                             ),
+          //                           ),
+          //                         ),
+          //
+          //                         // product name
+          //                         Flexible(
+          //                           flex: 1,
+          //                           child: Text(
+          //                             maxLines: 2,
+          //                             GetMaxChar(product.name, 16),
+          //                             textAlign: TextAlign.center,
+          //                             style: secondaryTextStyle(
+          //                               color: Color(0xFF20003D),
+          //                               size: 16.sp.round(),
+          //                               weight: FontWeight.w600,
+          //                               letterSpacing: -0.41,
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         Spacer(flex: 1,),
+          // //product description
+          //                         Flexible(
+          //                           flex: 1,
+          //                           child: Text(
+          //                             '${product.size ?? 300} gm',
+          //                             style: secondaryTextStyle(
+          //                               color: Color(0xFF20003D),
+          //                               size: 12.sp.round(),
+          //                               weight: FontWeight.w300,
+          //                               letterSpacing: -0.41,
+          //                             ),
+          //                           ),
+          //                         ),
+          // //       Column(
+          // //
+          // //       crossAxisAlignment: CrossAxisAlignment.center,
+          // //       mainAxisAlignment: MainAxisAlignment.start,
+          // //       children: [
+          // //       // product image
+          // //
+          // //       Spacer(flex: 1,),
+          // //       // product name
+          // //
+          // //       Text(
+          // //       GetMaxChar(product.name, 12),
+          // //       textAlign: TextAlign.center,
+          // //       style: secondaryTextStyle(
+          // //       color: Color(0xFF20003D),
+          // //       size: 16.sp.round(),
+          // //       weight: FontWeight.w600,
+          // //       letterSpacing: -0.41,
+          // //       ),
+          // //       ),
+          // //       Spacer(flex: 1,),
+          // // //product description
+          // //       Text(
+          // //       '${product.size ?? 300} gm',
+          // //       style: secondaryTextStyle(
+          // //       color: Color(0xFF20003D),
+          // //       size: 12.sp.round(),
+          // //       weight: FontWeight.w300,
+          // //       letterSpacing: -0.41,
+          // //       ),
+          // //       ),
+          // //       //product price
+          // //       Spacer(flex: 1,),
+          // //       ]),
+          //                         Text(
+          //                           '\$${product.price ?? ""}',
+          //                           textAlign: TextAlign.center,
+          //                           style: secondaryTextStyle(
+          //                             color: Color(0xFF4F0099),
+          //                             size: 22.sp.round(),
+          //                             weight: FontWeight.w600,
+          //                             letterSpacing: -0.41,
+          //                           ),
+          //                         ),
+          //                       ]),
+          //                 ))
+          //           Stack(children: [
+          //             PositionedDirectional(
+          //                 top: 10,
+          //                 child:),
+          // PositionedDirectional(
+          //     top: 20,
+          //     end: 10.w,
+          //     child: Obx(
+          //           () =>
+          //           LikeButton(
+          //             onTap: onLikeButtonTapped,
+          //             product: product,
+          //             isLiked: wishListController
+          //                 .isProductInWishList(product.id)
+          //                 .value,
+          //             size: 20.sp,
+          //             circleColor: const CircleColor(
+          //                 start: Color(0xff00ddff), end: Color(0xff0099cc)),
+          //             bubblesColor: BubblesColor(
+          //               dotPrimaryColor: Color(0xff33b5e5),
+          //               dotSecondaryColor: Color(0xff0099cc),
+          //             ),
+          //             likeCountAnimationDuration: Duration(seconds: 1),
+          //             likeCountAnimationType: LikeCountAnimationType.all,
+          //             countBuilder: (int? count, bool isLiked,
+          //                 String text) {
+          //               var color =
+          //               isLiked ? Colors.deepPurpleAccent : Colors.grey;
+          //
+          //               return Text(
+          //                 '',
+          //                 style: TextStyle(color: color),
+          //               );
+          //             },
+          //             likeBuilder: (bool isLiked) {
+          //               return SvgPicture.asset(
+          //                 wishListController
+          //                     .isProductInWishList(product.id)
+          //                     .value
+          //                     ? 'assets/images/addwish.svg'
+          //                     : 'assets/images/home/heart.svg',
+          //                 color: isLiked ? Colors.deepPurpleAccent : Colors
+          //                     .grey,
+          //                 width: 20.w,
+          //               );
+          //             },
+          //           ),
+          //     )),
+          // if (index == 1)
+          //   PositionedDirectional(
+          //     top: -4.h,
+          //     start: 5.w,
+          //     child: ShowUp(
+          //         child: Container(
+          //             width: 38.w * 1.8,
+          //             height: 44.h * 1.8,
+          //             child: Stack(children: [
+          //               SvgPicture.asset(
+          //                 'assets/images/home/off.svg',
+          //                 width: 38.w * 1.8,
+          //                 height: 44.h * 1.8,
+          //                 fit: BoxFit.cover,
+          //               ),
+          //               PositionedDirectional(
+          //                   bottom: 35.h,
+          //                   start: 17.w,
+          //                   child: ShowUp(
+          //                     child: Text(
+          //                       '${50}%',
+          //                       style: secondaryTextStyle(
+          //                         color: Colors.white,
+          //                         size: 12.sp.round(),
+          //                         weight: FontWeight.w800,
+          //                         letterSpacing: -0.41,
+          //                       ),
+          //                     ),
+          //                   )),
+          //             ]))),
+          //   ),
+          // Padding(
+          //   padding: EdgeInsets.only(
+          //       top: MediaQuery
+          //           .of(Get.context!)
+          //           .size
+          //           .width >= 600 ?
+          //       20.h : 0.h
+          //   ), //       Column(
+          //                           //
+          //                           //       crossAxisAlignment: CrossAxisAlignment.center,
+          //                           //       mainAxisAlignment: MainAxisAlignment.start,
+          //                           //       children: [
+          //                           //       // product image
+          //                           //
+          //                           //       Spacer(flex: 1,),
+          //                           //       // product name
+          //                           //
+          //                           //       Text(
+          //                           //       GetMaxChar(product.name, 12),
+          //                           //       textAlign: TextAlign.center,
+          //                           //       style: secondaryTextStyle(
+          //                           //       color: Color(0xFF20003D),
+          //                           //       size: 16.sp.round(),
+          //                           //       weight: FontWeight.w600,
+          //                           //       letterSpacing: -0.41,
+          //                           //       ),
+          //                           //       ),
+          //                           //       Spacer(flex: 1,),
+          //                           // //product description
+          //                           //       Text(
+          //                           //       '${product.size ?? 300} gm',
+          //                           //       style: secondaryTextStyle(
+          //                           //       color: Color(0xFF20003D),
+          //                           //       size: 12.sp.round(),
+          //                           //       weight: FontWeight.w300,
+          //                           //       letterSpacing: -0.41,
+          //                           //       ),
+          //                           //       ),
+          //                           //       //product price
+          //                           //       Spacer(flex: 1,),
+          //                           //       ]),
+          // child: PositionedDirectional(
+          //   bottom: -15.h,
+          //   end: 0.w,
+          //   start: -10.w,
+          //   child: SizedBox(
+          //     height: 350.h,
+          //     child: Stack(
+          //       children: [
+          //         // الخلفية SVG
+          //         PositionedDirectional(
+          //           bottom:
+          //           cartController.cartItems.isEmpty ||
+          //               cartController.cartItems.indexWhere(
+          //                       (item) =>
+          //                   item.product.id ==
+          //                       product.id) ==
+          //                   -1
+          //               ?
+          //           8
+          //               :
+          //           4
+          //           ,
+          //           end:
+          //           cartController.cartItems.isEmpty ||
+          //               cartController.cartItems.indexWhere(
+          //                       (item) =>
+          //                   item.product.id ==
+          //                       product.id) ==
+          //                   -1
+          //               ?
+          //           -12.w
+          //               :
+          //           15.w
+          //           ,
+          //           start:
+          //
+          //           cartController.cartItems.isEmpty ||
+          //               cartController.cartItems.indexWhere(
+          //                       (item) =>
+          //                   item.product.id ==
+          //                       item.product.id) ==
+          //                   -1
+          //               ? 22.w : 15.w,
+          //           child: SvgPicture.asset(
+          //             cartController.cartItems.isEmpty ||
+          //                 cartController.cartItems.indexWhere(
+          //                         (item) =>
+          //                     item.product.id ==
+          //                         product.id) ==
+          //                     -1
+          //                 ?
+          //             "assets/images/home/add_background.svg"
+          //
+          //                 :
+          //             'assets/images/home/borderCart.svg'
+          //             ,
+          //             fit: BoxFit.cover,
+          //
+          //             height: 134.h,
+          //
+          //           ),
+          //         ),
+          //         // Cart controls
+          //         PositionedDirectional(
+          //           bottom: 66.h,
+          //           end:
+          //           cartController.cartItems.isEmpty ||
+          //               cartController.cartItems.indexWhere(
+          //                       (item) =>
+          //                   item.product.id ==
+          //                       product.id) ==
+          //                   -1
+          //               ?
+          //           -3.w
+          //
+          //               :
+          //           0,
+          //           start: 12,
+          //           child: SizedBox(
+          //             width: 80.w,
+          //             child: Obx(
+          //                   () =>
+          //                   AnimatedSwitcher(
+          //                     duration: const Duration(milliseconds: 300),
+          //                     child: cartController.cartItems.isEmpty ||
+          //                         cartController.cartItems.indexWhere(
+          //                                 (item) =>
+          //                             item.product.id ==
+          //                                 product.id) ==
+          //                             -1
+          //                         ? InkWell(
+          //                       onTap: () {
+          //                         if (userToken == null) {
+          //                           Get.to(() => LoginView());
+          //                         } else {
+          //                           int initialQty = product.d_limit > 0
+          //                               ? product.d_limit
+          //                               : 1;
+          //                           cartController.addToCart(product,
+          //                               quantity: initialQty);
+          //                         }
+          //                       },
+          //                       child:
+          //                       Center(
+          //                         child: SvgPicture.asset(
+          //                           'assets/images/home/add_icon.svg',
+          //                           width: 40.w,
+          //                           height: 40.h,
+          //                         ),
+          //                       ),
+          //
+          //                     )
+          //                         : Row(
+          //                       mainAxisAlignment:
+          //                       MainAxisAlignment.spaceAround,
+          //                       children: [
+          //                         Column(children: [
+          //                           Padding(
+          //                             padding: EdgeInsetsDirectional.only(
+          //                               start: 10.w,
+          //
+          //                             ),
+          //                             child: InkWell(
+          //                               onTap: () {
+          //                                 if (userToken == null) {
+          //                                   Get.to(() => LoginView());
+          //                                   return;
+          //                                 }
+          //                                 var index = cartController
+          //                                     .cartItems
+          //                                     .indexWhere((item) =>
+          //                                 item.product.id ==
+          //                                     product.id);
+          //                                 var currentItem = cartController
+          //                                     .cartItems[index];
+          //
+          //                                 // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+          //                                 if (product.d_limit != 0 &&
+          //                                     currentItem.quantity >
+          //                                         product.d_limit ||
+          //                                     product.d_limit == 0 &&
+          //                                         currentItem.quantity >
+          //                                             1) {
+          //                                   cartController.updateQuantity(
+          //                                     currentItem,
+          //                                     currentItem.quantity - 1,
+          //                                   );
+          //                                 } else if (product.d_limit == 0 &&
+          //                                     currentItem.quantity ==
+          //                                         1 ||
+          //                                     currentItem.quantity ==
+          //                                         product.d_limit) {
+          //                                   print('teasdsadsadsa');
+          //                                   cartController
+          //                                       .removeItem(currentItem);
+          //                                 }
+          //                               },
+          //                               child: SvgPicture.asset(
+          //                                 'assets/images/home/minus.svg',
+          //                                 width: 20.w,
+          //                                 height: 20.h,
+          //                               ),
+          //                             ),
+          //                           ),
+          //                           SizedBox(
+          //                             height: 5.h,
+          //                           )
+          //                         ]),
+          //                         Column(children: [
+          //                           Text(
+          //                             '${cartController
+          //                                 .cartItems[cartController
+          //                                 .cartItems.indexWhere((item) =>
+          //                             item.product.id == product.id)]
+          //                                 .quantity}',
+          //                             textAlign: TextAlign.center,
+          //                             style: primaryTextStyle(
+          //                               color: Color(0xFFFEFEFE),
+          //                               size: 20.sp.round(),
+          //                               height: 1.05,
+          //                               weight: FontWeight.w900,
+          //                               letterSpacing: -0.41,
+          //                             ),
+          //                           ),
+          //                           SizedBox(
+          //                             height: 2.h,
+          //                           )
+          //                         ]),
+          //                         Column(
+          //                           children: [
+          //                             Padding(
+          //                               padding: EdgeInsets.only(
+          //                                   right: 5.w),
+          //                               child: InkWell(
+          //                                 onTap: () {
+          //                                   if (userToken == null) {
+          //                                     Get.to(() => LoginView());
+          //                                     return;
+          //                                   }
+          //                                   var index = cartController
+          //                                       .cartItems
+          //                                       .indexWhere((item) =>
+          //                                   item.product.id ==
+          //                                       product.id);
+          //                                   var currentItem = cartController
+          //                                       .cartItems[index];
+          //                                   cartController.updateQuantity(
+          //                                     currentItem,
+          //                                     currentItem.quantity + 1,
+          //                                   );
+          //                                 },
+          //                                 child: SvgPicture.asset(
+          //                                   'assets/images/home/plus.svg',
+          //                                   width: 20.w,
+          //                                   height: 20.h,
+          //                                 ),
+          //                               ),
+          //                             ),
+          //                             SizedBox(
+          //                               height: 5.h,
+          //                             )
+          //                           ],
+          //                         )
+          //                       ],
+          //                     ),
+          //                   ),
+          //             ),
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+        ));
+  });
+  //       ]);
+  // })
+  // )
+  // ,
+  // )
+  // );
+//     return Obx(() {
+//       return GestureDetector(
+//         onTap: () async {
+//           ProductController productController = Get.put(ProductController());
+//           await productController.getProduct(product.id!);
+//           Get.to(const ProductView());
+//         },
+//         child: Container(
+//             decoration: const BoxDecoration(
+//                 borderRadius:
+//                 BorderRadius.only(bottomLeft: Radius.circular(20),
+//                   bottomRight: Radius.circular(20),)
+//             ),
+//             padding: EdgeInsets.all(15.w),
+//             width: 195.w,
+//
+//             child:  ClipPath(
+//       clipper: BottomWaveClipper(),
+//       child: Container(
+//       width: 170.w,
+//       height: 259.h + 55.h,
+//       decoration: BoxDecoration(
+//       color: Colors.white,
+//       borderRadius: const BorderRadius.only(
+//       topLeft: Radius.circular(5),
+//       topRight: Radius.circular(5)),
+//       boxShadow: [
+//       BoxShadow(
+//       color: Colors.grey.withOpacity(0.5),
+//       blurRadius: 10,
+//       offset: Offset(0, 5),
+//       ),
+//       ],
+//       ),
+//       child: Column(
+//       crossAxisAlignment: CrossAxisAlignment.center,
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       children: [
+//         // product image
+//         Flexible(
+//           flex: 3,
+//           child: SizedBox(
+//
+//             child: CachedNetworkImage(
+//               imageUrl: product.image,
+//               placeholder: (context, url) =>
+//                   Lottie.asset(
+//                       "assets/images/jiffy_placeholder.json"
+//                   ),
+//
+//               errorWidget: (context, url, error) =>
+//                   Image.network(
+//                     'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+//                     // صورة بديلة عند فشل التحميل
+//                     height: 120.h,
+//                   ),
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//         ),
+//
+//       // product name
+//       Flexible(
+//         flex: 1,
+//         child: Text(
+//           maxLines: 2,
+//         GetMaxChar(product.name, 16),
+//         textAlign: TextAlign.center,
+//         style: secondaryTextStyle(
+//         color: Color(0xFF20003D),
+//         size: 16.sp.round(),
+//         weight: FontWeight.w600,
+//         letterSpacing: -0.41,
+//         ),
+//         ),
+//       ),
+//       Spacer(flex: 1,),
+// //product description
+//       Flexible(
+//         flex: 1,
+//         child: Text(
+//         '${product.size ?? 300} gm',
+//         style: secondaryTextStyle(
+//         color: Color(0xFF20003D),
+//         size: 12.sp.round(),
+//         weight: FontWeight.w300,
+//         letterSpacing: -0.41,
+//         ),
+//         ),
+//       ),
+// //       Column(
+// //
+// //       crossAxisAlignment: CrossAxisAlignment.center,
+// //       mainAxisAlignment: MainAxisAlignment.start,
+// //       children: [
+// //       // product image
+// //
+// //       Spacer(flex: 1,),
+// //       // product name
+// //
+// //       Text(
+// //       GetMaxChar(product.name, 12),
+// //       textAlign: TextAlign.center,
+// //       style: secondaryTextStyle(
+// //       color: Color(0xFF20003D),
+// //       size: 16.sp.round(),
+// //       weight: FontWeight.w600,
+// //       letterSpacing: -0.41,
+// //       ),
+// //       ),
+// //       Spacer(flex: 1,),
+// // //product description
+// //       Text(
+// //       '${product.size ?? 300} gm',
+// //       style: secondaryTextStyle(
+// //       color: Color(0xFF20003D),
+// //       size: 12.sp.round(),
+// //       weight: FontWeight.w300,
+// //       letterSpacing: -0.41,
+// //       ),
+// //       ),
+// //       //product price
+// //       Spacer(flex: 1,),
+// //       ]),
+//       Text(
+//       '\$${product.price ?? ""}',
+//       textAlign: TextAlign.center,
+//       style: secondaryTextStyle(
+//       color: Color(0xFF4F0099),
+//       size: 22.sp.round(),
+//       weight: FontWeight.w600,
+//       letterSpacing: -0.41,
+//       ),
+//       ),
+//       ]),
+//       ))
+//             // Stack(children: [
+//             //   PositionedDirectional(
+//             //       top: 10,
+//             //       child:),
+//             //   // PositionedDirectional(
+//             //   //     top: 20,
+//             //   //     end: 10.w,
+//             //   //     child: Obx(
+//             //   //           () =>
+//             //   //           LikeButton(
+//             //   //             onTap: onLikeButtonTapped,
+//             //   //             product: product,
+//             //   //             isLiked: wishListController
+//             //   //                 .isProductInWishList(product.id)
+//             //   //                 .value,
+//             //   //             size: 20.sp,
+//             //   //             circleColor: const CircleColor(
+//             //   //                 start: Color(0xff00ddff), end: Color(0xff0099cc)),
+//             //   //             bubblesColor: BubblesColor(
+//             //   //               dotPrimaryColor: Color(0xff33b5e5),
+//             //   //               dotSecondaryColor: Color(0xff0099cc),
+//             //   //             ),
+//             //   //             likeCountAnimationDuration: Duration(seconds: 1),
+//             //   //             likeCountAnimationType: LikeCountAnimationType.all,
+//             //   //             countBuilder: (int? count, bool isLiked,
+//             //   //                 String text) {
+//             //   //               var color =
+//             //   //               isLiked ? Colors.deepPurpleAccent : Colors.grey;
+//             //   //
+//             //   //               return Text(
+//             //   //                 '',
+//             //   //                 style: TextStyle(color: color),
+//             //   //               );
+//             //   //             },
+//             //   //             likeBuilder: (bool isLiked) {
+//             //   //               return SvgPicture.asset(
+//             //   //                 wishListController
+//             //   //                     .isProductInWishList(product.id)
+//             //   //                     .value
+//             //   //                     ? 'assets/images/addwish.svg'
+//             //   //                     : 'assets/images/home/heart.svg',
+//             //   //                 color: isLiked ? Colors.deepPurpleAccent : Colors
+//             //   //                     .grey,
+//             //   //                 width: 20.w,
+//             //   //               );
+//             //   //             },
+//             //   //           ),
+//             //   //     )),
+//             //   // if (index == 1)
+//             //   //   PositionedDirectional(
+//             //   //     top: -4.h,
+//             //   //     start: 5.w,
+//             //   //     child: ShowUp(
+//             //   //         child: Container(
+//             //   //             width: 38.w * 1.8,
+//             //   //             height: 44.h * 1.8,
+//             //   //             child: Stack(children: [
+//             //   //               SvgPicture.asset(
+//             //   //                 'assets/images/home/off.svg',
+//             //   //                 width: 38.w * 1.8,
+//             //   //                 height: 44.h * 1.8,
+//             //   //                 fit: BoxFit.cover,
+//             //   //               ),
+//             //   //               PositionedDirectional(
+//             //   //                   bottom: 35.h,
+//             //   //                   start: 17.w,
+//             //   //                   child: ShowUp(
+//             //   //                     child: Text(
+//             //   //                       '${50}%',
+//             //   //                       style: secondaryTextStyle(
+//             //   //                         color: Colors.white,
+//             //   //                         size: 12.sp.round(),
+//             //   //                         weight: FontWeight.w800,
+//             //   //                         letterSpacing: -0.41,
+//             //   //                       ),
+//             //   //                     ),
+//             //   //                   )),
+//             //   //             ]))),
+//             //   //   ),
+//             //   // Padding(
+//             //   //   padding: EdgeInsets.only(
+//             //   //       top: MediaQuery
+//             //   //           .of(Get.context!)
+//             //   //           .size
+//             //   //           .width >= 600 ?
+//             //   //       20.h : 0.h
+//             //   //   ),
+//             //   //   child: PositionedDirectional(
+//             //   //     bottom: -15.h,
+//             //   //     end: 0.w,
+//             //   //     start: -10.w,
+//             //   //     child: SizedBox(
+//             //   //       height: 350.h,
+//             //   //       child: Stack(
+//             //   //         children: [
+//             //   //           // الخلفية SVG
+//             //   //           PositionedDirectional(
+//             //   //             bottom:
+//             //   //             cartController.cartItems.isEmpty ||
+//             //   //                 cartController.cartItems.indexWhere(
+//             //   //                         (item) =>
+//             //   //                     item.product.id ==
+//             //   //                         product.id) ==
+//             //   //                     -1
+//             //   //                 ?
+//             //   //             8
+//             //   //                 :
+//             //   //             4
+//             //   //             ,
+//             //   //             end:
+//             //   //             cartController.cartItems.isEmpty ||
+//             //   //                 cartController.cartItems.indexWhere(
+//             //   //                         (item) =>
+//             //   //                     item.product.id ==
+//             //   //                         product.id) ==
+//             //   //                     -1
+//             //   //                 ?
+//             //   //             -12.w
+//             //   //                 :
+//             //   //             15.w
+//             //   //             ,
+//             //   //             start:
+//             //   //
+//             //   //             cartController.cartItems.isEmpty ||
+//             //   //                 cartController.cartItems.indexWhere(
+//             //   //                         (item) =>
+//             //   //                     item.product.id ==
+//             //   //                         item.product.id) ==
+//             //   //                     -1
+//             //   //                 ? 22.w : 15.w,
+//             //   //             child: SvgPicture.asset(
+//             //   //               cartController.cartItems.isEmpty ||
+//             //   //                   cartController.cartItems.indexWhere(
+//             //   //                           (item) =>
+//             //   //                       item.product.id ==
+//             //   //                           product.id) ==
+//             //   //                       -1
+//             //   //                   ?
+//             //   //               "assets/images/home/add_background.svg"
+//             //   //
+//             //   //                   :
+//             //   //               'assets/images/home/borderCart.svg'
+//             //   //               ,
+//             //   //               fit: BoxFit.cover,
+//             //   //
+//             //   //               height: 134.h,
+//             //   //
+//             //   //             ),
+//             //   //           ),
+//             //   //           // Cart controls
+//             //   //           PositionedDirectional(
+//             //   //             bottom: 66.h,
+//             //   //             end:
+//             //   //             cartController.cartItems.isEmpty ||
+//             //   //                 cartController.cartItems.indexWhere(
+//             //   //                         (item) =>
+//             //   //                     item.product.id ==
+//             //   //                         product.id) ==
+//             //   //                     -1
+//             //   //                 ?
+//             //   //             -3.w
+//             //   //
+//             //   //                 :
+//             //   //             0,
+//             //   //             start: 12,
+//             //   //             child: SizedBox(
+//             //   //               width: 80.w,
+//             //   //               child: Obx(
+//             //   //                     () =>
+//             //   //                     AnimatedSwitcher(
+//             //   //                       duration: const Duration(milliseconds: 300),
+//             //   //                       child: cartController.cartItems.isEmpty ||
+//             //   //                           cartController.cartItems.indexWhere(
+//             //   //                                   (item) =>
+//             //   //                               item.product.id ==
+//             //   //                                   product.id) ==
+//             //   //                               -1
+//             //   //                           ? InkWell(
+//             //   //                         onTap: () {
+//             //   //                           if (userToken == null) {
+//             //   //                             Get.to(() => LoginView());
+//             //   //                           } else {
+//             //   //                             int initialQty = product.d_limit > 0
+//             //   //                                 ? product.d_limit
+//             //   //                                 : 1;
+//             //   //                             cartController.addToCart(product,
+//             //   //                                 quantity: initialQty);
+//             //   //                           }
+//             //   //                         },
+//             //   //                         child:
+//             //   //                         Center(
+//             //   //                           child: SvgPicture.asset(
+//             //   //                             'assets/images/home/add_icon.svg',
+//             //   //                             width: 40.w,
+//             //   //                             height: 40.h,
+//             //   //                           ),
+//             //   //                         ),
+//             //   //
+//             //   //                       )
+//             //   //                           : Row(
+//             //   //                         mainAxisAlignment:
+//             //   //                         MainAxisAlignment.spaceAround,
+//             //   //                         children: [
+//             //   //                           Column(children: [
+//             //   //                             Padding(
+//             //   //                               padding: EdgeInsetsDirectional.only(
+//             //   //                                 start: 10.w,
+//             //   //
+//             //   //                               ),
+//             //   //                               child: InkWell(
+//             //   //                                 onTap: () {
+//             //   //                                   if (userToken == null) {
+//             //   //                                     Get.to(() => LoginView());
+//             //   //                                     return;
+//             //   //                                   }
+//             //   //                                   var index = cartController
+//             //   //                                       .cartItems
+//             //   //                                       .indexWhere((item) =>
+//             //   //                                   item.product.id ==
+//             //   //                                       product.id);
+//             //   //                                   var currentItem = cartController
+//             //   //                                       .cartItems[index];
+//             //   //
+//             //   //                                   // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+//             //   //                                   if (product.d_limit != 0 &&
+//             //   //                                       currentItem.quantity >
+//             //   //                                           product.d_limit ||
+//             //   //                                       product.d_limit == 0 &&
+//             //   //                                           currentItem.quantity >
+//             //   //                                               1) {
+//             //   //                                     cartController.updateQuantity(
+//             //   //                                       currentItem,
+//             //   //                                       currentItem.quantity - 1,
+//             //   //                                     );
+//             //   //                                   } else
+//             //   //                                   if (product.d_limit == 0 &&
+//             //   //                                       currentItem.quantity ==
+//             //   //                                           1 ||
+//             //   //                                       currentItem.quantity ==
+//             //   //                                           product.d_limit) {
+//             //   //                                     print('teasdsadsadsa');
+//             //   //                                     cartController
+//             //   //                                         .removeItem(currentItem);
+//             //   //                                   }
+//             //   //                                 },
+//             //   //                                 child: SvgPicture.asset(
+//             //   //                                   'assets/images/home/minus.svg',
+//             //   //                                   width: 20.w,
+//             //   //                                   height: 20.h,
+//             //   //                                 ),
+//             //   //                               ),
+//             //   //                             ),
+//             //   //                             SizedBox(
+//             //   //                               height: 5.h,
+//             //   //                             )
+//             //   //                           ]),
+//             //   //                           Column(children: [
+//             //   //                             Text(
+//             //   //                               '${cartController
+//             //   //                                   .cartItems[cartController
+//             //   //                                   .cartItems.indexWhere((item) =>
+//             //   //                               item.product.id == product.id)]
+//             //   //                                   .quantity}',
+//             //   //                               textAlign: TextAlign.center,
+//             //   //                               style: primaryTextStyle(
+//             //   //                                 color: Color(0xFFFEFEFE),
+//             //   //                                 size: 20.sp.round(),
+//             //   //                                 height: 1.05,
+//             //   //                                 weight: FontWeight.w900,
+//             //   //                                 letterSpacing: -0.41,
+//             //   //                               ),
+//             //   //                             ),
+//             //   //                             SizedBox(
+//             //   //                               height: 2.h,
+//             //   //                             )
+//             //   //                           ]),
+//             //   //                           Column(
+//             //   //                             children: [
+//             //   //                               Padding(
+//             //   //                                 padding: EdgeInsets.only(
+//             //   //                                     right: 5.w),
+//             //   //                                 child: InkWell(
+//             //   //                                   onTap: () {
+//             //   //                                     if (userToken == null) {
+//             //   //                                       Get.to(() => LoginView());
+//             //   //                                       return;
+//             //   //                                     }
+//             //   //                                     var index = cartController
+//             //   //                                         .cartItems
+//             //   //                                         .indexWhere((item) =>
+//             //   //                                     item.product.id ==
+//             //   //                                         product.id);
+//             //   //                                     var currentItem = cartController
+//             //   //                                         .cartItems[index];
+//             //   //                                     cartController.updateQuantity(
+//             //   //                                       currentItem,
+//             //   //                                       currentItem.quantity + 1,
+//             //   //                                     );
+//             //   //                                   },
+//             //   //                                   child: SvgPicture.asset(
+//             //   //                                     'assets/images/home/plus.svg',
+//             //   //                                     width: 20.w,
+//             //   //                                     height: 20.h,
+//             //   //                                   ),
+//             //   //                                 ),
+//             //   //                               ),
+//             //   //                               SizedBox(
+//             //   //                                 height: 5.h,
+//             //   //                               )
+//             //   //                             ],
+//             //   //                           )
+//             //   //                         ],
+//             //   //                       ),
+//             //   //                     ),
+//             //   //               ),
+//             //   //             ),
+//             //   //           )
+//             //   //         ],
+//             //   //       ),
+//             //   //     ),
+//             //   //   ),
+//             //   // )
+//             // ])),
+//         ));
+//     });
+//     )
+//     );
+}
+
+
+bool isProductInCart(Product product) {
+  if (cartController.cartItems.isEmpty ||
+      cartController.cartItems.indexWhere(
+              (item) =>
+          item.product.id ==
+              product.id) ==
+          -1) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+buildShowAddToCartButton(context, Product product) {
+  return  Stack(
+    alignment: Alignment.center,
+    children: [
+      Transform.translate(
+        offset:  Offset(
+            0
+            ,
+            MediaQuery.of(context).size.width/20),
+        child: SvgPicture.asset(
+          'assets/images/home/borderCart.svg',
+          fit: BoxFit.cover,
+
+          height: MediaQuery.of(context).size.width / 2.8,
+
+
+        ),
+      ),
+
+      Padding(
+        padding: EdgeInsets.only(
+            top: MediaQuery
+                .of(context)
+                .size
+                .width / 25,
+            left: MediaQuery
+                .of(context)
+                .size
+                .width / 35
+
+        ),
+        child: SizedBox(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width / 2.8,
+
+          child: Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 5.w,
+
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment
+                  .center,
+              crossAxisAlignment: CrossAxisAlignment
+                  .center,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      handleDecrement(product);
+                    },
+                    child: SvgPicture.asset(
+                        "assets/images/home/minus.svg")),
+                Spacer(),
+                Obx(() {
+                  return Text(
+                    isProductInCart(product) ?
+                    '${cartController
+                        .cartItems[cartController
+                        .cartItems.indexWhere((item) =>
+                    item.product.id ==
+                        product.id)]
+                        .quantity}' : '0',
+                    textAlign: TextAlign.center,
+                    style: primaryTextStyle(
+                      color: Colors.white,
+                      size: 20.sp.round(),
+                      height: 1.05,
+                      weight: FontWeight.w900,
+                      letterSpacing: -0.41,
+                    ),
+                  );
+                }),
+                Spacer(),
+
+                GestureDetector(
+                    onTap: () {
+                      handleIncrement(product);
+                    },
+                    child: SvgPicture.asset(
+                        "assets/images/home/plus.svg")),
+              ],
+            ),
+          ),
+        ),
+      )
+
+    ],
+  );
+}
+
+void addToCart(Product product) {
+  if (userToken == null) {
+    Get.to(() => LoginView());
+  } else {
+    int initialQty = product.d_limit > 0
+        ? product.d_limit
+        : 1;
+    cartController.addToCart(product,
+        quantity: initialQty);
+  }
+}
+void handleIncrement(Product product) {
+  if (userToken == null) {
+    Get.to(() => LoginView());
+  } else {
+    int initialQty = product.d_limit > 0
+        ? product.d_limit
+        : 1;
+    cartController.addToCart(product,
+        quantity: initialQty);
+  }
+}
+
+void handleDecrement(Product product) {
+  if (userToken == null) {
+    Get.to(() => LoginView());
+    return;
+  }
+  var index = cartController
+      .cartItems
+      .indexWhere((item) =>
+  item.product.id ==
+      product.id);
+  var currentItem = cartController
+      .cartItems[index];
+
+  if (product.d_limit != 0 &&
+      currentItem.quantity >
+          product.d_limit ||
+      product.d_limit == 0 &&
+          currentItem.quantity >
+              1) {
+    cartController.updateQuantity(
+      currentItem,
+      currentItem.quantity - 1,
+    );
+  } else if (product.d_limit == 0 &&
+      currentItem.quantity ==
+          1 ||
+      currentItem.quantity ==
+          product.d_limit) {
+    cartController
+        .removeItem(currentItem);
+  }
+}
+buildLikedButton(context, Product product) {
+  return Padding(
+    padding: EdgeInsets.only(
+        bottom: MediaQuery
+            .of(context)
+            .size
+            .width / 1.8,
+        left: MediaQuery
+            .of(context)
+            .size
+            .width / 3.8
+    ),
+    child: LikeButton(
+      onTap: onLikeButtonTapped,
+      product: product,
+      isLiked: wishListController
+          .isProductInWishList(product.id)
+          .value,
+      size: 20.sp,
+      circleColor: const CircleColor(
+          start: Color(0xff00ddff), end: Color(
+          0xff0099cc)),
+      bubblesColor: const BubblesColor(
+        dotPrimaryColor: Color(0xff33b5e5),
+        dotSecondaryColor: Color(0xff0099cc),
+      ),
+      likeCountAnimationDuration: Duration(seconds: 1),
+      likeCountAnimationType: LikeCountAnimationType.all,
+      countBuilder: (int? count, bool isLiked,
+          String text) {
+        var color =
+        isLiked ? Colors.deepPurpleAccent : Colors.grey;
+
+        return Text(
+          '',
+          style: TextStyle(color: color),
+        );
+      },
+      likeBuilder: (bool isLiked) {
+        return SvgPicture.asset(
+          wishListController
+              .isProductInWishList(product.id)
+              .value
+              ? 'assets/images/addwish.svg'
+              : 'assets/images/home/heart.svg',
+          color: isLiked
+              ? Colors.deepPurpleAccent
+              : Colors
+              .grey,
+          width: 20.w,
+        );
+      },
+    ),
+  );
+}
+buildAddToCartButton(context, Product product) {
+  return GestureDetector(
+    onTap: () {
+      addToCart(product);
+    },
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        Transform.translate(
+          offset:  Offset(
+              MediaQuery.of(context).size.width/30
+              ,
+              MediaQuery.of(context).size.width/20),
+          child: SvgPicture.asset(
+            'assets/images/home/add_background.svg',
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width / 1.1,
+            height: MediaQuery.of(context).size.width / 2.9,
+
+
+          ),
+        ),
+
+        Transform.translate(
+          offset:  Offset(
+              MediaQuery.of(context).size.width/80
+              ,
+              MediaQuery.of(context).size.width/50),
+          child: SvgPicture.asset(
+            "assets/images/home/add_icon.svg",
+            fit: BoxFit.cover,
+
+          ),
+        ),
+      ],
+    ),
   );
 }

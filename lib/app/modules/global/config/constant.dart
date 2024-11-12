@@ -130,7 +130,7 @@ class AppConstants {
    size: 'XL',
     rating: 4.5,
     outOfStock: false,
-    image: 'https://cdn-icons-png.flaticon.com/512/7410/7410183.png',
+    image: 'https://retchhh.wordpress.com/wp-content/uploads/2015/03/loading1.gif',
     old_price: 20.0,
 
   );

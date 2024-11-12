@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jiffy/app/modules/auth/views/login_view.dart';
 import 'package:jiffy/app/modules/global/model/model_response.dart';
+import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:jiffy/main.dart';
@@ -166,6 +167,7 @@ class ProfileController extends GetxController {
     userToken = null;
     clearUserData();
     Get.offAll(LoginView()); // Navigate to signup screen
+
   }
 
   void Logout() async {

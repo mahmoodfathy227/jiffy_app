@@ -205,10 +205,10 @@ class WishlistController extends GetxController {
       isWishlistLoading.value = false;
       return [];
     }
-    product_ids.forEach((id) {
+    for (var id in product_ids) {
       bodyFields["ids[${_index}]"] = id;
       _index++;
-    });
+    }
 
     print("the body is ${bodyFields}");
     var headers = {
@@ -231,6 +231,7 @@ class WishlistController extends GetxController {
         for (var product in responseData['data']) {
           resultSearchProducts.add(Product.fromJson(product));
         }
+        resultSearchProducts.toSet().toList();
         resultCount.value = resultSearchProducts.length;
         isWishlistLoading.value = false;
         print("your result length ${resultSearchProducts.length}");

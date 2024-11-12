@@ -8,9 +8,10 @@ import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/profile/views/profile_view.dart';
 import 'package:jiffy/app/modules/wishlist/view/wishlist_view.dart';
 
+import '../../../../main.dart';
+
 class MainView extends StatelessWidget {
-  final NavigationsBarController _tabController =
-      Get.put(NavigationsBarController());
+
 
   final List<Widget> _screens = [
     HomeView(),
@@ -24,7 +25,10 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Obx(() => _screens[_tabController.selectedIndex.value]),
+        Obx(() {
+          print("Your current screen is ${tabController.selectedIndex.value}");
+          return _screens[tabController.selectedIndex.value];
+        } ),
         Positioned(
           bottom: 20.h,
           left: 0,

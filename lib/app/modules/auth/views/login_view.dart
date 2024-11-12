@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:jiffy/app/modules/auth/views/register_view.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
+import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../global/config/configs.dart';
@@ -16,6 +17,7 @@ import '../../global/config/helpers.dart';
 import '../../global/theme/app_theme.dart';
 import '../../global/theme/colors.dart';
 import '../../global/widget/widget.dart';
+import '../../main/controllers/tab_controller.dart';
 import 'forgot_password_view.dart';
 import '../controllers/auth_controller.dart';
 
@@ -294,7 +296,7 @@ SizedBox(height:25.h ,),
               Get.snackbar('Guest Mode', 'You\'re Acting As A Guest');
               // Get.to(MainView());
               // Get.offNamedUntil(Routes.MAIN, (Route) => false);
-              Get.off(MainView());
+              Get.to(MainView());
             },
             child: buttonSocialMedia(
                 icon: 'assets/images/onboarding/person.svg',
@@ -386,7 +388,8 @@ SizedBox(height:25.h ,),
                             SizedBox(width: 10.w,),
                             GestureDetector(
                               onTap: () {
-                                Get.off(()=>  MainView());
+                                Get.put(NavBarController());
+                                Get.to(()=>  MainView());
                               },
                               child: ConstrainedBox(
 

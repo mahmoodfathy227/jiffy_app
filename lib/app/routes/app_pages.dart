@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:jiffy/app/modules/cart/bindings/cart_binding.dart';
-import 'package:jiffy/app/modules/cart/views/cart_view.dart';
-import 'package:jiffy/app/modules/main/bindings/main_binding.dart';
-import 'package:jiffy/app/modules/main/views/main_view.dart';
-import 'package:jiffy/app/modules/profile/bindings/profile_binding.dart';
-import 'package:jiffy/app/modules/profile/views/change_password.dart';
-import 'package:jiffy/app/modules/profile/views/profile_view.dart';
-import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 
 import '../modules/address/bindings/address_binding.dart';
 import '../modules/address/views/address_view.dart';
@@ -17,10 +9,20 @@ import '../modules/auth/bindings/forgot_password_binding.dart';
 import '../modules/auth/views/forgot_password_view.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
+import '../modules/cart/bindings/cart_binding.dart';
+import '../modules/cart/views/cart_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
+import '../modules/main/bindings/main_binding.dart';
+import '../modules/main/views/main_view.dart';
+import '../modules/navBar/bindings/nav_bar_binding.dart';
+import '../modules/navBar/views/nav_bar_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/change_password.dart';
+import '../modules/profile/views/profile_view.dart';
+import '../modules/profile/views/update_profile.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -192,10 +194,15 @@ class AppPages {
         ),
         GetPage(
           name: _Paths.ADDRESS,
-          page: () =>  AddressView(),
+          page: () => AddressView(),
           binding: AddressBinding(),
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.NAV_BAR,
+      page: () => const NavBarView(),
+      binding: NavBarBinding(),
     ),
   ];
 }

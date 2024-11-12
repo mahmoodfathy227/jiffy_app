@@ -11,6 +11,7 @@ import 'package:jiffy/app/modules/global/model/test_model_response.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
+import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/product/controllers/product_controller.dart';
 import 'package:jiffy/app/modules/product/views/product_view.dart';
 import 'package:jiffy/app/modules/search/views/search_view.dart';
@@ -19,10 +20,7 @@ import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart'
 import 'package:jiffy/main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import '../../../routes/app_pages.dart';
 import '../../auth/views/login_view.dart';
-import '../../main/controllers/tab_controller.dart';
 import '../controllers/home_controller.dart';
 import 'dart:math' as math;
 
@@ -30,8 +28,9 @@ class HomeView extends StatelessWidget {
   // Inject HomeController using GetX
   final HomeController homeController = Get.put(HomeController());
   final CartController cartController =
-  Get.put(CartController()); // ربط CartController
+  Get.put(CartController());
   final WishlistController wishListController = Get.put(WishlistController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,39 +38,43 @@ class HomeView extends StatelessWidget {
         backgroundColor: const Color(0xFFF8F3FF),
         body: SingleChildScrollView(
             child: Column(
-              // استخدام Column لضمان التمرير
+
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
+                  //build App Bar
+                  SizedBox(
 
                     width: MediaQuery
                         .of(context)
                         .size
                         .width,
-                    height: 420.h, // يمكن تخصيص الارتفاع أو جعله مرنًا
+                    height: 420.h,
                     child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        SemiLunarScrollView(),
-                        SvgPicture.asset(
-                          'assets/images/home/circular.svg',
-                          fit: BoxFit.fill,
-width: MediaQuery.of(context).size.width,
-
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.only(top: 50.h),
-                          child: SearchHomeBar(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          SemiLunarScrollView(),
+                          SvgPicture.asset(
+                            'assets/images/home/circular.svg',
+                            fit: BoxFit.fill,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
 
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 250.h),
-                            child: SemiLunarScrollView()),
 
-                        
-                        // Slide-down animation using GetX controlled animations
+                          Padding(
+                            padding: EdgeInsets.only(top: 50.h),
+                            child: SearchHomeBar(
+
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(top: 250.h),
+                              child: SemiLunarScrollView()),
+
+
+                          // Slide-down animation using GetX controlled animations
 //                         PositionedDirectional(
 //                           start: -127.w,
 //                           top: -290.h,
@@ -324,30 +327,19 @@ width: MediaQuery.of(context).size.width,
 //                               ],
 //                             )),
 //                       ],
-                    ]),
+                        ]),
                   ),
-              buildDots(homeController),
-        SizedBox(height: 22.h,),
-        viewProductSection(
-                      'Featured Product',
-                      homeController.homePageData.value
-                          .featuredProducts,
-                      context),
-                  // SlideTransition(
-                  //     position: Tween<Offset>(
-                  //       begin: const Offset(
-                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                  //       end: const Offset(
-                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                  //     ).animate(
-                  //       CurvedAnimation(
-                  //         parent: homeController.controller,
-                  //         curve: Curves.easeInOut,
-                  //       ),
-                  //     ),
-                  //     child: Obx(() {
-                  //       return BannerAd();
-                  //     })),'
+                  buildDots(homeController),
+                  SizedBox(height: 10.h,),
+                  // build Feature Products
+                  Obx(() {
+                    return viewProductSection(
+                        'Featured Product',
+                        homeController.homePageData.value
+                            .featuredProducts,
+                        context);
+                  }),
+
                   Obx(() {
                     return BannerAd();
                   }),
@@ -637,7 +629,7 @@ width: MediaQuery.of(context).size.width,
                               end: 5.w, start: 5.w),
                           child: premiumProductTemplate(homeController
                               .homePageData.value
-                              .latestProducts[index], index)
+                              .latestProducts[index], index, context)
 
 
                       );
@@ -665,7 +657,7 @@ width: MediaQuery.of(context).size.width,
           },
         ),
         Container(
-          height: 290.h + 65.h, // يمكنك تعديل الارتفاع بناءً على تصميمك
+          height: 290.h + 65.h,
           width: MediaQuery
               .of(context)
               .size
@@ -677,25 +669,16 @@ width: MediaQuery.of(context).size.width,
             scrollDirection: Axis.horizontal,
             itemCount: 5,
             itemBuilder: (context, index) {
-              return Padding(
-                  padding: EdgeInsetsDirectional.only(end: 5.w, start: 5.w),
-                  child: productCard(AppConstants.sampleProduct)
-
-
-              );
+              return productCard(AppConstants.sampleProduct, context, index);
             },
           )
               :
           ListView.builder(
+            shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemCount: product.length,
             itemBuilder: (context, index) {
-              return Padding(
-                  padding: EdgeInsetsDirectional.only(end: 5.w, start: 5.w),
-                  child: productCard(product[index])
-
-
-              );
+              return productCard(product[index], context, index);
             },
           ),
         ),
@@ -725,475 +708,9 @@ width: MediaQuery.of(context).size.width,
     }
   }
 
-  Widget productCard(Product product) {
-    int index = homeController.homePageData.value.latestProducts
-        .indexWhere((item) => item.id == product.id);
-    return Obx(() {
-      return GestureDetector(
-        onTap: () async {
-          ProductController productController = Get.put(ProductController());
-          await productController.getProduct(product.id!);
-          Get.to(const ProductView());
-        },
-        child: Container(
-            decoration: const BoxDecoration(
-                borderRadius:
-                BorderRadius.only(bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),)
-            ),
-            padding: EdgeInsets.all(15.w),
-            width: 195.w,
 
-            child: Stack(children: [
-              PositionedDirectional(
-                  top: 10,
-                  child: ClipPath(
-                      clipper: BottomWaveClipper(),
-                      child: Container(
-                        width: 170.w,
-                        height: 259.h + 55.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(5)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              blurRadius: 10,
-                              offset: Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Column(
 
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 120.h,
-                                      child: CachedNetworkImage(
-                                        imageUrl: product.image,
-                                        placeholder: (context, url) =>
-                                            Lottie.asset(
-                                                "assets/images/jiffy_placeholder.json"
-                                            ),
-                                        // SizedBox(
-                                        //     height: 120.h,
-                                        //     child: Center(
-                                        //         child:
-                                        //         CircularProgressIndicator())),
-                                        // مؤشر تحميل
-                                        errorWidget: (context, url, error) =>
-                                            Image.network(
-                                              'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-                                              // صورة بديلة عند فشل التحميل
-                                              height: 120.h,
-                                            ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    // صورة المنتج
-
-                                    Text(
-                                      GetMaxChar(product.name, 12),
-                                      textAlign: TextAlign.center,
-                                      style: secondaryTextStyle(
-                                        color: Color(0xFF20003D),
-                                        size: 16.sp.round(),
-                                        weight: FontWeight.w600,
-                                        letterSpacing: -0.41,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-
-                                    Text(
-                                      '${product.size ?? 300} gm',
-                                      style: secondaryTextStyle(
-                                        color: Color(0xFF20003D),
-                                        size: 12.sp.round(),
-                                        weight: FontWeight.w300,
-                                        letterSpacing: -0.41,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                  ]),
-                              FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .start,
-                                      children: [
-                                        if (index == 1)
-                                          Opacity(
-                                            opacity: 0.50,
-                                            child: Text(
-                                              '24.40',
-                                              textAlign: TextAlign.start,
-                                              style: secondaryTextStyle(
-                                                color: Color(0xFFA1A1A1),
-                                                size: 12.sp.round(),
-                                                fontFamily: 'MuseoModerno',
-                                                weight: FontWeight.w400,
-                                                height: 3,
-                                                letterSpacing: -0.41,
-                                                decoration: TextDecoration
-                                                    .lineThrough,
-                                                // تحديد الخط السفلي
-                                                decorationColor: Colors
-                                                    .red,
-                                                // تحديد لون الخط السفلي
-                                                decorationThickness:
-                                                2, // يمكنك تغيير سمك الخط إذا رغبت
-                                              ),
-                                            ),
-                                          ),
-                                        if (index == 1) SizedBox(width: 10.w),
-                                        Text(
-                                          '\$${product.price ?? ""}',
-                                          textAlign: TextAlign.center,
-                                          style: secondaryTextStyle(
-                                            color: Color(0xFF4F0099),
-                                            size: 22.sp.round(),
-                                            weight: FontWeight.w600,
-                                            letterSpacing: -0.41,
-                                          ),
-                                        ),
-                                        if (index == 1) SizedBox(width: 20.w),
-                                      ])),
-                              SizedBox(height: 8),
-                            ]),
-                      ))),
-              PositionedDirectional(
-                  top: 20,
-                  end: 10.w,
-                  child: Obx(
-                        () =>
-                        LikeButton(
-                          onTap: onLikeButtonTapped,
-                          product: product,
-                          isLiked: wishListController
-                              .isProductInWishList(product.id)
-                              .value,
-                          size: 20.sp,
-                          circleColor: const CircleColor(
-                              start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                          bubblesColor: BubblesColor(
-                            dotPrimaryColor: Color(0xff33b5e5),
-                            dotSecondaryColor: Color(0xff0099cc),
-                          ),
-                          likeCountAnimationDuration: Duration(seconds: 1),
-                          likeCountAnimationType: LikeCountAnimationType.all,
-                          countBuilder: (int? count, bool isLiked,
-                              String text) {
-                            var color =
-                            isLiked ? Colors.deepPurpleAccent : Colors.grey;
-
-                            return Text(
-                              '',
-                              style: TextStyle(color: color),
-                            );
-                          },
-                          likeBuilder: (bool isLiked) {
-                            return SvgPicture.asset(
-                              wishListController
-                                  .isProductInWishList(product.id)
-                                  .value
-                                  ? 'assets/images/addwish.svg'
-                                  : 'assets/images/home/heart.svg',
-                              color: isLiked ? Colors.deepPurpleAccent : Colors
-                                  .grey,
-                              width: 20.w,
-                            );
-                          },
-                        ),
-                  )),
-              if (index == 1)
-                PositionedDirectional(
-                  top: -4.h,
-                  start: 5.w,
-                  child: ShowUp(
-                      child: Container(
-                          width: 38.w * 1.8,
-                          height: 44.h * 1.8,
-                          child: Stack(children: [
-                            SvgPicture.asset(
-                              'assets/images/home/off.svg',
-                              width: 38.w * 1.8,
-                              height: 44.h * 1.8,
-                              fit: BoxFit.cover,
-                            ),
-                            PositionedDirectional(
-                                bottom: 35.h,
-                                start: 17.w,
-                                child: ShowUp(
-                                  child: Text(
-                                    '${50}%',
-                                    style: secondaryTextStyle(
-                                      color: Colors.white,
-                                      size: 12.sp.round(),
-                                      weight: FontWeight.w800,
-                                      letterSpacing: -0.41,
-                                    ),
-                                  ),
-                                )),
-                          ]))),
-                ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(Get.context!)
-                        .size
-                        .width >= 600 ?
-                    20.h : 0.h
-                ),
-                child: PositionedDirectional(
-                  bottom: -15.h,
-                  end: 0.w,
-                  start: -10.w,
-                  child: SizedBox(
-                    height: 350.h,
-                    child: Stack(
-                      children: [
-                        // الخلفية SVG
-                        PositionedDirectional(
-                          bottom:
-                          cartController.cartItems.isEmpty ||
-                              cartController.cartItems.indexWhere(
-                                      (item) =>
-                                  item.product.id ==
-                                      product.id) ==
-                                  -1
-                              ?
-                          8
-                              :
-                          4
-                          ,
-                          end:
-                          cartController.cartItems.isEmpty ||
-                              cartController.cartItems.indexWhere(
-                                      (item) =>
-                                  item.product.id ==
-                                      product.id) ==
-                                  -1
-                              ?
-                          -12.w
-                              :
-                          15.w
-                          ,
-                          start:
-
-                          cartController.cartItems.isEmpty ||
-                              cartController.cartItems.indexWhere(
-                                      (item) =>
-                                  item.product.id ==
-                                      item.product.id) ==
-                                  -1
-                              ? 22.w : 15.w,
-                          child: SvgPicture.asset(
-                            cartController.cartItems.isEmpty ||
-                                cartController.cartItems.indexWhere(
-                                        (item) =>
-                                    item.product.id ==
-                                        product.id) ==
-                                    -1
-                                ?
-                            "assets/images/home/add_background.svg"
-
-                                :
-                            'assets/images/home/borderCart.svg'
-                            ,
-                            fit: BoxFit.cover,
-
-                            height: 134.h,
-
-                          ),
-                        ),
-                        // Cart controls
-                        PositionedDirectional(
-                          bottom: 66.h,
-                          end:
-                          cartController.cartItems.isEmpty ||
-                              cartController.cartItems.indexWhere(
-                                      (item) =>
-                                  item.product.id ==
-                                      product.id) ==
-                                  -1
-                              ?
-                          -3.w
-
-                              :
-                          0,
-                          start: 12,
-                          child: SizedBox(
-                            width: 80.w,
-                            child: Obx(
-                                  () =>
-                                  AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 300),
-                                    child: cartController.cartItems.isEmpty ||
-                                        cartController.cartItems.indexWhere(
-                                                (item) =>
-                                            item.product.id ==
-                                                product.id) ==
-                                            -1
-                                        ? InkWell(
-                                      onTap: () {
-                                        if (userToken == null) {
-                                          Get.to(() => LoginView());
-                                        } else {
-                                          int initialQty = product.d_limit > 0
-                                              ? product.d_limit
-                                              : 1;
-                                          cartController.addToCart(product,
-                                              quantity: initialQty);
-                                        }
-                                      },
-                                      child:
-                                      Center(
-                                        child: SvgPicture.asset(
-                                          'assets/images/home/add_icon.svg',
-                                          width: 40.w,
-                                          height: 40.h,
-                                        ),
-                                      ),
-
-                                    )
-                                        : Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.only(
-                                              start: 10.w,
-
-                                            ),
-                                            child: InkWell(
-                                              onTap: () {
-                                                if (userToken == null) {
-                                                  Get.to(() => LoginView());
-                                                  return;
-                                                }
-                                                var index = cartController
-                                                    .cartItems
-                                                    .indexWhere((item) =>
-                                                item.product.id ==
-                                                    product.id);
-                                                var currentItem = cartController
-                                                    .cartItems[index];
-
-                                                // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
-                                                if (product.d_limit != 0 &&
-                                                    currentItem.quantity >
-                                                        product.d_limit ||
-                                                    product.d_limit == 0 &&
-                                                        currentItem.quantity >
-                                                            1) {
-                                                  cartController.updateQuantity(
-                                                    currentItem,
-                                                    currentItem.quantity - 1,
-                                                  );
-                                                } else
-                                                if (product.d_limit == 0 &&
-                                                    currentItem.quantity ==
-                                                        1 ||
-                                                    currentItem.quantity ==
-                                                        product.d_limit) {
-                                                  print('teasdsadsadsa');
-                                                  cartController
-                                                      .removeItem(currentItem);
-                                                }
-                                              },
-                                              child: SvgPicture.asset(
-                                                'assets/images/home/minus.svg',
-                                                width: 20.w,
-                                                height: 20.h,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5.h,
-                                          )
-                                        ]),
-                                        Column(children: [
-                                          Text(
-                                            '${cartController
-                                                .cartItems[cartController
-                                                .cartItems.indexWhere((item) =>
-                                            item.product.id == product.id)]
-                                                .quantity}',
-                                            textAlign: TextAlign.center,
-                                            style: primaryTextStyle(
-                                              color: Color(0xFFFEFEFE),
-                                              size: 20.sp.round(),
-                                              height: 1.05,
-                                              weight: FontWeight.w900,
-                                              letterSpacing: -0.41,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 2.h,
-                                          )
-                                        ]),
-                                        Column(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  right: 5.w),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  if (userToken == null) {
-                                                    Get.to(() => LoginView());
-                                                    return;
-                                                  }
-                                                  var index = cartController
-                                                      .cartItems
-                                                      .indexWhere((item) =>
-                                                  item.product.id ==
-                                                      product.id);
-                                                  var currentItem = cartController
-                                                      .cartItems[index];
-                                                  cartController.updateQuantity(
-                                                    currentItem,
-                                                    currentItem.quantity + 1,
-                                                  );
-                                                },
-                                                child: SvgPicture.asset(
-                                                  'assets/images/home/plus.svg',
-                                                  width: 20.w,
-                                                  height: 20.h,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5.h,
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ])),
-      );
-    });
-  }
-
-  Widget premiumProductTemplate(Product product, int index) {
+  Widget premiumProductTemplate(Product product, int index, context) {
     return GestureDetector(
       onTap: () async {
         ProductController productController = Get.put(ProductController());
@@ -1245,7 +762,7 @@ width: MediaQuery.of(context).size.width,
                         maxLines: 2,
                         style: primaryTextStyle(
                           color: Color(0xFFFEFEFE),
-                          size: 20.sp.round(),
+                          size: 15.sp.round(),
                           height: 1.05,
                           weight: FontWeight.w900,
                           letterSpacing: -0.41,
@@ -1274,7 +791,7 @@ width: MediaQuery.of(context).size.width,
                     ),
 
                     Transform.translate(
-                      offset: const Offset(0, 20),
+                      offset: const Offset(0, 25),
                       child: Container(
                           width: 100.w,
                           alignment: Alignment.center,
@@ -1284,7 +801,7 @@ width: MediaQuery.of(context).size.width,
                               textAlign: TextAlign.center,
                               style: primaryTextStyle(
                                 color: Color(0xFFFEFEFE),
-                                size: 22.sp.round(),
+                                size: 15.sp.round(),
                               )
                           )
                       ),
@@ -1301,15 +818,7 @@ width: MediaQuery.of(context).size.width,
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (userToken == null) {
-                                  Get.to(() => LoginView());
-                                } else {
-                                  int initialQty = product.d_limit > 0
-                                      ? product.d_limit
-                                      : 1;
-                                  cartController.addToCart(product,
-                                      quantity: initialQty);
-                                }
+                             addToCart(product);
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -1334,44 +843,7 @@ width: MediaQuery.of(context).size.width,
                                             ),
                                             child: InkWell(
                                               onTap: () {
-                                                if (userToken == null) {
-                                                  Get.to(() => LoginView());
-                                                  return;
-                                                }
-                                                var index = cartController
-                                                    .cartItems
-                                                    .indexWhere((item) =>
-                                                item.product.id ==
-                                                    product.id);
-                                                var currentItem = cartController
-                                                    .cartItems[index];
-
-                                                // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
-                                                if (product.d_limit != 0 &&
-                                                    currentItem.quantity >
-                                                        product.d_limit ||
-                                                    product.d_limit == 0 &&
-                                                        currentItem.quantity >
-                                                            1) {
-                                                  cartController.updateQuantity(
-                                                    currentItem,
-                                                    currentItem.quantity - 1,
-                                                  );
-                                                } else
-                                                if (product.d_limit == 0 &&
-                                                    currentItem.quantity ==
-                                                        1 ||
-                                                    currentItem.quantity ==
-                                                        product.d_limit) {
-                                                  print('teasdsadsadsa');
-                                                  cartController
-                                                      .removeItem(currentItem);
-                                                  // cartController.updateQuantity(
-                                                  //   currentItem,
-                                                  //   currentItem.quantity -
-                                                  //       product.d_limit,
-                                                  // );
-                                                }
+                                               handleDecrement(product);
                                               },
                                               child: SvgPicture.asset(
                                                 'assets/images/home/minus.svg',
@@ -1412,21 +884,7 @@ width: MediaQuery.of(context).size.width,
                                                   right: 5.w),
                                               child: InkWell(
                                                 onTap: () {
-                                                  if (userToken == null) {
-                                                    Get.to(() => LoginView());
-                                                    return;
-                                                  }
-                                                  var index = cartController
-                                                      .cartItems
-                                                      .indexWhere((item) =>
-                                                  item.product.id ==
-                                                      product.id);
-                                                  var currentItem = cartController
-                                                      .cartItems[index];
-                                                  cartController.updateQuantity(
-                                                    currentItem,
-                                                    currentItem.quantity + 1,
-                                                  );
+                                             handleIncrement(product);
                                                 },
                                                 child: SvgPicture.asset(
                                                   'assets/images/home/plus.svg',
@@ -1452,18 +910,10 @@ width: MediaQuery.of(context).size.width,
                             :
                         GestureDetector(
                           onTap: () {
-                            if (userToken == null) {
-                              Get.to(() => LoginView());
-                            } else {
-                              int initialQty = product.d_limit > 0
-                                  ? product.d_limit
-                                  : 1;
-                              cartController.addToCart(product,
-                                  quantity: initialQty);
-                            }
+                            addToCart(product);
                           },
                           child: SvgPicture.asset(
-                              height: 100.h,
+                              height: MediaQuery.of(context).size.width /4.1,
                               fit: BoxFit.cover,
                               "assets/images/home/add_to_cart_premium.svg"),
                         ),
@@ -1573,6 +1023,13 @@ width: MediaQuery.of(context).size.width,
     });
   }
 
+
+
+
+
+
+
+
 }
 
 class SemiLunarScrollView extends StatefulWidget {
@@ -1596,8 +1053,8 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
   Widget build(BuildContext context) {
     return Obx(() {
       return
-        homeController.isCategoriesLoading.value?
-            //Loading One
+        homeController.isCategoriesLoading.value ?
+        //Loading One
         ListView.separated(
           shrinkWrap: true,
           controller: _scrollController,
@@ -1610,58 +1067,55 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
 
             upperValue(index, offset) {
               if (index < 4) {
-                return index * 90.h;
-              } else {
+                return index * MediaQuery.of(context).size.height /6 ;
+              }
+              else {
                 homeController.toggleRotation();
-                return index * 190.h;
+                return index * MediaQuery.of(context).size.height /7;
               }
             }
             double curveOffset = math.sin(
-                (upperValue(index, offset) - offset) / 100) * 50;
+                (upperValue(index, offset) - offset) / 100) * 20;
 
-            return Transform.translate(
-              offset: Offset(60.w, curveOffset),
-              child: Column(
-                children: [
-                  Container(
+            return GestureDetector(
+              onTap: () {
+                print("sdfsdfdsfsd");
+                var bodyRequest = {
+                  "category_ids[0]": homeController.categories[index].id
+                      .toString(),
+                  'orderBy': 'high-low',
 
-                    decoration: BoxDecoration(
-                        boxShadow: [
-
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: Offset(0, 3),
-                          )
-
-                        ]
-                    ),
-                    child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.white,
-                        child: ClipOval(
-                          child: Lottie.asset("assets/images/jiffy_placeholder.json",
+                };
+                customSearchController.toggleSelectedCategory(
+                    homeController.categories[index].name);
+                customSearchController.getProducts(bodyRequest);
 
 
-                          ),
-                        )
-                    ),
+                Get.to(() => const SearchView());
+                // customSearchController.scrollListener();
+                customSearchController.animateToCategory(index);
+              },
+              child: Padding(
+           padding:  EdgeInsets.only(top: 30.0.h, left: 20.w, right: 20.w),
+                child: Transform.translate(
+                  offset: Offset(0.w, curveOffset),
+                  child:  CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.white,
+                      child: ClipOval(
+                        child: Lottie.asset(
+                          "assets/images/jiffy_placeholder.json",
 
 
+                        ),
+                      )
                   ),
-
-
-
-
-
-
-                ],
+                ),
               ),
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(width: 50.w,);
+            return SizedBox(width: 2.w,);
           },
         )
             :
@@ -1678,30 +1132,20 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                 : 0.0;
 
             upperValue(index, offset) {
-              if (index < 4) {
-                return index * 95.h;
+              if (index < 3) {
+                return index * MediaQuery.of(context).size.height /6 ;
               }
               else {
-              homeController.toggleRotation();
-              return index * 100.h;
+                homeController.toggleRotation();
+                return index * MediaQuery.of(context).size.height /7;
               }
             }
             double curveOffset = math.sin(
-                (upperValue(index, offset) - offset) / 100) * 50;
+                (upperValue(index, offset) - offset) / 100) * 20;
 
-            return Listener (
-            // onTapDown
-              onPointerUp: (_) => {                print("sdfsdfdsfsd"),
-
-            },
-              onPointerSignal: (_) => {                print("sdfsdfdsfsd"),
-
-              },
-
-
-
+            return SizedBox(
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   print("sdfsdfdsfsd");
                   var bodyRequest = {
                     "category_ids[0]": homeController.categories[index].id
@@ -1709,18 +1153,19 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                     'orderBy': 'high-low',
 
                   };
-                  customSearchController.toggleSelectedCategory(homeController.categories[index].name);
+                  customSearchController.toggleSelectedCategory(
+                      homeController.categories[index].name);
                   customSearchController.getProducts(bodyRequest);
 
 
-                  Get.to( ()=> const SearchView());
+                  Get.to(() => const SearchView());
                   // customSearchController.scrollListener();
                   customSearchController.animateToCategory(index);
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding:  EdgeInsets.only(top: 30.0.h, left: 20.w, right: 20.w),
                   child: Transform.translate(
-                    offset: Offset(10.w, curveOffset),
+                    offset: Offset(0.w, curveOffset),
                     child: Column(
                       children: [
                         Container(
@@ -1746,24 +1191,25 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                             ),
 
 
-
                             radius: 30,
 
                           ),
                         ),
                         SizedBox(height: 5.h,),
                         InkWell(
-                          onTap: (){
-                            print("sdfsdfsd");
+                          onTap: () {
+
                           },
                           child: SizedBox(
                             width: 52.w,
 
                             child: Text(homeController.categories[index].name!,
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                              maxLines: 1,
                               textAlign: TextAlign.center,
-                              style: secondaryTextStyle(),),
+                              style: secondaryTextStyle(
+                                size: 12.sp.round()
+                              ),),
                           ),
                         ),
 
@@ -1775,7 +1221,7 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(width:  40.w,);
+            return SizedBox(width: 2.w,);
           },
         );
     });

@@ -16,6 +16,7 @@ import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/help/bindings/help_binding.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
+import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:restart_app/restart_app.dart';
 
@@ -188,9 +189,12 @@ CustomSearchController customSearchController = Get.put(CustomSearchController()
 WishlistController wishListController = Get.put(WishlistController());
 CartController cartController = Get.put(CartController());
 
+NavBarController tabController = Get.put(NavBarController());
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return Observer(
         builder: (_) => FutureBuilder<Color>(
             future: getMaterialYouData(),

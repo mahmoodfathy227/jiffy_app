@@ -10,10 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Observable state for animations
-  late AnimationController controller;
-  late AnimationController _fadecontroller;
-  late AnimationController
-      _controllerRotate; // This will stay as an AnimationController
+
+
    Animation<Offset>? slideAnimation;
    Animation<double>? fadeInAnimation;
    Animation<double>? rotationAnimation;
@@ -171,9 +169,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onClose() {
-    controller.dispose();
-    _fadecontroller.dispose();
-    _controllerRotate.dispose();
+
+
     scrollController.dispose();
     pageController.value.dispose();
     super.onClose();

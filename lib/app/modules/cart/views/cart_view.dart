@@ -516,7 +516,7 @@ Future.delayed(Duration(milliseconds: 500), () {
     return Obx(() {
       return Scaffold(
         backgroundColor: primaryBackgroundColor,
-          body: cartController.isAuth.value
+          body: cartController.isAuth.value || userToken != null
               ? SizedBox(
                   height: MediaQuery.sizeOf(context).height,
                   width: MediaQuery.sizeOf(context).width,

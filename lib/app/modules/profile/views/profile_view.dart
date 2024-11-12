@@ -9,6 +9,7 @@ import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/profile/views/update_profile.dart';
+import 'package:jiffy/app/modules/services/api_service.dart';
 
 import '../../auth/views/register_view.dart';
 import '../controllers/profile_controller.dart';
@@ -34,168 +35,173 @@ class _ProfileViewState extends State<ProfileView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() {
-        return controller.isAuth.value
-            ? SingleChildScrollView(
-                child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 80,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 365.h,
-                        child: Stack(
-                          children: [
-                            CustomAppBar(
-                              myFunction: () {},
-                              back: false,
-                              title: "Profile",
-                            ),
-                            controller.isLoading.value
-                                ? LoadingWidget(_buildProfileHeader(context))
-                                : Positioned(
-                                    bottom: 20.h,
-                                    left: 0,
-                                    right: 0,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: _buildProfileHeader(context),
-                                    ),
-                                  ),
-                          ],
+      body: userToken != null
+          ? SingleChildScrollView(
+          child: SizedBox(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height - 80,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 365.h,
+                    child: Stack(
+                      children: [
+                        CustomAppBar(
+                          myFunction: () {},
+                          back: false,
+                          title: "Profile",
                         ),
+
+
+              Positioned(
+                bottom: 20.h,
+                left: 0,
+                right: 0,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: _buildProfileHeader(context),
+                ),
+              ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  Container(
+                    width: 324.w,
+                    padding:
+                    EdgeInsetsDirectional.symmetric(vertical: 10.h),
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      SizedBox(height: 10.h),
-                      Container(
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 20,
+                          offset: Offset(0, 4),
+                          spreadRadius: -10,
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 276.w,
+                          child: Text(
+                            'Preferences & Support',
+                            style: secondaryTextStyle(
+                              color: Color(0xFF20003D),
+                              size: 20.sp.round(),
+                              weight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        _buildMenuItem(
+                            'address.svg', 'Address', () {
+                          AddressController addressController = Get.put(
+                              AddressController());
+                          addressController.changeAddressStatus(false);
+                          Get.to(AddressView());
+                        }, 19, 1),
+                        // _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
+                        // _buildMenuItem('rate.svg', 'Rate this app', () {
+                        //   if (GetPlatform.isAndroid) {
+                        //     _launchURL(
+                        //         'https://play.google.com/store/apps/details?id=maryana.genixs.com.maryana');
+                        //   } else if (GetPlatform.isIOS) {
+                        //     _launchURL(
+                        //         'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
+                        //   }
+                        // }, 19, 4),
+                        _buildMenuItem('help.svg', 'Help Center', () {
+                          Get.to(HelpView());
+                        }, 19, 5),
+
+                        _buildMenuItem('terms.svg', 'Terms of Use', () {
+                          _launchURL(
+                              'https://jiffy.abadr.work/terms-of-use');
+                        }, 19, 5),
+                        _buildMenuItem('privacy.svg', 'Privacy Policy', () {
+                          _launchURL(
+                              'https://jiffy.abadr.work/privacy-policy');
+                        }, 19, 6),
+                        SizedBox(height: 10.h),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+                  ShowUp(
+                    delay: 200,
+                    child: InkWell(
+                      onTap: () {
+                        _showLogoutConfirmation(context, controller);
+                      },
+                      child: Container(
                         width: 324.w,
-                        padding:
-                            EdgeInsetsDirectional.symmetric(vertical: 10.h),
+                        height: 52.h,
                         decoration: ShapeDecoration(
-                          color: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                                width: 1, color: Color(0xFFFF4141)),
+                            borderRadius: BorderRadius.circular(42),
                           ),
                           shadows: const [
                             BoxShadow(
                               color: Color(0x3F000000),
-                              blurRadius: 20,
+                              blurRadius: 100,
                               offset: Offset(0, 4),
                               spreadRadius: -10,
                             )
                           ],
                         ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: 276.w,
-                              child: Text(
-                                'Preferences & Support',
-                                style: secondaryTextStyle(
-                                  color: Color(0xFF20003D),
-                                  size: 20.sp.round(),
-                                  weight: FontWeight.w700,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(children: [
+                                SvgPicture.asset(
+                                  'assets/images/profile/logout.svg',
+                                  width: 19.w,
                                 ),
-                              ),
-                            ),
-                            _buildMenuItem(
-                                'address.svg', 'Address', () {
-                                  AddressController addressController = Get.put(AddressController());
-                                  addressController.changeAddressStatus(false);
-                                  Get.to(AddressView());
-                            }, 19, 1),
-                            // _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
-                            // _buildMenuItem('rate.svg', 'Rate this app', () {
-                            //   if (GetPlatform.isAndroid) {
-                            //     _launchURL(
-                            //         'https://play.google.com/store/apps/details?id=maryana.genixs.com.maryana');
-                            //   } else if (GetPlatform.isIOS) {
-                            //     _launchURL(
-                            //         'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
-                            //   }
-                            // }, 19, 4),
-                            _buildMenuItem('help.svg', 'Help Center', () {
-                             Get.to(HelpView());
-                            }, 19, 5),
-
-                            // _buildMenuItem('terms.svg', 'Terms of Use', () {
-                            //   _launchURL(
-                            //       'https://mariannella.genixarea.pro/terms.html');
-                            // }, 19, 5),
-                            // _buildMenuItem('privacy.svg', 'Privacy Policy', () {
-                            //   _launchURL(
-                            //       'https://mariannella.genixarea.pro/privacy.html');
-                            // }, 19, 6),
-                            SizedBox(height: 10.h),
-                          ],
-                        ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Text(
+                                  'Log out',
+                                  style: secondaryTextStyle(
+                                    color: const Color(0xFFFF4141),
+                                    size: 14.sp.round(),
+                                    weight: FontWeight.w500,
+                                  ),
+                                ),
+                              ]),
+                            ]),
                       ),
-                      SizedBox(height: 20.h),
-                      ShowUp(
-                        delay: 200,
-                        child: InkWell(
-                          onTap: () {
-                            _showLogoutConfirmation(context, controller);
-                          },
-                          child: Container(
-                            width: 324.w,
-                            height: 52.h,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    width: 1, color: Color(0xFFFF4141)),
-                                borderRadius: BorderRadius.circular(42),
-                              ),
-                              shadows: const [
-                                BoxShadow(
-                                  color: Color(0x3F000000),
-                                  blurRadius: 100,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -10,
-                                )
-                              ],
-                            ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(children: [
-                                    SvgPicture.asset(
-                                      'assets/images/profile/logout.svg',
-                                      width: 19.w,
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    Text(
-                                      'Log out',
-                                      style: secondaryTextStyle(
-                                        color: const Color(0xFFFF4141),
-                                        size: 14.sp.round(),
-                                        weight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ]),
-                                ]),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20.h),
-                    ],
+                    ),
                   ),
-                ),
-              ))
-            : Center(
-                child: socialMediaPlaceHolder(),
-              );
-      }),
+                  SizedBox(height: 20.h),
+                ],
+              ),
+            ),
+          ))
+          : Center(
+        child: socialMediaPlaceHolder(),
+      ),
     );
   }
 
-  void _showLogoutConfirmation(
-      BuildContext context, ProfileController controller) {
+  void _showLogoutConfirmation(BuildContext context,
+      ProfileController controller) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -231,7 +237,8 @@ class _ProfileViewState extends State<ProfileView>
                   InkWell(
                       onTap: () {
                         controller.Logout();
-                        Get.back(); // Use Get.back() instead of Navigator.pop(context)
+                        Get
+                            .back(); // Use Get.back() instead of Navigator.pop(context)
                       },
                       child: Container(
                         width: 150.w,
@@ -240,7 +247,7 @@ class _ProfileViewState extends State<ProfileView>
                             color: Colors.red,
                             border: Border.all(color: Colors.black12),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
+                            BorderRadius.all(Radius.circular(12))),
                         child: Center(
                             child: Text('Yes',
                                 style: primaryTextStyle(
@@ -258,7 +265,7 @@ class _ProfileViewState extends State<ProfileView>
                         decoration: BoxDecoration(
                             color: Colors.grey,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
+                            BorderRadius.all(Radius.circular(12))),
                         child: Center(
                             child: Text('No',
                                 style: primaryTextStyle(
@@ -276,13 +283,15 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   late AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
-    )..forward();
+    )
+      ..forward();
   }
 
   @override
@@ -292,184 +301,178 @@ class _ProfileViewState extends State<ProfileView>
   }
 
   Widget _buildProfileHeader(BuildContext context) {
-    return AnimatedOpacity(
-      duration: Duration(milliseconds: 500),
-      opacity: controller.isLoading.value ? 0 : 1,
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0, -1),
-          end: Offset(0, 0),
-        ).animate(CurvedAnimation(
-          parent: _animationController,
-          curve: Curves.easeOut,
-        )),
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 50.h), // لضبط المسافة العلوية للصورة
-              padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 16.w),
-              height: 169.h,
-              width: 324.w,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                shadows: [
-                  BoxShadow(
-                    color: Color(0x3F000000),
-                    blurRadius: 20,
-                    offset: Offset(0, 4),
-                    spreadRadius: -10,
-                  )
-                ],
+    return Obx(() {
+      return Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 50.h),
+            // لضبط المسافة العلوية للصورة
+            padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 16.w),
+            height: 169.h,
+            width: 324.w,
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: Column(
-                children: [
-                  SizedBox(height: 70.h), // لإضافة فراغ يعادل نصف حجم الصورة
-                  Obx(
-                    () => Text(
-                      GetMaxChar(
-                          '${controller.userModel.value.firstName} ${controller.userModel.value.lastName}',
-                          13),
-                      style: secondaryTextStyle(
-                        color: Color(0xFF4F0099),
-                        size: 16,
-                        weight: FontWeight.w700,
-                        height: 0.09,
+              shadows: [
+                BoxShadow(
+                  color: Color(0x3F000000),
+                  blurRadius: 20,
+                  offset: Offset(0, 4),
+                  spreadRadius: -10,
+                )
+              ],
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 70.h), // لإضافة فراغ يعادل نصف حجم الصورة
+                Obx(
+                      () =>
+                      Text(
+                        GetMaxChar(
+                            '${controller.userModel.value
+                                .firstName} ${controller.userModel.value
+                                .lastName}',
+                            13),
+                        style: secondaryTextStyle(
+                          color: Color(0xFF4F0099),
+                          size: 16,
+                          weight: FontWeight.w700,
+                          height: 0.09,
+                        ),
                       ),
+                ),
+                SizedBox(height: 15.h),
+                Obx(() {
+                  return controller.userModel.value.email.isNotEmpty
+                      ? Text(
+                    GetMaxChar(controller.userModel.value.email, 25),
+                    style: secondaryTextStyle(
+                      color: Colors.black,
+                      size: 12.sp.round(),
+                      weight: FontWeight.w300,
+                      letterSpacing: -0.12,
                     ),
-                  ),
-                  SizedBox(height: 15.h),
-                  Obx(() {
-                    return controller.userModel.value.email.isNotEmpty
-                        ? Text(
-                            GetMaxChar(controller.userModel.value.email, 25),
-                            style: secondaryTextStyle(
-                              color: Colors.black,
-                              size: 12.sp.round(),
-                              weight: FontWeight.w300,
-                              letterSpacing: -0.12,
-                            ),
-                          )
-                        : SizedBox();
-                  }),
-                  SizedBox(height: 10.h),
+                  )
+                      : SizedBox();
+                }),
+                SizedBox(height: 10.h),
 
-                  ShowUp(
-                      delay: 200,
-                      child: InkWell(
-                          onTap: () {
-                            Get.to(() => ProfileUpdate());
-                          },
-                          child: Container(
-                              width: 117.w,
-                              height: 34.h,
-                              decoration: ShapeDecoration(
-                                gradient: const LinearGradient(
-                                  begin: Alignment(1.00, 0.04),
-                                  end: Alignment(-1, -0.04),
-                                  colors: [
-                                    Color(0xFF6900CC),
-                                    Color(0xFF20003D)
-                                  ],
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(43),
-                                ),
-                                shadows: const [
-                                  BoxShadow(
-                                    color: Color(0x4C000000),
-                                    blurRadius: 30,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                  )
+                ShowUp(
+                    delay: 200,
+                    child: InkWell(
+                        onTap: () {
+                          Get.to(() => ProfileUpdate());
+                        },
+                        child: Container(
+                            width: 117.w,
+                            height: 34.h,
+                            decoration: ShapeDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment(1.00, 0.04),
+                                end: Alignment(-1, -0.04),
+                                colors: [
+                                  Color(0xFF6900CC),
+                                  Color(0xFF20003D)
                                 ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/profile/edit.png',
-                                      width: 16.w,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(43),
+                              ),
+                              shadows: const [
+                                BoxShadow(
+                                  color: Color(0x4C000000),
+                                  blurRadius: 30,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 0,
+                                )
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/profile/edit.png',
+                                    width: 16.w,
+                                  ),
+                                  Text(
+                                    'Edit Profile',
+                                    style: secondaryTextStyle(
+                                      color: Colors.white,
+                                      size: 12.sp.round(),
+                                      weight: FontWeight.w500,
+                                      letterSpacing: -0.41,
                                     ),
-                                    Text(
-                                      'Edit Profile',
-                                      style: secondaryTextStyle(
-                                        color: Colors.white,
-                                        size: 12.sp.round(),
-                                        weight: FontWeight.w500,
-                                        letterSpacing: -0.41,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )))),
+                                  ),
+                                ],
+                              ),
+                            )))),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x3F000000), // لون الظل
+                    blurRadius: 20, // نصف قطر التمويه للظل
+                    offset: Offset(0, 4), // انزياح الظل
+                    spreadRadius: 0, // انتشار الظل
+                  ),
                 ],
               ),
-            ),
-            Positioned(
-              top: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x3F000000), // لون الظل
-                      blurRadius: 20, // نصف قطر التمويه للظل
-                      offset: Offset(0, 4), // انزياح الظل
-                      spreadRadius: 0, // انتشار الظل
-                    ),
-                  ],
-                ),
-                child: CircleAvatar(
-                  radius: 52.r,
-                  backgroundImage: controller.userModel.value.photo == null ||
-                          controller.userModel.value.photo!.isEmpty
-                      ? const AssetImage(
-                          'assets/images/profile/profile_placeholder.png')
-                      : null,
-                  child: controller.userModel.value.photo == null ||
-                          controller.userModel.value.photo!.isEmpty
-                      ? null
-                      : CachedNetworkImage(
-                          imageUrl: controller.userModel.value.photo!,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => CircleAvatar(
-                            radius: 52.r,
-                            backgroundImage: const AssetImage(
-                                'assets/images/profile/profile_placeholder.png'),
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 16.r,
-                              ),
-                            ),
-                          ),
-                          imageBuilder: (context, imageProvider) =>
-                              CircleAvatar(
-                            radius: 52.r,
-                            backgroundImage: imageProvider,
+              child: CircleAvatar(
+                radius: 52.r,
+                backgroundImage: controller.userModel.value.photo == null ||
+                    controller.userModel.value.photo!.isEmpty
+                    ? const AssetImage(
+                    'assets/images/profile/profile_placeholder.png')
+                    : null,
+                child: controller.userModel.value.photo == null ||
+                    controller.userModel.value.photo!.isEmpty
+                    ? null
+                    : CachedNetworkImage(
+                  imageUrl: controller.userModel.value.photo!,
+                  placeholder: (context, url) =>
+                  const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) =>
+                      CircleAvatar(
+                        radius: 52.r,
+                        backgroundImage: const AssetImage(
+                            'assets/images/profile/profile_placeholder.png'),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 16.r,
                           ),
                         ),
+                      ),
+                  imageBuilder: (context, imageProvider) =>
+                      CircleAvatar(
+                        radius: 52.r,
+                        backgroundImage: imageProvider,
+                      ),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ],
+      );
+    });
   }
 
-  Widget _buildMenuItem(
-      String icon, String title, VoidCallback onTap, double size, int index) {
+  Widget _buildMenuItem(String icon, String title, VoidCallback onTap,
+      double size, int index) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

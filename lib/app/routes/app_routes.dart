@@ -29,7 +29,7 @@ abstract class Routes {
   static const CART = _Paths.CART;
   static const HELP = _Paths.HELP;
   static const CHANGEPASSWORD = _Paths.CHANGEPASSWORD;
-
+  static const NAV_BAR = _Paths.NAV_BAR;
 }
 
 abstract class _Paths {
@@ -61,5 +61,5 @@ abstract class _Paths {
   static const CART = '/cart';
   static const Checkout = '/checkout';
   static const HELP = '/help';
-
+  static const NAV_BAR = '/nav-bar';
 }
