@@ -476,7 +476,7 @@ class _ScaleTransitionDemoState extends State<CategoryScroll>
   Widget build(BuildContext context) {
     return Obx(() {
       return ListView.separated(
-
+controller: customSearchController.categoryScrollController,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) =>
               _buildSingleCategoty(context, index),

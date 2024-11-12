@@ -45,7 +45,7 @@ import '../config/helpers.dart';
 import '../model/test_model_response.dart';
 
 class CustomNavBar extends StatelessWidget {
-  final NavigationsBarController _tabController = Get.find();
+  final NavigationsBarController _tabController = Get.put(NavigationsBarController());
 
   @override
   Widget build(BuildContext context) {
@@ -201,32 +201,53 @@ Widget SearchHomeBar({HomeController? homeController}) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SlideTransition(
-                position: homeController!.slideAnimation,
-                child: FadeTransition(
-                    opacity:
-                    homeController!.fadeInAnimation, // GetX controlled fade
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     // Open Drawer or any action
-                        //   },
-                        //   child: SvgPicture.asset(
-                        //     'assets/images/home/menu.svg',
-                        //   ),
-                        // ),
-                        SvgPicture.asset(
-                          'assets/images/splash/logo.svg',
-                          width: 60.w,
-                          height: 52.h,
-                        ),
-                        // SvgPicture.asset(
-                        //   'assets/images/home/notification.svg',
-                        // ),
-                      ],
-                    ))),
+            // SlideTransition(
+            //     position: homeController!.slideAnimation,
+            //     child: FadeTransition(
+            //         opacity:
+            //         homeController!.fadeInAnimation, // GetX controlled fade
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             // GestureDetector(
+            //             //   onTap: () {
+            //             //     // Open Drawer or any action
+            //             //   },
+            //             //   child: SvgPicture.asset(
+            //             //     'assets/images/home/menu.svg',
+            //             //   ),
+            //             // ),
+            //             SvgPicture.asset(
+            //               'assets/images/splash/logo.svg',
+            //               width: 60.w,
+            //               height: 52.h,
+            //             ),
+            //             // SvgPicture.asset(
+            //             //   'assets/images/home/notification.svg',
+            //             // ),
+            //           ],
+            //         ))),'
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // GestureDetector(
+                //   onTap: () {
+                //     // Open Drawer or any action
+                //   },
+                //   child: SvgPicture.asset(
+                //     'assets/images/home/menu.svg',
+                //   ),
+                // ),
+                SvgPicture.asset(
+                  'assets/images/splash/logo.svg',
+                  width: 60.w,
+                  height: 52.h,
+                ),
+                // SvgPicture.asset(
+                //   'assets/images/home/notification.svg',
+                // ),
+              ],
+            ),
             SizedBox(height: 26.h),
             Row(
               children: [
@@ -291,42 +312,73 @@ Widget SearchHomeBar({HomeController? homeController}) {
               ],
             ),
             SizedBox(height: 25.h),
-            FadeTransition(
-                opacity: homeController.fadeInAnimation, // GetX controlled fade
-                child: Text(
-                  'Current Location',
-                  textAlign: TextAlign.center,
-                  style: secondaryTextStyle(
-                    color: Colors.white,
-                    size: 12.sp.round(),
-                    weight: FontWeight.w300,
-                    letterSpacing: -0.41,
-                  ),
-                )),
-            SizedBox(height: 10.h),
-            FadeTransition(
-              opacity: homeController.fadeInAnimation, // GetX controlled fade
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/home/locations.svg',
-                  ),
-                  SizedBox(width: 12.w),
-                  Text(
-                    'Cairo, Egypt',
-                    textAlign: TextAlign.center,
-                    style: secondaryTextStyle(
-                      color: Color(0xFFFFFDD2),
-                      size: 24.sp.round(),
-                      weight: FontWeight.w700,
-                      height: 0.09,
-                      letterSpacing: -0.41,
-                    ),
-                  ),
-                ],
+            Text(
+              'Current Location',
+              textAlign: TextAlign.center,
+              style: secondaryTextStyle(
+                color: Colors.white,
+                size: 12.sp.round(),
+                weight: FontWeight.w300,
+                letterSpacing: -0.41,
               ),
             )
+            // FadeTransition(
+            //     opacity: homeController.fadeInAnimation, // GetX controlled fade
+            //     child: Text(
+            //       'Current Location',
+            //       textAlign: TextAlign.center,
+            //       style: secondaryTextStyle(
+            //         color: Colors.white,
+            //         size: 12.sp.round(),
+            //         weight: FontWeight.w300,
+            //         letterSpacing: -0.41,
+            //       ),
+            //     ))
+            ,
+            SizedBox(height: 10.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/images/home/locations.svg',
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  'Cairo, Egypt',
+                  textAlign: TextAlign.center,
+                  style: secondaryTextStyle(
+                    color: Color(0xFFFFFDD2),
+                    size: 24.sp.round(),
+                    weight: FontWeight.w700,
+                    height: 0.09,
+                    letterSpacing: -0.41,
+                  ),
+                ),
+              ],
+            ),
+            // FadeTransition(
+            //   opacity: homeController.fadeInAnimation, // GetX controlled fade
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       SvgPicture.asset(
+            //         'assets/images/home/locations.svg',
+            //       ),
+            //       SizedBox(width: 12.w),
+            //       Text(
+            //         'Cairo, Egypt',
+            //         textAlign: TextAlign.center,
+            //         style: secondaryTextStyle(
+            //           color: Color(0xFFFFFDD2),
+            //           size: 24.sp.round(),
+            //           weight: FontWeight.w700,
+            //           height: 0.09,
+            //           letterSpacing: -0.41,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ));

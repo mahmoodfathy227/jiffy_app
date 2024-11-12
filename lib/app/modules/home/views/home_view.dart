@@ -6,19 +6,25 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/app/builtInPackage/like_button-2.0.5/lib/like_button.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
+import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/product/controllers/product_controller.dart';
 import 'package:jiffy/app/modules/product/views/product_view.dart';
+import 'package:jiffy/app/modules/search/views/search_view.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
+import 'package:jiffy/main.dart';
 import 'package:lottie/lottie.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../../routes/app_pages.dart';
 import '../../auth/views/login_view.dart';
 import '../../main/controllers/tab_controller.dart';
 import '../controllers/home_controller.dart';
+import 'dart:math' as math;
 
 class HomeView extends StatelessWidget {
   // Inject HomeController using GetX
@@ -29,7 +35,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         backgroundColor: const Color(0xFFF8F3FF),
         body: SingleChildScrollView(
@@ -38,323 +43,433 @@ class HomeView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
+
                     width: MediaQuery
                         .of(context)
                         .size
                         .width,
-                    height: 750.h, // يمكن تخصيص الارتفاع أو جعله مرنًا
+                    height: 420.h, // يمكن تخصيص الارتفاع أو جعله مرنًا
                     child: Stack(
+                      alignment: Alignment.topCenter,
                       children: [
-                        // Slide-down animation using GetX controlled animations
-                        PositionedDirectional(
-                            start: -127.w,
-                            top: -280.h,
-                            child: SlideTransition(
-                                position: homeController.slideAnimation,
-                                child: FadeTransition(
-                                  opacity: homeController
-                                      .fadeInAnimation, // GetX Fade-In
-                                  child: Container(
-                                    width: 644.w,
-                                    height: 663.h,
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          left: 15.w,
-                                          top: 0,
-                                          child: Obx(() {
-                                            // This widget will now reactively listen to changes in rotationAngleCircule
-                                            return Transform.rotate(
-                                              angle: homeController
-                                                  .rotationAngleCircule
-                                                  .value,
-                                              // Controlled by HomeController
-                                              child: SvgPicture.asset(
-                                                'assets/images/home/circule.svg',
-                                                fit: BoxFit.contain,
-                                                width: 645.w,
-                                                height: 598.h,
-                                              ),
-                                            );
-                                          }),
-                                        ),
-                                        // ListView with Rotation
-                                        Positioned.fill(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                            children: [
-                                              SizedBox(
-                                                height: 150
-                                                    .h,
-                                                // Adjust height if needed
-                                                width: MediaQuery
-                                                    .of(context)
-                                                    .size
-                                                    .width +
-                                                    85.w,
-                                                child: PageView.builder(
-                                                  onPageChanged: (
-                                                      int pageIndex) {
-                                                    homeController
-                                                        .onPageChanged(
-                                                        pageIndex); // GetX Page change handler
-                                                  },
-                                                  controller: homeController
-                                                      .pageController.value,
-                                                  itemCount: (homeController
-                                                      .categories.length /
-                                                      4)
-                                                      .ceil(),
-                                                  // Number of pages
-                                                  itemBuilder:
-                                                      (context, pageIndex) {
-                                                    int startIndex = pageIndex *
-                                                        4;
-                                                    int endIndex =
-                                                    (startIndex + 4) >
-                                                        homeController
-                                                            .categories
-                                                            .length
-                                                        ? homeController
-                                                        .categories.length
-                                                        : startIndex + 4;
-                                                    List<
-                                                        String> currentCategories =
-                                                    homeController.categories
-                                                        .sublist(startIndex,
-                                                        endIndex);
+                        SemiLunarScrollView(),
+                        SvgPicture.asset(
+                          'assets/images/home/circular.svg',
+                          fit: BoxFit.fill,
+width: MediaQuery.of(context).size.width,
 
-                                                    return Center(
-                                                      child: Padding(
-                                                        padding: EdgeInsets
-                                                            .only(
-                                                            top: 0.h),
-                                                        child: SizedBox(
-                                                          height: 300
-                                                              .h,
-                                                          // Adjust to fit your curve
-                                                          child: ListView
-                                                              .builder(
-                                                            controller:
-                                                            homeController
-                                                                .scrollController
-                                                            ,
-
-                                                            scrollDirection:
-                                                            Axis.horizontal,
-
-                                                            // physics:
-                                                            // const NeverScrollableScrollPhysics(),
-                                                            itemCount:
-                                                            currentCategories
-                                                                .length,
-                                                            itemBuilder: (
-                                                                context,
-                                                                indexList) {
-                                                              // Adjust vertical offset based on index to create the curved effect
-                                                              double verticalShift =
-                                                              homeController
-                                                                  .calculateVerticalShift(
-                                                                  indexList,
-                                                                  currentCategories
-                                                                      .length);
-                                                              return Padding(
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                  horizontal: 34
-                                                                      .w /
-                                                                      2, // Horizontal spacing
-                                                                ),
-                                                                child: Transform
-                                                                    .translate(
-                                                                  offset: Offset(
-                                                                      0,
-                                                                      verticalShift),
-                                                                  child: Column(
-                                                                    children: [
-                                                                      buildCategoryItem(
-                                                                        currentCategories[
-                                                                        indexList],
-                                                                        Icons
-                                                                            .category,
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              // Add dots indicator below categories
-                                              buildDots(homeController),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ))),
-
-                        // Add Search bar with Slide and Fade animation
-                        Positioned(
-                            top: 36.h,
-                            left: 0,
-                            right: 0,
-                            child: SearchHomeBar(
-                                homeController: homeController)),
-// body of home
-                        PositionedDirectional(
-                            top: 400.h,
-                            child: Column(
-                              children: [
-                                Obx(() =>
-                                    SlideTransition(
-                                        position: Tween<Offset>(
-                                          begin: const Offset(1.0,
-                                              0.0),
-                                          // يبدأ خارج الشاشة على اليمين (x = 1)
-                                          end: const Offset(0.0,
-                                              0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                                        ).animate(
-                                          CurvedAnimation(
-                                            parent: homeController.controller,
-                                            curve: Curves.easeInOut,
-                                          ),
-                                        ),
-                                        child: viewProductSection(
-                                            'Latest Product',
-                                            homeController
-                                                .homePageData.value
-                                                .latestProducts,
-                                            context))),
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.h,
-                  ),
-                  SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(
-                            1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                        end: const Offset(
-                            0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                      ).animate(
-                        CurvedAnimation(
-                          parent: homeController.controller,
-                          curve: Curves.easeInOut,
                         ),
-                      ),
-                      child: Obx(() {
-                        return BannerAd();
-                      })),
-                  SizedBox(
-                    height: 9.h,
-                  ),
-                  Obx(() =>
-                      SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(
-                                1.0, 0.0),
-                            // يبدأ خارج الشاشة على اليمين (x = 1)
-                            end: const Offset(
-                                0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                          ).animate(
-                            CurvedAnimation(
-                              parent: homeController.controller,
-                              curve: Curves.easeInOut,
-                            ),
+
+                        Padding(
+                          padding: EdgeInsets.only(top: 50.h),
+                          child: SearchHomeBar(
+
                           ),
-                          child: viewProductSection(
-                              'Featured Product',
-                              homeController.homePageData.value
-                                  .featuredProducts,
-                              context))),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 250.h),
+                            child: SemiLunarScrollView()),
+
+                        
+                        // Slide-down animation using GetX controlled animations
+//                         PositionedDirectional(
+//                           start: -127.w,
+//                           top: -290.h,
+//                           child: Container(
+//
+//                             width: 644.w,
+//                             height: 663.h,
+//                             child: Stack(
+//                               children: [
+//                               Positioned(
+//                               left: 15.w,
+//                               top: 0,
+//                               child: Obx(() {
+//                                 // This widget will now reactively listen to changes in rotationAngleCircule
+//                                 return Transform.rotate(
+//                                   angle: homeController
+//                                       .rotationAngleCircule
+//                                       .value,
+//                                   // Controlled by HomeController
+//                                   child: RotationTransition(
+//                                     turns: Tween(begin: 0.0, end: 1.0)
+//                                         .animate(homeController
+//                                         .rotatingUpperBarController),
+//
+//                                     child: SvgPicture.asset(
+//                                       'assets/images/home/circule.svg',
+//                                       fit: BoxFit.contain,
+//
+//                                       width: 645.w,
+//                                       height: 598.h,
+//                                     ),
+//                                   ),
+//                                 );
+//                               }),
+//                             ),
+//                                 // ListView with Rotation
+//                                 Positioned.fill(
+//                                   child: Column(
+//                                     mainAxisAlignment:
+//                                     MainAxisAlignment.end,
+//                                     children: [
+//                                       SemiLunarScrollView(),
+//                                       // Add dots indicator below categories
+//                                       buildDots(homeController),
+//                                     ],
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           // child: SlideTransition(
+//                           //     position: homeController.slideAnimation,
+//                           //     child: FadeTransition(
+//                           //       opacity: homeController
+//                           //           .fadeInAnimation, // GetX Fade-In
+//                           //       child: Container(
+//                           //         width: 644.w,
+//                           //         height: 663.h,
+//                           //         child: Stack(
+//                           //           children: [
+//                           //             Positioned(
+//                           //               left: 15.w,
+//                           //               top: 0,
+//                           //               child: Obx(() {
+//                           //                 // This widget will now reactively listen to changes in rotationAngleCircule
+//                           //                 return Transform.rotate(
+//                           //                   angle: homeController
+//                           //                       .rotationAngleCircule
+//                           //                       .value,
+//                           //                   // Controlled by HomeController
+//                           //                   child: SvgPicture.asset(
+//                           //                     'assets/images/home/circule.svg',
+//                           //                     fit: BoxFit.contain,
+//                           //                     width: 645.w,
+//                           //                     height: 598.h,
+//                           //                   ),
+//                           //                 );
+//                           //               }),
+//                           //             ),
+//                           //             // ListView with Rotation
+//                           //             Positioned.fill(
+//                           //               child: Column(
+//                           //                 mainAxisAlignment:
+//                           //                 MainAxisAlignment.end,
+//                           //                 children: [
+//                           //                   SizedBox(
+//                           //                     height: 150
+//                           //                         .h,
+//                           //                     // Adjust height if needed
+//                           //                     width: MediaQuery
+//                           //                         .of(context)
+//                           //                         .size
+//                           //                         .width +
+//                           //                         85.w,
+//                           //                     child: PageView.builder(
+//                           //                       onPageChanged: (
+//                           //                           int pageIndex) {
+//                           //                         homeController
+//                           //                             .onPageChanged(
+//                           //                             pageIndex); // GetX Page change handler
+//                           //                       },
+//                           //                       controller: homeController
+//                           //                           .pageController.value,
+//                           //                       itemCount: (homeController
+//                           //                           .categories.length /
+//                           //                           4)
+//                           //                           .ceil(),
+//                           //                       // Number of pages
+//                           //                       itemBuilder:
+//                           //                           (context, pageIndex) {
+//                           //                         int startIndex = pageIndex *
+//                           //                             4;
+//                           //                         int endIndex =
+//                           //                         (startIndex + 4) >
+//                           //                             homeController
+//                           //                                 .categories
+//                           //                                 .length
+//                           //                             ? homeController
+//                           //                             .categories.length
+//                           //                             : startIndex + 4;
+//                           //                         List<
+//                           //                             String> currentCategories =
+//                           //                         homeController.categories
+//                           //                             .sublist(startIndex,
+//                           //                             endIndex);
+//                           //
+//                           //                         return Center(
+//                           //                           child: Padding(
+//                           //                             padding: EdgeInsets
+//                           //                                 .only(
+//                           //                                 top: 0.h),
+//                           //                             child: SizedBox(
+//                           //                               height: 300
+//                           //                                   .h,
+//                           //                               // Adjust to fit your curve
+//                           //                               child: ListView
+//                           //                                   .builder(
+//                           //                                 controller:
+//                           //                                 homeController
+//                           //                                     .scrollController
+//                           //                                 ,
+//                           //
+//                           //                                 scrollDirection:
+//                           //                                 Axis.horizontal,
+//                           //
+//                           //                                 // physics:
+//                           //                                 // const NeverScrollableScrollPhysics(),
+//                           //                                 itemCount:
+//                           //                                 currentCategories
+//                           //                                     .length,
+//                           //                                 itemBuilder: (
+//                           //                                     context,
+//                           //                                     indexList) {
+//                           //                                   // Adjust vertical offset based on index to create the curved effect
+//                           //                                   double verticalShift =
+//                           //                                   homeController
+//                           //                                       .calculateVerticalShift(
+//                           //                                       indexList,
+//                           //                                       currentCategories
+//                           //                                           .length);
+//                           //                                   return Padding(
+//                           //                                     padding: EdgeInsets
+//                           //                                         .symmetric(
+//                           //                                       horizontal: 34
+//                           //                                           .w /
+//                           //                                           2, // Horizontal spacing
+//                           //                                     ),
+//                           //                                     child: Transform
+//                           //                                         .translate(
+//                           //                                       offset: Offset(
+//                           //                                           0,
+//                           //                                           verticalShift),
+//                           //                                       child: Column(
+//                           //                                         children: [
+//                           //                                           buildCategoryItem(
+//                           //                                             currentCategories[
+//                           //                                             indexList],
+//                           //                                             Icons
+//                           //                                                 .category,
+//                           //                                           ),
+//                           //                                         ],
+//                           //                                       ),
+//                           //                                     ),
+//                           //                                   );
+//                           //                                 },
+//                           //                               ),
+//                           //                             ),
+//                           //                           ),
+//                           //                         );
+//                           //                       },
+//                           //                     ),
+//                           //                   ),
+//                           //                   // Add dots indicator below categories
+//                           //                   buildDots(homeController),
+//                           //                 ],
+//                           //               ),
+//                           //             ),
+//                           //           ],
+//                           //         ),
+//                           //       ),
+//                           //     ))
+//                         ),
+//
+//                         // Add Search bar with Slide and Fade animation
+//                         Positioned(
+//                             top: 36.h,
+//                             left: 0,
+//                             right: 0,
+//                             child: ShowUp(
+//                               delay: 300,
+//                               child: SearchHomeBar(
+//                                   homeController: homeController),
+//                             )),
+// // body of home
+//                         PositionedDirectional(
+//                             top: 400.h,
+//                             child: Column(
+//                               children: [
+//                                 // Obx(() =>
+//                                 //     SlideTransition(
+//                                 //         position: Tween<Offset>(
+//                                 //           begin: const Offset(1.0,
+//                                 //               0.0),
+//                                 //           // يبدأ خارج الشاشة على اليمين (x = 1)
+//                                 //           end: const Offset(0.0,
+//                                 //               0.0), // ينتهي في موقعه الطبيعي (x = 0)
+//                                 //         ).animate(
+//                                 //           CurvedAnimation(
+//                                 //             parent: homeController.controller,
+//                                 //             curve: Curves.easeInOut,
+//                                 //           ),
+//                                 //         ),
+//                                 //         child: viewProductSection(
+//                                 //             'Latest Product',
+//                                 //             homeController
+//                                 //                 .homePageData.value
+//                                 //                 .latestProducts,
+//                                 //             context))),
+//                                 Obx(() {
+//                                   return ShowUp(
+//                                     delay: 500,
+//                                     child: viewProductSection(
+//                                         'Latest Product',
+//                                         homeController
+//                                             .homePageData.value
+//                                             .latestProducts,
+//                                         context),
+//                                   );
+//                                 })
+//                               ],
+//                             )),
+//                       ],
+                    ]),
+                  ),
+              buildDots(homeController),
+        SizedBox(height: 22.h,),
+        viewProductSection(
+                      'Featured Product',
+                      homeController.homePageData.value
+                          .featuredProducts,
+                      context),
+                  // SlideTransition(
+                  //     position: Tween<Offset>(
+                  //       begin: const Offset(
+                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
+                  //       end: const Offset(
+                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
+                  //     ).animate(
+                  //       CurvedAnimation(
+                  //         parent: homeController.controller,
+                  //         curve: Curves.easeInOut,
+                  //       ),
+                  //     ),
+                  //     child: Obx(() {
+                  //       return BannerAd();
+                  //     })),'
+                  Obx(() {
+                    return BannerAd();
+                  }),
+                  SizedBox(
+                    height: 9.h,
+                  ),
+                  // Obx(() =>
+                  //     SlideTransition(
+                  //         position: Tween<Offset>(
+                  //           begin: const Offset(
+                  //               1.0, 0.0),
+                  //           // يبدأ خارج الشاشة على اليمين (x = 1)
+                  //           end: const Offset(
+                  //               0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
+                  //         ).animate(
+                  //           CurvedAnimation(
+                  //             parent: homeController.controller,
+                  //             curve: Curves.easeInOut,
+                  //           ),
+                  //         ),
+                  //         child: viewProductSection(
+                  //             'Featured Product',
+                  //             homeController.homePageData.value
+                  //                 .featuredProducts,
+                  //             context))),
+                  Obx(() {
+                    return viewProductSection(
+                        'Featured Product',
+                        homeController.homePageData.value
+                            .featuredProducts,
+                        context);
+                  }),
                   SizedBox(
                     height: 9.h,
                   ),
 
-                  SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(
-                            1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                        end: const Offset(
-                            0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                      ).animate(
-                        CurvedAnimation(
-                          parent: homeController.controller,
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      child: Obx(() {
-                        return BannerAd2();
-                      })),
+                  // SlideTransition(
+                  //     position: Tween<Offset>(
+                  //       begin: const Offset(
+                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
+                  //       end: const Offset(
+                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
+                  //     ).animate(
+                  //       CurvedAnimation(
+                  //         parent: homeController.controller,
+                  //         curve: Curves.easeInOut,
+                  //       ),
+                  //     ),
+                  //     child: Obx(() {
+                  //       return BannerAd2();
+                  //     })),
 
-
+                  Obx(() {
+                    return BannerAd2();
+                  }),
                   SizedBox(
                     height: 9.h,
                   ),
-                  SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(
-                            1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                        end: const Offset(
-                            0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                      ).animate(
-                        CurvedAnimation(
-                          parent: homeController.controller,
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      child: premiumProduct(context)),
+                  // SlideTransition(
+                  //     position: Tween<Offset>(
+                  //       begin: const Offset(
+                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
+                  //       end: const Offset(
+                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
+                  //     ).animate(
+                  //       CurvedAnimation(
+                  //         parent: homeController.controller,
+                  //         curve: Curves.easeInOut,
+                  //       ),
+                  //     ),
+                  //     child: premiumProduct(context)),
+                  premiumProduct(context),
                   SizedBox(
                     height: 35.h,
                   ),
-                  SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(
-                            1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                        end: const Offset(
-                            0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                      ).animate(
-                        CurvedAnimation(
-                          parent: homeController.controller,
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      child: Obx(() {
-                        return newArrives();
-                      })),
+                  // SlideTransition(
+                  //     position: Tween<Offset>(
+                  //       begin: const Offset(
+                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
+                  //       end: const Offset(
+                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
+                  //     ).animate(
+                  //       CurvedAnimation(
+                  //         parent: homeController.controller,
+                  //         curve: Curves.easeInOut,
+                  //       ),
+                  //     ),
+                  //     child: Obx(() {
+                  //       return newArrives();
+                  //     })),
+                  Obx(() {
+                    return newArrives();
+                  }),
                   SizedBox(
                     height: 29.h,
                   ),
-                  Obx(() =>
-                      SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(
-                                1.0, 0.0),
-                            // يبدأ خارج الشاشة على اليمين (x = 1)
-                            end: const Offset(
-                                0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                          ).animate(
-                            CurvedAnimation(
-                              parent: homeController.controller,
-                              curve: Curves.easeInOut,
-                            ),
-                          ),
-                          child: viewProductSection(
-                              'Perfumes',
-                              homeController.homePageData.value
-                                  .featuredProducts,
-                              context))),
+                  // Obx(() =>
+                  //     SlideTransition(
+                  //         position: Tween<Offset>(
+                  //           begin: const Offset(
+                  //               1.0, 0.0),
+                  //           // يبدأ خارج الشاشة على اليمين (x = 1)
+                  //           end: const Offset(
+                  //               0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
+                  //         ).animate(
+                  //           CurvedAnimation(
+                  //             parent: homeController.controller,
+                  //             curve: Curves.easeInOut,
+                  //           ),
+                  //         ),
+                  //         child: viewProductSection(
+                  //             'Perfumes',
+                  //             homeController.homePageData.value
+                  //                 .featuredProducts,
+                  //             context))),
+                  Obx(() {
+                    return viewProductSection(
+                        'Perfumes',
+                        homeController.homePageData.value
+                            .featuredProducts,
+                        context);
+                  }),
                   SizedBox(
                     height: 9.h,
                   ),
@@ -399,6 +514,7 @@ class HomeView extends StatelessWidget {
             ),
       );
   }
+
   Widget BannerAd2() {
     return
 
@@ -437,6 +553,7 @@ class HomeView extends StatelessWidget {
             ),
       );
   }
+
   Widget newArrives() {
     return
 
@@ -554,7 +671,22 @@ class HomeView extends StatelessWidget {
               .size
               .width,
           padding: EdgeInsetsDirectional.only(start: 10.w),
-          child: ListView.builder(
+          child:
+          product.length == 0 ?
+          ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return Padding(
+                  padding: EdgeInsetsDirectional.only(end: 5.w, start: 5.w),
+                  child: productCard(AppConstants.sampleProduct)
+
+
+              );
+            },
+          )
+              :
+          ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: product.length,
             itemBuilder: (context, index) {
@@ -647,14 +779,14 @@ class HomeView extends StatelessWidget {
                                       child: CachedNetworkImage(
                                         imageUrl: product.image,
                                         placeholder: (context, url) =>
-                                        Lottie.asset(
-                                          "assets/images/jiffy_placeholder.json"
-                                        ),
-                                            // SizedBox(
-                                            //     height: 120.h,
-                                            //     child: Center(
-                                            //         child:
-                                            //         CircularProgressIndicator())),
+                                            Lottie.asset(
+                                                "assets/images/jiffy_placeholder.json"
+                                            ),
+                                        // SizedBox(
+                                        //     height: 120.h,
+                                        //     child: Center(
+                                        //         child:
+                                        //         CircularProgressIndicator())),
                                         // مؤشر تحميل
                                         errorWidget: (context, url, error) =>
                                             Image.network(
@@ -814,9 +946,12 @@ class HomeView extends StatelessWidget {
                           ]))),
                 ),
               Padding(
-                padding:  EdgeInsets.only(
-                  top : MediaQuery.of(Get.context!).size.width >= 600 ?
-                      20.h : 0.h
+                padding: EdgeInsets.only(
+                    top: MediaQuery
+                        .of(Get.context!)
+                        .size
+                        .width >= 600 ?
+                    20.h : 0.h
                 ),
                 child: PositionedDirectional(
                   bottom: -15.h,
@@ -965,7 +1100,8 @@ class HomeView extends StatelessWidget {
                                                     currentItem,
                                                     currentItem.quantity - 1,
                                                   );
-                                                } else if (product.d_limit == 0 &&
+                                                } else
+                                                if (product.d_limit == 0 &&
                                                     currentItem.quantity ==
                                                         1 ||
                                                     currentItem.quantity ==
@@ -1069,16 +1205,16 @@ class HomeView extends StatelessWidget {
 
             top: 0.h),
         child: SizedBox(
-          height:  290.h,
+          height: 290.h,
           width: 180.w,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               SvgPicture.asset("assets/images/home/premium_product.svg",
-                height: 320.h ,
+                height: 320.h,
               ),
               SizedBox(
-                height:  340.h,
+                height: 340.h,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -1239,7 +1375,7 @@ class HomeView extends StatelessWidget {
                                               },
                                               child: SvgPicture.asset(
                                                 'assets/images/home/minus.svg',
-color: primaryColor,
+                                                color: primaryColor,
                                                 height: 20.h,
                                               ),
                                             ),
@@ -1435,6 +1571,220 @@ color: primaryColor,
         }),
       );
     });
+  }
+
+}
+
+class SemiLunarScrollView extends StatefulWidget {
+  @override
+  _SemiLunarScrollViewState createState() => _SemiLunarScrollViewState();
+}
+
+class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
+  final ScrollController _scrollController = ScrollController();
+  HomeController homeController = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return
+        homeController.isCategoriesLoading.value?
+            //Loading One
+        ListView.separated(
+          shrinkWrap: true,
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: 8,
+          itemBuilder: (context, index) {
+            double offset = _scrollController.hasClients
+                ? _scrollController.offset
+                : 0.0;
+
+            upperValue(index, offset) {
+              if (index < 4) {
+                return index * 90.h;
+              } else {
+                homeController.toggleRotation();
+                return index * 190.h;
+              }
+            }
+            double curveOffset = math.sin(
+                (upperValue(index, offset) - offset) / 100) * 50;
+
+            return Transform.translate(
+              offset: Offset(60.w, curveOffset),
+              child: Column(
+                children: [
+                  Container(
+
+                    decoration: BoxDecoration(
+                        boxShadow: [
+
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                            offset: Offset(0, 3),
+                          )
+
+                        ]
+                    ),
+                    child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.white,
+                        child: ClipOval(
+                          child: Lottie.asset("assets/images/jiffy_placeholder.json",
+
+
+                          ),
+                        )
+                    ),
+
+
+                  ),
+
+
+
+
+
+
+                ],
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(width: 50.w,);
+          },
+        )
+            :
+        //Data One
+        ListView.separated(
+          shrinkWrap: true,
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: homeController
+              .categories.length,
+          itemBuilder: (context, index) {
+            double offset = _scrollController.hasClients
+                ? _scrollController.offset
+                : 0.0;
+
+            upperValue(index, offset) {
+              if (index < 4) {
+                return index * 95.h;
+              }
+              else {
+              homeController.toggleRotation();
+              return index * 100.h;
+              }
+            }
+            double curveOffset = math.sin(
+                (upperValue(index, offset) - offset) / 100) * 50;
+
+            return Listener (
+            // onTapDown
+              onPointerUp: (_) => {                print("sdfsdfdsfsd"),
+
+            },
+              onPointerSignal: (_) => {                print("sdfsdfdsfsd"),
+
+              },
+
+
+
+              child: GestureDetector(
+                onTap: (){
+                  print("sdfsdfdsfsd");
+                  var bodyRequest = {
+                    "category_ids[0]": homeController.categories[index].id
+                        .toString(),
+                    'orderBy': 'high-low',
+
+                  };
+                  customSearchController.toggleSelectedCategory(homeController.categories[index].name);
+                  customSearchController.getProducts(bodyRequest);
+
+
+                  Get.to( ()=> const SearchView());
+                  // customSearchController.scrollListener();
+                  customSearchController.animateToCategory(index);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Transform.translate(
+                    offset: Offset(10.w, curveOffset),
+                    child: Column(
+                      children: [
+                        Container(
+
+                          decoration: BoxDecoration(
+                              boxShadow: [
+
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 3),
+                                )
+
+                              ]
+                          ),
+                          child: CircleAvatar(
+
+                            backgroundColor: Colors.white,
+                            backgroundImage: CachedNetworkImageProvider(
+                              homeController.categories[index].image!,
+
+                            ),
+
+
+
+                            radius: 30,
+
+                          ),
+                        ),
+                        SizedBox(height: 5.h,),
+                        InkWell(
+                          onTap: (){
+                            print("sdfsdfsd");
+                          },
+                          child: SizedBox(
+                            width: 52.w,
+
+                            child: Text(homeController.categories[index].name!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: secondaryTextStyle(),),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(width:  40.w,);
+          },
+        );
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
 

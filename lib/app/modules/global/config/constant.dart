@@ -130,7 +130,7 @@ class AppConstants {
    size: 'XL',
     rating: 4.5,
     outOfStock: false,
-    image: 'https://picsum.photos/200/300',
+    image: 'https://cdn-icons-png.flaticon.com/512/7410/7410183.png',
     old_price: 20.0,
 
   );

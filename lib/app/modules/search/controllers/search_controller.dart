@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
 
@@ -18,12 +19,13 @@ RxBool isCategoryLoading = false.obs;
 Rx<TextEditingController> searchController = TextEditingController().obs;
   RxString  selectedCategory = "".obs;
   var bodyRequest;
-
+ScrollController categoryScrollController = ScrollController();
 List<String> filterItems = ["Featured", "Best Selling", "Latest",];
   final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    categoryScrollController.addListener((){});
   }
 
   @override
@@ -123,7 +125,35 @@ print("your map body request is ${combinedMap}");
     selectedCategory.value = category;
     print("toggled ${selectedCategory.value}");
   }
+  
+  animateToCategory(index){
+Future.delayed(Duration(seconds: 1),(){
+  _scrollToIndex(index);
+});
+
+  }
+  void _scrollToIndex(int index) {
+    double itemHeight = 150.h; // Height of each item including padding
+    double targetOffset = index * itemHeight;
+    if (categoryScrollController.hasClients) {
+      categoryScrollController.animateTo(
+        targetOffset,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOut,
+      );
+      }
+
+  }
+
+  void scrollListener() {
+    double maxScrollExtent = categoryScrollController.position.maxScrollExtent;
+    double currentScrollPosition = categoryScrollController.offset;
+
+    if (currentScrollPosition >= maxScrollExtent ) {
+
+    } else if (currentScrollPosition < maxScrollExtent ) {
 
 
-
+    }
+  }
 }

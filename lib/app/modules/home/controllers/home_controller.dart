@@ -14,12 +14,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController _fadecontroller;
   late AnimationController
       _controllerRotate; // This will stay as an AnimationController
-  late Animation<Offset> slideAnimation;
-  late Animation<double> fadeInAnimation;
-  late Animation<double> rotationAnimation;
+   Animation<Offset>? slideAnimation;
+   Animation<double>? fadeInAnimation;
+   Animation<double>? rotationAnimation;
 
   // Rotation angle to be controlled
-  var rotationAngleCircule = 0.0.obs;
+  var rotationAngleCircule = 77.0.obs;
 
   // Create an observable to control rotation state
   var isRotatingForward = false.obs;
@@ -32,16 +32,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   ScrollController scrollController = ScrollController();
 
-  List<String> categories = [
-    'Styling',
-    'Makeup',
-    'Nails',
-    'Skincare',
-    'Category 5',
-    'Category 6',
-    'Category 7',
-    'Category 8',
-  ];
+  var categories = <Categories>[
+
+  ].obs;
+
+  late AnimationController rotatingUpperBarController;
+  RxBool isRotating = false.obs;
   final WishlistController wishListController = Get.put(WishlistController());
   final CartController cartController =
       Get.put(CartController()); // Remove this line
@@ -50,57 +46,61 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void onInit() {
     super.onInit();
     fetchHomePageData();
+    getCategories();
     scrollController.addListener(_onScroll);
-
-     //Initialize main animation controller
-    controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+    rotatingUpperBarController = AnimationController(
+      duration: Duration(seconds: 2),
       vsync: this,
     );
-    _fadecontroller = AnimationController(
-      duration: const Duration(milliseconds: 700),
-      vsync: this,
-    );
-
-    // Initialize rotation animation controller
-    _controllerRotate = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-
-    // Define slide and fade animations
-    slideAnimation =
-        Tween<Offset>(begin: Offset(0, -1), end: Offset(0, 0)).animate(
-      CurvedAnimation(parent: controller, curve: Curves.easeInOut),
-    );
-
-    fadeInAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _fadecontroller, curve: Curves.easeIn),
-    );
-
-    // Define rotation animation
-    rotationAnimation = Tween<double>(begin: 0, end: 360).animate(
-      CurvedAnimation(parent: _controllerRotate, curve: Curves.easeInOut),
-    );
-
-    // Start animation after a delay
-    Future.delayed(const Duration(milliseconds: 500)).then((_) {
-      controller.forward();
-    });
-    Future.delayed(const Duration(milliseconds: 500)).then((_) {
-      _fadecontroller.forward();
-    });
-
-    // Listen to scroll events and adjust rotation
-    pageController.value.addListener(() {
-      if (pageController.value.page == 0) {
-        isRotatingForward.value = false; // Reverse rotation
-      } else {
-        isRotatingForward.value = true; // Forward rotation
-      }
-      rotationAngleCircule.value =
-          pageController.value.page! * (3.14159 / 2); // Adjust rotation
-    });
+    //  //Initialize main animation controller
+    // controller = AnimationController(
+    //   duration: const Duration(milliseconds: 1000),
+    //   vsync: this,
+    // );
+    // _fadecontroller = AnimationController(
+    //   duration: const Duration(milliseconds: 700),
+    //   vsync: this,
+    // );
+    //
+    // // Initialize rotation animation controller
+    // _controllerRotate = AnimationController(
+    //   duration: const Duration(milliseconds: 200),
+    //   vsync: this,
+    // );
+    //
+    // // Define slide and fade animations
+    // slideAnimation =
+    //     Tween<Offset>(begin: Offset(0, -1), end: Offset(0, 0)).animate(
+    //   CurvedAnimation(parent: controller, curve: Curves.easeInOut),
+    // );
+    //
+    // fadeInAnimation = Tween<double>(begin: 0, end: 1).animate(
+    //   CurvedAnimation(parent: _fadecontroller, curve: Curves.easeIn),
+    // );
+    //
+    // // Define rotation animation
+    // rotationAnimation = Tween<double>(begin: 0, end: 360).animate(
+    //   CurvedAnimation(parent: _controllerRotate, curve: Curves.easeInOut),
+    // );
+    //
+    // // Start animation after a delay
+    // Future.delayed(const Duration(milliseconds: 500)).then((_) {
+    //   controller.forward();
+    // });
+    // Future.delayed(const Duration(milliseconds: 500)).then((_) {
+    //   _fadecontroller.forward();
+    // });
+    //
+    // // Listen to scroll events and adjust rotation
+    // pageController.value.addListener(() {
+    //   if (pageController.value.page == 0) {
+    //     isRotatingForward.value = false; // Reverse rotation
+    //   } else {
+    //     isRotatingForward.value = true; // Forward rotation
+    //   }
+    //   rotationAngleCircule.value =
+    //       pageController.value.page! * (3.14159 / 2); // Adjust rotation
+    // });
     currentPage.value = 0;
     // wishListController.getWishlistProducts();
   }
@@ -110,13 +110,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onReady();
 
     // Handle rotation based on the observable value
-    ever(isRotatingForward, (isForward) {
-      if (isForward) {
-        _controllerRotate.forward();
-      } else {
-        _controllerRotate.reverse();
-      }
-    });
+    // ever(isRotatingForward, (isForward) {
+    //   if (isForward) {
+    //     _controllerRotate.forward();
+    //   } else {
+    //     _controllerRotate.reverse();
+    //   }
+    // });
     currentPage.value = 0;
   }
 
@@ -195,5 +195,46 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (currentScrollOffset > 100) {
       print('Scrolled more than 100 pixels');
     }
+  }
+
+  void toggleRotation() {
+    isRotating.value = !isRotating.value;
+    if (isRotating.value) {
+      rotatingUpperBarController.forward();
+      // rotatingUpperBarController.repeat(reverse: true, period: Duration(seconds: 1));
+    } else {
+      rotatingUpperBarController.stop();
+    }
+
+  }
+
+  RxBool isCategoriesLoading = false.obs;
+  getCategories() async{
+categories.clear();
+isCategoriesLoading.value = true; // استخدام القيمة المتغيرة لحالة التحميل
+    try {
+      final response = await apiConsumer.post(
+          'categories'); // تغيير http إلى apiConsumer إذا كنت تستخدم نفس الـ API
+
+      if (response['status'] == 'success') {
+        var jsonData = response['data'];
+        for(var cat in jsonData){
+          categories.add(Categories.fromJson(cat));
+        }
+
+
+        print("your length is categries ${categories.length}");
+        isCategoriesLoading.value = false;
+      } else {
+
+        isCategoriesLoading.value = false;
+      }
+    } catch (e) {
+      print('Error in the home products getter categries : $e');
+      isCategoriesLoading.value = false;
+    } finally {
+      isCategoriesLoading.value = false;
+    }
+
   }
 }
