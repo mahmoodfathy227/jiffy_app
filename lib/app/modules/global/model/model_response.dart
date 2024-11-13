@@ -14,7 +14,7 @@ class Order {
   final dynamic shipping;
   final dynamic discount;
   final dynamic total;
-  final bool readyToPay;
+  // final bool readyToPay;
   final String status;
   // final Address? address;
   final List<Item> items;
@@ -28,7 +28,7 @@ class Order {
     required this.shipping,
     required this.discount,
     required this.total,
-    required this.readyToPay,
+    // required this.readyToPay,
     required this.status,
     // required this.address,
     required this.items,
@@ -44,7 +44,7 @@ class Order {
       shipping: json['shipping'],
       discount: json['discount'],
       total: json['total'],
-      readyToPay: json['ready_to_pay'],
+      // readyToPay: json['ready_to_pay'],
       status: json['status'] ?? 'pending',
       // address:
       //     json['address'] != null ? Address.fromJson(json['address']) : null,

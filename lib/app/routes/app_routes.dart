@@ -30,6 +30,8 @@ abstract class Routes {
   static const HELP = _Paths.HELP;
   static const CHANGEPASSWORD = _Paths.CHANGEPASSWORD;
   static const NAV_BAR = _Paths.NAV_BAR;
+  static const ORDER = _Paths.ORDER;
+
 }
 
 abstract class _Paths {
@@ -62,4 +64,6 @@ abstract class _Paths {
   static const Checkout = '/checkout';
   static const HELP = '/help';
   static const NAV_BAR = '/nav-bar';
+  static const ORDER = '/order';
+
 }

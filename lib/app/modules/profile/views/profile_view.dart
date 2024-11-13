@@ -8,6 +8,8 @@ import 'package:jiffy/app/modules/address/views/address_view.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
+import 'package:jiffy/app/modules/orders/controllers/orders_controller.dart';
+import 'package:jiffy/app/modules/orders/views/orders_view.dart';
 import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 
@@ -34,6 +36,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) {
+    controller.fetchProfile();
     return Scaffold(
       body: userToken != null
           ? SingleChildScrollView(
@@ -113,7 +116,10 @@ class _ProfileViewState extends State<ProfileView>
                           addressController.changeAddressStatus(false);
                           Get.to(AddressView());
                         }, 19, 1),
-                        // _buildMenuItem('order.svg', 'Orders', () {}, 19, 3),
+                        _buildMenuItem('order.svg', 'Orders', () {
+                          Get.put(OrdersController());
+                          Get.to(()=> OrdersView());
+                        }, 19, 3),
                         // _buildMenuItem('rate.svg', 'Rate this app', () {
                         //   if (GetPlatform.isAndroid) {
                         //     _launchURL(

@@ -19,6 +19,9 @@ import '../modules/navBar/bindings/nav_bar_binding.dart';
 import '../modules/navBar/views/nav_bar_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/orders/bindings/orders_binding.dart';
+import '../modules/orders/views/add_rate_product.dart';
+import '../modules/orders/views/orders_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/change_password.dart';
 import '../modules/profile/views/profile_view.dart';
@@ -106,11 +109,11 @@ class AppPages {
       page: () => SplashScreen(),
       binding: SplashBinding(),
     ),
-    // GetPage(
-    //   name: _Paths.ADDREVIEW,
-    //   page: () => const RateProductScreen(),
-    //   binding: OrdersBinding(),
-    // ),
+    GetPage(
+      name: _Paths.ADDREVIEW,
+      page: () => const RateProductScreen(),
+      binding: OrdersBinding(),
+    ),
     GetPage(
       name: _Paths.ONBOARDING,
       page: () => OnboardingView(),
@@ -197,6 +200,11 @@ class AppPages {
           page: () => AddressView(),
           binding: AddressBinding(),
         ),
+        GetPage(
+          name: _Paths.ORDERS,
+          page: () =>  OrdersView(),
+          binding: OrdersBinding(),
+        ),
       ],
     ),
     GetPage(
@@ -204,5 +212,6 @@ class AppPages {
       page: () => const NavBarView(),
       binding: NavBarBinding(),
     ),
+
   ];
 }

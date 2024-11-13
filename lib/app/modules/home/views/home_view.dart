@@ -699,7 +699,7 @@ class HomeView extends StatelessWidget {
       } else {
         // Add to wishlist
         wishListController.wishlistProductIds!.value.add(product.id);
-        wishListController.addToWishlist(product.id);
+        wishListController.addToWishlist(product.id,);
       }
       return !isLiked;
       // Return the updated liked state (toggle)

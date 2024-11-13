@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/model/model_response.dart';
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
 
@@ -41,7 +42,7 @@ class WishlistController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // getWishlistProducts();
+     getWishlistProducts();
   }
 
   @override
@@ -153,13 +154,9 @@ class WishlistController extends GetxController {
   addToWishlist(product_id) async {
 
     if (userToken != null) {
-      // Get.closeCurrentSnackbar();
-      // Get.snackbar('Added', 'Added To Wishlist',
-      //     // backgroundColor: primaryColor,
-      //
-      //     isDismissible: true);
 
-      print('removing from Wishlist api loading ....');
+
+
 
       var formData = dio.FormData.fromMap({
         'product_id': product_id,
@@ -260,9 +257,7 @@ class WishlistController extends GetxController {
 
   addToGrid(id) async {
     await getProductWithId(id);
-    if (productData != null) {
-      resultSearchProducts.add(productData!);
-    }
+    resultSearchProducts.add(productData!);
     print("getting grid after added ${resultSearchProducts.length}");
   }
 
@@ -277,7 +272,7 @@ class WishlistController extends GetxController {
     };
 
     final response = await http.post(
-      Uri.parse('https://panel.mariannella.com/api/products/${id}'),
+      Uri.parse('${BASE_URL}products/${id}'),
       headers: headers,
     );
 

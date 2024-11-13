@@ -17,17 +17,17 @@ class WishlistView extends GetView<WishlistController> {
 
   @override
   Widget build(BuildContext context) {
-    // if (WishlistController().initialized) {
-    //   print("true done yes");
-    //   controller.getWishlistProducts();
-    // } else {
-    //   print("true done no");
-    //
-    //   Get.lazyPut<WishlistController>(() => WishlistController());
-    //
-    // }
-Get.put(WishlistController());
-    controller.getWishlistProducts();
+    if (WishlistController().initialized) {
+      print("true done yes");
+
+    } else {
+      print("true done no");
+
+      Get.lazyPut<WishlistController>(() => WishlistController());
+
+    }
+
+
     print(
         "starting wishlist view with a list of ${controller.resultSearchProducts
             .length}");
@@ -71,7 +71,7 @@ Get.put(WishlistController());
                   left: 0,
                   right: 0,
                   child: SingleChildScrollView(
-                    key: const PageStorageKey<String>("pageThree"),
+
                     child: Container(
                       height:
                       MediaQuery
@@ -86,21 +86,19 @@ Get.put(WishlistController());
                             height: 15.h,
                           ),
                           Obx(() {
-                            print(
-                                "loading value is ${controller
-                                    .isWishlistLoading}");
+
                             return controller.isWishlistLoading.value
                                 ? Expanded(
                                 child: loadingIndicatorWidget())
                                 : Expanded(
                               child: ShowUp(
-                                child: Obx(() {
-                                  return buildProductGrid(context);
-                                }),
+                                child: buildProductGrid(context),
                                 delay: 400,
                               ),
                             );
                           }),
+
+                          SizedBox(height: 100.h)
                         ],
                       ),
                     ),
@@ -110,7 +108,7 @@ Get.put(WishlistController());
   }
 
   buildProductGrid(context) {
-    print("product grid are ${controller.resultSearchProducts}");
+
 
     return Obx(() {
       return Container(
@@ -120,13 +118,6 @@ Get.put(WishlistController());
               .size
               .width,
           child:
-          controller.isWishlistLoading.value ?
-          Align(
-            alignment: Alignment.center,
-            child: loadingIndicatorWidget(),
-          )
-              :
-
           controller.resultSearchProducts.isEmpty
               ? Align(
             alignment: Alignment.center,
@@ -155,14 +146,14 @@ Get.put(WishlistController());
             itemBuilder: (context, index) {
               return buildProductCard(
                 product:
-                // ViewProductData.fromJson(
-                //     controller.resultSearchProducts[index])
+
                 controller.resultSearchProducts[index],
                 isInWishlist: true,
               );
             },
             itemCount: controller.resultSearchProducts.length,
           ));
+
     });
   }
 }

@@ -12,6 +12,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:jiffy/app/modules/home/views/home_view.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
 import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
+import 'package:jiffy/app/modules/profile/controllers/profile_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart' as authTest;
@@ -428,6 +429,8 @@ Get.toNamed(Routes.LOGIN);
           userToken = AppConstants.userData!.token;
           clearFields();
           Get.put(NavBarController());
+          Get.delete(force: true);
+
       tabController.changeIndex(0);
 
           Get.off(MainView());

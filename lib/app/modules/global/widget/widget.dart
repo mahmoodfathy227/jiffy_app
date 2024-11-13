@@ -4809,7 +4809,7 @@ class _buildCardProductState extends State<buildProductCard> {
                           },
                         ),
                   )),
-              if (index == 1)
+              if (false)
                 PositionedDirectional(
                   top: -4.h,
                   start: 5.w,
@@ -5129,9 +5129,10 @@ Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
     } else {
       // Add to wishlist
       wishListController.wishlistProductIds!.value.add(product.id);
-      wishListController.addToWishlist(product.id);
+      wishListController.addToWishlist(product.id,
+      );
     }
-    return !isLiked;
+    return isLiked;
     // Return the updated liked state (toggle)
   } catch (e) {
     return false;

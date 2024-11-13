@@ -1,4 +1,4 @@
-package genixs.com.jiffy;
+package genixs.com.jifffy;
 
 import io.flutter.embedding.android.FlutterActivity;
 
