@@ -124,43 +124,42 @@ class OrdersView extends GetView<OrdersController> {
                                 ))),
                       ),
                     if (controller.orders.isNotEmpty && !controller.loading.value)
-                      Expanded(
-                          child: Padding(
-                            padding:  EdgeInsets.only(top:
-                            MediaQuery.of(context).size.height/15),
-                            child: SizedBox(
+                      Padding(
+                        padding:  EdgeInsets.only(top:
+                        MediaQuery.of(context).size.height/15),
+                        child: SizedBox(
 
-                              height: MediaQuery.of(context).size.height ,
-                              child: Padding(
-                                padding:  EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height/6,
-                                  bottom: MediaQuery.of(context).size.height/10
-                                ),
-                                child: SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ListView.builder(
-                                      reverse: true,
-                                      shrinkWrap: true,
-                                      itemCount: controller.orders.length,
-                                      itemBuilder: (context, index) {
-                                        final order = controller.orders[index];
-                                        return ShowUp(
-                                            delay: 20 * index,
-                                            child: Padding(
-                                                padding: EdgeInsetsDirectional.symmetric(
-                                                    vertical: 20.h),
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      Get.to(() => OrderDetailsScreen(
-                                                        order: order,
-                                                      ));
-                                                    },
-                                                    child: orderCard(order))));
-                                      },
-                                    )),
-                              ),
+                          height: MediaQuery.of(context).size.height ,
+                          child: Padding(
+                            padding:  EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height/6,
+                                bottom: MediaQuery.of(context).size.height/10
                             ),
-                          ))
+                            child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: ListView.builder(
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  itemCount: controller.orders.length,
+                                  itemBuilder: (context, index) {
+                                    final order = controller.orders[index];
+                                    return ShowUp(
+                                        delay: 20 * index,
+                                        child: Padding(
+                                            padding: EdgeInsetsDirectional.symmetric(
+                                                vertical: 20.h),
+                                            child: InkWell(
+                                                onTap: () {
+                                                  Get.to(() => OrderDetailsScreen(
+                                                    order: order,
+                                                  ));
+                                                },
+                                                child: orderCard(order))));
+                                  },
+                                )),
+                          ),
+                        ),
+                      )
                   ],
                 ),
 
