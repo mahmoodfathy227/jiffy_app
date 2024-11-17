@@ -209,10 +209,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         )),
                   ]),
 
-              // Text(
-              //   "\$$price",
-              //   style: primaryTextStyle(size: 14.sp.round()),
-              // ),
+              Text(
+                "\$$price",
+                style: primaryTextStyle(size: 14.sp.round()),
+              ),
 
               // IconButton(
               //   icon: Icon(Icons.star_border, color: Colors.amber),

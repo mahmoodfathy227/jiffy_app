@@ -140,9 +140,11 @@ class ProductController extends GetxController {
   }
 
   getProductReviews() async {
-    print("start getting review 11");
-
-    if (isFirstTimeGettingReviews == true) {
+    print("start getting review for id no ${product.value.id}");
+    reviews.clear();
+    update(['reviews']);
+    // if (isFirstTimeGettingReviews == true) {
+      if (true) {
       print("start getting review 2");
       isReviewsLoading = false;
       print("review value is 1 ${isReviewsLoading}");
@@ -244,6 +246,7 @@ class ProductController extends GetxController {
 
       setSelectedIndex(selectedIndex.value);
       changeImagesList(selectedColor.value);
+      await getProductReviews();
       print("your product data is ${product.value}");
 isAddToCartActive.value = false;
 

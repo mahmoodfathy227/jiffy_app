@@ -14,7 +14,7 @@ class CartController extends GetxController {
   var cartItems = <CartItem>[].obs;
   var step = ''.obs;
   var selectedMethod = ''.obs;
-  var loading = true.obs;
+  var loading = false.obs;
   var couponCode = ''.obs;
   var giftCardCode = ''.obs;
   var discount = Rx<dynamic>(0);

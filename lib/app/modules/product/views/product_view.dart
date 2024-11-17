@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -1306,7 +1307,7 @@ print("${"pro id is ${controller.product.value.id}"}");
   _buildOneCustomerReview(ReviewsModel review, context) {
     print("the review is ${review.title}");
     return Container(
-      height: 140.h,
+      height: 130.h,
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
       child: Column(
@@ -1350,15 +1351,27 @@ print("${"pro id is ${controller.product.value.id}"}");
             ],
           ),
           SizedBox(
-            height: 5.h,
+            height: 15.h,
           ),
-          Text(
-            review.comment!,
-            style: secondaryTextStyle(
-              color: greyishColor,
-              size: 12.sp.round(),
+          review.comment == null ? SizedBox() :
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              height: 50.h,
+              child:Text(
+                maxLines: 2,
+                review.comment! ,
+                style: secondaryTextStyle(
+                  color: greyishColor,
+                  size: 12.sp.round(),
+                  
+                ),
+            
+              ),
             ),
           ),
+
+
         ],
       ),
     );
