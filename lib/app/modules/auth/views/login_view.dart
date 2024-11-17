@@ -10,6 +10,7 @@ import 'package:jiffy/app/modules/auth/views/register_view.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
 import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../global/config/configs.dart';
@@ -44,7 +45,7 @@ class LoginView extends StatelessWidget {
             ShowUp(
                 delay: 400,
                 child: CustomTextField(
-                  labelText: 'Your Email',
+                  labelText: 'Your Email'.tr,
                   onChanged: (value) => controller.email.value = value,
                   errorText:  controller.emailError.value,
                 )),
@@ -54,7 +55,7 @@ SizedBox(height:25.h ,),
                 delay: 600,
                 child: CustomTextField(
 
-                  labelText: 'Password',
+                  labelText: 'Password'.tr,
                   onChanged: (value) => controller.password.value = value,
                   errorText: controller.passwordError.value,
                   obscureText: true,
@@ -70,7 +71,7 @@ SizedBox(height:25.h ,),
                     child: Align(
                       alignment: AlignmentDirectional.topEnd,
                       child: Text(
-                        'Forgot Password?',
+                        'Forgot Password?'.tr,
                         textAlign: TextAlign.center,
                         style: primaryTextStyle(
                           color: primaryColor,
@@ -87,7 +88,7 @@ SizedBox(height:25.h ,),
             MyDefaultButton(
               errorText: controller.errorMessage.value,
               isloading: controller.isLoading.value,
-              btnText: 'Log In',
+              btnText: 'Log In'.tr,
               onPressed: () => controller.login(),
             ),
             SizedBox(height: 15.h),
@@ -97,7 +98,7 @@ SizedBox(height:25.h ,),
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Don\'t have an account?',
+                    'Don\'t have an account?'.tr,
                     textAlign: TextAlign.center,
                     style: primaryTextStyle(
                       color: Color(0xFF555662),
@@ -110,7 +111,7 @@ SizedBox(height:25.h ,),
                   InkWell(
                     onTap: () => Get.to(() => RegisterView()),
                     child: Text(
-                      'Sign up',
+                      'Sign up'.tr,
                       textAlign: TextAlign.center,
                       style: primaryTextStyle(
                         color: primaryColor,
@@ -437,6 +438,7 @@ SizedBox(height:25.h ,),
 
                               ),
                             ),
+
                             Spacer(),
                             SvgPicture.asset(
                               LOGO,
@@ -444,59 +446,135 @@ SizedBox(height:25.h ,),
                               height: 30.h,
                               fit: BoxFit.cover,
                             ),
-SizedBox(width: 90.w,),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(()=> const HelpView());
-                              },
-                              child: ConstrainedBox(
+                            Spacer(),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(()=> const HelpView());
+                            },
+                            child: ConstrainedBox(
 
                                 constraints: BoxConstraints(
 
-                                  maxWidth: 100.w,
-                                  maxHeight: 50.h
+                                    maxWidth: 100.w,
+                                    maxHeight: 50.h
                                 ),
                                 child: Container(
                                   width: 80.w,
                                   height: 35.h,
                                   decoration: BoxDecoration(
-                                  color:   Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        spreadRadius: 3,
-                                        blurRadius: 5,
-                                        offset: Offset(0, 1), // changes position of shadow
-                                      ),
-                                    ]
+                                      color:   Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          spreadRadius: 3,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 1), // changes position of shadow
+                                        ),
+                                      ]
                                   ),
                                   child: Row(
 
-                                    children: [
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      SvgPicture.asset(
-                                        'assets/images/help.svg',
-                                        width: 20.w,
-                                        height: 20.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      SizedBox(width: 5.w,),
-                                      Text("Help",
-                                        style: secondaryTextStyle(
-                                          weight: FontWeight.w500,
-                                          size: 12.sp.round(),
+                                      children: [
+                                        SizedBox(
+                                          width: 10.w,
                                         ),
-                                      )
+                                        SvgPicture.asset(
+                                          'assets/images/help.svg',
+                                          width: 20.w,
+                                          height: 20.h,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        SizedBox(width: 5.w,),
+                                        Text("Help",
+                                          style: secondaryTextStyle(
+                                            weight: FontWeight.w500,
+                                            size: 12.sp.round(),
+                                          ),
+                                        )
 
-                                  ]),
+                                      ]),
                                 )
 
 
-                              ),
                             ),
+                          ),
+                          SizedBox(width: 5.w,),
+                          //language Switch
+                          GestureDetector(
+                            onTap: () async {
+                              //updated prefs
+
+                              if(Get.locale!.languageCode == 'en'){
+                                Get.updateLocale(const Locale('ar'));
+                                final prefs = await SharedPreferences.getInstance();
+                                prefs.setString('user_lang', 'ar');
+
+                              } else {
+
+                                Get.updateLocale(const Locale('en'));
+                                final prefs = await SharedPreferences.getInstance();
+                                prefs.setString('user_lang', 'en');
+                              }
+
+
+                            },
+                            child: ConstrainedBox(
+
+                                constraints: BoxConstraints(
+
+                                    maxWidth: 60.w,
+                                    maxHeight: 50.h
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(3.0),
+                                  width: 80.w,
+                                  height: 35.h,
+                                  decoration: BoxDecoration(
+                                      color:   Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          spreadRadius: 3,
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 1), // changes position of shadow
+                                        ),
+                                      ]
+                                  ),
+                                  child: Row(
+
+                                      children: [
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/images/language.svg',
+                                          width: 20.w,
+                                          height: 20.h,
+                                          fit: BoxFit.cover,
+                                          color: primaryColor,
+                                        ),
+                                        SizedBox(width: 5.w,),
+                                        Text(
+
+                                          Get.locale!.languageCode != 'en' ? "En" : "Ar",
+                                          style: secondaryTextStyle(
+                                            weight: FontWeight.w500,
+                                            size: 12.sp.round(),
+                                          ),
+                                        )
+
+                                      ]),
+                                )
+
+
+                            ),
+                          ),
+                        ],
+                      ),
                             SizedBox(width: 10.w,),
                           ],
                         )),
@@ -506,17 +584,17 @@ SizedBox(width: 90.w,),
 
                     SizedBox(
 
-                      width: 255.w,
+                      width: 275.w,
                       height: 120.h,
                       child: Column(
                         children: [
-                          Text("Login to", overflow: TextOverflow.ellipsis,
+                          Text("Login to".tr, overflow: TextOverflow.ellipsis,
                             style: primaryTextStyle(
                                 weight: FontWeight.w700,
                                 size: 32.sp.round(),
                                 color: primaryColor
                             ),),
-                          Text("your account", overflow: TextOverflow.ellipsis,
+                          Text("".tr, overflow: TextOverflow.ellipsis,
                             style: primaryTextStyle(
                                 weight: FontWeight.w700,
                                 size: 32.sp.round(),

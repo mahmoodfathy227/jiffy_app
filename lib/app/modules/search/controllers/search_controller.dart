@@ -20,7 +20,7 @@ Rx<TextEditingController> searchController = TextEditingController().obs;
   RxString  selectedCategory = "".obs;
   var bodyRequest;
 ScrollController categoryScrollController = ScrollController();
-List<String> filterItems = ["Featured", "Best Selling", "Latest",];
+List<String> filterItems = ["Featured".tr, "Best Selling".tr, "Latest".tr,];
   final count = 0.obs;
   @override
   void onInit() {

@@ -111,11 +111,12 @@ print("${"pro id is ${controller.product.value.id}"}");
                   Stack(
                     alignment: Alignment.topCenter,
                     children: [
+                      //Carousel Images
                       _buildProductImagesCarousel(
                           context, [controller.product.value.image], "", controller.productImages),
                       CustomAppBar(
                         myFunction: () {},
-                        title: "Product",
+                        title: "Product".tr,
                         svgPath: "assets/images/shopping-cart.svg",
                       ),
                     ],
@@ -123,7 +124,7 @@ print("${"pro id is ${controller.product.value.id}"}");
 
                   //Search Bar
                   // _buildSearchWidget(context),
-                  //Carousel Images
+
 
                   Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -338,7 +339,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                                   isloading: false,
                                   btnText:
                                   controller.isAddToCartActive.value ?
-                                  "View Cart"
+                                  "View Cart".tr
                                       :
                                   "Add To Cart",
                                   isSecondaryTextStyle: true,
@@ -466,7 +467,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          "Size",
+                          "Size".tr,
                           style: boldTextStyle(
                             size: 18.sp.round(),
                             letterSpacing: 0.8.w,
@@ -552,7 +553,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                           child: Row(
                             children: [
                               Text(
-                                "SubTotal",
+                                "SubTotal".tr,
                                 style: primaryTextStyle(
                                   size: 17.sp.round(),
                                   weight: FontWeight.w400,
@@ -667,7 +668,7 @@ print("${"pro id is ${controller.product.value.id}"}");
               SizedBox(
                 width: 10.w,
               ),
-              Text("OUT OF 5",
+              Text("OUT OF 5".tr,
                   style: secondaryTextStyle(
                       color: Color(0xFF8A8A8F),
                       height: 0.11,
@@ -967,7 +968,9 @@ print("${"pro id is ${controller.product.value.id}"}");
             children: [
               Align(
                   alignment: Alignment.topLeft,
-                  child: Text(comingProduct.name ?? "Purple Flower EDP",
+                  child: Text(
+                    key: Key(comingProduct.name.toString()),
+                      comingProduct.name ?? "Purple Flower EDP",
                       style: secondaryTextStyle(
                           size: 25.sp.round(),
                           color: const Color(0xff20003D),
@@ -1008,7 +1011,7 @@ print("${"pro id is ${controller.product.value.id}"}");
           //   ),
           // ),
           Text(
-            "300 gm",
+            "300 gm".tr,
             style: secondaryTextStyle(
                 weight: FontWeight.w400, size: 16.sp.round()),
           ),
@@ -1037,7 +1040,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                       color: primaryColor,
                       weight: FontWeight.w900)),
               const Spacer(),
-              Text("Available on fast delivery",
+              Text("Available on fast delivery".tr,
                   style: secondaryTextStyle(
                       size: 13.sp.round(),
                       color: secondaryPrimaryColor,
@@ -1112,7 +1115,7 @@ print("${"pro id is ${controller.product.value.id}"}");
           padding: EdgeInsets.symmetric(horizontal: kDefaultPadding * 1.2),
           child: Row(
             children: [
-              Text("Reviews",
+              Text("Reviews".tr,
                   style: secondaryTextStyle(
                       size: 18.sp.round(),
                       weight: FontWeight.w700,
@@ -1244,7 +1247,7 @@ print("${"pro id is ${controller.product.value.id}"}");
             child: Column(
               children: [
                 Text(
-                  "No Comments Yet ..",
+                  "No Comments Yet ..".tr,
                   style: secondaryTextStyle(),
                 ),
                 SizedBox(
@@ -1277,7 +1280,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                   padding:
                   EdgeInsets.only(left: kDefaultPadding * 0.6),
                   child: Text(
-                    "Reviews (${controller.product.value.rating
+                    "${'Reviews'.tr} (${controller.product.value.rating
                         .toString()})",
                     style: secondaryTextStyle(
                         color: greyishColor, size: 12.sp.round()),
@@ -1388,7 +1391,7 @@ print("${"pro id is ${controller.product.value.id}"}");
             child: Padding(
               padding: EdgeInsets.only(top: 10.h, bottom: 15.h),
               child: Text(
-                "No Related Products Yet",
+                "No Related Products Yet".tr,
                 style: primaryTextStyle(),
               ),
             ),
@@ -1423,351 +1426,9 @@ print("${"pro id is ${controller.product.value.id}"}");
         });
   }
 
-  _buildProductColors(context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Colors", style: boldTextStyle(size: 22.sp.round())),
-          SizedBox(height: 5.h),
-          Divider(
-            color: Colors.grey[300],
-            height: 2,
-          ),
-          SizedBox(height: 10.h),
-          ShowUp(
-            delay: 300,
-            child: Obx(() {
-              return controller.isProductLoading.value
-                  ? loadingIndicatorWidget()
-                  : GetBuilder<ProductController>(
-                builder: (logic) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5.w),
-                    height:
-                    70.h, // Increase height to accommodate the text
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (ctx, index) =>
-                          GestureDetector(
-                            onTap: () {
-                              controller.setColor(
-                                  controller.colorsList[index].name);
-                              controller.changeImagesList(
-                                  controller.colorsList[index].name);
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 45.w,
-                                  height: 43.h,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Colors.grey.withOpacity(0.3)),
-                                    color: Color(int.parse(
-                                        '0xff${controller.colorsList[index].hex!
-                                            .split('#')[1]}')),
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      Center(
-                                        child:
-                                        controller.selectedColor.value ==
-                                            controller
-                                                .colorsList[index]
-                                                .name
-                                            ? ShowUp(
-                                          delay: 200,
-                                          child: SvgPicture.asset(
-                                              'assets/images/selected.svg',
-                                              width: 20.w,
-                                              height: 20.w,
-                                              color: controller
-                                                  .colorsList[
-                                              index]
-                                                  .name ==
-                                                  'White'
-                                                  ? Colors.black
-                                                  : Colors.white),
-                                        )
-                                            : SizedBox(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 5.h),
-                                // Spacing between the circle and the text
-                                Text(
-                                  controller.colorsList[index].name ??
-                                      '', // Display color name
-                                  style: primaryTextStyle(
-                                      size: 12.sp.round(),
-                                      weight: FontWeight
-                                          .w400), // Adjust font size
-                                ),
-                              ],
-                            ),
-                          ),
-                      separatorBuilder: (ctx, index) =>
-                          SizedBox(width: 5.w),
-                      itemCount: controller.colorsList.length,
-                    ),
-                  );
-                },
-              );
-            }),
-          ),
-          SizedBox(height: 15.h),
-        ],
-      ),
-    );
-  }
 
-  _buildProductSizes(context) {
-    // Column(
-    //   children: [
-    //     ShowUp(
-    //       delay: 300,
-    //       child: Obx(() {
-    //         return controller.isProductLoading.value
-    //             ? loadingIndicatorWidget()
-    //             : GetBuilder<ProductController>(
-    //           builder: (logic) {
-    //             return Container(
-    //               margin:
-    //               EdgeInsets.symmetric(horizontal: 15.w),
-    //               height: 50.h,
-    //               width: MediaQuery.of(context).size.width,
-    //               child: ListView.separated(
-    //                 scrollDirection: Axis.horizontal,
-    //                 itemBuilder: (ctx, index) =>
-    //                     GestureDetector(
-    //                       onTap: () {
-    //                         controller.setSize(
-    //                             controller.sizeList[index]);
-    //                       },
-    //                       child: Container(
-    //                         width: 45.w,
-    //                         height: 45.h,
-    //                         decoration: ShapeDecoration(
-    //                           color: controller.sizeList[index] ==
-    //                               controller
-    //                                   .selectedSize.value
-    //                               ? Color(0xFF515151)
-    //                               : Color(0xFFFAFAFA),
-    //                           shape: RoundedRectangleBorder(
-    //                             borderRadius:
-    //                             BorderRadius.circular(16.50),
-    //                           ),
-    //                         ),
-    //                         child: Center(
-    //                           child: Text(
-    //                             controller.sizeList[index],
-    //                             style: primaryTextStyle(
-    //                               color: Color(0xffCCCCCC),
-    //                               size: 15.sp.round(),
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ),
-    //                     ),
-    //                 separatorBuilder: (ctx, index) =>
-    //                     SizedBox(width: 5.w),
-    //                 itemCount: controller.sizeList.length,
-    //               ),
-    //             );
-    //           },
-    //         );
-    //       }),
-    //     ),
-    //   ],
-    // ),
-    // //////////////////////////////////////////////////
-    // SizedBox(height: 20.h),
-    // /////////////////Color//////////////////////////////
-    // Padding(
-    // padding: EdgeInsets.only(left: 15.w),
-    // child: Align(
-    // alignment: Alignment.topLeft,
-    // child: Text(
-    // "Color",
-    // style: boldTextStyle(
-    // size: 18.sp.round(),
-    // letterSpacing: 0.8.w,
-    // color: Colors.grey,
-    // ),
-    // ),
-    // ),
-    // ),
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //point here
-          Row(
-            children: [
-              Text("Sizes", style: boldTextStyle(size: 22.sp.round())),
-              Spacer(),
-            ],
-          ),
-          SizedBox(height: 5.h),
-          Divider(
-            color: Colors.grey[300],
-            height: 2,
-          ),
-          SizedBox(height: 10.h),
-          ShowUp(
-            delay: 300,
-            child: Obx(() {
-              return controller.isProductLoading.value
-                  ? loadingIndicatorWidget()
-                  : GetBuilder<ProductController>(
-                builder: (logic) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8.w),
-                    height: 32.h,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (ctx, index) =>
-                          GestureDetector(
-                            onTap: () {
-                              controller.setSize(controller.sizeList[index]);
-                            },
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: 55.w,
-                              ),
-                              child: Container(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 4.w),
-                                // width: 55.w,
-                                decoration: ShapeDecoration(
-                                  color: controller.sizeList[index] ==
-                                      controller.selectedSize.value
-                                      ? Color(0xFF515151)
-                                      : Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(26.50),
-                                    side: BorderSide(
-                                        width: 2,
-                                        color: controller.sizeList[index] ==
-                                            controller.selectedSize.value
-                                            ? Color(0xFF515151)
-                                            : Colors.grey[300]!),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    controller.sizeList[index],
-                                    style: primaryTextStyle(
-                                      color: controller.sizeList[index] ==
-                                          controller.selectedSize.value
-                                          ? Color(0xffCCCCCC)
-                                          : Colors.black,
-                                      size: 15.sp.round(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      separatorBuilder: (ctx, index) =>
-                          SizedBox(width: 5.w),
-                      itemCount: controller.sizeList.length,
-                    ),
-                  );
-                  //   Container(
-                  //   margin: EdgeInsets.symmetric(horizontal: 5.w),
-                  //   height:
-                  //       70.h, // Increase height to accommodate the text
-                  //   width: MediaQuery.of(context).size.width,
-                  //   child: ListView.separated(
-                  //     scrollDirection: Axis.horizontal,
-                  //     itemBuilder: (ctx, index) => GestureDetector(
-                  //       onTap: () {
-                  //         controller.setColor(
-                  //             controller.colorsList[index].name);
-                  //         controller.changeImagesList(
-                  //             controller.colorsList[index].name);
-                  //       },
-                  //       child: Column(
-                  //         children: [
-                  //           Container(
-                  //             width: 45.w,
-                  //             height: 43.h,
-                  //             decoration: BoxDecoration(
-                  //               shape: BoxShape.circle,
-                  //               border: Border.all(
-                  //                   color: Colors.grey.withOpacity(0.3)),
-                  //               color: Color(int.parse(
-                  //                   '0xff${controller.colorsList[index].hex!.split('#')[1]}')),
-                  //             ),
-                  //             child: Stack(
-                  //               children: [
-                  //                 Center(
-                  //                   child:
-                  //                       controller.selectedColor.value ==
-                  //                               controller
-                  //                                   .colorsList[index]
-                  //                                   .name
-                  //                           ? ShowUp(
-                  //                               delay: 200,
-                  //                               child: SvgPicture.asset(
-                  //                                   'assets/images/selected.svg',
-                  //                                   width: 20.w,
-                  //                                   height: 20.w,
-                  //                                   color: controller
-                  //                                               .colorsList[
-                  //                                                   index]
-                  //                                               .name ==
-                  //                                           'White'
-                  //                                       ? Colors.black
-                  //                                       : Colors.white),
-                  //                             )
-                  //                           : SizedBox(),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           SizedBox(height: 5.h),
-                  //           // Spacing between the circle and the text
-                  //           Text(
-                  //             controller.colorsList[index].name ??
-                  //                 '', // Display color name
-                  //             style: primaryTextStyle(
-                  //                 size: 12.sp.round(),
-                  //                 weight: FontWeight
-                  //                     .w400), // Adjust font size
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     separatorBuilder: (ctx, index) =>
-                  //         SizedBox(width: 5.w),
-                  //     itemCount: controller.colorsList.length,
-                  //   ),
-                  // );
-                },
-              );
-            }),
-          ),
-          SizedBox(height: 15.h),
-        ],
-      ),
-    );
-  }
+
+
 
   _buildProductRating() {
     return Column(
@@ -1785,7 +1446,7 @@ print("${"pro id is ${controller.product.value.id}"}");
               width: kDefaultPadding * 1.5,
             ),
             Text(
-              "Rating",
+              "Rating".tr,
               style: secondaryTextStyle(
                   weight: FontWeight.w300,
                   size: 16.sp.round(),

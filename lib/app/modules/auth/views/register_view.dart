@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,7 @@ String randomId = "123";
               child: SizedBox(
                 width: 326.w,
                 child: Text(
-                  'Create an account',
+                  'Create an account'.tr,
                   textAlign: TextAlign.center,
                   style: primaryTextStyle(
                       weight: FontWeight.w800,
@@ -97,7 +98,7 @@ String randomId = "123";
                           ),
                         ),
                         child: Text(
-                          'Individual',
+                          'Individual'.tr,
                           style: primaryTextStyle(
                               size: 16.sp.round(),
                               weight: !isCompany ? FontWeight.w900 : FontWeight
@@ -138,7 +139,7 @@ String randomId = "123";
                           ),
                         ),
                         child: Text(
-                            'Company',
+                            'Company'.tr,
                             style: primaryTextStyle(
                                 size: 16.sp.round(),
                                 weight: isCompany ? FontWeight.w900 : FontWeight
@@ -200,12 +201,9 @@ String randomId = "123";
                                   ),
                                 ],
                               ),
-                              child: SvgPicture.asset(
-                                "assets/images/back_btn.svg",
-                                width: 80.w,
-                                height: 80.h,
-                                fit: BoxFit.cover,
-                              ),
+                              child:
+buildBackBtn(),
+
                             ),
                           ),
                         ),
@@ -301,7 +299,7 @@ String randomId = "123";
                       child: ShowUp(
                         delay: 400,
                         child: CustomTextField(
-                          labelText: 'First Name',
+                          labelText: 'First Name'.tr,
                           onChanged: (value) =>
                           controller.firstName.value = value,
                           errorText:  controller.firstNameError.value,
@@ -313,7 +311,7 @@ String randomId = "123";
                       child: ShowUp(
                         delay: 400,
                         child: CustomTextField(
-                          labelText: 'Last Name',
+                          labelText: 'Last Name'.tr,
                           onChanged: (value) =>
                           controller.lastName.value = value,
                           errorText: controller.lastNameError.value,
@@ -326,7 +324,7 @@ String randomId = "123";
           delay: 600,
           child: CustomTextField(
 
-            labelText: 'Company Name',
+            labelText: 'Company Name'.tr,
             onChanged: (value) => controller.company.value = value,
             errorText: controller.companyError.value ,
           ),
@@ -341,7 +339,7 @@ String randomId = "123";
         ShowUp(
           delay: 600,
           child: CustomTextField(
-            labelText: 'Your Email',
+            labelText: 'Your Email'.tr,
             onChanged: (value) => controller.email.value = value,
             errorText: controller.emailError.value ,
           ),
@@ -350,7 +348,7 @@ String randomId = "123";
         ShowUp(
           delay: 600,
           child: CustomTextField(
-            labelText: 'Password',
+            labelText: 'Password'.tr,
             onChanged: (value) => controller.password.value = value,
             errorText: controller.passwordError.value ,
             obscureText: true,
@@ -360,7 +358,7 @@ String randomId = "123";
         ShowUp(
           delay: 600,
           child: CustomTextField(
-            labelText: 'Confirm Password',
+            labelText: 'Confirm Password'.tr,
             onChanged: (value) => controller.confirmPassword.value = value,
             errorText: controller.confirmPasswordError.value ,
             obscureText: true,
@@ -372,7 +370,7 @@ String randomId = "123";
           child: MyDefaultButton(
             errorText: controller.errorMessage.value,
             isloading: controller.isLoading.value,
-            btnText: 'Sign up',
+            btnText: 'Sign up'.tr,
             onPressed: () => controller.register(),
           ),
         ),
@@ -383,7 +381,7 @@ String randomId = "123";
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Already have an account?',
+                'Already have an account?'.tr,
                 textAlign: TextAlign.center,
                 style: primaryTextStyle(
                   color: Color(0xFF555662),
@@ -399,7 +397,7 @@ String randomId = "123";
                   Get.to(() => LoginView());
                 },
                 child: Text(
-                  'Log in',
+                  'Log in'.tr,
                   textAlign: TextAlign.center,
                   style: primaryTextStyle(
                     color: primaryColor,

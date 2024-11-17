@@ -30,12 +30,12 @@ class Completed extends GetView<CheckoutController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
 Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
-                  Text("Thank you", style: primaryTextStyle(color: Color(0xFF10AE48),
+                  Text("Thank you".tr, style: primaryTextStyle(color: Color(0xFF10AE48),
                   weight: FontWeight.w900,
                     size: 24.sp.round()
 
                   ),),
-                  Text("You can view your order in ‘My Orders’ section.", style:
+                  Text("You can view your order in ‘My Orders’ section.".tr, style:
                   primaryTextStyle(color: Colors.grey,
                   size: 12.sp.round()
                   ) )
@@ -48,7 +48,7 @@ Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
       floatingActionButton: buildFloatingButton(
 
 
-        buttonName: 'Continue Shopping',
+        buttonName: 'Continue Shopping'.tr,
 isPlainBackground: true,
         context: context,
         onPressed: () {

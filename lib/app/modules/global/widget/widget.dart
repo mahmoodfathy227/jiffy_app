@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/help/views/help_view.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
@@ -32,6 +33,7 @@ import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 
 import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../main.dart';
 import '../../../builtInPackage/like_button-2.0.5/lib/like_button.dart';
@@ -324,7 +326,7 @@ Widget SearchHomeBar({HomeController? homeController}) {
             ),
             SizedBox(height: 25.h),
             Text(
-              'Current Location',
+              'Current Location'.tr,
               textAlign: TextAlign.center,
               style: secondaryTextStyle(
                 color: Colors.white,
@@ -712,7 +714,7 @@ class JiffyDefaultButtonState extends State<JiffyDefaultButton> {
         width: widget.width ?? 181.w,
         height: widget.height ?? 64.h,
         decoration: ShapeDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment(1.00, 0.04),
             end: Alignment(-1, -0.04),
             colors: [
@@ -856,7 +858,7 @@ Widget MainLoading({double? width, double? height}) {
 }
 
 Color getColorStatusOrder(status) {
-  return status == 'PENDING'
+  return status == 'PENDING'.tr
       ? const Color(0xFFCF6112)
       : status == 'Delivered'
       ? const Color(0xFF33C200)
@@ -867,7 +869,15 @@ Widget orderCard(Order order) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
     decoration: BoxDecoration(
+      border: Border.all(
+           color: order.status == 'pending' ? const Color(0xFFCF6112) :
+        order.status == 'delivered' ?
+        const Color(0xFF33C200)
+          :
+        const Color(0xFFC40000),
+      ),
       color: Colors.white,
+
       borderRadius: BorderRadius.circular(10.r),
       boxShadow: [
         BoxShadow(
@@ -910,7 +920,7 @@ Widget orderCard(Order order) {
           children: [
             Expanded(
               child: Text(
-                'Tracking number: ${order.code}',
+                '${'Tracking number:'.tr} ${order.code}',
                 style: primaryTextStyle(
                   color: Color(0xFF777E90),
                   size: 14.sp.round(),
@@ -926,7 +936,7 @@ Widget orderCard(Order order) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Subtotal: \$${order.subTotal}',
+             '${'Subtotal'.tr}\$${order.subTotal}',
               style: primaryTextStyle(
                 color: Color(0xFF777E90),
                 size: 14.sp.round(),
@@ -956,7 +966,7 @@ Widget orderCard(Order order) {
               ),
               child: Center(
                 child: Text(
-                  'Details',
+                  'Details'.tr,
                   style: primaryTextStyle(
                     color: Colors.black,
                     size: 14.sp.round(),
@@ -1515,6 +1525,7 @@ Widget buttonSocialMedia({txtColor,
       child: Container(
           width: 327.w,
           height: 48.h,
+          padding: EdgeInsets.symmetric(horizontal: 5.w),
           decoration: ShapeDecoration(
             color: Color(color),
             shape: RoundedRectangleBorder(
@@ -1536,7 +1547,7 @@ Widget buttonSocialMedia({txtColor,
               Text(
                 text,
                 style: primaryTextStyle(
-                  size: 16.sp.round(),
+                  size: 14.sp.round(),
                   color: Color(txtColor),
                   weight: FontWeight.w500,
                   height: 0.06,
@@ -1554,7 +1565,7 @@ Widget buttonSocialMedia({txtColor,
                 Text(
                   text,
                   style: primaryTextStyle(
-                    size: 16.sp.round(),
+                    size: 14.sp.round(),
                     color: Color(txtColor),
                     weight: FontWeight.w500,
                     height: 0.06,
@@ -1790,7 +1801,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         width: MediaQuery
             .of(context)
             .size
@@ -1825,20 +1836,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             Get.off(() =>MainView());
                           } else {
                             print("going to home no") ;
-                            Get.back();
+                            Get.back(closeOverlays: true);
                           }
 
 
                         },
-                        icon: Stack(alignment: Alignment.center, children: [
-                          SvgPicture.asset(
-                            "assets/images/close-circle.svg",
-                          ),
-                          SvgPicture.asset(
-                            "assets/images/back_btn.svg",
-                            width: 88.h,
-                          ),
-                        ]))
+                        icon:  buildBackBtn(),)
                     :
                         SizedBox()
                     ,
@@ -1854,8 +1857,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
 
                     Spacer(),
-                    if (svgPath == null) Spacer(),
-                    if (svgPath != null)
+                  
                       isHelp ?
                       SizedBox(
                         width: 80.w,
@@ -3888,7 +3890,7 @@ Widget socialMediaPlaceHolder() {
           height: 32.h,
         ),
         Text(
-          'Please log in or sign up to continue shopping',
+          'Please log in or sign up to continue shopping'.tr,
           textAlign: TextAlign.center,
           style: secondaryTextStyle(
             color:  Colors.black,
@@ -3907,10 +3909,11 @@ Widget socialMediaPlaceHolder() {
               Get.to(LoginView());
             },
             child: buttonSocialMedia(
-                icon: 'assets/icons/login.svg',
+                icon: 'assets/icons/profile.svg',
                 index: 3,
-                text: 'Sign in with password',
+                text: 'Sign in with password'.tr,
                 color: 0xFFD4B0FF,
+
                 txtColor: 0xFF21034F,
                 borderColor: 0xFFD4B0FF)),
         SizedBox(
@@ -3926,7 +3929,7 @@ Widget socialMediaPlaceHolder() {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Don’t have an account?',
+                      text: 'Don’t have an account?'.tr,
                       style: primaryTextStyle(
                         color: const Color(0xFFCDCFD0),
                         size: 16.sp.round(),
@@ -3942,7 +3945,7 @@ Widget socialMediaPlaceHolder() {
                       ),
                     ),
                     TextSpan(
-                      text: 'Sign up',
+                      text: 'Sign up'.tr,
                       style: primaryTextStyle(
                         color: const Color(0xFFAA61FF),
                         size: 16.sp.round(),
@@ -4008,7 +4011,7 @@ customSearchField(isHome) {
           decoration: InputDecoration(
               contentPadding: EdgeInsets.all(8.w),
               border: InputBorder.none,
-              hintText: 'Search',
+              hintText: 'Search'.tr,
 
               hintStyle: primaryTextStyle(
                 color: Color(0xFF4F0099).withOpacity(0.3),
@@ -4074,7 +4077,7 @@ customHomeSearchField() {
         decoration: InputDecoration(
             contentPadding: EdgeInsets.all(8.w),
             border: InputBorder.none,
-            hintText: 'Search',
+            hintText: 'Search'.tr,
 
             hintStyle: primaryTextStyle(
               color: Color(0xFF4F0099).withOpacity(0.3),
@@ -5389,15 +5392,181 @@ Widget placeHolderProductCard() {
 
 
 
-Widget productCard(Product product, context, int index) {
+Widget productCard(Product product, context, int index ) {
+  ProductController productController = Get.put(ProductController());
   return Obx(() {
     return GestureDetector(
         onTap: () async {
-          ProductController productController = Get.put(ProductController());
+
+          productController.productId.value = product.id!;
           await productController.getProduct(product.id!);
           Get.to(const ProductView());
         },
-        child: SizedBox(
+        child:
+        productController.productId.value == product.id  &&
+            productController.isProductLoading.value
+        ?
+        Skeletonizer(
+          containersColor: Colors.grey[300],
+          enabled: true,
+          child: SizedBox(
+
+
+            child:
+            //product column stack
+            Stack(
+                alignment: Alignment.center,
+
+                children: [
+                  //add to favourite stack
+                  SizedBox(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 2,
+                    child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/images/home/product_background.svg",
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width / 1.0,
+
+                            fit: BoxFit.fitHeight,
+                          ),
+                          buildLikedButton(context, product),
+                        ]),
+                  ),
+                  //product details column
+                  SizedBox(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1.9,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          right: MediaQuery
+                              .of(context)
+                              .size
+                              .width / 12
+                      ),
+                      child: Column(
+
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: MediaQuery.of(context).
+                            size.width/7,),
+                            // product image
+                            Flexible(
+                              flex:  2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+
+                                  child: CachedNetworkImage(
+
+                                    imageUrl: product.image,
+                                    placeholder: (context, url) =>
+                                        Lottie.asset(
+                                            "assets/images/jiffy_placeholder.json"
+                                        ),
+
+                                    errorWidget: (context, url, error) =>
+                                        Image.network(
+                                          'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+
+                                          height: 120.h,
+                                        ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // product name
+                            Flexible(
+                              flex: 1,
+                              child: Text(
+                                maxLines: 2,
+                                GetMaxChar(product.name, 12),
+                                textAlign: TextAlign.center,
+                                style: secondaryTextStyle(
+                                  color: const Color(0xFF20003D),
+                                  size: 16.sp.round(),
+                                  weight: FontWeight.w600,
+                                  letterSpacing: -0.41,
+                                ),
+                              ),
+                            ),
+
+                            //product description
+                            Flexible(
+                              flex: 1,
+                              child: Text(
+                                '${product.size ?? 300} gm',
+                                style: secondaryTextStyle(
+                                  color: Color(0xFF20003D),
+                                  size: 12.sp.round(),
+                                  weight: FontWeight.w300,
+                                  letterSpacing: -0.41,
+                                ),
+                              ),
+                            ),
+
+
+                            //product details stack
+                            Stack(
+                              children: [
+
+
+                                //add to cart button with price stack
+                                Stack(
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    Padding(
+                                      padding:  EdgeInsets.only(
+                                          top: MediaQuery.of(context).size.width/25
+                                      ),
+                                      child: Text(
+                                        '\$${product.price ?? ""}',
+                                        textAlign: TextAlign.center,
+                                        style: secondaryTextStyle(
+                                          color: Color(0xFF4F0099),
+                                          size: 22.sp.round(),
+                                          weight: FontWeight.w600,
+                                          letterSpacing: -0.41,
+                                        ),
+                                      ),
+                                    ),
+                                    Obx(() {
+                                      return
+                                        isProductInCart(product) && userToken !=null
+                                            ?
+                                        buildShowAddToCartButton(context, product)
+
+                                            :
+                                        buildAddToCartButton(context, product);
+                                    }),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const Spacer(flex: 1,),
+
+                          ]),
+                    ),
+                  ),
+
+                ]),
+
+
+
+          ),
+        )
+        :
+        SizedBox(
 
 
           child:
@@ -5448,24 +5617,27 @@ Widget productCard(Product product, context, int index) {
                           size.width/7,),
                           // product image
                           Flexible(
-                            flex: 3,
-                            child: SizedBox(
+                            flex:  2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
 
-                              child: CachedNetworkImage(
+                                child: CachedNetworkImage(
 
-                                imageUrl: product.image,
-                                placeholder: (context, url) =>
-                                    Lottie.asset(
-                                        "assets/images/jiffy_placeholder.json"
-                                    ),
+                                  imageUrl: product.image,
+                                  placeholder: (context, url) =>
+                                      Lottie.asset(
+                                          "assets/images/jiffy_placeholder.json"
+                                      ),
 
-                                errorWidget: (context, url, error) =>
-                                    Image.network(
-                                      'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
+                                  errorWidget: (context, url, error) =>
+                                      Image.network(
+                                        'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
 
-                                      height: 120.h,
-                                    ),
-                                fit: BoxFit.cover,
+                                        height: 120.h,
+                                      ),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -5547,608 +5719,10 @@ Widget productCard(Product product, context, int index) {
               ]),
 
 
-          //             Stack(
-          //               alignment: Alignment.topCenter,
-          //               children: [
-          //                 SvgPicture.asset(
-          //                   "assets/images/home/product_background.svg",
-          //              height: 100.h,
-          //                   fit: BoxFit.fitWidth,
-          //                 ),
-          //                 Container(
-          //
-          //                   decoration: BoxDecoration(
-          //                     color: Colors.white,
-          //                     borderRadius: const BorderRadius.only(
-          //                         topLeft: Radius.circular(5),
-          //                         topRight: Radius.circular(5)),
-          //                     boxShadow: [
-          //                       BoxShadow(
-          //                         color: Colors.grey.withOpacity(0.5),
-          //                         blurRadius: 10,
-          //                         offset: Offset(0, 5),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                   child: Column(
-          //                       crossAxisAlignment: CrossAxisAlignment.center,
-          //                       mainAxisAlignment: MainAxisAlignment.start,
-          //                       children: [
-          //                         // product image
-          //                         Flexible(
-          //                           flex: 3,
-          //                           child: SizedBox(
-          //
-          //                             child: CachedNetworkImage(
-          //                               imageUrl: product.image,
-          //                               placeholder: (context, url) =>
-          //                                   Lottie.asset(
-          //                                       "assets/images/jiffy_placeholder.json"
-          //                                   ),
-          //
-          //                               errorWidget: (context, url, error) =>
-          //                                   Image.network(
-          //                                     'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-          //                                     // صورة بديلة عند فشل التحميل
-          //                                     height: 120.h,
-          //                                   ),
-          //                               fit: BoxFit.cover,
-          //                             ),
-          //                           ),
-          //                         ),
-          //
-          //                         // product name
-          //                         Flexible(
-          //                           flex: 1,
-          //                           child: Text(
-          //                             maxLines: 2,
-          //                             GetMaxChar(product.name, 16),
-          //                             textAlign: TextAlign.center,
-          //                             style: secondaryTextStyle(
-          //                               color: Color(0xFF20003D),
-          //                               size: 16.sp.round(),
-          //                               weight: FontWeight.w600,
-          //                               letterSpacing: -0.41,
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         Spacer(flex: 1,),
-          // //product description
-          //                         Flexible(
-          //                           flex: 1,
-          //                           child: Text(
-          //                             '${product.size ?? 300} gm',
-          //                             style: secondaryTextStyle(
-          //                               color: Color(0xFF20003D),
-          //                               size: 12.sp.round(),
-          //                               weight: FontWeight.w300,
-          //                               letterSpacing: -0.41,
-          //                             ),
-          //                           ),
-          //                         ),
-          // //       Column(
-          // //
-          // //       crossAxisAlignment: CrossAxisAlignment.center,
-          // //       mainAxisAlignment: MainAxisAlignment.start,
-          // //       children: [
-          // //       // product image
-          // //
-          // //       Spacer(flex: 1,),
-          // //       // product name
-          // //
-          // //       Text(
-          // //       GetMaxChar(product.name, 12),
-          // //       textAlign: TextAlign.center,
-          // //       style: secondaryTextStyle(
-          // //       color: Color(0xFF20003D),
-          // //       size: 16.sp.round(),
-          // //       weight: FontWeight.w600,
-          // //       letterSpacing: -0.41,
-          // //       ),
-          // //       ),
-          // //       Spacer(flex: 1,),
-          // // //product description
-          // //       Text(
-          // //       '${product.size ?? 300} gm',
-          // //       style: secondaryTextStyle(
-          // //       color: Color(0xFF20003D),
-          // //       size: 12.sp.round(),
-          // //       weight: FontWeight.w300,
-          // //       letterSpacing: -0.41,
-          // //       ),
-          // //       ),
-          // //       //product price
-          // //       Spacer(flex: 1,),
-          // //       ]),
-          //                         Text(
-          //                           '\$${product.price ?? ""}',
-          //                           textAlign: TextAlign.center,
-          //                           style: secondaryTextStyle(
-          //                             color: Color(0xFF4F0099),
-          //                             size: 22.sp.round(),
-          //                             weight: FontWeight.w600,
-          //                             letterSpacing: -0.41,
-          //                           ),
-          //                         ),
-          //                       ]),
-          //                 )
-          //               ],
-          //             )
 
+        )
+    );
 
-          //             ClipPath(
-          //                 clipper: BottomWaveClipper(),
-          //                 child: Container(
-          //
-          //                   decoration: BoxDecoration(
-          //                     color: Colors.white,
-          //                     borderRadius: const BorderRadius.only(
-          //                         topLeft: Radius.circular(5),
-          //                         topRight: Radius.circular(5)),
-          //                     boxShadow: [
-          //                       BoxShadow(
-          //                         color: Colors.grey.withOpacity(0.5),
-          //                         blurRadius: 10,
-          //                         offset: Offset(0, 5),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                   child: Column(
-          //                       crossAxisAlignment: CrossAxisAlignment.center,
-          //                       mainAxisAlignment: MainAxisAlignment.start,
-          //                       children: [
-          //                         // product image
-          //                         Flexible(
-          //                           flex: 3,
-          //                           child: SizedBox(
-          //
-          //                             child: CachedNetworkImage(
-          //                               imageUrl: product.image,
-          //                               placeholder: (context, url) =>
-          //                                   Lottie.asset(
-          //                                       "assets/images/jiffy_placeholder.json"
-          //                                   ),
-          //
-          //                               errorWidget: (context, url, error) =>
-          //                                   Image.network(
-          //                                     'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-          //                                     // صورة بديلة عند فشل التحميل
-          //                                     height: 120.h,
-          //                                   ),
-          //                               fit: BoxFit.cover,
-          //                             ),
-          //                           ),
-          //                         ),
-          //
-          //                         // product name
-          //                         Flexible(
-          //                           flex: 1,
-          //                           child: Text(
-          //                             maxLines: 2,
-          //                             GetMaxChar(product.name, 16),
-          //                             textAlign: TextAlign.center,
-          //                             style: secondaryTextStyle(
-          //                               color: Color(0xFF20003D),
-          //                               size: 16.sp.round(),
-          //                               weight: FontWeight.w600,
-          //                               letterSpacing: -0.41,
-          //                             ),
-          //                           ),
-          //                         ),
-          //                         Spacer(flex: 1,),
-          // //product description
-          //                         Flexible(
-          //                           flex: 1,
-          //                           child: Text(
-          //                             '${product.size ?? 300} gm',
-          //                             style: secondaryTextStyle(
-          //                               color: Color(0xFF20003D),
-          //                               size: 12.sp.round(),
-          //                               weight: FontWeight.w300,
-          //                               letterSpacing: -0.41,
-          //                             ),
-          //                           ),
-          //                         ),
-          // //       Column(
-          // //
-          // //       crossAxisAlignment: CrossAxisAlignment.center,
-          // //       mainAxisAlignment: MainAxisAlignment.start,
-          // //       children: [
-          // //       // product image
-          // //
-          // //       Spacer(flex: 1,),
-          // //       // product name
-          // //
-          // //       Text(
-          // //       GetMaxChar(product.name, 12),
-          // //       textAlign: TextAlign.center,
-          // //       style: secondaryTextStyle(
-          // //       color: Color(0xFF20003D),
-          // //       size: 16.sp.round(),
-          // //       weight: FontWeight.w600,
-          // //       letterSpacing: -0.41,
-          // //       ),
-          // //       ),
-          // //       Spacer(flex: 1,),
-          // // //product description
-          // //       Text(
-          // //       '${product.size ?? 300} gm',
-          // //       style: secondaryTextStyle(
-          // //       color: Color(0xFF20003D),
-          // //       size: 12.sp.round(),
-          // //       weight: FontWeight.w300,
-          // //       letterSpacing: -0.41,
-          // //       ),
-          // //       ),
-          // //       //product price
-          // //       Spacer(flex: 1,),
-          // //       ]),
-          //                         Text(
-          //                           '\$${product.price ?? ""}',
-          //                           textAlign: TextAlign.center,
-          //                           style: secondaryTextStyle(
-          //                             color: Color(0xFF4F0099),
-          //                             size: 22.sp.round(),
-          //                             weight: FontWeight.w600,
-          //                             letterSpacing: -0.41,
-          //                           ),
-          //                         ),
-          //                       ]),
-          //                 ))
-          //           Stack(children: [
-          //             PositionedDirectional(
-          //                 top: 10,
-          //                 child:),
-          // PositionedDirectional(
-          //     top: 20,
-          //     end: 10.w,
-          //     child: Obx(
-          //           () =>
-          //           LikeButton(
-          //             onTap: onLikeButtonTapped,
-          //             product: product,
-          //             isLiked: wishListController
-          //                 .isProductInWishList(product.id)
-          //                 .value,
-          //             size: 20.sp,
-          //             circleColor: const CircleColor(
-          //                 start: Color(0xff00ddff), end: Color(0xff0099cc)),
-          //             bubblesColor: BubblesColor(
-          //               dotPrimaryColor: Color(0xff33b5e5),
-          //               dotSecondaryColor: Color(0xff0099cc),
-          //             ),
-          //             likeCountAnimationDuration: Duration(seconds: 1),
-          //             likeCountAnimationType: LikeCountAnimationType.all,
-          //             countBuilder: (int? count, bool isLiked,
-          //                 String text) {
-          //               var color =
-          //               isLiked ? Colors.deepPurpleAccent : Colors.grey;
-          //
-          //               return Text(
-          //                 '',
-          //                 style: TextStyle(color: color),
-          //               );
-          //             },
-          //             likeBuilder: (bool isLiked) {
-          //               return SvgPicture.asset(
-          //                 wishListController
-          //                     .isProductInWishList(product.id)
-          //                     .value
-          //                     ? 'assets/images/addwish.svg'
-          //                     : 'assets/images/home/heart.svg',
-          //                 color: isLiked ? Colors.deepPurpleAccent : Colors
-          //                     .grey,
-          //                 width: 20.w,
-          //               );
-          //             },
-          //           ),
-          //     )),
-          // if (index == 1)
-          //   PositionedDirectional(
-          //     top: -4.h,
-          //     start: 5.w,
-          //     child: ShowUp(
-          //         child: Container(
-          //             width: 38.w * 1.8,
-          //             height: 44.h * 1.8,
-          //             child: Stack(children: [
-          //               SvgPicture.asset(
-          //                 'assets/images/home/off.svg',
-          //                 width: 38.w * 1.8,
-          //                 height: 44.h * 1.8,
-          //                 fit: BoxFit.cover,
-          //               ),
-          //               PositionedDirectional(
-          //                   bottom: 35.h,
-          //                   start: 17.w,
-          //                   child: ShowUp(
-          //                     child: Text(
-          //                       '${50}%',
-          //                       style: secondaryTextStyle(
-          //                         color: Colors.white,
-          //                         size: 12.sp.round(),
-          //                         weight: FontWeight.w800,
-          //                         letterSpacing: -0.41,
-          //                       ),
-          //                     ),
-          //                   )),
-          //             ]))),
-          //   ),
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //       top: MediaQuery
-          //           .of(Get.context!)
-          //           .size
-          //           .width >= 600 ?
-          //       20.h : 0.h
-          //   ), //       Column(
-          //                           //
-          //                           //       crossAxisAlignment: CrossAxisAlignment.center,
-          //                           //       mainAxisAlignment: MainAxisAlignment.start,
-          //                           //       children: [
-          //                           //       // product image
-          //                           //
-          //                           //       Spacer(flex: 1,),
-          //                           //       // product name
-          //                           //
-          //                           //       Text(
-          //                           //       GetMaxChar(product.name, 12),
-          //                           //       textAlign: TextAlign.center,
-          //                           //       style: secondaryTextStyle(
-          //                           //       color: Color(0xFF20003D),
-          //                           //       size: 16.sp.round(),
-          //                           //       weight: FontWeight.w600,
-          //                           //       letterSpacing: -0.41,
-          //                           //       ),
-          //                           //       ),
-          //                           //       Spacer(flex: 1,),
-          //                           // //product description
-          //                           //       Text(
-          //                           //       '${product.size ?? 300} gm',
-          //                           //       style: secondaryTextStyle(
-          //                           //       color: Color(0xFF20003D),
-          //                           //       size: 12.sp.round(),
-          //                           //       weight: FontWeight.w300,
-          //                           //       letterSpacing: -0.41,
-          //                           //       ),
-          //                           //       ),
-          //                           //       //product price
-          //                           //       Spacer(flex: 1,),
-          //                           //       ]),
-          // child: PositionedDirectional(
-          //   bottom: -15.h,
-          //   end: 0.w,
-          //   start: -10.w,
-          //   child: SizedBox(
-          //     height: 350.h,
-          //     child: Stack(
-          //       children: [
-          //         // الخلفية SVG
-          //         PositionedDirectional(
-          //           bottom:
-          //           cartController.cartItems.isEmpty ||
-          //               cartController.cartItems.indexWhere(
-          //                       (item) =>
-          //                   item.product.id ==
-          //                       product.id) ==
-          //                   -1
-          //               ?
-          //           8
-          //               :
-          //           4
-          //           ,
-          //           end:
-          //           cartController.cartItems.isEmpty ||
-          //               cartController.cartItems.indexWhere(
-          //                       (item) =>
-          //                   item.product.id ==
-          //                       product.id) ==
-          //                   -1
-          //               ?
-          //           -12.w
-          //               :
-          //           15.w
-          //           ,
-          //           start:
-          //
-          //           cartController.cartItems.isEmpty ||
-          //               cartController.cartItems.indexWhere(
-          //                       (item) =>
-          //                   item.product.id ==
-          //                       item.product.id) ==
-          //                   -1
-          //               ? 22.w : 15.w,
-          //           child: SvgPicture.asset(
-          //             cartController.cartItems.isEmpty ||
-          //                 cartController.cartItems.indexWhere(
-          //                         (item) =>
-          //                     item.product.id ==
-          //                         product.id) ==
-          //                     -1
-          //                 ?
-          //             "assets/images/home/add_background.svg"
-          //
-          //                 :
-          //             'assets/images/home/borderCart.svg'
-          //             ,
-          //             fit: BoxFit.cover,
-          //
-          //             height: 134.h,
-          //
-          //           ),
-          //         ),
-          //         // Cart controls
-          //         PositionedDirectional(
-          //           bottom: 66.h,
-          //           end:
-          //           cartController.cartItems.isEmpty ||
-          //               cartController.cartItems.indexWhere(
-          //                       (item) =>
-          //                   item.product.id ==
-          //                       product.id) ==
-          //                   -1
-          //               ?
-          //           -3.w
-          //
-          //               :
-          //           0,
-          //           start: 12,
-          //           child: SizedBox(
-          //             width: 80.w,
-          //             child: Obx(
-          //                   () =>
-          //                   AnimatedSwitcher(
-          //                     duration: const Duration(milliseconds: 300),
-          //                     child: cartController.cartItems.isEmpty ||
-          //                         cartController.cartItems.indexWhere(
-          //                                 (item) =>
-          //                             item.product.id ==
-          //                                 product.id) ==
-          //                             -1
-          //                         ? InkWell(
-          //                       onTap: () {
-          //                         if (userToken == null) {
-          //                           Get.to(() => LoginView());
-          //                         } else {
-          //                           int initialQty = product.d_limit > 0
-          //                               ? product.d_limit
-          //                               : 1;
-          //                           cartController.addToCart(product,
-          //                               quantity: initialQty);
-          //                         }
-          //                       },
-          //                       child:
-          //                       Center(
-          //                         child: SvgPicture.asset(
-          //                           'assets/images/home/add_icon.svg',
-          //                           width: 40.w,
-          //                           height: 40.h,
-          //                         ),
-          //                       ),
-          //
-          //                     )
-          //                         : Row(
-          //                       mainAxisAlignment:
-          //                       MainAxisAlignment.spaceAround,
-          //                       children: [
-          //                         Column(children: [
-          //                           Padding(
-          //                             padding: EdgeInsetsDirectional.only(
-          //                               start: 10.w,
-          //
-          //                             ),
-          //                             child: InkWell(
-          //                               onTap: () {
-          //                                 if (userToken == null) {
-          //                                   Get.to(() => LoginView());
-          //                                   return;
-          //                                 }
-          //                                 var index = cartController
-          //                                     .cartItems
-          //                                     .indexWhere((item) =>
-          //                                 item.product.id ==
-          //                                     product.id);
-          //                                 var currentItem = cartController
-          //                                     .cartItems[index];
-          //
-          //                                 // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
-          //                                 if (product.d_limit != 0 &&
-          //                                     currentItem.quantity >
-          //                                         product.d_limit ||
-          //                                     product.d_limit == 0 &&
-          //                                         currentItem.quantity >
-          //                                             1) {
-          //                                   cartController.updateQuantity(
-          //                                     currentItem,
-          //                                     currentItem.quantity - 1,
-          //                                   );
-          //                                 } else if (product.d_limit == 0 &&
-          //                                     currentItem.quantity ==
-          //                                         1 ||
-          //                                     currentItem.quantity ==
-          //                                         product.d_limit) {
-          //                                   print('teasdsadsadsa');
-          //                                   cartController
-          //                                       .removeItem(currentItem);
-          //                                 }
-          //                               },
-          //                               child: SvgPicture.asset(
-          //                                 'assets/images/home/minus.svg',
-          //                                 width: 20.w,
-          //                                 height: 20.h,
-          //                               ),
-          //                             ),
-          //                           ),
-          //                           SizedBox(
-          //                             height: 5.h,
-          //                           )
-          //                         ]),
-          //                         Column(children: [
-          //                           Text(
-          //                             '${cartController
-          //                                 .cartItems[cartController
-          //                                 .cartItems.indexWhere((item) =>
-          //                             item.product.id == product.id)]
-          //                                 .quantity}',
-          //                             textAlign: TextAlign.center,
-          //                             style: primaryTextStyle(
-          //                               color: Color(0xFFFEFEFE),
-          //                               size: 20.sp.round(),
-          //                               height: 1.05,
-          //                               weight: FontWeight.w900,
-          //                               letterSpacing: -0.41,
-          //                             ),
-          //                           ),
-          //                           SizedBox(
-          //                             height: 2.h,
-          //                           )
-          //                         ]),
-          //                         Column(
-          //                           children: [
-          //                             Padding(
-          //                               padding: EdgeInsets.only(
-          //                                   right: 5.w),
-          //                               child: InkWell(
-          //                                 onTap: () {
-          //                                   if (userToken == null) {
-          //                                     Get.to(() => LoginView());
-          //                                     return;
-          //                                   }
-          //                                   var index = cartController
-          //                                       .cartItems
-          //                                       .indexWhere((item) =>
-          //                                   item.product.id ==
-          //                                       product.id);
-          //                                   var currentItem = cartController
-          //                                       .cartItems[index];
-          //                                   cartController.updateQuantity(
-          //                                     currentItem,
-          //                                     currentItem.quantity + 1,
-          //                                   );
-          //                                 },
-          //                                 child: SvgPicture.asset(
-          //                                   'assets/images/home/plus.svg',
-          //                                   width: 20.w,
-          //                                   height: 20.h,
-          //                                 ),
-          //                               ),
-          //                             ),
-          //                             SizedBox(
-          //                               height: 5.h,
-          //                             )
-          //                           ],
-          //                         )
-          //                       ],
-          //                     ),
-          //                   ),
-          //             ),
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // ),
-        ));
   });
   //       ]);
   // })
@@ -6791,7 +6365,7 @@ buildLikedButton(context, Product product) {
         left: MediaQuery
             .of(context)
             .size
-            .width / 3.8
+            .width / 4.8
     ),
     child: LikeButton(
       onTap: onLikeButtonTapped,
@@ -6807,7 +6381,7 @@ buildLikedButton(context, Product product) {
         dotPrimaryColor: Color(0xff33b5e5),
         dotSecondaryColor: Color(0xff0099cc),
       ),
-      likeCountAnimationDuration: Duration(seconds: 1),
+      likeCountAnimationDuration: const Duration(seconds: 1),
       likeCountAnimationType: LikeCountAnimationType.all,
       countBuilder: (int? count, bool isLiked,
           String text) {
@@ -6834,6 +6408,18 @@ buildLikedButton(context, Product product) {
         );
       },
     ),
+  ).animate().shimmer(
+    color: primaryColor,
+    duration: const Duration(seconds: 2),
+    delay: const Duration(milliseconds: 500),
+    colors: [
+      primaryColor,
+      Colors.white,
+      Colors.purpleAccent,
+      Colors.deepPurpleAccent,
+      primaryColor,
+    ],
+
   );
 }
 buildAddToCartButton(context, Product product) {
@@ -6873,4 +6459,28 @@ buildAddToCartButton(context, Product product) {
       ],
     ),
   );
+}
+
+Widget buildBackBtn(){
+  return Get.locale?.languageCode == 'en'?
+
+  SvgPicture.asset(
+    "assets/images/back_btn.svg",
+    width: 80.w,
+    height: 80.h,
+    fit: BoxFit.cover,
+  ).animate().rotate(
+    delay: const Duration(seconds: 1),
+  ).fadeIn()
+      :
+  SvgPicture.asset(
+    "assets/images/back_btn.svg",
+    width: 80.w,
+    height: 80.h,
+    fit: BoxFit.cover,
+
+  ).animate().rotate(
+      delay: const Duration(seconds: 1),
+      begin: 0.0, end: 0.5
+  ).fadeIn();
 }

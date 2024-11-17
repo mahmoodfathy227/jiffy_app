@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/app/builtInPackage/like_button-2.0.5/lib/like_button.dart';
+import 'package:jiffy/app/modules/auth/views/register_view.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
@@ -61,7 +63,9 @@ class HomeView extends StatelessWidget {
                                 .size
                                 .width,
 
-                          ),
+                          ).animate().slideX(
+                              duration: const Duration(milliseconds: 300)
+                          ).fadeIn(),
 
                           Padding(
                             padding: EdgeInsets.only(top: 50.h),
@@ -70,8 +74,10 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                              padding: EdgeInsets.only(top: 250.h),
-                              child: SemiLunarScrollView()),
+                            padding: EdgeInsets.only(top: 250.h),
+                            child: SemiLunarScrollView().animate().slideY(
+                                duration: const Duration(milliseconds: 500)
+                            ).fadeIn(),),
 
 
                           // Slide-down animation using GetX controlled animations
@@ -334,7 +340,7 @@ class HomeView extends StatelessWidget {
                   // build Feature Products
                   Obx(() {
                     return viewProductSection(
-                        'Featured Product',
+                        'Featured Product'.tr,
                         homeController.homePageData.value
                             .featuredProducts,
                         context);
@@ -367,7 +373,7 @@ class HomeView extends StatelessWidget {
                   //             context))),
                   Obx(() {
                     return viewProductSection(
-                        'Featured Product',
+                        'Best Selling Product'.tr,
                         homeController.homePageData.value
                             .featuredProducts,
                         context);
@@ -457,7 +463,7 @@ class HomeView extends StatelessWidget {
                   //             context))),
                   Obx(() {
                     return viewProductSection(
-                        'Perfumes',
+                        'Perfumes'.tr,
                         homeController.homePageData.value
                             .featuredProducts,
                         context);
@@ -606,7 +612,7 @@ class HomeView extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 15.h,),
-            Text("Premium Products", style: secondaryTextStyle(
+            Text("Premium Products".tr, style: secondaryTextStyle(
                 color: Colors.white,
                 size: 23.sp.round(),
                 weight: FontWeight.w700
@@ -650,7 +656,7 @@ class HomeView extends StatelessWidget {
       children: [
         TitleWithSeeAll(
           title: title,
-          actionText: 'See all',
+          actionText: 'See all'.tr,
           onTap: () {
             // Navigate to "See All" or perform some action
             print('See All tapped');
@@ -662,14 +668,16 @@ class HomeView extends StatelessWidget {
               .of(context)
               .size
               .width,
-          padding: EdgeInsetsDirectional.only(start: 10.w),
+          padding: EdgeInsetsDirectional.only(start: 5.w),
           child:
           product.length == 0 ?
           ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 5,
             itemBuilder: (context, index) {
-              return productCard(AppConstants.sampleProduct, context, index);
+                 return
+
+                productCard(AppConstants.sampleProduct, context, index);
             },
           )
               :
@@ -683,7 +691,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ).animate().fadeIn(duration: const Duration(seconds: 1));
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
@@ -707,7 +715,6 @@ class HomeView extends StatelessWidget {
       return false;
     }
   }
-
 
 
   Widget premiumProductTemplate(Product product, int index, context) {
@@ -818,7 +825,7 @@ class HomeView extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                             addToCart(product);
+                                addToCart(product);
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -843,7 +850,7 @@ class HomeView extends StatelessWidget {
                                             ),
                                             child: InkWell(
                                               onTap: () {
-                                               handleDecrement(product);
+                                                handleDecrement(product);
                                               },
                                               child: SvgPicture.asset(
                                                 'assets/images/home/minus.svg',
@@ -880,11 +887,23 @@ class HomeView extends StatelessWidget {
                                         Column(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.only(
-                                                  right: 5.w),
+                                              padding:
+                                              Get.locale!.languageCode == 'ar' ?
+                                              EdgeInsets.only(
+                                                  left: 5.w
+
+
+                                              )
+                                              :
+                                              EdgeInsets.only(
+
+
+                                                right: 5.w
+
+                                              ),
                                               child: InkWell(
                                                 onTap: () {
-                                             handleIncrement(product);
+                                                  handleIncrement(product);
                                                 },
                                                 child: SvgPicture.asset(
                                                   'assets/images/home/plus.svg',
@@ -913,7 +932,10 @@ class HomeView extends StatelessWidget {
                             addToCart(product);
                           },
                           child: SvgPicture.asset(
-                              height: MediaQuery.of(context).size.width /4.1,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 4.1,
                               fit: BoxFit.cover,
                               "assets/images/home/add_to_cart_premium.svg"),
                         ),
@@ -1024,12 +1046,6 @@ class HomeView extends StatelessWidget {
   }
 
 
-
-
-
-
-
-
 }
 
 class SemiLunarScrollView extends StatefulWidget {
@@ -1066,12 +1082,18 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                 : 0.0;
 
             upperValue(index, offset) {
-              if (index < 4) {
-                return index * MediaQuery.of(context).size.height /6 ;
+              if (index < 3) {
+                return index * MediaQuery
+                    .of(context)
+                    .size
+                    .height / 6;
               }
               else {
                 homeController.toggleRotation();
-                return index * MediaQuery.of(context).size.height /7;
+                return index * MediaQuery
+                    .of(context)
+                    .size
+                    .height / 7;
               }
             }
             double curveOffset = math.sin(
@@ -1096,10 +1118,10 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                 customSearchController.animateToCategory(index);
               },
               child: Padding(
-           padding:  EdgeInsets.only(top: 30.0.h, left: 20.w, right: 20.w),
+                padding: EdgeInsets.only(top: 30.0.h, left: 20.w, right: 20.w),
                 child: Transform.translate(
                   offset: Offset(0.w, curveOffset),
-                  child:  CircleAvatar(
+                  child: CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.white,
                       child: ClipOval(
@@ -1133,11 +1155,17 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
 
             upperValue(index, offset) {
               if (index < 3) {
-                return index * MediaQuery.of(context).size.height /6 ;
+                return index * MediaQuery
+                    .of(context)
+                    .size
+                    .height / 6;
               }
               else {
                 homeController.toggleRotation();
-                return index * MediaQuery.of(context).size.height /7;
+                return index * MediaQuery
+                    .of(context)
+                    .size
+                    .height / 7;
               }
             }
             double curveOffset = math.sin(
@@ -1163,7 +1191,8 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                   customSearchController.animateToCategory(index);
                 },
                 child: Padding(
-                  padding:  EdgeInsets.only(top: 30.0.h, left: 20.w, right: 20.w),
+                  padding: EdgeInsets.only(
+                      top: 30.0.h, left: 20.w, right: 20.w),
                   child: Transform.translate(
                     offset: Offset(0.w, curveOffset),
                     child: Column(
@@ -1208,7 +1237,7 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                               maxLines: 1,
                               textAlign: TextAlign.center,
                               style: secondaryTextStyle(
-                                size: 12.sp.round()
+                                  size: 12.sp.round()
                               ),),
                           ),
                         ),

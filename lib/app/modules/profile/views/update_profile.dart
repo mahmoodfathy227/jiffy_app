@@ -54,7 +54,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     children: [
                       CustomAppBar(
                         myFunction: () {},
-                        title: "Edit Profile",
+                        title: "Edit Profile".tr,
                       ),
                       Positioned(
                         bottom: 0.h,
@@ -298,10 +298,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Update Your Photo',
+                    'Update Your Photo'.tr,
                     style: primaryTextStyle(
                       color: Colors.white,
-                      size: 14.sp.round(),
+                      size: 10.sp.round(),
                       weight: FontWeight.w500,
                       letterSpacing: -0.41,
                     ),
@@ -378,15 +378,18 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                CustomTextField(
-                  initialValue:
-                  controller.userModel.value.phone ?? '(+961) 123321',
-                  labelText:  "phone",
-                  onChanged: (value) =>
-                  controller.userModel.value.phone = value,
-                  errorText: controller.phoneError.value.isEmpty
-                      ? ""
-                      : controller.phoneError.value,
+                ShowUp(
+                  delay: 400,
+                  child: CustomTextField(
+                    initialValue:
+                    controller.userModel.value.phone ?? '(+961) 123321',
+                    labelText:  "phone",
+                    onChanged: (value) =>
+                    controller.userModel.value.phone = value,
+                    errorText: controller.phoneError.value.isEmpty
+                        ? ""
+                        : controller.phoneError.value,
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 ShowUp(
@@ -436,7 +439,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                               weight: FontWeight.w400,
                               height: 1,
                             ),
-                            labelText: 'Date of Birth',
+                            labelText: 'Date of Birth'.tr,
                             suffixIcon: Icon(
                               Icons.calendar_today,
                               size: 20.sp,
@@ -464,7 +467,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       setState(() {});
                     }
                   },
-                  btnText: 'Update',
+                  btnText: 'Update'.tr,
                   isloading: controller.isLoading.value,
                 ),
 
@@ -493,7 +496,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         ),
                         child: Center(
                           child: Text(
-                            'Change Password ',
+                            'Change Password'.tr,
                             style: primaryTextStyle(
                               color: Color(0xFF4F0099),
                               size: 18.sp.round(),
@@ -527,7 +530,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         },
                         child: Center(
                           child: Text(
-                            'Delete Account',
+                            'Delete Account'.tr,
                             style: secondaryTextStyle(
                               color: Colors.white,
                               size: 14.sp.round(),

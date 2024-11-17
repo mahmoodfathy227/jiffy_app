@@ -18,6 +18,7 @@ import 'package:jiffy/app/modules/help/bindings/help_binding.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
+import 'package:jiffy/app/utils/traslation.dart';
 import 'package:restart_app/restart_app.dart';
 
 import 'package:shorebird_code_push/shorebird_code_push.dart';
@@ -203,22 +204,30 @@ class MyApp extends StatelessWidget {
                   designSize: const Size(389.78, 844),
                   minTextAdapt: true,
                   splitScreenMode: true,
+                  
                   // Use builder only if you need to use library outside ScreenUtilInit context
                   builder: (_, child) {
-                    return Observer(
-                        builder: (_) => GetMaterialApp(
+                    return GetMaterialApp(
 
-                              debugShowCheckedModeBanner: false,
-                              useInheritedMediaQuery: true,
-                              title: APP_NAME,
-                              theme: AppTheme.lightTheme(color: snap.data),
-                              initialRoute: Routes.SPLASH,
-                              initialBinding: SplashBinding(),
-                           // initialRoute: Routes.CHECKOUT,
-                           // initialBinding: CheckoutBinding(),
-                                // home: const PaymentMethod(),
-                              getPages: AppPages.routes,
-                            ));
+                      debugShowCheckedModeBanner: false,
+                      useInheritedMediaQuery: true,
+                      title: APP_NAME,
+                      translations: Translation(),
+                      locale: AppConstants.userLang == null ? const Locale('en') :
+                      AppConstants.userLang == 'ar'?
+                      const Locale('ar')
+                          :
+                      const Locale('en')
+                      ,
+                      fallbackLocale: const Locale('en'),
+                      theme: AppTheme.lightTheme(color: snap.data),
+                      initialRoute: Routes.SPLASH,
+                      initialBinding: SplashBinding(),
+                      // initialRoute: Routes.CHECKOUT,
+                      // initialBinding: CheckoutBinding(),
+                      // home: const PaymentMethod(),
+                      getPages: AppPages.routes,
+                    );
                   });
             }));
   }

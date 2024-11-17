@@ -68,7 +68,7 @@ SizedBox(height: 70.h,),
                       SizedBox(height: kDefaultPadding * 2,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: kDefaultPadding * 3),
-                        child: Text("How can we help you today?",
+                        child: Text("How can we help you today?".tr,
                           textAlign: TextAlign.center,
                           style: secondaryTextStyle(
                             size: 28.sp.round(),
@@ -82,7 +82,7 @@ SizedBox(height: 70.h,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: kDefaultPadding * 2),
                         child: Text(
-                          "Lorem ipsum can emily and talanted Support Lorem ipsum can emily and talanted",
+                          "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction".tr,
                           textAlign: TextAlign.center,
                           style: secondaryTextStyle(
                               size: 14.sp.round(),
@@ -96,7 +96,7 @@ SizedBox(height: 70.h,),
                         return MyDefaultButton(
                           onPressed: () => controller.sendEmail(),
                           isloading: controller.isLoading.value,
-                          btnText: "Send a Message",
+                          btnText: "Send a Message".tr,
                         isSecondaryTextStyle: true,
                        borderRadius: 30.sp,
                      btnWidth: 240,
@@ -111,7 +111,7 @@ SizedBox(height: 70.h,),
                         return MyDefaultButton(
                           onPressed: () => controller.getSupportPhoneNumber(),
                           isloading: controller.isPhoneLoading.value,
-                          btnText: "Call Us",
+                          btnText: "Call Us".tr,
                           isSecondaryTextStyle: true,
                           borderRadius: 30.sp,
                           btnWidth: 240,
@@ -130,7 +130,7 @@ SizedBox(height: 70.h,),
               CustomAppBar(
                 myFunction: () {},
                 svgPath: "assets/images/notification.svg",
-                title: 'Help Center',
+                title: 'Help Center'.tr,
                 isHelp: true,
 
               ),

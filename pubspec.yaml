@@ -83,6 +83,7 @@ dependencies:
   auto_size_text:
   skeletonizer:
 
+
   image: ^3.0.1
   scrollable_positioned_list:
   smooth_page_indicator:
@@ -96,6 +97,11 @@ flutter:
         - asset: assets/fonts/CircularStd-Book.ttf
         - asset: assets/fonts/CircularStd-Black.ttf
         - asset: assets/fonts/CircularStd-Bold.ttf
+
+
+    - family: Janna
+      fonts:
+        - asset: assets/fonts/janna-arabic/Janna LT Bold.ttf
 
 
 

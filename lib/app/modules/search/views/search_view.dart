@@ -108,12 +108,7 @@ class SearchView extends GetView<CustomSearchController> {
                               ),
                             ]
                         ),
-                        child: SvgPicture.asset(
-                          "assets/images/back_btn.svg",
-                          width: 78.h,
-                          fit: BoxFit.cover,
-
-                        ),
+                        child: buildBackBtn(),
                       ),
                     ),
 
@@ -194,7 +189,7 @@ class SearchView extends GetView<CustomSearchController> {
     return Obx(() {
       return AnimatedPadding(
 
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        padding: EdgeInsets.only(left: 25.w),
         duration: Duration(milliseconds: 100),
         child:
         customSearchController.isProductsLoading.value ?
@@ -243,18 +238,18 @@ class SearchView extends GetView<CustomSearchController> {
 
             crossAxisSpacing: 1,
             // width / height: fixed for *all* items
-            childAspectRatio: (0.7 / 1.5),
+            childAspectRatio: (0.7 / 1.3),
           ),
           itemCount: customSearchController.filteredProducts.length,
           itemBuilder: (context, index) {
             return
               SizedBox(
 
-                  child: productCard(customSearchController.filteredProducts[index] ,context, index));
-              buildProductCard(
-                product: customSearchController.filteredProducts[index],);
-            globalProductCard(
-                customSearchController.filteredProducts[index], index);
+                  child: productCard(customSearchController.filteredProducts[index] ,context, index, ));
+            //   buildProductCard(
+            //     product: customSearchController.filteredProducts[index],);
+            // globalProductCard(
+            //     customSearchController.filteredProducts[index], index);
           },
         ),
       );
@@ -320,7 +315,7 @@ class _FadeInDemoState extends State<FadeInFilterBar>
                   borderRadius: 30.r,
                   height: 40.h,
                   btnWidth: 75,
-                  btnText: 'Clear',
+                  btnText: 'Clear'.tr,
                   isSecondaryTextStyle: false,
 
 
@@ -398,7 +393,7 @@ class _FadeInDemoState extends State<FadeInFilterBar>
     return Obx(() {
       return Row(
         children: [
-          Text('Price', style: secondaryTextStyle(),),
+          Text('Price'.tr, style: secondaryTextStyle(),),
           SizedBox(width: 5.w,),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -108,7 +108,7 @@ class VerificationCodeView extends GetView<AuthController> {
               padding:  EdgeInsets.only(left: kDefaultPadding * 2.7),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Pin is incorrect", style: primaryTextStyle(
+                child: Text("Pin is incorrect".tr, style: primaryTextStyle(
                     color: Colors.red,
                   weight: FontWeight.w300,
                   size: 15.sp.round(),
@@ -126,7 +126,7 @@ class VerificationCodeView extends GetView<AuthController> {
                   child: MyDefaultButton(
                     errorText: controller.errorMessage.value,
                     isloading: controller.isLoading.value,
-                    btnText: 'Send',
+                    btnText: 'Send'.tr,
                     isActive: controller.isValidOTP.value,
 
 
@@ -188,7 +188,7 @@ class VerificationCodeView extends GetView<AuthController> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Didn’t get a code?',
+                          text: 'Didn’t get a code?'.tr,
                           style: primaryTextStyle(
                             color: const Color(0xFFCDCFD0),
                             size: 14.sp.round(),
@@ -204,7 +204,7 @@ class VerificationCodeView extends GetView<AuthController> {
                           ),
                         ),
                         TextSpan(
-                          text: 'Click to resend',
+                          text: 'Click to resend'.tr,
                           style: primaryTextStyle(
                             color: !controller.isEnded.value ? const Color(
                                 0xFF979C9E) : const Color(0xFFAA61FF),
@@ -243,7 +243,7 @@ class VerificationCodeView extends GetView<AuthController> {
                         "assets/images/forgot_password/arrow-left.svg"),
                     SizedBox(width: 5.w,),
                     Text(
-                      'Back to login',
+                      'Back to login'.tr,
                       textAlign: TextAlign.center,
                       style: primaryTextStyle(
                         color: const Color(0xFF555662),
@@ -314,7 +314,7 @@ class VerificationCodeView extends GetView<AuthController> {
 
 
                       child: Text(
-                        "Code Verification", overflow: TextOverflow.ellipsis,
+                        "Code Verification".tr, overflow: TextOverflow.ellipsis,
                         style: primaryTextStyle(
                             weight: FontWeight.w700,
                             size: 32.sp.round(),
@@ -322,7 +322,7 @@ class VerificationCodeView extends GetView<AuthController> {
                         ),),
                     ),
                     SizedBox(height: 10.h,),
-                    Text("We've sent the code to the email \n on your device",
+                    Text("We've sent the code to the email \n on your device".tr,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis, style: primaryTextStyle(
                           weight: FontWeight.w100,

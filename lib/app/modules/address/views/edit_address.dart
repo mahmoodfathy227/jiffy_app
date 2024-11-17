@@ -24,9 +24,9 @@ final Address addressToUpdate ;
       body: Stack(
         children: [
           CustomAppBar(myFunction: () {},
-            title: 'Edit Address',
-            svgPath: "assets/images/notification.svg",
-            isAddress: true,
+            title: 'Edit Address'.tr,
+            // svgPath: "assets/images/notification.svg",
+            isAddress: false,
 
           ),
           Padding(
@@ -42,7 +42,7 @@ final Address addressToUpdate ;
           children: [
             buildFloatingButton(
 
-                buttonName: 'Select on Map', context: context,
+                buttonName: 'Select on Map'.tr, context: context,
                 onPressed: () {
                   Get.to(SelectFromMap());
                 },
@@ -53,7 +53,7 @@ final Address addressToUpdate ;
 
             buildFloatingButton(
 
-              buttonName: 'Save Address', context: context,
+              buttonName: 'Save Address'.tr, context: context,
               isLoading: controller.isLoading.value,
               onPressed: () {
                 controller.updateAddress(addressToUpdate);

@@ -3,13 +3,16 @@ import 'dart:ui';
 import 'package:delayed_widget/delayed_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/auth/views/register_view.dart';
 
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/onboarding_controller.dart';
 
@@ -67,8 +70,92 @@ class OnboardingView extends StatelessWidget {
                     controller: controller.pageController,
                     onPageChanged: controller.onPageChanged,
                     children: [
-                      buildOnboardingPage(
-                          "assets/images/onboarding/center1.png", context),
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+
+                          buildOnboardingPage(
+                              "assets/images/onboarding/center1.png", context),
+                          //language Switch
+                          Padding(
+                            padding:  EdgeInsets.only(
+                                top: 50.h ,
+                                right: 20.w
+                            ),
+                            child: GestureDetector(
+                              onTap: () async {
+                                if(Get.locale!.languageCode == 'en') {
+                                  //updated prefs
+                                  Get.updateLocale(const Locale('ar'));
+                                  final prefs = await SharedPreferences.getInstance();
+                                  prefs.setString('user_lang', 'ar');
+                                } else {
+                                  Get.updateLocale(const Locale('en'));
+                                  final prefs = await SharedPreferences.getInstance();
+                                  prefs.setString('user_lang', 'en');
+                                }
+
+
+                              },
+                              child: ConstrainedBox(
+
+                                  constraints: BoxConstraints(
+
+                                      maxWidth: 60.w,
+                                      maxHeight: 50.h
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(3.0),
+                                    width: 80.w,
+                                    height: 35.h,
+                                    decoration: BoxDecoration(
+                                        color:   Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.4),
+                                            spreadRadius: 3,
+                                            blurRadius: 5,
+                                            offset: const Offset(0, 1), // changes position of shadow
+                                          ),
+                                        ]
+                                    ),
+                                    child: Row(
+
+                                        children: [
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          SvgPicture.asset(
+                                            'assets/images/language.svg',
+                                            width: 20.w,
+                                            height: 20.h,
+                                            fit: BoxFit.cover,
+                                            color: primaryColor,
+                                          ),
+                                          SizedBox(width: 5.w,),
+                                          Text(
+
+                                            Get.locale!.languageCode != 'en' ? "En" : "Ar",
+                                            style: secondaryTextStyle(
+                                              weight: FontWeight.w500,
+                                              size: 12.sp.round(),
+                                            ),
+                                          )
+
+                                        ]),
+                                  )
+
+
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+
+
+
                       buildOnboardingPage(
                           "assets/images/onboarding/center2.png", context),
                       buildOnboardingPage(
@@ -171,11 +258,11 @@ class OnboardingView extends StatelessWidget {
   String getTitle(int pageIndex) {
     switch (pageIndex) {
       case 0:
-        return "Glow Up";
+        return "Glow Up".tr;
       case 1:
-        return "Beauty Tips";
+        return "Beauty Tips".tr;
       case 2:
-        return "Self-Care";
+        return "Self-Care".tr;
       default:
         return "";
     }
@@ -185,11 +272,11 @@ class OnboardingView extends StatelessWidget {
   String getDescription(int pageIndex) {
     switch (pageIndex) {
       case 0:
-        return "Personalized skincare routines just for you.\nLet your inner beauty shine.";
+        return "Personalized skincare routines just for you.\nLet your inner beauty shine.".tr;
       case 1:
-        return "Discover the latest trends and expert advice.\nElevate your beauty routine.";
+        return "Discover the latest trends and expert advice.\nElevate your beauty routine.".tr;
       case 2:
-        return "Create a daily routine to relax and recharge.\nYour well-being comes first.";
+        return "Create a daily routine to relax and recharge.\nYour well-being comes first.".tr;
       default:
         return "";
     }
@@ -279,7 +366,7 @@ class OnboardingView extends StatelessWidget {
                           children: [
                             // Outer shadow (drop shadow)
                             Text(
-                              'Get Started!',
+                              'Get Started!'.tr,
                               textAlign: TextAlign.center,
                               style: primaryTextStyle(
                                 size: 48.sp.round(),
@@ -326,7 +413,7 @@ class OnboardingView extends StatelessWidget {
                               },
                               blendMode: BlendMode.dstIn,
                               child: Text(
-                                'Get Started!',
+                                'Get Started!'.tr,
                                 textAlign: TextAlign.center,
                                 style: primaryTextStyle(
                                   size: 48.sp.round(),
@@ -343,7 +430,7 @@ class OnboardingView extends StatelessWidget {
                         SizedBox(
                           width: 187.w,
                           child: Text(
-                            'Begin your personalized beauty journey now.',
+                            'Begin your personalized beauty journey now.'.tr,
                             textAlign: TextAlign.center,
                             style: primaryTextStyle(
                               color: Colors.white,
@@ -386,7 +473,7 @@ class OnboardingView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'Start',
+                                'Start'.tr,
                                 textAlign: TextAlign.center,
                                 style: primaryTextStyle(
                                   color: Colors.white,
@@ -411,30 +498,33 @@ class OnboardingView extends StatelessWidget {
 
   // Helper function to build each onboarding page with a center image
   Widget buildOnboardingPage(String centerImagePath, BuildContext context) {
-    return Stack(
-      children: [
-        Obx(() {
-          return PositionedDirectional(
-            top: controller.currentPage.value == 1 ? 140.h : 160.h,
-            start: controller.currentPage.value >= 0 ? 10.w : 0,
-            end: controller.currentPage.value == 1 ? 10.w : 0,
-            child: ScaleTransition(
-              scale: controller.backgroundScaleAnimation!,
-              child: RotationTransition(
-                turns: controller
-                    .imageRotationAnimation!, // استخدام الأنيميشن المعدل هنا
-                child: ClipOval(
-                  child: Image.asset(
-                    centerImagePath,
-                    height: 370.h,
+    return
+
+      Stack(
+        children: [
+          Obx(() {
+            return PositionedDirectional(
+              top: controller.currentPage.value == 1 ? 140.h : 160.h,
+              start: controller.currentPage.value >= 0 ? 10.w : 0,
+              end: controller.currentPage.value == 1 ? 10.w : 0,
+              child: ScaleTransition(
+                scale: controller.backgroundScaleAnimation!,
+                child: RotationTransition(
+                  turns: controller
+                      .imageRotationAnimation!, // استخدام الأنيميشن المعدل هنا
+                  child: ClipOval(
+                    child: Image.asset(
+                      centerImagePath,
+                      height: 370.h,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        }),
-      ],
-    );
+            );
+          }),
+        ],
+      );
+
   }
 
   // Dots indicator for the bottom of the page
@@ -476,7 +566,7 @@ class OnboardingView extends StatelessWidget {
               TextButton(
                 onPressed: controller.skip,
                 child: Text(
-                  "Skip",
+                  "Skip".tr,
                   style: primaryTextStyle(
                     color: Colors.white,
                     size: 14.5.sp.round(),
@@ -490,11 +580,25 @@ class OnboardingView extends StatelessWidget {
                   controller.nextPage();
                   HapticFeedback.selectionClick();
                 },
-                child: SvgPicture.asset(
+                child:
+                Get.locale?.languageCode == 'en'?
+                SvgPicture.asset(
                   'assets/images/onboarding/next.svg',
                   width: 42.w,
                   height: 47.h,
-                ),
+                ).animate().rotate(
+                  delay: const Duration(seconds: 1),).fadeIn()
+                    :
+                SvgPicture.asset(
+                  'assets/images/onboarding/next.svg',
+                  width: 42.w,
+                  height: 47.h,
+                ).animate().rotate(
+                  delay: const Duration(seconds: 1),
+                  begin: 0,
+                  end: 0.5
+                ).fadeIn()
+                ,
               ),
             ],
           ),

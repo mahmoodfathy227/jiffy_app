@@ -22,8 +22,10 @@ class PaymentMethod extends GetView<CheckoutController> {
       body: Stack(
         children: [
           CustomAppBar(myFunction: () {},
-            title: 'Payment',
-            svgPath: "assets/images/notification.svg",
+            title: 'Payment'.tr,
+            isAddress: true ,
+
+            // svgPath: "assets/images/notification.svg",
 
           ),
           Padding(
@@ -33,9 +35,9 @@ class PaymentMethod extends GetView<CheckoutController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(left: 30.w),
+                      padding: EdgeInsets.symmetric(horizontal: 30.w),
                       child: Text(
-                        "Select Your Payment ", style: secondaryTextStyle(
+                        "Select Your Payment".tr, style: secondaryTextStyle(
                           color: Colors.black,
                           size: 16.sp.round(),
                           weight: FontWeight.w300
@@ -71,7 +73,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                               SvgPicture.asset(
                                   "assets/images/payment/money-4.svg"),
                               SizedBox(width: 5.w,),
-                              Text("Cash", style: secondaryTextStyle(),)
+                              Text("Cash".tr, style: secondaryTextStyle(),)
                             ],
                           ),
                         ),
@@ -100,7 +102,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                                     "assets/images/payment/card.svg"),
                                 SizedBox(width: 5.w,),
                                 Text(
-                                  "Credit Card", style: secondaryTextStyle(
+                                  "Credit Card".tr, style: secondaryTextStyle(
                                   size: 14.sp.round()
                                 ),)
                               ],
@@ -159,7 +161,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                       Row(
                         children: [
                           Text(
-                            "Subtotal:",
+                            "Subtotal:".tr,
                             style: secondaryTextStyle(
                                 size: 14.sp.round(),
                                 weight: FontWeight.w400
@@ -179,7 +181,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                       Row(
                         children: [
                           Text(
-                            "Shipping:",
+                            "Shipping:".tr,
                             style: secondaryTextStyle(
                                 size: 14.sp.round(),
                                 weight: FontWeight.w400
@@ -199,7 +201,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                       Row(
                         children: [
                           Text(
-                            "Total:",
+                            "Total:".tr,
                             style: secondaryTextStyle(
                                 size: 14.sp.round(),
                                 weight: FontWeight.w400
@@ -223,7 +225,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                 Expanded(
                   flex: 2,
                   child: buildFloatingButton(
-                    buttonName: 'Confirm Order',
+                    buttonName: 'Confirm Order'.tr,
                     isLoading: controller.isConfirmingOrder.value,
                     context: context,
                     onPressed: () {
@@ -357,7 +359,7 @@ placeholder: (ctx, v) {
 
                           ),),
                         Spacer(),
-                        Text("qty : ${controller.cartProducts[index].quantity}",
+                        Text("${"qty".tr} : ${controller.cartProducts[index].quantity}",
                           style: secondaryTextStyle(color: primaryColor,
                               weight: FontWeight.w700,
                               size: 12.sp.round()

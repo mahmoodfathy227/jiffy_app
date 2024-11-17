@@ -28,7 +28,7 @@ class SendAMessageView extends GetView<HelpController> {
             CustomAppBar(
               myFunction: () {},
               svgPath: "assets/images/notification.svg",
-              title: 'Send a Message',
+              title: 'Send a Message'.tr,
               isHelp: true,
 
             ),
@@ -61,7 +61,7 @@ class SendAMessageView extends GetView<HelpController> {
                   child: Column(
                     children: [
                       SizedBox(height: kDefaultPadding,),
-                      Text("Contact Us",
+                      Text("Contact Us".tr,
                         style: secondaryTextStyle(
                             color: primaryColor,
                             weight: FontWeight.w700,
@@ -69,7 +69,7 @@ class SendAMessageView extends GetView<HelpController> {
 
                       SizedBox(height: kDefaultPadding * 2,),
                       CustomTextField(
-                        labelText: "Name",
+                        labelText: "Name".tr,
                         onChanged: (v) {},
 customTextEditingController: controller.name,
 
@@ -97,7 +97,7 @@ customTextEditingController: controller.name,
 
                             ),
                             Text(
-                                "Use Your Email", style: secondaryTextStyle(
+                                "Use Your Email".tr, style: secondaryTextStyle(
                                 weight: FontWeight.w400,
                                 size: 14.sp.round(),
                                 color: Colors.black
@@ -114,7 +114,7 @@ customTextEditingController: controller.name,
                           CustomTextField(
                             initialValue: "",
                               customTextEditingController: controller.email,
-                              labelText: "Email", onChanged: (v) {})
+                              labelText: "Email".tr, onChanged: (v) {})
                               :
                           SizedBox()
                         ;
@@ -124,7 +124,7 @@ customTextEditingController: controller.name,
                         initialValue: "",
                         customTextEditingController: controller.message,
 
-                        labelText: "Write your message",
+                        labelText: "Write your message".tr,
                         maxLines: 4,
                         onChanged: (v) {},
                         height: 120.h,
@@ -169,7 +169,7 @@ customTextEditingController: controller.name,
                                     height: 35.h, width: 35.w,),
                                   SizedBox(height: 10.h,),
 
-                                  Text("Add Attachments",
+                                  Text("Add Attachments".tr,
                                       style: secondaryTextStyle(
                                         size: 12.sp.round(),
 
@@ -279,7 +279,7 @@ customTextEditingController: controller.name,
                           MyDefaultButton(
                             onPressed: () => controller.sendTicket(),
                             isloading: controller.isLoading.value,
-                            btnText: "Send",
+                            btnText: "Send".tr,
                             isSecondaryTextStyle: true,
                             borderRadius: 30.sp,
                             btnWidth: 170,

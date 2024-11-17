@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_common/get_reset.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
@@ -105,7 +108,7 @@ TextStyle secondaryTextStyle({
     fontSize: size != null ? size.toDouble() : textSecondarySizeGlobal,
     color: color ?? textSecondaryColorGlobal,
     fontWeight: weight ?? fontWeightSecondaryGlobal,
-    fontFamily: fontFamily ?? 'museomoderno',
+    fontFamily:   Get.locale?.languageCode == 'ar'? 'Janna' : fontFamily ?? 'museomoderno',
     letterSpacing: letterSpacing,
     fontStyle: fontStyle,
     decoration: decoration,
@@ -139,7 +142,7 @@ TextStyle primaryTextStyle({
     color: color ?? textPrimaryColorGlobal,
     fontWeight: weight ?? fontWeightPrimaryGlobal,
     fontFamily:
-        fontFamily ?? 'circularStd', // Use custom font instead of GoogleFonts
+    Get.locale?.languageCode == 'ar'? 'Janna' :  fontFamily ?? 'CircularStd', // Use custom font instead of GoogleFonts
     letterSpacing: letterSpacing,
     fontStyle: fontStyle,
     decoration: decoration,

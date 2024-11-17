@@ -35,7 +35,7 @@ class AddressView extends GetView<AddressController> {
               print("fgdfg");
             },
             isAddress: true,
-            title: 'All Addresses',
+            title: 'All Addresses'.tr,
             svgPath: "assets/images/notification.svg",
 
           ),
@@ -64,11 +64,11 @@ class AddressView extends GetView<AddressController> {
 
           buttonName: controller.isFromCheckout.value ?
           controller.addressList.isEmpty ?
-          'Add New Address' :
-          'Select Address'
+          'Add New Address'.tr :
+          'Select Address'.tr
               :
 
-          'Add New Address',
+          'Add New Address'.tr,
           context: context,
           onPressed: () {
             if (controller.addressList.isEmpty) {
@@ -146,7 +146,7 @@ class AddressView extends GetView<AddressController> {
 
           children: [
 
-            Text("Your Default Address", style: primaryTextStyle(
+            Text("Your Default Address".tr, style: primaryTextStyle(
                 weight: FontWeight.w400,
                 size: 18.sp.round(),
                 color: secondaryPrimaryColor
@@ -262,7 +262,7 @@ class AddressView extends GetView<AddressController> {
 
                         Row(
                           children: [
-                            Text("Phone: ", style: primaryTextStyle(
+                            Text("Phone: ".tr, style: primaryTextStyle(
                                 weight: FontWeight.w400,
                                 size: 12.sp.round(),
                                 color: accentGreyishColor

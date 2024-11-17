@@ -5,7 +5,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
-import 'package:jiffy/app/modules/home/views/home_view.dart';
+
 import 'package:jiffy/app/modules/main/views/main_view.dart';
 
 
@@ -13,9 +13,7 @@ import '../../../../main.dart';
 import '../../global/model/model_response.dart';
 import '../../global/model/test_model_response.dart';
 import '../../services/api_consumer.dart';
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:carousel_slider/carousel_controller.dart';
 
 class ProductController extends GetxController {
 // Rx<Product>? product = Product().obs;
@@ -42,6 +40,7 @@ class ProductController extends GetxController {
     size: "",
     outOfStock: false,
   ).obs;
+  RxInt productId = 0.obs;
   ApiConsumer apiConsumer = sl();
   final count = 0.obs;
   final isShowDescription = true.obs;
@@ -222,8 +221,8 @@ class ProductController extends GetxController {
     sizeList.clear();
     productSizeGuide.value = SizeGuide();
     // isProductLoading.value = true;
-    isProductLoading.value = false;
-
+    isProductLoading.value = true;
+    productId.value = id;
     try {
       final response = await apiConsumer.post(
         'products/$id',

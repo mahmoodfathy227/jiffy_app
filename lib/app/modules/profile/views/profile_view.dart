@@ -12,6 +12,7 @@ import 'package:jiffy/app/modules/orders/controllers/orders_controller.dart';
 import 'package:jiffy/app/modules/orders/views/orders_view.dart';
 import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../auth/views/register_view.dart';
 import '../controllers/profile_controller.dart';
@@ -61,7 +62,7 @@ class _ProfileViewState extends State<ProfileView>
                         CustomAppBar(
                           myFunction: () {},
                           back: false,
-                          title: "Profile",
+                          title: "Profile".tr,
                         ),
 
 
@@ -101,7 +102,7 @@ class _ProfileViewState extends State<ProfileView>
                         SizedBox(
                           width: 276.w,
                           child: Text(
-                            'Preferences & Support',
+                            'Preferences & Support'.tr,
                             style: secondaryTextStyle(
                               color: Color(0xFF20003D),
                               size: 20.sp.round(),
@@ -110,13 +111,13 @@ class _ProfileViewState extends State<ProfileView>
                           ),
                         ),
                         _buildMenuItem(
-                            'address.svg', 'Address', () {
+                            'address.svg', 'Address'.tr, () {
                           AddressController addressController = Get.put(
                               AddressController());
                           addressController.changeAddressStatus(false);
                           Get.to(AddressView());
                         }, 19, 1),
-                        _buildMenuItem('order.svg', 'Orders', () {
+                        _buildMenuItem('order.svg', 'Orders'.tr, () {
                           Get.put(OrdersController());
                           Get.to(()=> OrdersView());
                         }, 19, 3),
@@ -129,18 +130,31 @@ class _ProfileViewState extends State<ProfileView>
                         //         'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
                         //   }
                         // }, 19, 4),
-                        _buildMenuItem('help.svg', 'Help Center', () {
+                        _buildMenuItem('help.svg', 'Help Center'.tr, () {
                           Get.to(HelpView());
                         }, 19, 5),
-
-                        _buildMenuItem('terms.svg', 'Terms of Use', () {
+                        _buildMenuItem('language.svg', 'Language'.tr, () async {
+                          //updated prefs
+                          if(Get.locale!.languageCode == 'en'){
+                            Get.updateLocale(const Locale('ar'));
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.setString('user_lang', 'ar');
+                          } else {
+                            Get.updateLocale(const Locale('en'));
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.setString('user_lang', 'en');
+                          }
+                        }, 19, 6),
+                        _buildMenuItem('terms.svg', 'Terms of Use'.tr, () {
                           _launchURL(
                               'https://jiffy.abadr.work/terms-of-use');
                         }, 19, 5),
-                        _buildMenuItem('privacy.svg', 'Privacy Policy', () {
+                        _buildMenuItem('privacy.svg', 'Privacy Policy'.tr, () {
                           _launchURL(
                               'https://jiffy.abadr.work/privacy-policy');
                         }, 19, 6),
+
+
                         SizedBox(height: 10.h),
                       ],
                     ),
@@ -183,7 +197,7 @@ class _ProfileViewState extends State<ProfileView>
                                   width: 10.w,
                                 ),
                                 Text(
-                                  'Log out',
+                                  'Log out'.tr,
                                   style: secondaryTextStyle(
                                     color: const Color(0xFFFF4141),
                                     size: 14.sp.round(),
@@ -407,10 +421,10 @@ class _ProfileViewState extends State<ProfileView>
                                     width: 16.w,
                                   ),
                                   Text(
-                                    'Edit Profile',
+                                    'Edit Profile'.tr,
                                     style: secondaryTextStyle(
                                       color: Colors.white,
-                                      size: 12.sp.round(),
+                                      size: 10.sp.round(),
                                       weight: FontWeight.w500,
                                       letterSpacing: -0.41,
                                     ),

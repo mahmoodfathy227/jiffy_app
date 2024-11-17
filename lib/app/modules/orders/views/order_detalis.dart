@@ -422,7 +422,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                   controller.singelOrder.value!.id
                                                       .toString()),
                                               SizedBox(height: 10.h),
-                                              _buildOrderRow('Tracking Number',
+                                              _buildOrderRow('Tracking Number'.tr,
                                                   controller.singelOrder.value!.code),
                                               SizedBox(height: 10.h),
                                               _buildOrderRow(

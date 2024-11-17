@@ -23,7 +23,7 @@ class AddAddress extends GetView<AddressController> {
       body: Stack(
         children: [
           CustomAppBar(myFunction: () {},
-            title: 'All Addresses',
+            title: 'All Addresses'.tr,
             svgPath: "assets/images/notification.svg",
             isAddress: true,
 

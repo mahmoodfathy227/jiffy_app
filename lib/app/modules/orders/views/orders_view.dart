@@ -18,6 +18,7 @@ class OrdersView extends GetView<OrdersController> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -29,7 +30,7 @@ class OrdersView extends GetView<OrdersController> {
                 Stack(
                   children: [
                     CustomAppBar(
-                      title: 'My Orders', myFunction: () {  },
+                      title: 'My Orders'.tr, myFunction: () {  },
                     ),
 
                     Padding(
@@ -37,10 +38,19 @@ class OrdersView extends GetView<OrdersController> {
                         top: MediaQuery.of(context).size.height/6
                       ),
                       child: TabBar(
-                        indicator: ShapeDecoration(
-                          color: primaryColor,
+
+                        indicator:  ShapeDecoration(
+
+                          color:
+                          controller.selectedStatus.value == "pending"?
+                          const Color(0xFFCF6112) :
+                          controller.selectedStatus.value == "cancelled"?
+                          Color(0xFFC40000)
+                          :
+                          Color(0xFF33C200),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
+
                           ),
                         ),
                         indicatorPadding: EdgeInsetsDirectional.symmetric(
@@ -72,10 +82,10 @@ class OrdersView extends GetView<OrdersController> {
                             controller.setStatus('cancelled');
                           }
                         },
-                        tabs: const [
-                          Tab(text: 'Pending'),
-                          Tab(text: 'Delivered'),
-                          Tab(text: 'Cancelled'),
+                        tabs:  [
+                          Tab(text: 'Pending'.tr, height: 55.h, ),
+                          Tab(text: 'Delivered'.tr, height: 55.h,),
+                          Tab(text: 'Cancelled'.tr, height: 55.h,),
                         ],
                       ),
                     ),
@@ -116,7 +126,7 @@ class OrdersView extends GetView<OrdersController> {
                                     Padding(
                                       padding: EdgeInsets.only(left: 15.w),
                                       child: Text(
-                                        'No Orders available',
+                                        'No Orders available'.tr,
                                         style: primaryTextStyle(size: 20.sp.round()),
                                       ),
                                     ),
@@ -147,7 +157,7 @@ class OrdersView extends GetView<OrdersController> {
                                         delay: 20 * index,
                                         child: Padding(
                                             padding: EdgeInsetsDirectional.symmetric(
-                                                vertical: 20.h),
+                                                vertical: 20.h , horizontal: 20.w),
                                             child: InkWell(
                                                 onTap: () {
                                                   Get.to(() => OrderDetailsScreen(

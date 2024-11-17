@@ -44,9 +44,7 @@ class WishlistView extends GetView<WishlistController> {
                 .sizeOf(context)
                 .width,
             child: Stack(children: [
-              // CustomAppBar(
-              //   title: "WishList", myFunction: () {  },
-              // ),
+
               Align(
                   alignment: Alignment.center,
                   child: socialMediaPlaceHolder()),
@@ -63,7 +61,7 @@ class WishlistView extends GetView<WishlistController> {
             child: Stack(children: [
               CustomAppBar(
                 back: false,
-                title: "WishList", myFunction: () {},
+                title: "WishList".tr, myFunction: () {},
 
               ),
               Positioned(
@@ -112,7 +110,7 @@ class WishlistView extends GetView<WishlistController> {
 
     return Obx(() {
       return Container(
-          padding: const EdgeInsets.all(15),
+          padding:  EdgeInsets.only(left: 25.w),
           width: MediaQuery
               .of(context)
               .size
@@ -122,7 +120,7 @@ class WishlistView extends GetView<WishlistController> {
               ? Align(
             alignment: Alignment.center,
             child: Text(
-              "Sorry , No Products Found",
+              "Sorry , No Products Found".tr,
               style: primaryTextStyle(
                   size: 20.sp.round(),
                   color: Colors.black,
@@ -139,17 +137,20 @@ class WishlistView extends GetView<WishlistController> {
                         .of(context)
                         .size
                         .height *
-                        heightDevidedRatio),
+                        heightDevidedRatio *1.1),
                 crossAxisCount: 2,
-                mainAxisSpacing: 10.h,
-                crossAxisSpacing: 5.w),
+                mainAxisSpacing: 1.h,
+                crossAxisSpacing: 1.w),
             itemBuilder: (context, index) {
-              return buildProductCard(
-                product:
-
-                controller.resultSearchProducts[index],
-                isInWishlist: true,
-              );
+              return 
+                productCard(controller.resultSearchProducts[index], context, index);
+                
+              //   buildProductCard(
+              //   product:
+              //
+              //   controller.resultSearchProducts[index],
+              //   isInWishlist: true,
+              // );
             },
             itemCount: controller.resultSearchProducts.length,
           ));

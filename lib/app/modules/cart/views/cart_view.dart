@@ -534,7 +534,7 @@ Future.delayed(Duration(milliseconds: 500), () {
                           print('sadsadsad');
                           showCustomBlurDialog();
                         },
-                        title: "Cart",
+                        title: "Cart".tr,
                         svgPath: "assets/images/cart/clear.svg",
                       ),
                     ],
@@ -562,10 +562,10 @@ Future.delayed(Duration(milliseconds: 500), () {
           height: 670.h,
           child: EmptyScreen(
             nameImage: 'assets/images/cart/shopping-cart.png',
-            title: 'Your cart is empty!',
+            title: 'Your cart is empty!'.tr,
             desc:
-                'Explore our products and add items to your cart. Your selections will appear here.',
-            txtbutton: 'Start Shopping',
+                'Explore our products and add items to your cart. Your selections will appear here.'.tr,
+            txtbutton: 'Start Shopping'.tr,
           ));
     } else {
       return SizedBox(
@@ -650,7 +650,7 @@ Future.delayed(Duration(milliseconds: 500), () {
                               children: [
                                 SizedBox(height:15.h ,),
                                 Text(
-                                  'Total',
+                                  'Total'.tr,
                                   textAlign: TextAlign.center,
                                   style: secondaryTextStyle(
                                     color: Color(0xFF20003D),
@@ -707,7 +707,7 @@ Future.delayed(Duration(milliseconds: 500), () {
 
                                   children: [
                                     Text(
-                                      'Check Out',
+                                      'Check Out'.tr,
                                       style: primaryTextStyle(
                                         size: 16.sp.round(),
                                         weight: FontWeight.w600,

@@ -180,7 +180,8 @@ Get.snackbar("Success", "Ticket Send Successful",snackPosition: SnackPosition.TO
       if (apiResponse.status == 'success') {
         print("phone number gotten successful");
         isPhoneLoading.value = false;
-        _launchCaller(apiResponse.data['phone']);
+        launchWhatsapp(apiResponse.data['phone']);
+
         return apiResponse.data['phone'];
       } else {
         isPhoneLoading.value = false;
@@ -199,12 +200,23 @@ Get.snackbar("Success", "Ticket Send Successful",snackPosition: SnackPosition.TO
     }
   }
 
-  _launchCaller(phone) async {
-    final url = "tel:${phone}";
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+
+
+  launchWhatsapp(number) async{
+    var contact = number;
+    var androidUrl = "whatsapp://send?phone=$contact&text=Hi, I need some help";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi, I need some help')}";
+
+    try{
+      if(Platform.isIOS){
+        await launchUrl(Uri.parse(iosUrl));
+      }
+      else{
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception{
+      Get.snackbar("Error", 'WhatsApp is not installed.');
+
     }
   }
 }

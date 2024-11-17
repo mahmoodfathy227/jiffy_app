@@ -21,7 +21,7 @@ import 'helpers.dart';
 
 class AppConstants {
   static UserData? userData;
-
+  static String? userLang;
   static hideLoading(context) {
     Navigator.of(context).pop();
   }
@@ -109,6 +109,7 @@ class AppConstants {
 
   static loadUserFromCache() async {
     final prefs = await SharedPreferences.getInstance();
+    //user_token
     final userDataString = prefs.getString('user_data');
     if (userDataString != null) {
       final userDataJson = jsonDecode(userDataString); // Use jsonDecode
@@ -117,6 +118,17 @@ class AppConstants {
 
       print('User loaded from cache: $userDataJson');
     }
+//user_lang
+    final userLang = prefs.getString('user_lang');
+    if (userLang != null) {
+
+      AppConstants.userLang =  userLang;
+
+
+      print('User Lang loaded from cache: $userLang');
+    }
+
+
   }
 
   static String placeHolderImage = "assets/images/placeholder.png";
