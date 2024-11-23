@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:jiffy/app/modules/home/controllers/home_controller.dart';
 
 import 'package:public_ip_address/public_ip_address.dart';
 
@@ -35,6 +36,9 @@ class AddressController extends GetxController {
 
   RxString addressState = 'empty'.obs;
   var label = ''.obs;
+
+
+
   var kGooglePlex = CameraPosition(
     target: LatLng(33.888630, 35.495480),
     zoom: 14.4746,
@@ -44,8 +48,8 @@ class AddressController extends GetxController {
   var building = ''.obs;
   var address = ''.obs;
   var phone = ''.obs;
-  var city = ''.obs;
-  var state = ''.obs;
+  var city =  ''.obs;
+  var state = ''.obs ;
   var latitude = ''.obs;
   var markers = <String, Marker>{}.obs;
 
@@ -81,12 +85,7 @@ class AddressController extends GetxController {
       }
       print("start fetching countries 2");
       print("countriesList: ${countriesList.first}");
-      // final response = await apiConsumer.post('countries');
-      // countriesList.value = (response['data']['countries'] as List)
-      //     .map((country) => Country.fromJson(country))
-      //     .toList();
-      // selectedCountry.value =
-      //     countriesList.isNotEmpty ? countriesList[0].name : '';
+
     } catch (e) {
       print('Failed to fetch countries: $e');
       Get.snackbar('Error', 'Failed to fetch countries');
@@ -261,10 +260,10 @@ void changeAddressStatus(status) {
           }
         }
       } catch (e, stackTrace) {
-        print(e.toString() + " stackTrace" + stackTrace.toString());
+        print("$e stackTrace$stackTrace");
         Get.snackbar('Error', 'Failed to fetch addresses');
       } finally {
-        clearFieldsAndErrors();
+        // clearFieldsAndErrors();
 
         isLoading(false);
       }
@@ -273,37 +272,67 @@ void changeAddressStatus(status) {
 
   void addAddress() async {
     print('tsadsad');
+    HomeController homeController;
+
+
     final newAddress = Address(
       id: 0,
-      label: label.value,
-      apartment: apartment.value,
+      label: selectedLabel.value,
+      // apartment: apartment.value,
       floor: floor.value,
       building: building.value,
       address: address.value,
       phone: phone.value,
-      city: city.value,
+      city: city.value  ,
       country: selectedCountry.value,
       state: state.value,
       latitude: latitude.value,
       longitude: longitude.value,
       isDefault: 0,
     );
-
+print("your address is ${newAddress.toJson()}");
     try {
       isLoading(true);
-      final response = await apiConsumer.post(
+       await apiConsumer.post(
         'profile/address-store',
         body: newAddress.toJson(),
       );
       print('tsadsad2');
 
-      fetchAddresses();
+      // fetchAddresses();
+
+if(address.value.isEmpty){
+  addressError.value = "Address is required";
+}
+
+      if(state.value.isEmpty){
+        stateError.value = "State is required";
+      }
+      if(phone.value.isEmpty){
+        phoneError.value = "Phone is required";
+      }
+
 
       //addressList.add(Address.fromJson(response.data));
       Get.snackbar('Success', 'Address added successfully', colorText: Colors.white);
      Get.offAndToNamed(Routes.MAIN);
+     fetchAddresses();
+     clearFieldsAndErrors();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to add address Check All The Fields', colorText: Colors.white);
+      // Get.snackbar('Error', 'Please Check All The Fields Marked With *', colorText: Colors.white);
+
+      if(state.value.isEmpty){
+        stateError.value = "State is required";
+      }
+
+      if(address.value.isEmpty){
+        addressError.value = "Address is required";
+      }
+
+      if(phone.value.isEmpty){
+        phoneError.value = "Phone is required";
+      }
+
     } finally {
       isLoading(false);
     }
@@ -446,17 +475,17 @@ void changeAddressStatus(status) {
   }
 
   void updateAddress(Address addressToUpdate) async {
-    if (!validateField(label.value, labelError) ||
-        !validateField(apartment.value, apartmentError) ||
-        !validateField(phone.value, phoneError) ||
-        !validateField(state.value, stateError)) {
-      return;
-    }
+    // if (!validateField(label.value, labelError) ||
+    //     !validateField(apartment.value, apartmentError) ||
+    //     !validateField(phone.value, phoneError) ||
+    //     !validateField(state.value, stateError)) {
+    //   return;
+    // }
 
     final updatedAddress = Address(
       id: addressToUpdate.id,
       label: label.value,
-      apartment: apartment.value,
+      // apartment: apartment.value,
       floor: floor.value,
       building: building.value,
       address: address.value,
@@ -479,11 +508,27 @@ void changeAddressStatus(status) {
         'profile/address-update/${addressToUpdate.id}',
         body: updatedAddress.toJson(),
       );
-      fetchAddresses();
+
       clearFieldsAndErrors();
       Get.snackbar('Success', 'Address updated successfully');
+      print("updated successfully");
+      Get.to(Routes.MAIN);
+       fetchAddresses();
+
     } catch (e) {
-      Get.snackbar('Error', 'Failed to Update address Check All The Fields', colorText: Colors.white);
+      print("error updating address: $e");
+      if(state.value.isEmpty){
+        stateError.value = "State is required";
+      }
+
+      if(address.value.isEmpty){
+        addressError.value = "Address is required";
+      }
+
+      if(phone.value.isEmpty){
+        phoneError.value = "Phone is required";
+      }
+
     } finally {
       isLoading(false);
     }
@@ -510,7 +555,7 @@ void changeAddressStatus(status) {
   }
 
   void clearFieldsAndErrors() {
-    label.value = 'Home';
+    label.value = selectedLabel.value;
     apartment.value = '';
     floor.value = '';
     building.value = '';
@@ -545,7 +590,18 @@ void changeAddressStatus(status) {
   }
 
   bool isFirstOpen = true;
-
+RxString selectedLabel = 'Home'.obs;
+  // List<Map<String, String>> labels = [
+  //   {
+  //     "name": "Home",
+  //
+  //   },
+  //   {
+  //     "name": "Work",
+  //
+  //   },
+  //
+  // ];
   List<Map<String, String>> worldCountries = [
     {
       "name": "Afghanistan",
@@ -1376,7 +1432,15 @@ RxString addressPlace = "".obs;
     print(place);
   }
 
+setCountry(country){
+  selectedCountry.value = country;
+}
+  setState(country){
+    state.value = country;
+  }
 
-
+  setCity(country){
+    city.value = country;
+  }
 }
 

@@ -79,27 +79,31 @@ class CustomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                  onTap: () => {
+                  onTap: () =>
+                  {
 
                     tabController.changeIndex(0)
-                    },
+                  },
                   child: _buildBottomNavigationBarItem(0, "Home", "home")),
               InkWell(
-                  onTap: () => {
+                  onTap: () =>
+                  {
 
                     tabController.changeIndex(1)
                   },
                   child:
                   _buildBottomNavigationBarItem(1, "wishlist", "wishlist")),
               InkWell(
-                  onTap: () => {
+                  onTap: () =>
+                  {
                     tabController.changeIndex(2)
                   },
                   child: _buildBottomNavigationBarItem(2, "Cart", "bag")),
               InkWell(
-                  onTap: () => {
+                  onTap: () =>
+                  {
                     tabController.changeIndex(3)
-                    },
+                  },
                   child:
                   _buildBottomNavigationBarItem(3, "Profile", "profile")),
             ],
@@ -111,11 +115,12 @@ class CustomNavBar extends StatelessWidget {
 
   Widget _buildBottomNavigationBarItem(int tabIndex, String label,
       String iconName) {
-
     final isSelected = tabController.selectedIndex.value == tabIndex;
     return
-      Obx(() => tabController.selectedIndex.value == tabIndex ? _buildSelectedIcon(tabIndex, iconName, label) : _buildUnselectedIcon(tabIndex, iconName, label));
-
+      Obx(() =>
+      tabController.selectedIndex.value == tabIndex
+          ? _buildSelectedIcon(tabIndex, iconName, label)
+          : _buildUnselectedIcon(tabIndex, iconName, label));
   }
 
   Widget _buildSelectedIcon(index, String iconName, String label) {
@@ -203,8 +208,14 @@ class TitleWithSeeAll extends StatelessWidget {
   }
 }
 
-Widget SearchHomeBar({HomeController? homeController}) {
+Widget SearchHomeBar({HomeController? homeController,required BuildContext context}) {
   // Adding the header with the logo, search bar, and location
+  HomeController homeController;
+  if (HomeController().initialized == false) {
+    homeController = Get.put(HomeController());
+  } else {
+    homeController = Get.find<HomeController>();
+  }
 
   return Container(
       height: 300.h,
@@ -259,49 +270,15 @@ Widget SearchHomeBar({HomeController? homeController}) {
                 // SvgPicture.asset(
                 //   'assets/images/home/notification.svg',
                 // ),
-              ],
-            ),
-            SizedBox(height: 26.h),
-            Row(
-              children: [
-                Container(
-                  width: 287.w,
-                  height: 44.h,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(31),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x19000000),
-                        blurRadius: 30,
-                        offset: Offset(0, 4),
-                        spreadRadius: -5,
-                      )
-                    ],
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      // Get.toNamed(Routes.SEARCH);
-                    },
-                    child: Padding(
-                      padding:
-                      EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
-                      child: customHomeSearchField(),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 11.w),
-                // Space between the search field and the icon
-                // Search Icon next to the search field
+                SizedBox(width: 10.w),
                 GestureDetector(
                   onTap: () {
-                    Get.to(SearchView());
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=> const SearchView()));
+                    // Get.to(SearchView());
                   },
                   child: Container(
-                      width: 44.w,
-                      height: 44.h,
+                      width: 30.w,
+                      height: 30.h,
                       decoration: const ShapeDecoration(
                         color: Colors.white,
                         shape: OvalBorder(),
@@ -315,15 +292,83 @@ Widget SearchHomeBar({HomeController? homeController}) {
                         ],
                       ),
                       child: Center(
-                        child: SvgPicture.asset(
-                          'assets/images/home/search.svg',
-                          width: 18.w,
-                          height: 18.h,
+                        child: Hero(
+                          tag: 'search',
+                          key: const Key('search'),
+                          child: SvgPicture.asset(
+                            key: const Key('search'),
+                            'assets/images/home/search.svg',
+                            width: 20.w,
+                            height: 20.h,
+                          ),
                         ),
                       )),
                 ),
               ],
             ),
+            SizedBox(height: 26.h),
+            // Row(
+            //   children: [
+            //     Container(
+            //       width: 287.w,
+            //       height: 44.h,
+            //       decoration: ShapeDecoration(
+            //         color: Colors.white,
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(31),
+            //         ),
+            //         shadows: const [
+            //           BoxShadow(
+            //             color: Color(0x19000000),
+            //             blurRadius: 30,
+            //             offset: Offset(0, 4),
+            //             spreadRadius: -5,
+            //           )
+            //         ],
+            //       ),
+            //       child: GestureDetector(
+            //         onTap: () {
+            //           // Get.toNamed(Routes.SEARCH);
+            //         },
+            //         child: Padding(
+            //           padding:
+            //           EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
+            //           child: customHomeSearchField(),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(width: 11.w),
+            //     // Space between the search field and the icon
+            //     // Search Icon next to the search field
+            //     GestureDetector(
+            //       onTap: () {
+            //         Get.to(SearchView());
+            //       },
+            //       child: Container(
+            //           width: 44.w,
+            //           height: 44.h,
+            //           decoration: const ShapeDecoration(
+            //             color: Colors.white,
+            //             shape: OvalBorder(),
+            //             shadows: [
+            //               BoxShadow(
+            //                 color: Color(0x19000000),
+            //                 blurRadius: 30,
+            //                 offset: Offset(0, 4),
+            //                 spreadRadius: -5,
+            //               )
+            //             ],
+            //           ),
+            //           child: Center(
+            //             child: SvgPicture.asset(
+            //               'assets/images/home/search.svg',
+            //               width: 18.w,
+            //               height: 18.h,
+            //             ),
+            //           )),
+            //     ),
+            //   ],
+            // ),
             SizedBox(height: 25.h),
             Text(
               'Current Location'.tr,
@@ -356,17 +401,26 @@ Widget SearchHomeBar({HomeController? homeController}) {
                   'assets/images/home/locations.svg',
                 ),
                 SizedBox(width: 12.w),
-                Text(
-                  'Cairo, Egypt',
-                  textAlign: TextAlign.center,
-                  style: secondaryTextStyle(
-                    color: Color(0xFFFFFDD2),
-                    size: 24.sp.round(),
-                    weight: FontWeight.w700,
-                    height: 0.09,
-                    letterSpacing: -0.41,
-                  ),
-                ),
+                Obx(() {
+                  return
+                    homeController.isLocationLoading.value?
+                    const CircularProgressIndicator(color: Colors.white,)
+                        :
+                    Text(
+                    homeController.state.value.isEmpty &&
+
+                        homeController.city.value.isEmpty ?
+                    '' : '${homeController.state.value},${homeController.city.value}',
+                    textAlign: TextAlign.center,
+                    style: secondaryTextStyle(
+                      color: const Color(0xFFFFFDD2),
+                      size: 24.sp.round(),
+                      weight: FontWeight.w700,
+                      height: 0.09,
+                      letterSpacing: -0.41,
+                    ),
+                  );
+                }),
               ],
             ),
             // FadeTransition(
@@ -870,10 +924,10 @@ Widget orderCard(Order order) {
     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
     decoration: BoxDecoration(
       border: Border.all(
-           color: order.status == 'pending' ? const Color(0xFFCF6112) :
+        color: order.status == 'pending' ? const Color(0xFFCF6112) :
         order.status == 'delivered' ?
         const Color(0xFF33C200)
-          :
+            :
         const Color(0xFFC40000),
       ),
       color: Colors.white,
@@ -936,7 +990,7 @@ Widget orderCard(Order order) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-             '${'Subtotal'.tr}\$${order.subTotal}',
+              '${'Subtotal'.tr}\$${order.subTotal}',
               style: primaryTextStyle(
                 color: Color(0xFF777E90),
                 size: 14.sp.round(),
@@ -1277,8 +1331,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   },
                   initialValue:
                   widget.customTextEditingController != null ?
-                      null
-                  :
+                  null
+                      :
                   widget.initialValue ?? '',
                   obscureText: _obscureText,
                   maxLines: widget.maxLines,
@@ -1791,7 +1845,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.svgPath = "assets/images/back_btn.svg",
     required this.myFunction,
     this.isHelp = false,
-     this.isAddress = false,
+    this.isAddress = false,
 
   });
 
@@ -1824,29 +1878,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 padding: EdgeInsets.only(top: 10.h),
                 child: Row(
                   children: [
-                    back?
+                    back ?
 
 
                     IconButton(
-                        onPressed: () {
-                          print("tapped here");
-                          if(isAddress){
-                            print("going to home") ;
-                            Get.put(CartController());
-                            Get.off(() =>MainView());
-                          } else {
-                            print("going to home no") ;
-                            Get.back(closeOverlays: true);
-                          }
-
-
-                        },
-                        icon:  buildBackBtn(),)
-                    :
-                        SizedBox()
+                      onPressed: () {
+                        print("tapped here");
+                        if (isAddress) {
+                          print("going to home");
+                          Get.put(CartController());
+                          Get.off(() => MainView());
+                        } else {
+                          print("going to home no");
+                          Get.back(closeOverlays: true);
+                        }
+                      },
+                      icon: buildBackBtn(),)
+                        :
+                    SizedBox()
                     ,
-                   Spacer() ,
-                   back?  SizedBox() :  Spacer()  ,
+                    Spacer(),
+                    back ? SizedBox() : Spacer(),
                     Text(
                       title,
                       style: secondaryTextStyle(
@@ -1857,34 +1909,34 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
 
                     Spacer(),
-                  
-                      isHelp ?
-                      SizedBox(
-                        width: 80.w,
-                      )
-                          :
-                      IconButton(
-                          onPressed: () {},
-                          icon: Stack(alignment: Alignment.center, children: [
-                            SvgPicture.asset(
-                              "assets/images/close-circle.svg",
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // myFunction;
-                                Get.to(() => HelpView());
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 4.h),
-                                child: SvgPicture.asset(
-                                  // svgPath,
-                                  "assets/images/help.svg",
-                                  // "assets/images/shopping-cart.svg",
-                                  width: 22.h,
-                                ),
+
+                    isHelp ?
+                    SizedBox(
+                      width: 80.w,
+                    )
+                        :
+                    IconButton(
+                        onPressed: () {},
+                        icon: Stack(alignment: Alignment.center, children: [
+                          SvgPicture.asset(
+                            "assets/images/close-circle.svg",
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // myFunction;
+                              Get.to(() => HelpView());
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 4.h),
+                              child: SvgPicture.asset(
+                                // svgPath,
+                                "assets/images/help.svg",
+                                // "assets/images/shopping-cart.svg",
+                                width: 22.h,
                               ),
                             ),
-                          ])),
+                          ),
+                        ])),
                   ],
                 ),
               ),
@@ -3893,7 +3945,7 @@ Widget socialMediaPlaceHolder() {
           'Please log in or sign up to continue shopping'.tr,
           textAlign: TextAlign.center,
           style: secondaryTextStyle(
-            color:  Colors.black,
+            color: Colors.black,
             size: 16.sp.round(),
             weight: FontWeight.w400,
           ),
@@ -4025,10 +4077,14 @@ customSearchField(isHome) {
               ),
               suffixIcon: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  "assets/images/home/search.svg",
-                  fit: BoxFit.cover,
+                child: Hero(
+                  tag: "search",
+                  key: Key('search'),
+                  child: SvgPicture.asset(
+                    "assets/images/home/search.svg",
+                    fit: BoxFit.cover,
 
+                  ),
                 ),
               )
 
@@ -4075,28 +4131,28 @@ customHomeSearchField() {
         },
         controller: customSearchController.searchController.value,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(8.w),
-            border: InputBorder.none,
-            hintText: 'Search'.tr,
+          contentPadding: EdgeInsets.all(8.w),
+          border: InputBorder.none,
+          hintText: 'Search'.tr,
 
-            hintStyle: primaryTextStyle(
-              color: Color(0xFF4F0099).withOpacity(0.3),
-              size: 14.sp.round(),
-              weight: FontWeight.w400,
-              letterSpacing: -0.41,
-            ),
-            suffixIconConstraints: BoxConstraints(
-              maxWidth: 52.w,
-              maxHeight: 52.h,
-            ),
-            // suffixIcon: Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: SvgPicture.asset(
-            //     "assets/images/home/search.svg",
-            //     fit: BoxFit.cover,
-            //
-            //   ),
-            // )
+          hintStyle: primaryTextStyle(
+            color: Color(0xFF4F0099).withOpacity(0.3),
+            size: 14.sp.round(),
+            weight: FontWeight.w400,
+            letterSpacing: -0.41,
+          ),
+          suffixIconConstraints: BoxConstraints(
+            maxWidth: 52.w,
+            maxHeight: 52.h,
+          ),
+          // suffixIcon: Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: SvgPicture.asset(
+          //     "assets/images/home/search.svg",
+          //     fit: BoxFit.cover,
+          //
+          //   ),
+          // )
 
         ),
       );
@@ -4661,11 +4717,11 @@ class _buildCardProductState extends State<buildProductCard> {
                                         child: CachedNetworkImage(
                                           imageUrl: widget.product.image,
                                           placeholder: (context, url) =>
-                                              // SizedBox(
-                                              //     height: 120.h,
-                                              //     child: const Center(
-                                              //         child:
-                                              //         CircularProgressIndicator())),
+                                          // SizedBox(
+                                          //     height: 120.h,
+                                          //     child: const Center(
+                                          //         child:
+                                          //         CircularProgressIndicator())),
                                           Lottie.asset(
                                               "assets/images/jiffy_placeholder.json"
                                           ),
@@ -5383,29 +5439,19 @@ Widget placeHolderProductCard() {
 }
 
 
-
-
-
-
-
-
-
-
-
-Widget productCard(Product product, context, int index ) {
+Widget productCard(Product product, context, int index) {
   ProductController productController = Get.put(ProductController());
   return Obx(() {
     return GestureDetector(
         onTap: () async {
-
           productController.productId.value = product.id!;
           await productController.getProduct(product.id!);
           Get.to(const ProductView());
         },
         child:
-        productController.productId.value == product.id  &&
+        productController.productId.value == product.id &&
             productController.isProductLoading.value
-        ?
+            ?
         Skeletonizer(
           containersColor: Colors.grey[300],
           enabled: true,
@@ -5456,11 +5502,14 @@ Widget productCard(Product product, context, int index ) {
 
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(height: MediaQuery.of(context).
-                            size.width/7,),
+                            SizedBox(height: MediaQuery
+                                .of(context)
+                                .
+                            size
+                                .width / 7,),
                             // product image
                             Flexible(
-                              flex:  2,
+                              flex: 2,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: SizedBox(
@@ -5526,8 +5575,11 @@ Widget productCard(Product product, context, int index ) {
                                   alignment: Alignment.topCenter,
                                   children: [
                                     Padding(
-                                      padding:  EdgeInsets.only(
-                                          top: MediaQuery.of(context).size.width/25
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width / 25
                                       ),
                                       child: Text(
                                         '\$${product.price ?? ""}',
@@ -5542,9 +5594,11 @@ Widget productCard(Product product, context, int index ) {
                                     ),
                                     Obx(() {
                                       return
-                                        isProductInCart(product) && userToken !=null
+                                        isProductInCart(product) &&
+                                            userToken != null
                                             ?
-                                        buildShowAddToCartButton(context, product)
+                                        buildShowAddToCartButton(
+                                            context, product)
 
                                             :
                                         buildAddToCartButton(context, product);
@@ -5562,10 +5616,9 @@ Widget productCard(Product product, context, int index ) {
                 ]),
 
 
-
           ),
         )
-        :
+            :
         SizedBox(
 
 
@@ -5613,11 +5666,14 @@ Widget productCard(Product product, context, int index ) {
 
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: MediaQuery.of(context).
-                          size.width/7,),
+                          SizedBox(height: MediaQuery
+                              .of(context)
+                              .
+                          size
+                              .width / 7,),
                           // product image
                           Flexible(
-                            flex:  2,
+                            flex: 2,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
@@ -5683,8 +5739,11 @@ Widget productCard(Product product, context, int index ) {
                                 alignment: Alignment.topCenter,
                                 children: [
                                   Padding(
-                                    padding:  EdgeInsets.only(
-                                        top: MediaQuery.of(context).size.width/25
+                                    padding: EdgeInsets.only(
+                                        top: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width / 25
                                     ),
                                     child: Text(
                                       '\$${product.price ?? ""}',
@@ -5699,7 +5758,8 @@ Widget productCard(Product product, context, int index ) {
                                   ),
                                   Obx(() {
                                     return
-                                      isProductInCart(product) && userToken !=null
+                                      isProductInCart(product) &&
+                                          userToken != null
                                           ?
                                       buildShowAddToCartButton(context, product)
 
@@ -5719,10 +5779,8 @@ Widget productCard(Product product, context, int index ) {
               ]),
 
 
-
         )
     );
-
   });
   //       ]);
   // })
@@ -6210,19 +6268,25 @@ bool isProductInCart(Product product) {
 }
 
 buildShowAddToCartButton(context, Product product) {
-  return  Stack(
+  return Stack(
     alignment: Alignment.center,
     children: [
       Transform.translate(
-        offset:  Offset(
+        offset: Offset(
             0
             ,
-            MediaQuery.of(context).size.width/20),
+            MediaQuery
+                .of(context)
+                .size
+                .width / 20),
         child: SvgPicture.asset(
           'assets/images/home/borderCart.svg',
           fit: BoxFit.cover,
 
-          height: MediaQuery.of(context).size.width / 2.8,
+          height: MediaQuery
+              .of(context)
+              .size
+              .width / 2.8,
 
 
         ),
@@ -6247,7 +6311,7 @@ buildShowAddToCartButton(context, Product product) {
               .width / 2.8,
 
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 5.w,
+            padding: EdgeInsets.symmetric(horizontal: 5.w,
 
             ),
             child: Row(
@@ -6311,6 +6375,7 @@ void addToCart(Product product) {
         quantity: initialQty);
   }
 }
+
 void handleIncrement(Product product) {
   if (userToken == null) {
     Get.to(() => LoginView());
@@ -6355,6 +6420,7 @@ void handleDecrement(Product product) {
         .removeItem(currentItem);
   }
 }
+
 buildLikedButton(context, Product product) {
   return Padding(
     padding: EdgeInsets.only(
@@ -6422,6 +6488,7 @@ buildLikedButton(context, Product product) {
 
   );
 }
+
 buildAddToCartButton(context, Product product) {
   return GestureDetector(
     onTap: () {
@@ -6431,25 +6498,43 @@ buildAddToCartButton(context, Product product) {
       alignment: Alignment.center,
       children: [
         Transform.translate(
-          offset:  Offset(
-              MediaQuery.of(context).size.width/30
+          offset: Offset(
+              MediaQuery
+                  .of(context)
+                  .size
+                  .width / 30
               ,
-              MediaQuery.of(context).size.width/20),
+              MediaQuery
+                  .of(context)
+                  .size
+                  .width / 20),
           child: SvgPicture.asset(
             'assets/images/home/add_background.svg',
             fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width / 1.1,
-            height: MediaQuery.of(context).size.width / 2.9,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width / 1.1,
+            height: MediaQuery
+                .of(context)
+                .size
+                .width / 2.9,
 
 
           ),
         ),
 
         Transform.translate(
-          offset:  Offset(
-              MediaQuery.of(context).size.width/80
+          offset: Offset(
+              MediaQuery
+                  .of(context)
+                  .size
+                  .width / 80
               ,
-              MediaQuery.of(context).size.width/50),
+              MediaQuery
+                  .of(context)
+                  .size
+                  .width / 50),
           child: SvgPicture.asset(
             "assets/images/home/add_icon.svg",
             fit: BoxFit.cover,
@@ -6461,8 +6546,8 @@ buildAddToCartButton(context, Product product) {
   );
 }
 
-Widget buildBackBtn(){
-  return Get.locale?.languageCode == 'en'?
+Widget buildBackBtn() {
+  return Get.locale?.languageCode == 'en' ?
 
   SvgPicture.asset(
     "assets/images/back_btn.svg",

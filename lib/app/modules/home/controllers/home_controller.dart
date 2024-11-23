@@ -1,4 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
@@ -45,6 +47,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onInit();
     fetchHomePageData();
     getCategories();
+    getCurrentLocation();
     scrollController.addListener(_onScroll);
     rotatingUpperBarController = AnimationController(
       duration: Duration(seconds: 2),
@@ -233,5 +236,42 @@ isCategoriesLoading.value = true; // استخدام القيمة المتغير�
       isCategoriesLoading.value = false;
     }
 
+  }
+
+
+  RxString state = ''.obs;
+   RxString city = ''.obs;
+   RxString country = ''.obs;
+   RxBool isLocationLoading = false.obs;
+   void getCurrentLocation() async{
+     isLocationLoading.value = true;
+      // ask permission to  location
+      bool serviceEnabled;
+      LocationPermission permission;
+
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print('Location services are disabled.');
+        Get.snackbar("Location", "Location services are disabled", colorText: Colors.white);
+        isLocationLoading.value = false;
+      }
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('Location permissions are denied');
+          isLocationLoading.value = false;
+        }
+        isLocationLoading.value = false;
+      }
+      Position position = await Geolocator.getCurrentPosition();
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      var first = placemarks.first;
+      state.value = first.administrativeArea!;
+      city.value = first.locality!;
+      country.value = first.country!;
+     isLocationLoading.value = false;
+print("Your state is ${state.value} and city is ${city.value}");
   }
 }

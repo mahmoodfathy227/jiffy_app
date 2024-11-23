@@ -18,9 +18,9 @@ import '../controllers/address_controller.dart';
 import 'edit_address.dart';
 
 class AddressView extends GetView<AddressController> {
-  AddressView({super.key,});
+  AddressView( {super.key,required this.isFromAddress});
 
-
+final bool isFromAddress;
   @override
   Widget build(BuildContext context) {
     AddressController addressController = Get.put(AddressController());
@@ -72,16 +72,21 @@ class AddressView extends GetView<AddressController> {
           context: context,
           onPressed: () {
             if (controller.addressList.isEmpty) {
-              Get.to(() => AddAddress());
+              Get.to(() => const AddAddress());
             } else {
-              var defaultAddressId = controller.addressList
-                  .where((address) => address.isDefault == 1)
-                  .first;
-              CheckoutController checkoutController = Get.put(
-                  CheckoutController());
-              checkoutController.assignDefaultAddress(
-                  defaultAddressId.id.toString());
-              Get.to(() => const PaymentMethod());
+              if(isFromAddress) {
+                Get.to(() => const AddAddress());
+              } else {
+                var defaultAddressId = controller.addressList
+                    .where((address) => address.isDefault == 1)
+                    .first;
+                CheckoutController checkoutController = Get.put(
+                    CheckoutController());
+                checkoutController.assignDefaultAddress(
+                    defaultAddressId.id.toString());
+                Get.to(() => const PaymentMethod());
+              }
+
             }
           },
 

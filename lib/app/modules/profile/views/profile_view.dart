@@ -115,7 +115,7 @@ class _ProfileViewState extends State<ProfileView>
                           AddressController addressController = Get.put(
                               AddressController());
                           addressController.changeAddressStatus(false);
-                          Get.to(AddressView());
+                          Get.to(AddressView(isFromAddress: true,));
                         }, 19, 1),
                         _buildMenuItem('order.svg', 'Orders'.tr, () {
                           Get.put(OrdersController());

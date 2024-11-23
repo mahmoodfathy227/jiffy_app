@@ -70,7 +70,8 @@ class HomeView extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(top: 50.h),
                             child: SearchHomeBar(
-
+homeController: homeController,
+                              context: context,
                             ),
                           ),
                           Padding(

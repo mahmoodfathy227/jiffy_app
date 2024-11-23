@@ -22,7 +22,7 @@ class CheckoutView extends GetView<CheckoutController> {
    AddressController addressController = Get.put(AddressController());
    addressController.changeAddressStatus(true);
     return Scaffold(
-body: AddressView(),
+body: AddressView(isFromAddress: false,),
         // body: SafeArea(
         //     child:
         // // Stack(

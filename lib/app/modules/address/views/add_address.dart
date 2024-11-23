@@ -10,6 +10,7 @@ import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 
 import '../../global/config/helpers.dart';
+import '../../home/controllers/home_controller.dart';
 import '../controllers/address_controller.dart';
 
 class AddAddress extends GetView<AddressController> {
@@ -72,7 +73,20 @@ class AddAddress extends GetView<AddressController> {
   }
 
   _buildAddressFields(context) {
+    HomeController homeController;
+    if(HomeController().initialized == false) {
+      homeController = Get.put(HomeController());
+    } else {
+      homeController = Get.find<HomeController>();
+    }
+
+
+    if(homeController.country.isNotEmpty){
+      controller.setCountry(homeController.country.value);
+    }
+
     return Padding(
+
 
       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding * 1.5),
       child: SingleChildScrollView(
@@ -83,13 +97,115 @@ class AddAddress extends GetView<AddressController> {
             //apartment and country
             Row(
               children: [
-                Expanded(child: CustomTextField(
+                Expanded(child:
+          Container(
 
-                    labelText: "Apartment", onChanged: (value) {
-                  controller.apartment.value = value;
+          decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14.r),
+          boxShadow: [
+            customBoxShadow
+          ],
+        ),
+
+          child: Obx(() =>
+              InputDecorator(
+                decoration: InputDecoration(
+
+                  filled: true,
+                  fillColor:
 
 
-                })),
+                  Colors.white,
+
+
+                  enabledBorder: OutlineInputBorder(
+
+                    borderRadius: BorderRadius.circular(10),
+
+                    borderSide: const BorderSide(
+
+                      color:
+
+                      Colors.white,
+                      width: 1,
+                    ),
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+
+                    borderRadius: BorderRadius.circular(10),
+
+                    borderSide: BorderSide(
+                      color:
+
+                      primaryColor
+                      ,
+                      width: 1,
+                    ),
+                  ),
+
+                  hintStyle: secondaryTextStyle(
+                    color: Colors.black,
+                    size: 14.sp.round(),
+                    weight: FontWeight.w400,
+                    height: 1,
+                  ),
+
+
+                  helperStyle: secondaryTextStyle(
+
+                    color: Colors.red,
+                    size: 12.sp.round(),
+                    weight: FontWeight.w400,
+                    height: 1,
+
+                  ),
+
+
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    underline: Container(
+                      height: 2,
+                      color: const Color(0xFFA6AAC3),
+                    ),
+                    isDense: true,
+                    icon: SvgPicture.asset(
+                        "assets/images/address/arrow-down.svg"),
+                    value:  controller.selectedLabel.value,
+                    isExpanded: true,
+                    onChanged: (String? newValue) {
+                      controller.selectedLabel.value = newValue!;
+
+                    },
+                    items: ['Home','Work']
+                        .map<DropdownMenuItem<String>>(
+                            (String label) {
+                          return DropdownMenuItem<String>(
+                            value: label,
+                            child: Text(
+                              label ,
+                              style: primaryTextStyle(
+                                color: greyishColor,
+                                size: 14.sp.round(),
+                                weight: FontWeight.w400,
+                                height: 1,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                ),
+              )))
+                // CustomTextField(
+                //
+                //     labelText: "Apartment", onChanged: (value) {
+                //   controller.apartment.value = value;
+                //
+                //
+                // })
+                ),
                 SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
 
@@ -166,7 +282,11 @@ class AddAddress extends GetView<AddressController> {
                               isDense: true,
                               icon: SvgPicture.asset(
                                   "assets/images/address/arrow-down.svg"),
-                              value: controller.selectedCountry.value,
+                              value: homeController.country.value.isEmpty?
+                              controller.selectedCountry.value
+                              :
+                              homeController.country.value
+                              ,
                               isExpanded: true,
                               onChanged: (String? newValue) {
                                 controller.selectedCountry.value = newValue!;
@@ -195,15 +315,24 @@ class AddAddress extends GetView<AddressController> {
             SizedBox(height: kDefaultPadding,),
             //state and city
             Obx(() {
+              HomeController homeController = Get.put(HomeController());
+              if(homeController.state.isNotEmpty){
+                controller.setState(homeController.state.value);
+              }
+
+              if(homeController.city.isNotEmpty){
+                controller.setCity(homeController.city.value);
+              }
               return Row(
                 children: [
                   Expanded(
                       child: CustomTextField(
 
-
-
+                          errorText: controller.stateError.value,
+initialValue: homeController.state.value.isEmpty? '' : homeController.state.value,
                           labelText: "State*", onChanged: (value) {
                         controller.state.value = value;
+                        print("state is ${controller.state.value}");
                       })),
                   SizedBox(width: kDefaultPadding * 0.8,),
 
@@ -212,7 +341,7 @@ class AddAddress extends GetView<AddressController> {
 
                           errorText: controller.cityError.value,
 
-
+                          initialValue: homeController.city.value.isEmpty? '' : homeController.city.value,
 
                           labelText: "City", onChanged: (value) {
                         controller.city.value = value;
@@ -224,14 +353,18 @@ class AddAddress extends GetView<AddressController> {
             //Address
 
             Obx(() {
+
               return Row(
                 children: [
                   Expanded(child: CustomTextField(
                       customTextEditingController: controller.addressTextEditingController.value,
+
                       errorText: controller.addressError.value,
 
 
-                      labelText:controller.address.value == "" ? "Address*" : controller.address.value, onChanged: (value) {
+                      labelText:"Address*",
+
+                      onChanged: (value) {
                     controller.address.value = value;
                   })),
 
@@ -289,7 +422,7 @@ class AddAddress extends GetView<AddressController> {
             }),
             SizedBox(height: kDefaultPadding,),
 
-            WorkHomeSwitcher()
+            // WorkHomeSwitcher()WorkHomeSwitcher()
           ],
         ),
       ),

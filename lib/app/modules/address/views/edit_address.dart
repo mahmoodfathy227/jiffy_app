@@ -82,17 +82,126 @@ final Address addressToUpdate ;
             //apartment and country
             Row(
               children: [
-                Expanded(
-                    child: CustomTextField(
-                    height: 60.h,
-                    labelText:
-                    addressToUpdate.apartment??
-                        'apartment', onChanged: (value) {
-controller.apartment.value = value;
-                })),
+                Expanded(child:
+                Container(
+
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14.r),
+                      boxShadow: [
+                        customBoxShadow
+                      ],
+                    ),
+
+                    child: Obx(() =>
+                        InputDecorator(
+                          decoration: InputDecoration(
+
+                            filled: true,
+                            fillColor:
+
+
+                            Colors.white,
+
+
+                            enabledBorder: OutlineInputBorder(
+
+                              borderRadius: BorderRadius.circular(10),
+
+                              borderSide: const BorderSide(
+
+                                color:
+
+                                Colors.white,
+                                width: 1,
+                              ),
+                            ),
+
+                            focusedBorder: OutlineInputBorder(
+
+                              borderRadius: BorderRadius.circular(10),
+
+                              borderSide: BorderSide(
+                                color:
+
+                                primaryColor
+                                ,
+                                width: 1,
+                              ),
+                            ),
+
+                            hintStyle: secondaryTextStyle(
+                              color: Colors.black,
+                              size: 14.sp.round(),
+                              weight: FontWeight.w400,
+                              height: 1,
+                            ),
+
+
+                            helperStyle: secondaryTextStyle(
+
+                              color: Colors.red,
+                              size: 12.sp.round(),
+                              weight: FontWeight.w400,
+                              height: 1,
+
+                            ),
+
+
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              underline: Container(
+                                height: 2,
+                                color: const Color(0xFFA6AAC3),
+                              ),
+                              isDense: true,
+                              icon: SvgPicture.asset(
+                                  "assets/images/address/arrow-down.svg"),
+                              value: controller.selectedLabel.value,
+                              isExpanded: true,
+                              onChanged: (String? newValue) {
+                                controller.selectedLabel.value = newValue!;
+                                print("selectedLabel is ${controller.selectedLabel.value}");
+                              },
+                              items: ['Home','Work']
+                                  .map<DropdownMenuItem<String>>(
+                                      (String label) {
+                                    return DropdownMenuItem<String>(
+                                      value: label,
+                                      child: Text(
+                                        label ,
+                                        style: primaryTextStyle(
+                                          color: greyishColor,
+                                          size: 14.sp.round(),
+                                          weight: FontWeight.w400,
+                                          height: 1,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                            ),
+                          ),
+                        )))
+                  // CustomTextField(
+                  //
+                  //     labelText: "Apartment", onChanged: (value) {
+                  //   controller.apartment.value = value;
+                  //
+                  //
+                  // })
+                ),
+//                 Expanded(
+//                     child: CustomTextField(
+//                     height: 60.h,
+//                     labelText:
+//                     addressToUpdate.apartment??
+//                         'apartment', onChanged: (value) {
+// controller.apartment.value = value;
+//                 })),
                 SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
-                    height: 60.h,
+                    height: 50.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14.r),
@@ -203,8 +312,8 @@ controller.apartment.value = value;
                   Expanded(
                       child: CustomTextField(
 
-                          height: 60.h,
-
+                          height: 50.h,
+errorText: controller.stateError.value,
                           labelText: addressToUpdate.state ?? "State", onChanged: (value) {
                         controller.state.value = value;
                       })),
@@ -214,7 +323,7 @@ controller.apartment.value = value;
                       child: CustomTextField(
 
                           errorText: controller.cityError.value,
-                          height: 60.h,
+                          height: 50.h,
                           labelText: addressToUpdate.city ?? "City", onChanged: (value) {
                         controller.city.value = value;
                       })),
@@ -227,11 +336,14 @@ controller.apartment.value = value;
             Obx(() {
               return Row(
                 children: [
-                  Expanded(child: CustomTextField(
+                  Expanded(
+                      child: CustomTextField(
                       customTextEditingController: controller.addressTextEditingController.value,
                       errorText: controller.addressError.value,
-                      height: 60.h,
-                      labelText: addressToUpdate.address ?? "Address", onChanged: (value) {
+                      height: 50.h,
+                      labelText:
+                      "Address",
+                          onChanged: (value) {
                     controller.address.value = value;
                   })),
 
@@ -245,7 +357,7 @@ controller.apartment.value = value;
               children: [
                 Expanded(child: CustomTextField(
                     errorText: controller.floorError.value,
-                    height: 60.h,
+                    height: 50.h,
                     labelText: addressToUpdate.floor ?? "Floor", onChanged: (value) {
 
 
@@ -254,14 +366,14 @@ controller.apartment.value = value;
                 Expanded(child: CustomTextField(
 
                     errorText: controller.floorError.value,
-                    height: 60.h,
+                    height: 50.h,
                     labelText: addressToUpdate.floor ?? "Floor", onChanged: (value) {
                   controller.floor.value = value;
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
                     errorText: controller.buildingError.value,
-                    height: 60.h,
+                    height: 50.h,
                     labelText: addressToUpdate.building ?? "Building", onChanged: (value) {
                   controller.building.value = value;
                 })),
@@ -279,7 +391,7 @@ controller.apartment.value = value;
                   Expanded(child: CustomTextField(
                       keyboardType: TextInputType.number,
                       errorText: controller.phoneError.value,
-                      height: 60.h,
+                      height: 50.h,
                       labelText: addressToUpdate.phone ?? "Phone",
                       onChanged: (value) {
                         controller.phone.value = value;
@@ -291,7 +403,7 @@ controller.apartment.value = value;
 
             SizedBox(height: kDefaultPadding,),
 
-            WorkHomeSwitcher(),
+            // WorkHomeSwitcher(),
           ],
         ),
       ),
