@@ -171,6 +171,7 @@ class TitleWithSeeAll extends StatelessWidget {
             .of(context)
             .size
             .width,
+
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 23.w),
           child: Row(
@@ -404,13 +405,26 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                 Obx(() {
                   return
                     homeController.isLocationLoading.value?
-                    const CircularProgressIndicator(color: Colors.white,)
+                    SizedBox(
+                      width: 25.w,
+                        height: 25.h,
+                        child: const CircularProgressIndicator(color: Colors.white, ))
                         :
-                    Text(
                     homeController.state.value.isEmpty &&
 
                         homeController.city.value.isEmpty ?
-                    '' : '${homeController.state.value},${homeController.city.value}',
+
+                    IconButton(
+                      icon:  Icon(Icons.refresh_outlined,color: Colors.white),
+                      onPressed: () async{
+                         homeController.getCurrentLocation();
+                      },
+
+                     )
+:
+                    Text(
+
+                    '${homeController.state.value},${homeController.city.value}',
                     textAlign: TextAlign.center,
                     style: secondaryTextStyle(
                       color: const Color(0xFFFFFDD2),
@@ -4061,7 +4075,7 @@ customSearchField(isHome) {
           },
           controller: customSearchController.searchController.value,
           decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(8.w),
+              contentPadding: EdgeInsets.all(15.w),
               border: InputBorder.none,
               hintText: 'Search'.tr,
 
@@ -5633,16 +5647,13 @@ Widget productCard(Product product, context, int index) {
                   width: MediaQuery
                       .of(context)
                       .size
-                      .width / 2,
+                      .width / 2.4,
                   child: Stack(
                       alignment: Alignment.center,
                       children: [
                         SvgPicture.asset(
                           "assets/images/home/product_background.svg",
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width / 1.0,
+
 
                           fit: BoxFit.fitHeight,
                         ),
@@ -5670,7 +5681,7 @@ Widget productCard(Product product, context, int index) {
                               .of(context)
                               .
                           size
-                              .width / 7,),
+                              .width / 5,),
                           // product image
                           Flexible(
                             flex: 2,
@@ -6301,7 +6312,7 @@ buildShowAddToCartButton(context, Product product) {
             left: MediaQuery
                 .of(context)
                 .size
-                .width / 35
+                .width / 25
 
         ),
         child: SizedBox(
@@ -6507,20 +6518,30 @@ buildAddToCartButton(context, Product product) {
               MediaQuery
                   .of(context)
                   .size
-                  .width / 20),
-          child: SvgPicture.asset(
-            'assets/images/home/add_background.svg',
-            fit: BoxFit.cover,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width / 1.1,
-            height: MediaQuery
-                .of(context)
-                .size
-                .width / 2.9,
+                  .width / 30),
+          child: Padding(
+            padding: EdgeInsets.only(
+          left:     MediaQuery
+              .of(context)
+              .size
+              .width / 40,
+
+              top:  MediaQuery
+                  .of(context)
+                  .size
+                  .width / 40,
+  ),
+            child: SvgPicture.asset(
+              'assets/images/home/add_background.svg',
+              fit: BoxFit.cover,
+
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 3.0,
 
 
+            ),
           ),
         ),
 

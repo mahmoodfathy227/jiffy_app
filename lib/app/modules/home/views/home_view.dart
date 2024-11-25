@@ -373,11 +373,14 @@ homeController: homeController,
                   //                 .featuredProducts,
                   //             context))),
                   Obx(() {
-                    return viewProductSection(
-                        'Best Selling Product'.tr,
-                        homeController.homePageData.value
-                            .featuredProducts,
-                        context);
+                    return Transform.translate(
+                      offset: const Offset(0, -30),
+                      child: viewProductSection(
+                          'Best Selling Product'.tr,
+                          homeController.homePageData.value
+                              .featuredProducts,
+                          context),
+                    );
                   }),
                   SizedBox(
                     height: 9.h,
@@ -418,7 +421,9 @@ homeController: homeController,
                   //       ),
                   //     ),
                   //     child: premiumProduct(context)),
-                  premiumProduct(context),
+                  Transform.translate(
+                      offset: const Offset(0, -70),
+                      child: premiumProduct(context)),
                   SizedBox(
                     height: 35.h,
                   ),
@@ -463,15 +468,16 @@ homeController: homeController,
                   //                 .featuredProducts,
                   //             context))),
                   Obx(() {
-                    return viewProductSection(
-                        'Perfumes'.tr,
-                        homeController.homePageData.value
-                            .featuredProducts,
-                        context);
+                    return Transform.translate(
+                      offset: const Offset(0, -60),
+                      child: viewProductSection(
+                          'Perfumes'.tr,
+                          homeController.homePageData.value
+                              .featuredProducts,
+                          context),
+                    );
                   }),
-                  SizedBox(
-                    height: 9.h,
-                  ),
+
                 ])));
   }
 
@@ -495,22 +501,25 @@ homeController: homeController,
         fit: BoxFit.cover,
       )
           :
-      CachedNetworkImage(
-        imageUrl: homeController.homePageData.value.banners![0].image!,
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, error) =>
-            Image.asset(
-              'assets/images/home/banner1.png',
-              width: 375.w,
-              height: 193.h,
-              fit: BoxFit.cover,
-            ),
-        placeholder: (context, url) =>
-            Lottie.asset(
-                "assets/images/jiffy_placeholder.json"
-            ),
+      Transform.translate(
+        offset: const Offset(0, -50),
+        child: CachedNetworkImage(
+          imageUrl: homeController.homePageData.value.banners![0].image!,
+          width: 375.w,
+          height: 193.h,
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) =>
+              Image.asset(
+                'assets/images/home/banner1.png',
+                width: 375.w,
+                height: 193.h,
+                fit: BoxFit.cover,
+              ),
+          placeholder: (context, url) =>
+              Lottie.asset(
+                  "assets/images/jiffy_placeholder.json"
+              ),
+        ),
       );
   }
 
@@ -534,22 +543,25 @@ homeController: homeController,
         fit: BoxFit.cover,
       )
           :
-      CachedNetworkImage(
-        imageUrl: homeController.homePageData.value.banners![1].image!,
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, error) =>
-            Image.asset(
-              'assets/images/home/banner1.png',
-              width: 375.w,
-              height: 193.h,
-              fit: BoxFit.cover,
-            ),
-        placeholder: (context, url) =>
-            Lottie.asset(
-                "assets/images/jiffy_placeholder.json"
-            ),
+      Transform.translate(
+        offset: const Offset(0, -90),
+        child: CachedNetworkImage(
+          imageUrl: homeController.homePageData.value.banners![1].image!,
+          width: 375.w,
+          height: 193.h,
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) =>
+              Image.asset(
+                'assets/images/home/banner1.png',
+                width: 375.w,
+                height: 193.h,
+                fit: BoxFit.cover,
+              ),
+          placeholder: (context, url) =>
+              Lottie.asset(
+                  "assets/images/jiffy_placeholder.json"
+              ),
+        ),
       );
   }
 
@@ -581,22 +593,25 @@ homeController: homeController,
         fit: BoxFit.fill,
       )
           :
-      CachedNetworkImage(
-        imageUrl: homeController.homePageData.value.banners![2].image!,
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, error) =>
-            Image.asset(
-              'assets/images/home/banner1.png',
-              width: 375.w,
-              height: 193.h,
-              fit: BoxFit.cover,
-            ),
-        placeholder: (context, url) =>
-            Lottie.asset(
-                "assets/images/jiffy_placeholder.json"
-            ),
+      Transform.translate(
+        offset: const Offset(0, -60),
+        child: CachedNetworkImage(
+          imageUrl: homeController.homePageData.value.banners![2].image!,
+          width: 375.w,
+          height: 193.h,
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) =>
+              Image.asset(
+                'assets/images/home/banner1.png',
+                width: 375.w,
+                height: 193.h,
+                fit: BoxFit.cover,
+              ),
+          placeholder: (context, url) =>
+              Lottie.asset(
+                  "assets/images/jiffy_placeholder.json"
+              ),
+        ),
       );
     ;
   }
@@ -663,32 +678,36 @@ homeController: homeController,
             print('See All tapped');
           },
         ),
-        Container(
-          height: 290.h + 65.h,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          padding: EdgeInsetsDirectional.only(start: 5.w),
-          child:
-          product.length == 0 ?
-          ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-                 return
 
-                productCard(AppConstants.sampleProduct, context, index);
-            },
-          )
-              :
-          ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: product.length,
-            itemBuilder: (context, index) {
-              return productCard(product[index], context, index);
-            },
+        Transform.translate(
+          offset: const Offset(0, -30),
+          child: Container(
+            height: 290.h + 65.h,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            padding: EdgeInsetsDirectional.only(start: 5.w),
+            child:
+            product.length == 0 ?
+            ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                   return
+
+                  productCard(AppConstants.sampleProduct, context, index);
+              },
+            )
+                :
+            ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: product.length,
+              itemBuilder: (context, index) {
+                return productCard(product[index], context, index);
+              },
+            ),
           ),
         ),
       ],
@@ -821,93 +840,42 @@ homeController: homeController,
                         duration: const Duration(milliseconds: 300),
                         child: cartController.cartItems.any((item) =>
                         item.product.id == product.id) ?
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                addToCart(product);
-                              },
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                      height: 100.h,
-                                      color: Colors.white,
-                                      fit: BoxFit.cover,
-                                      "assets/images/home/add_to_cart_premium.svg"),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 15.h),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.only(
-                                              start: 5.w,
-
-
-                                            ),
-                                            child: InkWell(
-                                              onTap: () {
-                                                handleDecrement(product);
-                                              },
-                                              child: SvgPicture.asset(
-                                                'assets/images/home/minus.svg',
-                                                color: primaryColor,
-                                                height: 20.h,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5.h,
-                                          )
-                                        ]),
-                                        Column(children: [
-                                          Text(
-                                            '${cartController
-                                                .cartItems[cartController
-                                                .cartItems.indexWhere((item) =>
-                                            item.product.id == product.id)]
-                                                .quantity}',
-                                            textAlign: TextAlign.center,
-                                            style: primaryTextStyle(
-
-                                              size: 20.sp.round(),
-                                              height: 1.05,
-                                              weight: FontWeight.w900,
-                                              letterSpacing: -0.41,
-                                              color: primaryColor,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 2.h,
-                                          )
-                                        ]),
-                                        Column(
-                                          children: [
+                        Transform.translate(
+                          offset: Offset(0, 20),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  addToCart(product);
+                                },
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        height: 100.h,
+                                        color: Colors.white,
+                                        fit: BoxFit.cover,
+                                        "assets/images/home/add_to_cart_premium.svg"),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 15.h),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Column(children: [
                                             Padding(
-                                              padding:
-                                              Get.locale!.languageCode == 'ar' ?
-                                              EdgeInsets.only(
-                                                  left: 5.w
+                                              padding: EdgeInsetsDirectional.only(
+                                                start: 5.w,
 
-
-                                              )
-                                              :
-                                              EdgeInsets.only(
-
-
-                                                right: 5.w
 
                                               ),
                                               child: InkWell(
                                                 onTap: () {
-                                                  handleIncrement(product);
+                                                  handleDecrement(product);
                                                 },
                                                 child: SvgPicture.asset(
-                                                  'assets/images/home/plus.svg',
+                                                  'assets/images/home/minus.svg',
                                                   color: primaryColor,
                                                   height: 20.h,
                                                 ),
@@ -916,29 +884,86 @@ homeController: homeController,
                                             SizedBox(
                                               height: 5.h,
                                             )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                          ]),
+                                          Column(children: [
+                                            Text(
+                                              '${cartController
+                                                  .cartItems[cartController
+                                                  .cartItems.indexWhere((item) =>
+                                              item.product.id == product.id)]
+                                                  .quantity}',
+                                              textAlign: TextAlign.center,
+                                              style: primaryTextStyle(
 
-                          ],
+                                                size: 20.sp.round(),
+                                                height: 1.05,
+                                                weight: FontWeight.w900,
+                                                letterSpacing: -0.41,
+                                                color: primaryColor,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 2.h,
+                                            )
+                                          ]),
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                Get.locale!.languageCode == 'ar' ?
+                                                EdgeInsets.only(
+                                                    left: 5.w
+
+
+                                                )
+                                                :
+                                                EdgeInsets.only(
+
+
+                                                  right: 5.w
+
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    handleIncrement(product);
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    'assets/images/home/plus.svg',
+                                                    color: primaryColor,
+                                                    height: 20.h,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5.h,
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                          ),
                         )
                             :
                         GestureDetector(
                           onTap: () {
                             addToCart(product);
                           },
-                          child: SvgPicture.asset(
-                              height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 4.1,
-                              fit: BoxFit.cover,
-                              "assets/images/home/add_to_cart_premium.svg"),
+                          child: Transform.translate(
+                            offset: Offset(0, 15),
+                            child: SvgPicture.asset(
+                                height: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 3.9,
+                                fit: BoxFit.cover,
+                                "assets/images/home/add_to_cart_premium.svg"),
+                          ),
                         ),
                       );
                     }),

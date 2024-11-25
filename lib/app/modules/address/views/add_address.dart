@@ -329,7 +329,7 @@ class AddAddress extends GetView<AddressController> {
                       child: CustomTextField(
 
                           errorText: controller.stateError.value,
-initialValue: homeController.state.value.isEmpty? '' : homeController.state.value,
+initialValue: homeController.state.value.isEmpty? '' : homeController.state.value.replaceAll('.', ''),
                           labelText: "State*", onChanged: (value) {
                         controller.state.value = value;
                         print("state is ${controller.state.value}");
@@ -341,7 +341,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
 
                           errorText: controller.cityError.value,
 
-                          initialValue: homeController.city.value.isEmpty? '' : homeController.city.value,
+                          initialValue: homeController.city.value.isEmpty? '' : homeController.city.value.replaceAll('.', ''),
 
                           labelText: "City", onChanged: (value) {
                         controller.city.value = value;

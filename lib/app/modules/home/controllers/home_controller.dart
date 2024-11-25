@@ -252,7 +252,7 @@ isCategoriesLoading.value = true; // استخدام القيمة المتغير�
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         print('Location services are disabled.');
-        Get.snackbar("Location", "Location services are disabled", colorText: Colors.white);
+        // Get.snackbar("Location", "Location services are disabled", colorText: Colors.white);
         isLocationLoading.value = false;
       }
 
@@ -265,11 +265,13 @@ isCategoriesLoading.value = true; // استخدام القيمة المتغير�
         }
         isLocationLoading.value = false;
       }
+
+
       Position position = await Geolocator.getCurrentPosition();
       List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
       var first = placemarks.first;
-      state.value = first.administrativeArea!;
-      city.value = first.locality!;
+      state.value = first.administrativeArea!.substring(0, 8) + '..';
+      city.value =first.locality!.length >= 8 ? first.locality!.substring(0, 8) + '..' :first.locality! ;
       country.value = first.country!;
      isLocationLoading.value = false;
 print("Your state is ${state.value} and city is ${city.value}");

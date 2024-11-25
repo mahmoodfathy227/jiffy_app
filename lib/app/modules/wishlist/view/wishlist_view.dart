@@ -89,9 +89,12 @@ class WishlistView extends GetView<WishlistController> {
                                 ? Expanded(
                                 child: loadingIndicatorWidget())
                                 : Expanded(
-                              child: ShowUp(
-                                child: buildProductGrid(context),
-                                delay: 400,
+                              child: Transform.translate(
+                                offset: Offset(0, -90.h),
+                                child: ShowUp(
+                                  child: buildProductGrid(context),
+                                  delay: 400,
+                                ),
                               ),
                             );
                           }),

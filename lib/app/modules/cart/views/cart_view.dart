@@ -103,7 +103,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 Future.delayed(Duration(milliseconds: 500), () {
-  cartController.fetchCartDetailsFromAPI();
+  // cartController.fetchCartDetailsFromAPI();
 });
     // _handleIncomingLinks();
     _controller = AnimationController(

@@ -226,31 +226,35 @@ class SearchView extends GetView<CustomSearchController> {
           ),
           child: Text("No products found",
             style: secondaryTextStyle(color: Colors.black),),
-        ),) :
-        GridView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          physics: const NeverScrollableScrollPhysics(),
+        ),)
+            :
+        Transform.translate(
+          offset: const Offset(0, -50),
+          child: GridView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
 
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
 
-            crossAxisCount: 2,
+              crossAxisCount: 2,
 
-            crossAxisSpacing: 1,
-            // width / height: fixed for *all* items
-            childAspectRatio: (0.7 / 1.3),
+              crossAxisSpacing: 1,
+              // width / height: fixed for *all* items
+              childAspectRatio: (1.0 / 1.9),
+            ),
+            itemCount: customSearchController.filteredProducts.length,
+            itemBuilder: (context, index) {
+              return
+                SizedBox(
+
+                    child: productCard(customSearchController.filteredProducts[index] ,context, index, ));
+              //   buildProductCard(
+              //     product: customSearchController.filteredProducts[index],);
+              // globalProductCard(
+              //     customSearchController.filteredProducts[index], index);
+            },
           ),
-          itemCount: customSearchController.filteredProducts.length,
-          itemBuilder: (context, index) {
-            return
-              SizedBox(
-
-                  child: productCard(customSearchController.filteredProducts[index] ,context, index, ));
-            //   buildProductCard(
-            //     product: customSearchController.filteredProducts[index],);
-            // globalProductCard(
-            //     customSearchController.filteredProducts[index], index);
-          },
         ),
       );
     });
