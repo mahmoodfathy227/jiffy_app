@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
@@ -238,7 +239,7 @@ void changeAddressStatus(status) {
   void fetchAddresses() async {
     if (userToken != null) {
       try {
-        isLoading(true);
+        // isLoading(true);
         final response = await apiConsumer.get('profile/address-list');
         addressList.value = (response['data']["addresses"] as List)
             .map((address) => Address.fromJson(address))
@@ -265,20 +266,22 @@ void changeAddressStatus(status) {
       } finally {
         // clearFieldsAndErrors();
 
-        isLoading(false);
+        // isLoading(false);
       }
     }
   }
 
   void addAddress() async {
     print('tsadsad');
-    HomeController homeController;
 
 
+    var random = Random();
+    var randomNumber = random.nextInt(1000) + 1;
+    print("your filled data ex are 2 ${phone.value}, ${address.value} ");
     final newAddress = Address(
-      id: 0,
+      id: randomNumber,
       label: selectedLabel.value,
-      // apartment: apartment.value,
+      apartment: apartment.value,
       floor: floor.value,
       building: building.value,
       address: address.value,
@@ -474,7 +477,7 @@ if(address.value.isEmpty){
     markers['custom_marker'] = marker;
   }
 
-  void updateAddress(Address addressToUpdate) async {
+  Future updateAddress(Address addressToUpdate) async {
     // if (!validateField(label.value, labelError) ||
     //     !validateField(apartment.value, apartmentError) ||
     //     !validateField(phone.value, phoneError) ||
@@ -484,21 +487,23 @@ if(address.value.isEmpty){
 
     final updatedAddress = Address(
       id: addressToUpdate.id,
-      label: label.value,
-      // apartment: apartment.value,
-      floor: floor.value,
-      building: building.value,
-      address: address.value,
-      phone: phone.value,
-      city: city.value,
-      country: selectedCountry.value,
-      state: state.value,
-      latitude: latitude.value.isEmpty || latitude.value == null
-          ? '33.888630'
-          : latitude.value,
-      longitude: longitude.value.isEmpty || longitude.value == null
-          ? '35.495480'
-          : longitude.value,
+      label: label.value.isEmpty ? addressToUpdate.label :  label.value,
+      apartment: apartment.value.isEmpty ? addressToUpdate.apartment : apartment.value,
+      floor: floor.value.isEmpty ? addressToUpdate.floor : floor.value,
+      building: building.value.isEmpty? addressToUpdate.building : building.value,
+      address: address.value.isEmpty? addressToUpdate.address : address.value,
+      phone: phone.value.isEmpty? addressToUpdate.phone : phone.value,
+      city: city.value.isEmpty? addressToUpdate.city : city.value,
+      country: selectedCountry.value.isEmpty? addressToUpdate.country : selectedCountry.value,
+      state: state.value.isEmpty? addressToUpdate.state : state.value,
+      latitude: addressToUpdate.latitude.toString().isEmpty
+          ?
+      '33.888630'
+          :addressToUpdate.latitude.toString(),
+      longitude: addressToUpdate.longitude.toString().isEmpty
+          ?
+      '33.888630'
+          :addressToUpdate.longitude.toString(),
       isDefault: addressToUpdate.isDefault,
     );
 
@@ -508,11 +513,11 @@ if(address.value.isEmpty){
         'profile/address-update/${addressToUpdate.id}',
         body: updatedAddress.toJson(),
       );
-
+print("update address is ${updatedAddress.toJson()}");
       clearFieldsAndErrors();
       Get.snackbar('Success', 'Address updated successfully');
       print("updated successfully");
-      Get.to(Routes.MAIN);
+      Get.toNamed(Routes.MAIN);
        fetchAddresses();
 
     } catch (e) {

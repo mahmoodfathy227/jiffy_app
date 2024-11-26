@@ -37,7 +37,7 @@ class AddAddress extends GetView<AddressController> {
       ),
 
       floatingActionButton: Obx(() {
-        Get.put(AddressController());
+        // Get.put(AddressController());
         return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -57,9 +57,10 @@ class AddAddress extends GetView<AddressController> {
               buttonName: 'Save Address', context: context,
               isLoading: controller.isLoading.value,
               onPressed: () {
+                print("your filled data ex are 2 ${controller.phone.value}, ${controller.address.value} ");
                 controller.addAddress();
-                controller.validateField(
-                    controller.label.value, controller.labelError);
+                // controller.validateField(
+                //     controller.label.value, controller.labelError);
               },
 
             ),
@@ -357,7 +358,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
               return Row(
                 children: [
                   Expanded(child: CustomTextField(
-                      customTextEditingController: controller.addressTextEditingController.value,
+                      // customTextEditingController: controller.addressTextEditingController.value,
 
                       errorText: controller.addressError.value,
 
@@ -372,15 +373,15 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
               );
             }),
             SizedBox(height: kDefaultPadding,),
-            //Flat Floor Building
+            //Apartment Floor Building
 
             Row(
               children: [
                 Expanded(child: CustomTextField(
-                    errorText: controller.floorError.value,
+                    errorText: controller.apartmentError.value,
 
-                    labelText: "Flat", onChanged: (value) {
-
+                    labelText: "Apartment", onChanged: (value) {
+                  controller.apartment.value = value;
 
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
@@ -415,6 +416,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
                       labelText: "Phone*",
                       onChanged: (value) {
                         controller.phone.value = value;
+                        print("phone is ${controller.phone.value}");
                       })),
 
                 ],

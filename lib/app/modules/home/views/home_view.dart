@@ -700,13 +700,16 @@ homeController: homeController,
               },
             )
                 :
-            ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: product.length,
-              itemBuilder: (context, index) {
-                return productCard(product[index], context, index);
-              },
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: 10.w),
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: product.length,
+                itemBuilder: (context, index) {
+                  return productCard(product[index], context, index);
+                },
+              ),
             ),
           ),
         ),
@@ -818,7 +821,7 @@ homeController: homeController,
                     ),
 
                     Transform.translate(
-                      offset: const Offset(0, 25),
+                      offset:  Offset(0, 55.h),
                       child: Container(
                           width: 100.w,
                           alignment: Alignment.center,
@@ -828,7 +831,7 @@ homeController: homeController,
                               textAlign: TextAlign.center,
                               style: primaryTextStyle(
                                 color: Color(0xFFFEFEFE),
-                                size: 15.sp.round(),
+                                size: 17.sp.round(),
                               )
                           )
                       ),
@@ -1112,10 +1115,15 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                 return index * MediaQuery
                     .of(context)
                     .size
+                    .height / 9;
+              } else if (index ==3){
+                return index * MediaQuery
+                    .of(context)
+                    .size
                     .height / 6;
               }
               else {
-                homeController.toggleRotation();
+                // homeController.toggleRotation();
                 return index * MediaQuery
                     .of(context)
                     .size
@@ -1123,7 +1131,7 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
               }
             }
             double curveOffset = math.sin(
-                (upperValue(index, offset) - offset) / 100) * 20;
+                (upperValue(index, offset) - offset) / 90) * 10;
 
             return GestureDetector(
               onTap: () {
@@ -1184,10 +1192,15 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                 return index * MediaQuery
                     .of(context)
                     .size
+                    .height / 9;
+              } else if (index ==3){
+                return index * MediaQuery
+                    .of(context)
+                    .size
                     .height / 6;
               }
               else {
-                homeController.toggleRotation();
+                // homeController.toggleRotation();
                 return index * MediaQuery
                     .of(context)
                     .size

@@ -20,7 +20,7 @@ class OrdersView extends GetView<OrdersController> {
     var screenHeight = MediaQuery.of(context).size.height;
 
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
 
         body: Obx(() {
@@ -47,6 +47,9 @@ class OrdersView extends GetView<OrdersController> {
                           controller.selectedStatus.value == "cancelled"?
                           Color(0xFFC40000)
                           :
+                          controller.selectedStatus.value == 'all'?
+                              primaryColor
+                          :
                           Color(0xFF33C200),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -58,13 +61,13 @@ class OrdersView extends GetView<OrdersController> {
                         splashBorderRadius: BorderRadius.circular(30),
                         splashFactory: NoSplash.splashFactory,
                         labelStyle: primaryTextStyle(
-                          size: 14.sp.round(),
+                          size: 11.sp.round(),
                           color:  Colors.white,
                           weight: FontWeight.w400,
                         ),
                         unselectedLabelColor: Colors.black,
                         unselectedLabelStyle: primaryTextStyle(
-                          size: 14.sp.round(),
+                          size: 11.sp.round(),
                           color: Colors.black,
                           weight: FontWeight.w400,
                         ),
@@ -75,14 +78,17 @@ class OrdersView extends GetView<OrdersController> {
                         ),
                         onTap: (index) {
                           if (index == 0) {
-                            controller.setStatus('pending');
+                            controller.setStatus('all');
                           } else if (index == 1) {
-                            controller.setStatus('delivered');
+                            controller.setStatus('pending');
                           } else if (index == 2) {
+                            controller.setStatus('delivered');
+                          } else {
                             controller.setStatus('cancelled');
                           }
                         },
                         tabs:  [
+                          Tab(text: 'All'.tr, height: 55.h, ),
                           Tab(text: 'Pending'.tr, height: 55.h, ),
                           Tab(text: 'Delivered'.tr, height: 55.h,),
                           Tab(text: 'Cancelled'.tr, height: 55.h,),

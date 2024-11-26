@@ -19,8 +19,8 @@ class SelectFromMap extends GetView<AddressController> {
 
   @override
   Widget build(BuildContext context) {
-    AddressController addressController = Get.put(AddressController());
-    addressController.getPermission();
+    // AddressController addressController = Get.put(AddressController());
+    controller.getPermission();
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(

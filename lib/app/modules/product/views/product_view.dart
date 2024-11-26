@@ -1728,7 +1728,7 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                       .of(context)
                       .size
                       .height / 1.2,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitHeight,
                   width: MediaQuery
                       .of(context)
                       .size

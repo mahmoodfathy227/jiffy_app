@@ -17,7 +17,7 @@ class Country {
 class Address {
   int id;
   String label;
-  // String apartment;
+  String apartment;
   String floor;
   String building;
   String address;
@@ -32,7 +32,7 @@ class Address {
   Address({
     required this.id,
     required this.label,
-    // required this.apartment,
+    required this.apartment,
     required this.floor,
     required this.building,
     required this.address,
@@ -49,7 +49,7 @@ class Address {
     return Address(
       id: json['id'],
       label: json['label'],
-      // apartment: json['apartment'],
+      apartment: json['apartment'] ?? "",
       floor: json['floor'] ?? "0",
       building: json['building']?? "0",
       address: json['address'],
@@ -67,7 +67,7 @@ class Address {
     return {
       'id': id,
       'label': label,
-      // 'apartment': apartment,
+      'apartment': apartment,
       'floor': floor,
       'building': building,
       'address': address,

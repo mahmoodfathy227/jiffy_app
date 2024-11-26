@@ -139,7 +139,8 @@ const Map<String , String> en = {
 "qty" : "qty",
   'PENDING' : 'PENDING',
 'No Orders available' : 'No Orders available',
-    "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction" : "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction"
+    "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction" : "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction",
+  'All' : 'All'
 
 
 

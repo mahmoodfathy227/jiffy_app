@@ -11,7 +11,7 @@ class OrdersController extends GetxController {
   var orders = <Order>[].obs;
   var loading = true.obs;
   var singelLoading = true.obs;
-  var selectedStatus = 'pending'.obs;
+  var selectedStatus = 'all'.obs;
 
   @override
   void onInit() {
@@ -33,6 +33,7 @@ class OrdersController extends GetxController {
       if (response['status'] == 'success') {
         List<dynamic> data = response['data']['orders'];
         orders.assignAll(data.map((e) => Order.fromJson(e)).toList());
+        print("order gottrn susccefully");
       } else {
         print('Failed to fetch orders: ${response['data']}');
       }

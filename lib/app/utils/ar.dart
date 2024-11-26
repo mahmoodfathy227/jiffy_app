@@ -141,7 +141,8 @@ const Map<String , String> ar = {
   'Cancelled' : 'تم الالغاء',
       'PENDING' : 'قيد الإنتظار',
   'No Orders available' : 'لا يوجد طلبات',
-  "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction" : "اجعلنا نساعدك بالطريقة الى تختارها من أجل أن نصل لحل أمثل لمشكلتك حتى نرضيك بشكل كامل"
+  "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction" : "اجعلنا نساعدك بالطريقة الى تختارها من أجل أن نصل لحل أمثل لمشكلتك حتى نرضيك بشكل كامل",
+  'All' : 'الكل'
 
 
 

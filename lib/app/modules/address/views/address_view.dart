@@ -23,9 +23,11 @@ class AddressView extends GetView<AddressController> {
 final bool isFromAddress;
   @override
   Widget build(BuildContext context) {
-    AddressController addressController = Get.put(AddressController());
+    // AddressController addressController = Get.put(AddressController());
 
-    addressController.fetchAddresses();
+
+    controller.fetchAddresses();
+    // controller.clearFieldsAndErrors();
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: Stack(
@@ -58,7 +60,9 @@ final bool isFromAddress;
         ],
       ),
 
-      floatingActionButton: Obx(() {
+      floatingActionButton:
+
+      Obx(() {
         return buildFloatingButton(
 
 

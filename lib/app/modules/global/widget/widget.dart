@@ -263,23 +263,27 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                 //     'assets/images/home/menu.svg',
                 //   ),
                 // ),
-                SvgPicture.asset(
-                  'assets/images/splash/logo.svg',
-                  width: 60.w,
-                  height: 52.h,
+                Spacer(),
+                Padding(
+                  padding:  EdgeInsets.only(left: 25.w),
+                  child: SvgPicture.asset(
+                    'assets/images/splash/logo.svg',
+                    width: 60.w,
+                    height: 52.h,
+                  ),
                 ),
                 // SvgPicture.asset(
                 //   'assets/images/home/notification.svg',
                 // ),
-                SizedBox(width: 10.w),
+               Spacer(),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_)=> const SearchView()));
                     // Get.to(SearchView());
                   },
                   child: Container(
-                      width: 30.w,
-                      height: 30.h,
+                      width: 35.w,
+                      height: 35.h,
                       decoration: const ShapeDecoration(
                         color: Colors.white,
                         shape: OvalBorder(),
@@ -5606,6 +5610,7 @@ Widget productCard(Product product, context, int index) {
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: 10.h,),
                                     Obx(() {
                                       return
                                         isProductInCart(product) &&
@@ -5665,7 +5670,7 @@ Widget productCard(Product product, context, int index) {
                   width: MediaQuery
                       .of(context)
                       .size
-                      .width / 1.9,
+                      .width / 2.3,
                   child: Padding(
                     padding: EdgeInsets.only(
                         right: MediaQuery
@@ -6289,7 +6294,7 @@ buildShowAddToCartButton(context, Product product) {
             MediaQuery
                 .of(context)
                 .size
-                .width / 20),
+                .width / 33.h),
         child: SvgPicture.asset(
           'assets/images/home/borderCart.svg',
           fit: BoxFit.cover,
@@ -6297,7 +6302,7 @@ buildShowAddToCartButton(context, Product product) {
           height: MediaQuery
               .of(context)
               .size
-              .width / 2.8,
+              .width / 3.5,
 
 
         ),
@@ -6308,7 +6313,7 @@ buildShowAddToCartButton(context, Product product) {
             top: MediaQuery
                 .of(context)
                 .size
-                .width / 25,
+                .width / 33,
             left: MediaQuery
                 .of(context)
                 .size
@@ -6316,13 +6321,10 @@ buildShowAddToCartButton(context, Product product) {
 
         ),
         child: SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width / 2.8,
+
 
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.w,
 
             ),
             child: Row(
@@ -6521,15 +6523,7 @@ buildAddToCartButton(context, Product product) {
                   .width / 30),
           child: Padding(
             padding: EdgeInsets.only(
-          left:     MediaQuery
-              .of(context)
-              .size
-              .width / 40,
 
-              top:  MediaQuery
-                  .of(context)
-                  .size
-                  .width / 40,
   ),
             child: SvgPicture.asset(
               'assets/images/home/add_background.svg',
@@ -6538,7 +6532,7 @@ buildAddToCartButton(context, Product product) {
               height: MediaQuery
                   .of(context)
                   .size
-                  .width / 3.0,
+                  .width / 3.5,
 
 
             ),

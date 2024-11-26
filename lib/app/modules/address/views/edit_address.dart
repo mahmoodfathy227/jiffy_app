@@ -55,15 +55,18 @@ final Address addressToUpdate ;
 
               buttonName: 'Save Address'.tr, context: context,
               isLoading: controller.isLoading.value,
-              onPressed: () {
-                controller.updateAddress(addressToUpdate);
+              onPressed: () async{
+
+                await controller.updateAddress(addressToUpdate);
 
               },
 
             ),
           ],
         );
-      }),
+      },
+     ),
+
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
@@ -275,7 +278,7 @@ final Address addressToUpdate ;
                               isDense: true,
                               icon: SvgPicture.asset(
                                   "assets/images/address/arrow-down.svg"),
-                              value: controller.selectedCountry.value,
+                              value: addressToUpdate.country ?? controller.selectedCountry.value,
                               isExpanded: true,
                               onChanged: (String? newValue) {
                                 controller.selectedCountry.value = newValue!;
@@ -312,9 +315,11 @@ final Address addressToUpdate ;
                   Expanded(
                       child: CustomTextField(
 
+initialValue: addressToUpdate.state,
                           height: 50.h,
 errorText: controller.stateError.value,
-                          labelText: addressToUpdate.state ?? "State", onChanged: (value) {
+                          labelText: "State" , onChanged: (value) {
+
                         controller.state.value = value;
                       })),
                   SizedBox(width: kDefaultPadding * 0.8,),
@@ -324,7 +329,7 @@ errorText: controller.stateError.value,
 
                           errorText: controller.cityError.value,
                           height: 50.h,
-                          labelText: addressToUpdate.city ?? "City", onChanged: (value) {
+                          labelText: "City" , onChanged: (value) {
                         controller.city.value = value;
                       })),
                 ],
@@ -338,7 +343,8 @@ errorText: controller.stateError.value,
                 children: [
                   Expanded(
                       child: CustomTextField(
-                      customTextEditingController: controller.addressTextEditingController.value,
+                        initialValue: addressToUpdate.address,
+                      // customTextEditingController: controller.addressTextEditingController.value,
                       errorText: controller.addressError.value,
                       height: 50.h,
                       labelText:
@@ -356,25 +362,27 @@ errorText: controller.stateError.value,
             Row(
               children: [
                 Expanded(child: CustomTextField(
-                    errorText: controller.floorError.value,
+    initialValue: addressToUpdate.apartment,
+                    errorText: controller.apartmentError.value,
                     height: 50.h,
-                    labelText: addressToUpdate.floor ?? "Floor", onChanged: (value) {
+                    labelText: "Apartment", onChanged: (value) {
 
 
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
-
+                    initialValue: addressToUpdate.floor,
                     errorText: controller.floorError.value,
                     height: 50.h,
-                    labelText: addressToUpdate.floor ?? "Floor", onChanged: (value) {
+                    labelText: "Floor" , onChanged: (value) {
                   controller.floor.value = value;
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
                     errorText: controller.buildingError.value,
+                    initialValue: addressToUpdate.building,
                     height: 50.h,
-                    labelText: addressToUpdate.building ?? "Building", onChanged: (value) {
+                    labelText: "Building" , onChanged: (value) {
                   controller.building.value = value;
                 })),
 
@@ -392,9 +400,11 @@ errorText: controller.stateError.value,
                       keyboardType: TextInputType.number,
                       errorText: controller.phoneError.value,
                       height: 50.h,
-                      labelText: addressToUpdate.phone ?? "Phone",
+                      initialValue: addressToUpdate.phone,
+                      labelText: "Phone" ,
                       onChanged: (value) {
                         controller.phone.value = value;
+                        print("phone value ${controller.phone.value}");
                       })),
 
                 ],

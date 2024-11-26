@@ -266,14 +266,19 @@ isCategoriesLoading.value = true; // استخدام القيمة المتغير�
         isLocationLoading.value = false;
       }
 
+try{
+  Position position = await Geolocator.getCurrentPosition();
+  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+  var first = placemarks.first;
+  state.value = first.administrativeArea!.substring(0, 8) + '..';
+  city.value =first.locality!.length >= 8 ? first.locality!.substring(0, 8) + '..' :first.locality! ;
+  country.value = first.country!;
+  isLocationLoading.value = false;
+  print("Your state is ${state.value} and city is ${city.value}");
+}catch(e){
+        print("location error ${e.toString()}");
+        Get.snackbar('Location', e.toString(), colorText: Colors.white);
+}
 
-      Position position = await Geolocator.getCurrentPosition();
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-      var first = placemarks.first;
-      state.value = first.administrativeArea!.substring(0, 8) + '..';
-      city.value =first.locality!.length >= 8 ? first.locality!.substring(0, 8) + '..' :first.locality! ;
-      country.value = first.country!;
-     isLocationLoading.value = false;
-print("Your state is ${state.value} and city is ${city.value}");
   }
 }
