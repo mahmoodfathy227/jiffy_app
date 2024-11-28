@@ -1,5 +1,5 @@
 name: jiffy
-version: 2.0.60+60
+version: 2.0.61+61
 publish_to: none
 description: jiffy Amazing Ecommerce App In Lebnanon
 environment:
@@ -107,10 +107,18 @@ flutter:
 
     - family: museomoderno
       fonts:
-        - asset: assets/fonts/museomoderno/MuseoModerno-Medium.ttf
-        - asset: assets/fonts/museomoderno/MuseoModerno-Regular.ttf
-        - asset: assets/fonts/museomoderno/MuseoModerno-Black.ttf
-        - asset: assets/fonts/museomoderno/MuseoModerno-Bold.ttf
+        - asset: assets/fonts/parkins/Parkinsans-Light.ttf
+        - asset: assets/fonts/parkins/Parkinsans-Medium.ttf
+        - asset: assets/fonts/parkins/Parkinsans-Regular.ttf
+        - asset: assets/fonts/parkins/Parkinsans-Bold.ttf
+        - asset: assets/fonts/parkins/Parkinsans-ExtraBold.ttf
+
+
+
+  #        - asset: assets/fonts/museomoderno/MuseoModerno-Medium.ttf
+#        - asset: assets/fonts/museomoderno/MuseoModerno-Regular.ttf
+#        - asset: assets/fonts/museomoderno/MuseoModerno-Black.ttf
+#        - asset: assets/fonts/museomoderno/MuseoModerno-Bold.ttf
 
 
   uses-material-design: true
@@ -135,3 +143,5 @@ flutter:
     - assets/images/cart/
     - assets/images/payment/
     - shorebird.yaml
+    - assets/fonts/parkins/
+    - assets/fonts/montaserat/
