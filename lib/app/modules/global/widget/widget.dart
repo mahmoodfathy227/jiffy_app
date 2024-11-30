@@ -5557,7 +5557,7 @@ Widget productCard(Product product, context, int index) {
                               flex: 1,
                               child: Text(
                                 maxLines: 2,
-                                GetMaxChar(product.name, 12),
+                                GetMaxChar(product.name, 10),
                                 textAlign: TextAlign.center,
                                 style: secondaryTextStyle(
                                   color: const Color(0xFF20003D),

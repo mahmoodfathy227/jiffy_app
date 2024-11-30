@@ -373,14 +373,11 @@ homeController: homeController,
                   //                 .featuredProducts,
                   //             context))),
                   Obx(() {
-                    return Transform.translate(
-                      offset: const Offset(0, -30),
-                      child: viewProductSection(
-                          'Best Selling Product'.tr,
-                          homeController.homePageData.value
-                              .featuredProducts,
-                          context),
-                    );
+                    return viewProductSection(
+                        'Best Selling Product'.tr,
+                        homeController.homePageData.value
+                            .featuredProducts,
+                        context);
                   }),
                   SizedBox(
                     height: 9.h,
@@ -421,9 +418,7 @@ homeController: homeController,
                   //       ),
                   //     ),
                   //     child: premiumProduct(context)),
-                  Transform.translate(
-                      offset: const Offset(0, -70),
-                      child: premiumProduct(context)),
+                  premiumProduct(context),
                   SizedBox(
                     height: 35.h,
                   ),
@@ -468,14 +463,11 @@ homeController: homeController,
                   //                 .featuredProducts,
                   //             context))),
                   Obx(() {
-                    return Transform.translate(
-                      offset: const Offset(0, -60),
-                      child: viewProductSection(
-                          'Perfumes'.tr,
-                          homeController.homePageData.value
-                              .featuredProducts,
-                          context),
-                    );
+                    return viewProductSection(
+                        'Perfumes'.tr,
+                        homeController.homePageData.value
+                            .featuredProducts,
+                        context);
                   }),
 
                 ])));
@@ -502,7 +494,7 @@ homeController: homeController,
       )
           :
       Transform.translate(
-        offset: const Offset(0, -50),
+        offset: const Offset(0, 10),
         child: CachedNetworkImage(
           imageUrl: homeController.homePageData.value.banners![0].image!,
           width: 375.w,
@@ -543,25 +535,22 @@ homeController: homeController,
         fit: BoxFit.cover,
       )
           :
-      Transform.translate(
-        offset: const Offset(0, -90),
-        child: CachedNetworkImage(
-          imageUrl: homeController.homePageData.value.banners![1].image!,
-          width: 375.w,
-          height: 193.h,
-          fit: BoxFit.cover,
-          errorWidget: (context, url, error) =>
-              Image.asset(
-                'assets/images/home/banner1.png',
-                width: 375.w,
-                height: 193.h,
-                fit: BoxFit.cover,
-              ),
-          placeholder: (context, url) =>
-              Lottie.asset(
-                  "assets/images/jiffy_placeholder.json"
-              ),
-        ),
+      CachedNetworkImage(
+        imageUrl: homeController.homePageData.value.banners![1].image!,
+        width: 375.w,
+        height: 193.h,
+        fit: BoxFit.cover,
+        errorWidget: (context, url, error) =>
+            Image.asset(
+              'assets/images/home/banner1.png',
+              width: 375.w,
+              height: 193.h,
+              fit: BoxFit.cover,
+            ),
+        placeholder: (context, url) =>
+            Lottie.asset(
+                "assets/images/jiffy_placeholder.json"
+            ),
       );
   }
 
@@ -593,25 +582,22 @@ homeController: homeController,
         fit: BoxFit.fill,
       )
           :
-      Transform.translate(
-        offset: const Offset(0, -60),
-        child: CachedNetworkImage(
-          imageUrl: homeController.homePageData.value.banners![2].image!,
-          width: 375.w,
-          height: 193.h,
-          fit: BoxFit.cover,
-          errorWidget: (context, url, error) =>
-              Image.asset(
-                'assets/images/home/banner1.png',
-                width: 375.w,
-                height: 193.h,
-                fit: BoxFit.cover,
-              ),
-          placeholder: (context, url) =>
-              Lottie.asset(
-                  "assets/images/jiffy_placeholder.json"
-              ),
-        ),
+      CachedNetworkImage(
+        imageUrl: homeController.homePageData.value.banners![2].image!,
+        width: 375.w,
+        height: 193.h,
+        fit: BoxFit.cover,
+        errorWidget: (context, url, error) =>
+            Image.asset(
+              'assets/images/home/banner1.png',
+              width: 375.w,
+              height: 193.h,
+              fit: BoxFit.cover,
+            ),
+        placeholder: (context, url) =>
+            Lottie.asset(
+                "assets/images/jiffy_placeholder.json"
+            ),
       );
     ;
   }
@@ -789,7 +775,7 @@ homeController: homeController,
                         "${product.name}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        maxLines: 2,
+                        maxLines: 1,
                         style: primaryTextStyle(
                           color: Color(0xFFFEFEFE),
                           size: 15.sp.round(),
