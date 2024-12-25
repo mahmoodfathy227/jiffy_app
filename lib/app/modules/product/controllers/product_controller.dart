@@ -241,20 +241,21 @@ class ProductController extends GetxController {
 
      }
       print("you attachments are 22 ${product.value.attachments!}");
-      isProductLoading.value = false;
+
 
       setSelectedIndex(selectedIndex.value);
       changeImagesList(selectedColor.value);
       await getProductReviews();
       print("your product data is ${product.value}");
 isAddToCartActive.value = false;
-
+      isProductLoading.value = false;
     } catch (e, stackTrace) {
       print(stackTrace.toString() + ' product test error' + '${e.toString()}');
-      isProductLoading.value = false;
+
       product.value = AppConstants.sampleProduct;
       Get.snackbar("Error", "Product Not Found Redirect..");
       Get.off(() => MainView());
+      isProductLoading.value = false;
     }
   }
 

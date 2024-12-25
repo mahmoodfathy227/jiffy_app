@@ -35,7 +35,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'FullImage.dart';
 
-// final CartController cartController = Get.put(CartController());
+final CartController cartController = Get.put(CartController());
 
 class ProductView extends GetView<ProductController> {
   const ProductView({
@@ -52,128 +52,84 @@ print("${"pro id is ${controller.product.value.id}"}");
 
       body:Obx(() {
         return
-          // controller.product.value.image == null
-          //   ? SizedBox(
-          //       height: MediaQuery.of(context).size.height,
-          //       child: SingleChildScrollView(
-          //         child: Column(
-          //           children: [
-          //             //Search Bar
-          //             _buildSearchWidget(context),
-          //             //Carousel Images
-          //             Opacity(
-          //               opacity: 0.3,
-          //               child: controller.placeHolderImg.value.isEmpty
-          //                   ? SizedBox()
-          //                   : Image.network(
-          //                       controller.placeHolderImg.value,
-          //                       width: MediaQuery.of(context).size.width,
-          //                       height:
-          //                           MediaQuery.of(context).size.height / 2,
-          //                       fit: BoxFit.cover,
-          //                     ),
-          //             ),
-          //
-          //             LoadingWidget(
-          //               Column(
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   children: [
-          //                     //Product Name and Rating
-          //                     _buildProductNameAndStartRating(
-          //                         context, controller.product.value),
-          //                     //Product Price
-          //                     _buildProductPrice(
-          //                         context, controller.product.value),
-          //
-          //                     //Product Details
-          //                     _buildProductDetails(
-          //                         context, controller.product.value),
-          //
-          //                     //Product Reviews
-          //                     _buildProductReviews(
-          //                         context, controller.product.value),
-          //                   ]),
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //     )
-          //   :
-          SizedBox(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      //Carousel Images
-                      _buildProductImagesCarousel(
-                          context, [controller.product.value.image], "", controller.productImages),
-                      CustomAppBar(
-                        myFunction: () {},
-                        title: "Product".tr,
-                        svgPath: "assets/images/shopping-cart.svg",
-                      ),
-                    ],
-                  ),
 
-                  //Search Bar
-                  // _buildSearchWidget(context),
-
-
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          Opacity(
+            opacity: controller.product.value.outOfStock ? 0.5 : 1,
+            child: SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.topCenter,
                       children: [
-                        //build Small Photos
-
-                        SizedBox(
-                          height: 90.h,
+                        //Carousel Images
+                        _buildProductImagesCarousel(
+                            context, [controller.product.value.image], "", controller.productImages),
+                        CustomAppBar(
+                          myFunction: () {},
+                          title: "Product".tr,
+                          svgPath: "assets/images/shopping-cart.svg",
                         ),
-                        //Product Name and Rating
-                        _buildProductNameAndStartRating(
-                            context, controller.product.value),
-                        //Product Price
-                        _buildProductPrice(context, controller.product.value),
-                        //Description
-                        _buildProductDetails(
-                            context, controller.product.value),
+                      ],
+                    ),
 
-                        //Product rating
-                        _buildProductRating(),
-                        //Product Reviews
-                        _buildProductReviews(
-                            context, controller.product.value),
+                    //Search Bar
+                    // _buildSearchWidget(context),
 
-                        //Customer Reviews
-                        _buildCustomersReviews(context),
-                        SizedBox(
-                          height: 100.h,
-                        )
 
-// //Product Colors
-//                           _buildProductColors(context),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //build Small Photos
 
-                        // //Product Sizes
-                        // _buildProductSizes(context),
-                        //Product Details
-                        // _buildProductDetails(
-                        //     context, controller.product.value),
-                        //Product Size Guide
+                          SizedBox(
+                            height: 90.h,
+                          ),
+                          //Product Name and Rating
+                          _buildProductNameAndStartRating(
+                              context, controller.product.value),
+                          //Product Price
+                          _buildProductPrice(context, controller.product.value),
+                          //Description
+                          _buildProductDetails(
+                              context, controller.product.value),
 
-                        // _buildSizeGuide(
-                        //     context, controller.product.value),
+                          //Product rating
+                          _buildProductRating(),
+                          //Product Reviews
+                          _buildProductReviews(
+                              context, controller.product.value),
 
-                        //See Also Products
-                        // _buildSeeAlsoProduct(
-                        //     context, controller.product.value),
-                      ]),
-                ],
+                          //Customer Reviews
+                          _buildCustomersReviews(context),
+                          SizedBox(
+                            height: 100.h,
+                          )
+
+            // //Product Colors
+            //                           _buildProductColors(context),
+
+                          // //Product Sizes
+                          // _buildProductSizes(context),
+                          //Product Details
+                          // _buildProductDetails(
+                          //     context, controller.product.value),
+                          //Product Size Guide
+
+                          // _buildSizeGuide(
+                          //     context, controller.product.value),
+
+                          //See Also Products
+                          // _buildSeeAlsoProduct(
+                          //     context, controller.product.value),
+                        ]),
+                  ],
+                ),
               ),
             ),
           );
@@ -181,7 +137,7 @@ print("${"pro id is ${controller.product.value.id}"}");
       floatingActionButton: Obx(() {
         return
 
-          Row(
+          controller.product.value.outOfStock ? SizedBox() :  Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               AnimatedContainer(
@@ -1010,10 +966,27 @@ print("${"pro id is ${controller.product.value.id}"}");
           //     ],
           //   ),
           // ),
-          Text(
-            "300 gm".tr,
-            style: secondaryTextStyle(
-                weight: FontWeight.w400, size: 16.sp.round()),
+          Row(
+            children: [
+              Text(
+                "300 gm".tr,
+                style: secondaryTextStyle(
+                    weight: FontWeight.w400, size: 16.sp.round()),
+              ),
+              Spacer(),
+           controller.product.value.outOfStock?   Text(
+                "Out of stock".tr,
+                style: secondaryTextStyle(
+                    weight: FontWeight.w400, size: 16.sp.round()),
+              )
+              :
+              Text(
+                "Stock : ${controller.product.value.stock.toString()}".tr,
+                style: secondaryTextStyle(
+                    weight: FontWeight.w400, size: 16.sp.round()),
+              ),
+
+            ],
           ),
           SizedBox(
             height: 5.h,
@@ -1331,13 +1304,17 @@ print("${"pro id is ${controller.product.value.id}"}");
                 width: MediaQuery
                     .of(context)
                     .size
-                    .width - 120.w,
+                    .width - 150.w,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      review.customer!,
-                      style: secondaryTextStyle(),
+                    SizedBox(
+                      width  : 150.w,
+                      child: Text(
+                        maxLines: 1,
+                        review.customer!,
+                        style: secondaryTextStyle(size: 12),
+                      ),
                     ),
                     Spacer(),
                     Container(
@@ -1358,15 +1335,16 @@ print("${"pro id is ${controller.product.value.id}"}");
           ),
           review.comment == null ? SizedBox() :
           SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             child: SizedBox(
-              height: 50.h,
+              height: 40.h,
+
               child:Text(
-                maxLines: 2,
+                maxLines: 4,
                 review.comment! ,
                 style: secondaryTextStyle(
                   color: greyishColor,
-                  size: 12.sp.round(),
+                  size: 10.sp.round(),
                   
                 ),
             

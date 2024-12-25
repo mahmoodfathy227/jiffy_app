@@ -142,11 +142,27 @@ const Map<String , String> ar = {
       'PENDING' : 'قيد الإنتظار',
   'No Orders available' : 'لا يوجد طلبات',
   "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction" : "اجعلنا نساعدك بالطريقة الى تختارها من أجل أن نصل لحل أمثل لمشكلتك حتى نرضيك بشكل كامل",
-  'All' : 'الكل'
-
-
-
-
+  'All' : 'الكل',
+  "Guest" : "زائر",
+  "Home" : "المنزل",
+  "Work" : "العمل",
+  "Address*" : "العنوان*",
+"Apartment" : "المينى",
+  "Floor" : "الدور",
+  "Building" : "المبنى",
+  "Phone*" : "الهاتف*",
+  "State*" : "الولاية*",
+  "City" : "المدينة*",
+  'Thank you for your feedback!' : 'شكرا لك على الملاحظات الخاصة بك',
+  'We appreciated your feedback.\nWe’ll use your feedback to improve your experience.' : 'نحن نشكرك على الملاحظات الخاصة بك.\nسنستخدم ملاحظاتك لتحسين تجربتك.',
+  'Done' : 'تم',
+  'Rate Product' : 'تقييم المنتج',
+  'Submit your review to get 5 points' : 'قم بتقديم الملاحظات لحصول على 5 نقاط',
+  "Would you like to write anything about this product?" : "هل تريد كتابة شيء عن هذا المنتج؟",
+  "Submit Review" : "تقديم الملاحظات",
+  "Shipping Fee" : "رسوم التوصيل",
+  "Discount Applied" : "تم تطبيق الخصم",
+  'Tracking number:' : 'رقم التتبع:',
 
 
 

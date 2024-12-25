@@ -28,7 +28,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
-  final CartController cartController = Get.put(CartController());
+  final CartController cartController = Get.find();
   final ProductController productController = Get.put(ProductController());
 
   late AnimationController _controller;
@@ -102,9 +102,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-Future.delayed(Duration(milliseconds: 500), () {
-  // cartController.fetchCartDetailsFromAPI();
-});
+    Future.delayed(Duration(milliseconds: 500), () {
+      // cartController.fetchCartDetailsFromAPI();
+    });
     // _handleIncomingLinks();
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
@@ -144,8 +144,6 @@ Future.delayed(Duration(milliseconds: 500), () {
 
     _scaleAnimationController.repeat(reverse: true);
   }
-
-
 
 
   @override
@@ -191,20 +189,25 @@ Future.delayed(Duration(milliseconds: 500), () {
                               ],
                             ),
                             child: product.image.isEmpty
-                                ? ClipRRect(child: Image.asset("assets/images/placeholder.png"))
+                                ? ClipRRect(child: Image.asset(
+                                "assets/images/placeholder.png"))
                                 : ClipRRect(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl: product.image!,
-                                      fit: BoxFit.cover,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                  imageUrl: product.image!,
+                                  fit: BoxFit.cover,
 
-                                      placeholder: (context, url) => Lottie.asset("assets/images/jiffy_placeholder.json"),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset("assets/images/placeholder.png", fit: BoxFit.contain,)
-                                    ),
-                                  ),
+                                  placeholder: (context, url) =>
+                                      Lottie.asset(
+                                          "assets/images/jiffy_placeholder.json"),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                        "assets/images/placeholder.png",
+                                        fit: BoxFit.contain,)
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(width: 13.w),
@@ -317,56 +320,59 @@ Future.delayed(Duration(milliseconds: 500), () {
                       bottom: 0.h,
                       end: 0.w,
                       child: Observer(
-                        builder: (_) => Row(
-                          children: [
-                            Dismissible(
+                        builder: (_) =>
+                            Row(
+                              children: [
+                                Dismissible(
 
-                              key: Key(item.product.toString()),
+                                  key: Key(item.product.toString()),
 
-                              background: Container(
-                                color: Colors.transparent,
-                                child: const Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                    child: Icon(Icons.check,
-                                        color: Colors.white, size: 30),
+                                  background: Container(
+                                    color: Colors.transparent,
+                                    child: const Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Icon(Icons.check,
+                                            color: Colors.white, size: 30),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              direction: DismissDirection.startToEnd,
-                              onUpdate: (details) {},
-                              confirmDismiss: (direction) async {
-                                cartController.cartItems[index].isDismissible =
+                                  direction: DismissDirection.startToEnd,
+                                  onUpdate: (details) {},
+                                  confirmDismiss: (direction) async {
+                                    cartController.cartItems[index]
+                                        .isDismissible =
                                     false;
-                                cartController.cartItems.refresh();
-                                return false;
-                              },
-                              onDismissed: (direction) {
-                                //   cartController.removeItem(item);
-                              },
-                              child: InkWell(
-                                onTap: () {
-                                  cartController.removeItem(item);
-                                },
-                                child: Container(
-                                  width: item.isDismissible ? 50.w : 0,
-                                  height: 120.h,
-                                  decoration: BoxDecoration(
-                                    color: item.isDismissible
-                                        ? Colors.red
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Icon(Icons.delete,
-                                        color: Colors.white, size: 24.w),
+                                    cartController.cartItems.refresh();
+                                    return false;
+                                  },
+                                  onDismissed: (direction) {
+                                    //   cartController.removeItem(item);
+                                  },
+                                  child: InkWell(
+                                    onTap: () {
+                                      cartController.removeItem(item);
+                                    },
+                                    child: Container(
+                                      width: item.isDismissible ? 50.w : 0,
+                                      height: 120.h,
+                                      decoration: BoxDecoration(
+                                        color: item.isDismissible
+                                            ? Colors.red
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Icon(Icons.delete,
+                                            color: Colors.white, size: 24.w),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
                       ),
                     ),
                   ],
@@ -515,33 +521,37 @@ Future.delayed(Duration(milliseconds: 500), () {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
-        backgroundColor: primaryBackgroundColor,
+          backgroundColor: primaryBackgroundColor,
           body: cartController.isAuth.value || userToken != null
               ? SizedBox(
-                  height: MediaQuery.sizeOf(context).height,
-                  width: MediaQuery.sizeOf(context).width,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 100.h,
-                        left: 0,
-                        right: 0,
-                        child: buildCartWidgets(),
-                      ),
-                      CustomAppBar(
-                        back: false,
-                        myFunction: () {
-                          print('sadsadsad');
-                          showCustomBlurDialog();
-                        },
-                        title: "Cart".tr,
-                        svgPath: "assets/images/cart/clear.svg",
-                      ),
-                    ],
-                  ))
+              height: MediaQuery
+                  .sizeOf(context)
+                  .height,
+              width: MediaQuery
+                  .sizeOf(context)
+                  .width,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 100.h,
+                    left: 0,
+                    right: 0,
+                    child: buildCartWidgets(),
+                  ),
+                  CustomAppBar(
+                    back: false,
+                    myFunction: () {
+                      print('sadsadsad');
+                      showCustomBlurDialog();
+                    },
+                    title: "Cart".tr,
+                    svgPath: "assets/images/cart/clear.svg",
+                  ),
+                ],
+              ))
               : Align(
-                  alignment: Alignment.center,
-                  child: socialMediaPlaceHolder()
+              alignment: Alignment.center,
+              child: socialMediaPlaceHolder()
           ));
     });
   }
@@ -553,9 +563,9 @@ Future.delayed(Duration(milliseconds: 500), () {
           height: 670.h,
           child: Center(
               child: LoadingAnimationWidget.inkDrop(
-            color: primaryColor,
-            size: 50,
-          )));
+                color: primaryColor,
+                size: 50,
+              )));
     } else if (cartController.cartItems.isEmpty) {
       return SizedBox(
           width: 327.w,
@@ -564,185 +574,193 @@ Future.delayed(Duration(milliseconds: 500), () {
             nameImage: 'assets/images/cart/shopping-cart.png',
             title: 'Your cart is empty!'.tr,
             desc:
-                'Explore our products and add items to your cart. Your selections will appear here.'.tr,
+            'Explore our products and add items to your cart. Your selections will appear here.'
+                .tr,
             txtbutton: 'Start Shopping'.tr,
           ));
     } else {
-      return SizedBox(
-          width: 327.w,
-          height: 670.h,
-          child: Column(
+      return Obx(() {
+        return SizedBox(
+            width: 327.w,
+            height: 670.h,
+            child: Column(
 
-            children: [
-              SizedBox(
-                height: 30.h,
-              ),
-              Expanded(
-                child: AnimatedContainer(
-                  width: 327.w,
-                  duration: const Duration(milliseconds: 10),
-                  curve: Curves.slowMiddle,
-                  child: ListView.builder(
-                    itemCount: cartController.cartItems.length,
-                    itemBuilder: (context, index) {
-                      final item = cartController.cartItems[index];
+              children: [
+                SizedBox(
+                  height: 70.h,
+                ),
+                Expanded(
+                  child: AnimatedContainer(
+                    width: 327.w,
+                    duration: const Duration(milliseconds: 10),
+                    curve: Curves.slowMiddle,
+                    child: ListView.builder(
+                      itemCount: cartController.cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = cartController.cartItems[index];
 
-                      return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: Observer(
-                              builder: (_) => !item.isDismissible
-                                  ? Dismissible(
-                                      key: Key(item.product.toString()),
-                                      background: Container(
-                                        width: 50.w,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          border: Border.all(
-                                              width: 0.50,
-                                              color: Color(0xFFFAFAFA)),
-                                          borderRadius: const BorderRadius.only(
-                                              topRight: Radius.circular(20),
-                                              bottomRight: Radius.circular(20)),
-                                        ),
-                                        child: const Center(
-                                          child: Icon(Icons.delete,
-                                              color: Colors.white, size: 30),
-                                        ),
+                        return Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Observer(
+                                builder: (_) =>
+                                !item.isDismissible
+                                    ? Dismissible(
+                                    key: Key(item.product.toString()),
+                                    background: Container(
+                                      width: 50.w,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        border: Border.all(
+                                            width: 0.50,
+                                            color: const Color(0xFFFAFAFA)),
+                                        borderRadius: const BorderRadius.only(
+                                            topRight: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)),
                                       ),
-                                      direction: DismissDirection.endToStart,
-                                      onUpdate: (details) {},
-                                      confirmDismiss: (direction) async {
-                                        //    cartController.removeItem(item);
-                                        cartController.cartItems[index]
-                                            .isDismissible = true;
-                                        cartController.cartItems.refresh();
+                                      child: const Center(
+                                        child: Icon(Icons.delete,
+                                            color: Colors.white, size: 30),
+                                      ),
+                                    ),
+                                    direction: DismissDirection.endToStart,
+                                    onUpdate: (details) {},
+                                    confirmDismiss: (direction) async {
+                                      //    cartController.removeItem(item);
+                                      cartController.cartItems[index]
+                                          .isDismissible = true;
+                                      cartController.cartItems.refresh();
 
-                                        return false; // إعادة false لمنع الحذف
-                                      },
-                                      onDismissed: (direction) {
-                                        //    cartController.removeItem(item);
-                                      },
-                                      child:
-                                          itemCart(item.product, item, index))
-                                  : itemCart(item.product, item, index)));
-                    },
+                                      return false; // إعادة false لمنع الحذف
+                                    },
+                                    onDismissed: (direction) {
+                                      //    cartController.removeItem(item);
+                                    },
+                                    child:
+                                    itemCart(item.product, item, index))
+                                    : itemCart(item.product, item, index)));
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Hero(
-                tag: 'checkout',
-                child: Material(
-                  color: Colors.transparent,
-                  child: FadeTransition(
-                    opacity: _animation,
-                    child: Container(
-                      width: 375.w,
-                      height: 100.h, // Adjust height as per new design
+                Hero(
+                  tag: 'checkout',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: FadeTransition(
+                      opacity: _animation,
+                      child: Container(
+                        width: 375.w,
+                        height: 100.h, // Adjust height as per new design
 
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height:15.h ,),
-                                Text(
-                                  'Total'.tr,
-                                  textAlign: TextAlign.center,
-                                  style: secondaryTextStyle(
-                                    color: Color(0xFF20003D),
-                                    size: 20.sp.round(),
-                                    fontFamily: 'MuseoModerno',
-                                    weight: FontWeight.w500,
-                                    letterSpacing: -0.41,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 15.h,),
+                                  Text(
+                                    'Total'.tr,
+                                    textAlign: TextAlign.center,
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF20003D),
+                                      size: 20.sp.round(),
+                                      fontFamily: 'MuseoModerno',
+                                      weight: FontWeight.w500,
+                                      letterSpacing: -0.41,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '\$${cartController.cartItems.fold<double>(0, (sum, item) => sum + num.parse(item.product!.price.toString()) * item.quantity).toStringAsFixed(1)}',
-                                  textAlign: TextAlign.center,
-                                  style: secondaryTextStyle(
-                                    color: Color(0xFF4F0099),
-                                    size: 26.sp.round(),
-                                    weight: FontWeight.w500,
-                                    letterSpacing: -0.41,
-                                  ),
-                                )
-                              ],
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Get.put(CheckoutController());
-                                Get.to(()=> const CheckoutView());
-                                // Get.toNamed(Routes.CHECKOUT);
-                              },
-                              child: Container(
-                                width: 181.w,
-                                height: 64.h,
-                                decoration: ShapeDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment(1.00, 0.04),
-                                    end: Alignment(-1, -0.04),
-                                    colors: [
-                                      Color(0xFF20003D),
-                                      Color(0xFF6900CC),
+                                  Text(
+                                    '\$${cartController.cartItems.fold<double>(
+                                        0, (sum, item) =>
+                                    sum + num.parse(
+                                        item.product!.price.toString()) *
+                                        item.quantity).toStringAsFixed(1)}',
+                                    textAlign: TextAlign.center,
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF4F0099),
+                                      size: 26.sp.round(),
+                                      weight: FontWeight.w500,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.put(CheckoutController());
+                                  Get.to(() => const CheckoutView());
+                                  // Get.toNamed(Routes.CHECKOUT);
+                                },
+                                child: Container(
+                                  width: 181.w,
+                                  height: 64.h,
+                                  decoration: ShapeDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment(1.00, 0.04),
+                                      end: Alignment(-1, -0.04),
+                                      colors: [
+                                        Color(0xFF20003D),
+                                        Color(0xFF6900CC),
+                                      ],
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(43),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x4C000000),
+                                        blurRadius: 30,
+                                        offset: Offset(0, 4),
+                                        spreadRadius: 0,
+                                      )
                                     ],
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(43),
-                                  ),
-                                  shadows: [
-                                    BoxShadow(
-                                      color: Color(0x4C000000),
-                                      blurRadius: 30,
-                                      offset: Offset(0, 4),
-                                      spreadRadius: 0,
-                                    )
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
 
-                                  children: [
-                                    Text(
-                                      'Check Out'.tr,
-                                      style: primaryTextStyle(
-                                        size: 16.sp.round(),
-                                        weight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.w),
-                                    CircleAvatar(
-                                      radius: 16.w,
-                                      backgroundColor: Color(0xFF6101BB),
-                                      child: Text(
-                                        '${cartController.cartItems.length}',
+                                    children: [
+                                      Text(
+                                        'Check Out'.tr,
                                         style: primaryTextStyle(
-                                          size: 18.sp.round(),
-                                          weight: FontWeight.w700,
+                                          size: 16.sp.round(),
+                                          weight: FontWeight.w600,
                                           color: Colors.white,
-
-                                          letterSpacing: -0.45,
-                                          // Match button color
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(width: 10.w),
+                                      CircleAvatar(
+                                        radius: 16.w,
+                                        backgroundColor: Color(0xFF6101BB),
+                                        child: Text(
+                                          '${cartController.cartItems.length}',
+                                          style: primaryTextStyle(
+                                            size: 18.sp.round(),
+                                            weight: FontWeight.w700,
+                                            color: Colors.white,
+
+                                            letterSpacing: -0.45,
+                                            // Match button color
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ));
+              ],
+            ));
+      });
     }
   }
 }

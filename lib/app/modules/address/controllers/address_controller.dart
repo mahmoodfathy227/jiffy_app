@@ -241,6 +241,7 @@ void changeAddressStatus(status) {
       try {
         // isLoading(true);
         final response = await apiConsumer.get('profile/address-list');
+        print("address response is ${response['data']}");
         addressList.value = (response['data']["addresses"] as List)
             .map((address) => Address.fromJson(address))
             .toList();

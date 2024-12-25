@@ -7,12 +7,17 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' as gets;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:jiffy/app/modules/auth/controllers/auth_controller.dart';
+import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
+import 'package:jiffy/app/modules/cart/views/cart_view.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/config/log_utils.dart';
+import 'package:jiffy/app/modules/home/controllers/home_controller.dart';
+import 'package:jiffy/app/modules/product/controllers/product_controller.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:jiffy/app/modules/services/error/exceptions.dart';
 import 'package:jiffy/main.dart';
 
+import '../global/model/test_model_response.dart';
 import 'api_consumer.dart';
 import 'app_interceptors.dart';
 import 'status_code.dart';
@@ -85,6 +90,24 @@ class DioConsumer implements ApiConsumer {
           data: formDataIsEnabled ? formData : body);
       return _handleResponseAsJson(response);
     } on DioError catch (error) {
+      if(error.response?.statusCode == 409){
+    CartController cartController = Get.find();
+    HomeController homeController = Get.find();
+    ProductController productController = Get.find();
+    homeController.fetchHomePageData();
+    for(var item in cartController.cartItems){
+    Product resultProduct = productController.getProduct(item.product.id);
+      if(resultProduct.outOfStock == true){
+        cartController.cartItems.remove(item);
+      }
+    }
+   Get.off(() => CartPage());
+  Get.locale?.countryCode == 'en' ?
+  Get.snackbar("Sorry", "Item is out of stock and it's removed out of cart")
+  :
+  Get.snackbar("خطأ", "انتهى مخزون المنتج وتم ازالته من العربة");
+    ;
+      }
       _handleDioError(error);
     } catch (error) {
       throw Exception();

@@ -148,6 +148,7 @@ class Product {
   final dynamic old_price;
   final dynamic size;
   final dynamic outOfStock;
+  final dynamic stock;
   final dynamic rating;
   final dynamic d_limit;
   final dynamic sd_limit;
@@ -167,6 +168,7 @@ class Product {
      this.d_limit,
      this.sd_limit,
     this.attachments,
+    this.stock
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -183,6 +185,7 @@ class Product {
       rating: json['rating'] ?? 0.0,
       d_limit: json['d_limit'] ?? 0,
       sd_limit: json['sd_limit'] ?? 0,
+      stock: json['stock'] ?? 0,
       attachments: json['attachments'] ?? [],
     );
   }
@@ -200,6 +203,7 @@ class Product {
       'sd_limit': sd_limit,
       'd_limit': d_limit,
       'attachments': attachments,
+      'stock': stock
     };
   }
 }

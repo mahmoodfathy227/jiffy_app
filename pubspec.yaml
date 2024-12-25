@@ -1,5 +1,5 @@
 name: jiffy
-version: 2.0.63+63
+version: 2.0.67+67
 publish_to: none
 description: jiffy Amazing Ecommerce App In Lebnanon
 environment:
@@ -19,6 +19,7 @@ flutter_native_splash:
   image: assets/images/my_native_splash_logo.png  # Path to your splash image
   android: true
   ios: true
+
 
 
 dependencies:

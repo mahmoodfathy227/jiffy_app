@@ -30,7 +30,7 @@ class HomeView extends StatelessWidget {
   // Inject HomeController using GetX
   final HomeController homeController = Get.put(HomeController());
   final CartController cartController =
-  Get.put(CartController());
+   Get.put(CartController());
   final WishlistController wishListController = Get.put(WishlistController());
 
 
@@ -351,7 +351,7 @@ homeController: homeController,
                     return BannerAd();
                   }),
                   SizedBox(
-                    height: 9.h,
+                    height: 19.h,
                   ),
                   // Obx(() =>
                   //     SlideTransition(
@@ -383,21 +383,7 @@ homeController: homeController,
                     height: 9.h,
                   ),
 
-                  // SlideTransition(
-                  //     position: Tween<Offset>(
-                  //       begin: const Offset(
-                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                  //       end: const Offset(
-                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                  //     ).animate(
-                  //       CurvedAnimation(
-                  //         parent: homeController.controller,
-                  //         curve: Curves.easeInOut,
-                  //       ),
-                  //     ),
-                  //     child: Obx(() {
-                  //       return BannerAd2();
-                  //     })),
+
 
                   Obx(() {
                     return BannerAd2();
@@ -405,69 +391,51 @@ homeController: homeController,
                   SizedBox(
                     height: 9.h,
                   ),
-                  // SlideTransition(
-                  //     position: Tween<Offset>(
-                  //       begin: const Offset(
-                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                  //       end: const Offset(
-                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                  //     ).animate(
-                  //       CurvedAnimation(
-                  //         parent: homeController.controller,
-                  //         curve: Curves.easeInOut,
-                  //       ),
-                  //     ),
-                  //     child: premiumProduct(context)),
+
                   premiumProduct(context),
                   SizedBox(
                     height: 35.h,
                   ),
-                  // SlideTransition(
-                  //     position: Tween<Offset>(
-                  //       begin: const Offset(
-                  //           1.0, 0.0), // يبدأ خارج الشاشة على اليمين (x = 1)
-                  //       end: const Offset(
-                  //           0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                  //     ).animate(
-                  //       CurvedAnimation(
-                  //         parent: homeController.controller,
-                  //         curve: Curves.easeInOut,
-                  //       ),
-                  //     ),
-                  //     child: Obx(() {
-                  //       return newArrives();
-                  //     })),
+
                   Obx(() {
                     return newArrives();
                   }),
                   SizedBox(
                     height: 29.h,
                   ),
-                  // Obx(() =>
-                  //     SlideTransition(
-                  //         position: Tween<Offset>(
-                  //           begin: const Offset(
-                  //               1.0, 0.0),
-                  //           // يبدأ خارج الشاشة على اليمين (x = 1)
-                  //           end: const Offset(
-                  //               0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                  //         ).animate(
-                  //           CurvedAnimation(
-                  //             parent: homeController.controller,
-                  //             curve: Curves.easeInOut,
-                  //           ),
-                  //         ),
-                  //         child: viewProductSection(
-                  //             'Perfumes',
-                  //             homeController.homePageData.value
-                  //                 .featuredProducts,
-                  //             context))),
+
                   Obx(() {
-                    return viewProductSection(
-                        'Perfumes'.tr,
-                        homeController.homePageData.value
-                            .featuredProducts,
-                        context);
+                    return
+                      Center(
+                        child:
+
+
+                        Transform.translate(
+                          offset:
+                          homeController.homePageData.value.banners!.length < 3 ?
+                          Offset(0, -80)
+                          :
+                          Offset(0, 0)
+
+                          ,
+                          child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) =>  SizedBox(
+
+                                child: viewProductSection(
+                                    homeController.homePageData.value.categories[index].name,
+                                    homeController.homePageData.value.categories[index].products
+                                    ,
+                                    context),
+                              ),
+                              separatorBuilder: (context, index) => SizedBox(height: 9.h,),
+                              itemCount: homeController.homePageData.value.categories.length
+                          ),
+                        ),
+                      );
+
+
                   }),
 
                 ])));
@@ -478,28 +446,29 @@ homeController: homeController,
 
       homeController.homePageData.value.banners == null
           ?
-      Image.asset(
-        'assets/images/home/banner1.png',
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-      )
+      // Image.asset(
+      //   'assets/images/home/banner1.png',
+      //   width: 375.w,
+      //   height: 193.h,
+      //   fit: BoxFit.cover,
+      // )
+      const SizedBox()
           :
       homeController.homePageData.value.banners!.isEmpty ?
-      Image.asset(
-        'assets/images/home/banner1.png',
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-      )
+      // Image.asset(
+      //   'assets/images/home/banner1.png',
+      //   width: 375.w,
+      //   height: 193.h,
+      //   fit: BoxFit.cover,
+      // )
+      const SizedBox()
           :
       Transform.translate(
-        offset: const Offset(0, 10),
+        offset: const Offset(0, -33),
         child: CachedNetworkImage(
           imageUrl: homeController.homePageData.value.banners![0].image!,
-          width: 375.w,
-          height: 193.h,
-          fit: BoxFit.cover,
+
+          fit: BoxFit.fill,
           errorWidget: (context, url, error) =>
               Image.asset(
                 'assets/images/home/banner1.png',
@@ -520,37 +489,42 @@ homeController: homeController,
 
       homeController.homePageData.value.banners == null
           ?
-      Image.asset(
-        'assets/images/home/banner1.png',
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-      )
+      // Image.asset(
+      //   'assets/images/home/banner1.png',
+      //   width: 375.w,
+      //   height: 193.h,
+      //   fit: BoxFit.cover,
+      // )
+      const SizedBox()
           :
       homeController.homePageData.value.banners!.length < 2 ?
-      Image.asset(
-        'assets/images/home/banner1.png',
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-      )
+      // Image.asset(
+      //   'assets/images/home/banner1.png',
+      //   width: 375.w,
+      //   height: 193.h,
+      //   fit: BoxFit.cover,
+      // )
+      const SizedBox()
           :
-      CachedNetworkImage(
-        imageUrl: homeController.homePageData.value.banners![1].image!,
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, error) =>
-            Image.asset(
-              'assets/images/home/banner1.png',
-              width: 375.w,
-              height: 193.h,
-              fit: BoxFit.cover,
-            ),
-        placeholder: (context, url) =>
-            Lottie.asset(
-                "assets/images/jiffy_placeholder.json"
-            ),
+      Transform.translate(
+        offset: const Offset(0, -33),
+        child: CachedNetworkImage(
+          imageUrl: homeController.homePageData.value.banners![1].image!,
+          width: 375.w,
+          height: 193.h,
+          fit: BoxFit.fill,
+          errorWidget: (context, url, error) =>
+              Image.asset(
+                'assets/images/home/banner1.png',
+                width: 375.w,
+                height: 193.h,
+                fit: BoxFit.cover,
+              ),
+          placeholder: (context, url) =>
+              Lottie.asset(
+                  "assets/images/jiffy_placeholder.json"
+              ),
+        ),
       );
   }
 
@@ -567,44 +541,56 @@ homeController: homeController,
       )
           :
       homeController.homePageData.value.banners!.length < 3 ?
-      Image.asset(
-        'assets/images/home/newArrives.png',
-        width: 342.w,
-        height: 144.h,
-        fit: BoxFit.fill,
-      )
+      // Image.asset(
+      //   'assets/images/home/newArrives.png',
+      //   width: 342.w,
+      //   height: 144.h,
+      //   fit: BoxFit.fill,
+      // )
+      const SizedBox()
           :
       homeController.homePageData.value.banners![2].image!.isEmpty ?
-      Image.asset(
-        'assets/images/home/newArrives.png',
-        width: 342.w,
-        height: 144.h,
-        fit: BoxFit.fill,
-      )
+      // Image.asset(
+      //   'assets/images/home/newArrives.png',
+      //   width: 342.w,
+      //   height: 144.h,
+      //   fit: BoxFit.fill,
+      // )
+      const SizedBox()
           :
-      CachedNetworkImage(
-        imageUrl: homeController.homePageData.value.banners![2].image!,
-        width: 375.w,
-        height: 193.h,
-        fit: BoxFit.cover,
-        errorWidget: (context, url, error) =>
-            Image.asset(
-              'assets/images/home/banner1.png',
-              width: 375.w,
-              height: 193.h,
-              fit: BoxFit.cover,
-            ),
-        placeholder: (context, url) =>
-            Lottie.asset(
-                "assets/images/jiffy_placeholder.json"
-            ),
+      Transform.translate(
+        offset: const Offset(0, -33),
+        child: CachedNetworkImage(
+          imageUrl: homeController.homePageData.value.banners![2].image!,
+          width: 375.w,
+          height: 193.h,
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) =>
+              Image.asset(
+                'assets/images/home/banner1.png',
+                width: 375.w,
+                height: 193.h,
+                fit: BoxFit.cover,
+              ),
+          placeholder: (context, url) =>
+              Lottie.asset(
+                  "assets/images/jiffy_placeholder.json"
+              ),
+        ),
       );
     ;
   }
 
   Widget premiumProduct(context) {
     return Obx(() {
-      return Container(
+      return
+        homeController
+            .homePageData.value
+            .premiumProducts.isEmpty?
+            SizedBox()
+        :
+
+        Container(
         color: const Color(0xff1A0033),
         height: 401.h,
         width: MediaQuery
@@ -630,14 +616,14 @@ homeController: homeController,
                     scrollDirection: Axis.horizontal,
                     itemCount: homeController
                         .homePageData.value
-                        .latestProducts.length,
+                        .premiumProducts.length,
                     itemBuilder: (context, index) {
                       return Padding(
                           padding: EdgeInsetsDirectional.only(
                               end: 5.w, start: 5.w),
                           child: premiumProductTemplate(homeController
                               .homePageData.value
-                              .latestProducts[index], index, context)
+                              .premiumProducts[index], index, context)
 
 
                       );
@@ -654,53 +640,56 @@ homeController: homeController,
   }
 
   Widget viewProductSection(title, dynamic product, context) {
-    return Column(
-      children: [
-        TitleWithSeeAll(
-          title: title,
-          actionText: 'See all'.tr,
-          onTap: () {
-            // Navigate to "See All" or perform some action
-            print('See All tapped');
-          },
-        ),
+    return SizedBox(
+      height: 365.h,
+      child: Column(
+        children: [
+          TitleWithSeeAll(
+            title: title,
+            actionText: 'See all'.tr,
+            onTap: () {
+              // Navigate to "See All" or perform some action
+              print('See All tapped');
+            },
+          ),
 
-        Transform.translate(
-          offset: const Offset(0, -30),
-          child: Container(
-            height: 290.h + 65.h,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            padding: EdgeInsetsDirectional.only(start: 5.w),
-            child:
-            product.length == 0 ?
-            ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                   return
-
-                  productCard(AppConstants.sampleProduct, context, index);
-              },
-            )
-                :
-            Padding(
-              padding: EdgeInsetsDirectional.only(start: 10.w),
-              child: ListView.builder(
-                shrinkWrap: true,
+          Transform.translate(
+            offset: const Offset(0, -20),
+            child: Container(
+              height: 320.h ,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              padding: EdgeInsetsDirectional.only(start: 5.w),
+              child:
+              product.length == 0 ?
+              ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: product.length,
+                itemCount: 5,
                 itemBuilder: (context, index) {
-                  return productCard(product[index], context, index);
+                     return
+
+                    productCard(AppConstants.sampleProduct, context, index);
                 },
+              )
+                  :
+              Padding(
+                padding: EdgeInsetsDirectional.only(start: 10.w),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: product.length,
+                  itemBuilder: (context, index) {
+                    return productCard(product[index], context, index);
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    ).animate().fadeIn(duration: const Duration(seconds: 1));
+        ],
+      ).animate().fadeIn(duration: const Duration(seconds: 1)),
+    );
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked, dynamic product) async {
@@ -727,6 +716,7 @@ homeController: homeController,
 
 
   Widget premiumProductTemplate(Product product, int index, context) {
+    CartController myCartController = Get.find();
     return GestureDetector(
       onTap: () async {
         ProductController productController = Get.put(ProductController());
@@ -827,7 +817,7 @@ homeController: homeController,
                     Obx(() {
                       return AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        child: cartController.cartItems.any((item) =>
+                        child: myCartController.cartItems.any((item) =>
                         item.product.id == product.id) ?
                         Transform.translate(
                           offset: Offset(0, 20),
@@ -861,7 +851,7 @@ homeController: homeController,
                                               ),
                                               child: InkWell(
                                                 onTap: () {
-                                                  handleDecrement(product);
+                                                  handleDecrement(product , myCartController, product.outOfStock);
                                                 },
                                                 child: SvgPicture.asset(
                                                   'assets/images/home/minus.svg',
@@ -876,8 +866,8 @@ homeController: homeController,
                                           ]),
                                           Column(children: [
                                             Text(
-                                              '${cartController
-                                                  .cartItems[cartController
+                                              '${myCartController
+                                                  .cartItems[myCartController
                                                   .cartItems.indexWhere((item) =>
                                               item.product.id == product.id)]
                                                   .quantity}',
@@ -914,7 +904,7 @@ homeController: homeController,
                                                 ),
                                                 child: InkWell(
                                                   onTap: () {
-                                                    handleIncrement(product);
+                                                    handleIncrement(product , myCartController, product.outOfStock);
                                                   },
                                                   child: SvgPicture.asset(
                                                     'assets/images/home/plus.svg',

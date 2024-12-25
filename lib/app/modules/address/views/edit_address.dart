@@ -167,7 +167,7 @@ final Address addressToUpdate ;
                                 controller.selectedLabel.value = newValue!;
                                 print("selectedLabel is ${controller.selectedLabel.value}");
                               },
-                              items: ['Home','Work']
+                              items: ['Home'.tr,'Work'.tr]
                                   .map<DropdownMenuItem<String>>(
                                       (String label) {
                                     return DropdownMenuItem<String>(

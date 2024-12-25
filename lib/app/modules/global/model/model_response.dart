@@ -239,7 +239,7 @@ class User {
 }
 
 class HomePageData {
-  final List<Brands> categories;
+  final List<Category> categories;
   final List<Brands> brands;
   final List<Product> latestProducts;
   final List<Product> featuredProducts;
@@ -256,7 +256,7 @@ class HomePageData {
 
   factory HomePageData.fromJson(Map<String, dynamic> json) {
     var categoriesList =
-        (json['categories'] as List).map((i) => Brands.fromJson(i)).toList();
+        (json['categories'] as List).map((i) => Category.fromJson(i)).toList();
     var brandsList =
         (json['brands'] as List).map((i) => Brands.fromJson(i)).toList();
     var latestProductsList = (json['latest_products'] as List)
@@ -462,14 +462,19 @@ class Category {
   String? name;
   String? slug;
   String? image;
+  List<Product>? products;
 
-  Category({this.id, this.name, this.image,this.slug});
+  Category({this.id, this.name, this.image,this.slug, this.products});
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     slug = json['slug'];
     image = json['image'];
+    products = json['products'] != null
+        ? (json['products'] as List).map((i) => Product.fromJson(i)).toList()
+        : [];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -478,6 +483,7 @@ class Category {
     data['name'] = this.name;
     data['slug'] = this.slug;
     data['image'] = this.image;
+    data['products'] = this.products;
     return data;
   }
 }

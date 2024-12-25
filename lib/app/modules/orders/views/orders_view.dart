@@ -154,7 +154,7 @@ class OrdersView extends GetView<OrdersController> {
                             child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
-                                  reverse: true,
+
                                   shrinkWrap: true,
                                   itemCount: controller.orders.length,
                                   itemBuilder: (context, index) {
