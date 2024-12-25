@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
@@ -52,7 +53,10 @@ Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
 isPlainBackground: true,
         context: context,
         onPressed: () {
+
 Get.off(MainView());
+CartController cartController = Get.find();
+cartController.cartItems.refresh();
           print("pressed");
 
         },

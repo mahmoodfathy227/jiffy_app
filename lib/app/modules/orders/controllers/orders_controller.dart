@@ -11,7 +11,7 @@ class OrdersController extends GetxController {
   var orders = <Order>[].obs;
   var loading = true.obs;
   var singelLoading = true.obs;
-  var selectedStatus = 'all'.obs;
+  var selectedStatus = ''.obs;
 
   @override
   void onInit() {
@@ -25,10 +25,20 @@ class OrdersController extends GetxController {
   void fetchOrders() async {
     loading.value = true;
     try {
-      final response = await apiConsumer.post(
+       final response =
+       selectedStatus.value == 'all' || selectedStatus.value == '' ?
+       await apiConsumer.post(
         'orders',
-        body: {'status': selectedStatus.value},
-      );
+
+      )
+       :
+       await apiConsumer.post(
+         'orders',
+         body:  {
+           'status': selectedStatus.value
+         },
+       )
+       ;
 
       if (response['status'] == 'success') {
         List<dynamic> data = response['data']['orders'];

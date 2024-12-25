@@ -77,7 +77,7 @@ class _RateProductScreenState extends State<RateProductScreen>
                 ),
                 SizedBox(height: 26.h),
                 Text(
-                  'Thank you for your feedback!',
+                  'Thank you for your feedback!'.tr,
                   textAlign: TextAlign.center,
                   style: primaryTextStyle(
                     color: const Color(0xFF42474A),
@@ -89,7 +89,7 @@ class _RateProductScreenState extends State<RateProductScreen>
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'We appreciated your feedback.\nWe’ll use your feedback to improve your experience.',
+                    'We appreciated your feedback.\nWe’ll use your feedback to improve your experience.'.tr,
                     textAlign: TextAlign.center,
                     style: primaryTextStyle(
                       color: const Color(0xFF6D758A),
@@ -117,7 +117,7 @@ class _RateProductScreenState extends State<RateProductScreen>
                     ),
                     child: Center(
                       child: Text(
-                        'Done',
+                        'Done'.tr,
                         textAlign: TextAlign.center,
                         style: secondaryTextStyle(
                           color: Colors.white,
@@ -141,7 +141,7 @@ class _RateProductScreenState extends State<RateProductScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  CustomAppBar(
-        title: 'Rate Product', myFunction: () {  },
+        title: 'Rate Product'.tr, myFunction: () {  },
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0.w),
@@ -180,7 +180,7 @@ class _RateProductScreenState extends State<RateProductScreen>
                                 ),
                                 SizedBox(width: 13.w),
                                 Text(
-                                  'Submit your review to get 5 points',
+                                  'Submit your review to get 5 points'.tr,
                                   style: primaryTextStyle(
                                     color: Color(0xFF53178C),
                                     size: 12.sp.round(),
@@ -239,7 +239,7 @@ class _RateProductScreenState extends State<RateProductScreen>
                     fillColor: Colors.white,
                     focusColor: Colors.white,
                     hintText:
-                        "Would you like to write anything about this product?",
+                        "Would you like to write anything about this product?".tr,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.r),
                     ),
@@ -263,7 +263,7 @@ class _RateProductScreenState extends State<RateProductScreen>
                           controller.productId, rating, comment);
                       _showAnimatedDialog();
                     },
-                    btnText: "Submit Review",
+                    btnText: "Submit Review".tr,
                   ),
                 ),
               ),

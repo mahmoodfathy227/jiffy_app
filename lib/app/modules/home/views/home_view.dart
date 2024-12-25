@@ -30,7 +30,7 @@ class HomeView extends StatelessWidget {
   // Inject HomeController using GetX
   final HomeController homeController = Get.put(HomeController());
   final CartController cartController =
-  Get.put(CartController());
+   Get.put(CartController());
   final WishlistController wishListController = Get.put(WishlistController());
 
 
@@ -727,6 +727,7 @@ homeController: homeController,
 
 
   Widget premiumProductTemplate(Product product, int index, context) {
+    CartController myCartController = Get.find();
     return GestureDetector(
       onTap: () async {
         ProductController productController = Get.put(ProductController());
@@ -827,7 +828,7 @@ homeController: homeController,
                     Obx(() {
                       return AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        child: cartController.cartItems.any((item) =>
+                        child: myCartController.cartItems.any((item) =>
                         item.product.id == product.id) ?
                         Transform.translate(
                           offset: Offset(0, 20),
@@ -861,7 +862,7 @@ homeController: homeController,
                                               ),
                                               child: InkWell(
                                                 onTap: () {
-                                                  handleDecrement(product);
+                                                  handleDecrement(product , myCartController);
                                                 },
                                                 child: SvgPicture.asset(
                                                   'assets/images/home/minus.svg',
@@ -876,8 +877,8 @@ homeController: homeController,
                                           ]),
                                           Column(children: [
                                             Text(
-                                              '${cartController
-                                                  .cartItems[cartController
+                                              '${myCartController
+                                                  .cartItems[myCartController
                                                   .cartItems.indexWhere((item) =>
                                               item.product.id == product.id)]
                                                   .quantity}',
@@ -914,7 +915,7 @@ homeController: homeController,
                                                 ),
                                                 child: InkWell(
                                                   onTap: () {
-                                                    handleIncrement(product);
+                                                    handleIncrement(product , myCartController);
                                                   },
                                                   child: SvgPicture.asset(
                                                     'assets/images/home/plus.svg',

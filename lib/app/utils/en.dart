@@ -140,11 +140,26 @@ const Map<String , String> en = {
   'PENDING' : 'PENDING',
 'No Orders available' : 'No Orders available',
     "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction" : "Let Us Help You By Using The Method You Choose To Reach Your Satisfaction",
-  'All' : 'All'
-
-
-
-
+  'All' : 'All',
+  "Guest" : "Guest",
+  "Home" : "Home",
+  "Address*" : "Address*",
+  "Apartment" : "Apartment",
+  "Floor" : "Floor",
+  "Building" : "Building",
+  "Phone*" : "Phone*",
+  "State*" : "State*",
+  "City" : "City*",
+  "Thank you for your feedback!" : 'Thank you for your feedback!',
+  "We appreciated your feedback.\nWe’ll use your feedback to improve your experience." : 'We appreciated your feedback.\nWe’ll use your feedback to improve your experience.'
+,'Done' : 'Done'
+,'Rate Product' : 'Rate Product'
+,'Submit your review to get 5 points' : 'Submit your review to get 5 points'
+,'Would you like to write anything about this product?' : "Would you like to write anything about this product?"
+,'Submit Review' : "Submit Review"
+,'Shipping Fee' : "Shipping Fee"
+,'Discount Applied' : "Discount Applied"
+,'Tracking number:' : 'Tracking number:'
 
 
 

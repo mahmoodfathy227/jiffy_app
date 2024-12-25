@@ -188,7 +188,7 @@ _handleUri() {
 
 CustomSearchController customSearchController = Get.put(CustomSearchController());
 WishlistController wishListController = Get.put(WishlistController());
-CartController cartController = Get.put(CartController());
+ CartController cartController = Get.put(CartController());
 
 NavBarController tabController = Get.put(NavBarController());
 

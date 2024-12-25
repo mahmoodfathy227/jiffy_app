@@ -43,7 +43,7 @@ class AddAddress extends GetView<AddressController> {
           children: [
             buildFloatingButton(
 
-                buttonName: 'Select on Map', context: context,
+                buttonName: 'Select on Map'.tr, context: context,
                 onPressed: () {
                   Get.to(SelectFromMap());
                 },
@@ -54,7 +54,7 @@ class AddAddress extends GetView<AddressController> {
 
             buildFloatingButton(
 
-              buttonName: 'Save Address', context: context,
+              buttonName: 'Save Address'.tr, context: context,
               isLoading: controller.isLoading.value,
               onPressed: () {
                 print("your filled data ex are 2 ${controller.phone.value}, ${controller.address.value} ");
@@ -186,7 +186,7 @@ class AddAddress extends GetView<AddressController> {
                           return DropdownMenuItem<String>(
                             value: label,
                             child: Text(
-                              label ,
+                              label.tr ,
                               style: primaryTextStyle(
                                 color: greyishColor,
                                 size: 14.sp.round(),
@@ -331,7 +331,7 @@ class AddAddress extends GetView<AddressController> {
 
                           errorText: controller.stateError.value,
 initialValue: homeController.state.value.isEmpty? '' : homeController.state.value.replaceAll('.', ''),
-                          labelText: "State*", onChanged: (value) {
+                          labelText: "State*".tr, onChanged: (value) {
                         controller.state.value = value;
                         print("state is ${controller.state.value}");
                       })),
@@ -344,7 +344,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
 
                           initialValue: homeController.city.value.isEmpty? '' : homeController.city.value.replaceAll('.', ''),
 
-                          labelText: "City", onChanged: (value) {
+                          labelText: "City".tr, onChanged: (value) {
                         controller.city.value = value;
                       })),
                 ],
@@ -363,7 +363,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
                       errorText: controller.addressError.value,
 
 
-                      labelText:"Address*",
+                      labelText:"Address*".tr,
 
                       onChanged: (value) {
                     controller.address.value = value;
@@ -380,7 +380,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
                 Expanded(child: CustomTextField(
                     errorText: controller.apartmentError.value,
 
-                    labelText: "Apartment", onChanged: (value) {
+                    labelText: "Apartment".tr, onChanged: (value) {
                   controller.apartment.value = value;
 
                 })),
@@ -388,14 +388,14 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
                 Expanded(child: CustomTextField(
                     errorText: controller.floorError.value,
 
-                    labelText: "Floor", onChanged: (value) {
+                    labelText: "Floor".tr, onChanged: (value) {
                   controller.floor.value = value;
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
                     errorText: controller.buildingError.value,
 
-                    labelText: "Building", onChanged: (value) {
+                    labelText: "Building".tr, onChanged: (value) {
                   controller.building.value = value;
                 })),
 
@@ -413,7 +413,7 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
                       keyboardType: TextInputType.number,
                       errorText: controller.phoneError.value,
 
-                      labelText: "Phone*",
+                      labelText: "Phone*".tr,
                       onChanged: (value) {
                         controller.phone.value = value;
                         print("phone is ${controller.phone.value}");

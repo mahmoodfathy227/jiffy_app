@@ -123,11 +123,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             },
           ),
           SizedBox(height: 10.h),
-          _buildSummaryRow("Subtotal",
+          _buildSummaryRow("Subtotal".tr,
               double.parse(controller.singelOrder.value!.subTotal.toString())),
-          _buildSummaryRow("Shipping Fee",
+          _buildSummaryRow("Shipping Fee".tr,
               double.parse(controller.singelOrder.value!.shipping.toString())),
-          _buildSummaryRow("Discount Applied",
+          _buildSummaryRow("Discount Applied".tr,
               -double.parse(controller.singelOrder.value!.discount.toString())),
           // _buildSummaryRow("Gift Card Discount",
           //     -double.parse(order.giftCardValue.value.toString())),
@@ -374,7 +374,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                             width: 193.w,
                                                             height: 31.h,
                                                             child: Text(
-                                                              'Rate product to get 5 points for collect.',
+                                                              'Rate product to get 5 points for collect.'.tr,
                                                               style: TextStyle(
                                                                 color:
                                                                     Color(0xFF370269),

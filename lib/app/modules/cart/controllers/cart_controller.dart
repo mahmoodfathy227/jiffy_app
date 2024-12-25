@@ -411,6 +411,7 @@ class CartController extends GetxController {
       } else {
         print('Failed to clear cart: ${response['data']}');
       }
+      cartItems.refresh();
     } catch (e) {
       print('Error clearing cart: $e');
     }

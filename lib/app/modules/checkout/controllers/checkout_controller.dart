@@ -153,7 +153,9 @@ formDataIsEnabled: true,
     if (apiResponse.status == 'success') {
       print("confirm checkout gotten successful");
       isConfirmingOrder.value = false;
-      Get.offAll(() => const Completed());
+      cartController.clearCart();
+
+      Get.off(() => const Completed());
 
     }
     else {

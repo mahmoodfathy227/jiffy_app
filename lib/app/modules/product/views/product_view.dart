@@ -35,7 +35,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'FullImage.dart';
 
-// final CartController cartController = Get.put(CartController());
+final CartController cartController = Get.put(CartController());
 
 class ProductView extends GetView<ProductController> {
   const ProductView({
@@ -1331,13 +1331,16 @@ print("${"pro id is ${controller.product.value.id}"}");
                 width: MediaQuery
                     .of(context)
                     .size
-                    .width - 120.w,
+                    .width - 150.w,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      review.customer!,
-                      style: secondaryTextStyle(),
+                    SizedBox(
+                      width  : 100.w,
+                      child: Text(
+                        review.customer!,
+                        style: secondaryTextStyle(),
+                      ),
                     ),
                     Spacer(),
                     Container(
@@ -1360,9 +1363,10 @@ print("${"pro id is ${controller.product.value.id}"}");
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              height: 50.h,
+              height: 40.h,
+
               child:Text(
-                maxLines: 2,
+                maxLines: 4,
                 review.comment! ,
                 style: secondaryTextStyle(
                   color: greyishColor,
