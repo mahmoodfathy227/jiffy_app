@@ -5807,7 +5807,7 @@ Widget placeHolderProductCard() {
 
               ),
               product.outOfStock ?      Transform.translate(
-                offset: const Offset(72, 60),
+                offset: Get.locale!.languageCode == "ar" ? Offset(- 15, 60) : Offset(72, 60),
                 child: Transform.rotate(
                   angle: pi / 4,
                   child: Container(

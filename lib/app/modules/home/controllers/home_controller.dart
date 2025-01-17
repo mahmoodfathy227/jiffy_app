@@ -271,7 +271,7 @@ try{
   List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
   var first = placemarks.first;
   state.value = first.administrativeArea!.substring(0, 8) + '..';
-  city.value =first.locality!.length >= 8 ? first.locality!.substring(0, 8) + '..' :first.locality! ;
+  city.value = first.locality!.length >= 8 ? '${first.locality!.substring(0, 8)}..' :first.locality! ;
   country.value = first.country!;
   isLocationLoading.value = false;
   print("Your state is ${state.value} and city is ${city.value}");

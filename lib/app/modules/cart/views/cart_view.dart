@@ -253,127 +253,154 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             ),
                           ],
                         ),
+
                       ],
                     ),
-                    AnimatedPositionedDirectional(
-                        duration: const Duration(milliseconds: 300),
-                        top: 0.h,
-                        end: !item.isDismissible ? 0.w : 0.w,
-                        child: Column(children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          AnimatedContainer(
-                            duration: Duration(milliseconds: 300),
-                            height: 90.h,
-                            padding: EdgeInsets.symmetric(horizontal: 15.w),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      cartController.updateQuantity(
-                                          item, item.quantity + 1);
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/images/cart/plus.svg',
-                                      width: 27.w,
-                                      height: 27.h,
-                                    )),
-                                AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 300),
-                                  transitionBuilder: (Widget child,
-                                      Animation<double> animation) {
-                                    return ScaleTransition(
-                                        child: child, scale: animation);
-                                  },
-                                  child: Text(
-                                    item.quantity.toString(),
-                                    key: ValueKey<int>(item.quantity),
-                                    style: secondaryTextStyle(
-                                      color: Color(0xFF4F0099),
-                                      size: 20.sp.round(),
-                                      weight: FontWeight.w500,
-                                      letterSpacing: -0.41,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                    onTap: () {
-                                      if (item.quantity > 1) {
-                                        cartController.updateQuantity(
-                                            item, item.quantity - 1);
-                                        item.quantity - 1;
-                                      }
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/images/cart/minus.svg',
-                                      width: 27.w,
-                                      height: 27.h,
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ])),
-                    PositionedDirectional(
-                      bottom: 0.h,
-                      end: 0.w,
-                      child: Observer(
-                        builder: (_) =>
-                            Row(
-                              children: [
-                                Dismissible(
 
-                                  key: Key(item.product.toString()),
-
-                                  background: Container(
-                                    color: Colors.transparent,
-                                    child: const Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Icon(Icons.check,
-                                            color: Colors.white, size: 30),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AnimatedPositionedDirectional(
+                            duration: const Duration(milliseconds: 300),
+                            top: 0.h,
+                            end: !item.isDismissible ? 0.w : 0.w,
+                            child: Column(children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                height: 90.h,
+                                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          cartController.updateQuantity(
+                                              item, item.quantity + 1);
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/images/cart/plus.svg',
+                                          width: 27.w,
+                                          height: 27.h,
+                                        )),
+                                    AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 300),
+                                      transitionBuilder: (Widget child,
+                                          Animation<double> animation) {
+                                        return ScaleTransition(
+                                            child: child, scale: animation);
+                                      },
+                                      child: Text(
+                                        item.quantity.toString(),
+                                        key: ValueKey<int>(item.quantity),
+                                        style: secondaryTextStyle(
+                                          color: Color(0xFF4F0099),
+                                          size: 20.sp.round(),
+                                          weight: FontWeight.w500,
+                                          letterSpacing: -0.41,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  direction: DismissDirection.startToEnd,
-                                  onUpdate: (details) {},
-                                  confirmDismiss: (direction) async {
-                                    cartController.cartItems[index]
-                                        .isDismissible =
-                                    false;
-                                    cartController.cartItems.refresh();
-                                    return false;
-                                  },
-                                  onDismissed: (direction) {
-                                    //   cartController.removeItem(item);
-                                  },
-                                  child: InkWell(
-                                    onTap: () {
-                                      cartController.removeItem(item);
-                                    },
-                                    child: Container(
-                                      width: item.isDismissible ? 50.w : 0,
-                                      height: 120.h,
-                                      decoration: BoxDecoration(
-                                        color: item.isDismissible
-                                            ? Colors.red
-                                            : Colors.transparent,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Icon(Icons.delete,
-                                            color: Colors.white, size: 24.w),
-                                      ),
-                                    ),
-                                  ),
+                                    GestureDetector(
+                                        onTap: () {
+                                          if (item.quantity > 1) {
+                                            cartController.updateQuantity(
+                                                item, item.quantity - 1);
+                                            item.quantity - 1;
+                                          }
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/images/cart/minus.svg',
+                                          width: 27.w,
+                                          height: 27.h,
+                                        )),
+                                  ],
                                 ),
-                              ],
-                            ),
-                      ),
+                              ),
+                            ])),
+                        PositionedDirectional(
+                          bottom: 0.h,
+                          end: 0.w,
+                          child: Observer(
+                            builder: (_) =>
+                                Row(
+                                  children: [
+                                    Dismissible(
+
+                                      key: Key(item.product.toString()),
+
+                                      background: Container(
+                                        color: Colors.transparent,
+                                        child: const Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20.0),
+                                            child: Icon(Icons.check,
+                                                color: Colors.white, size: 30),
+                                          ),
+                                        ),
+                                      ),
+                                      direction: DismissDirection.startToEnd,
+                                      onUpdate: (details) {},
+                                      confirmDismiss: (direction) async {
+                                        cartController.cartItems[index]
+                                            .isDismissible =
+                                        false;
+                                        cartController.cartItems.refresh();
+                                        return false;
+                                      },
+                                      onDismissed: (direction) {
+                                        //   cartController.removeItem(item);
+                                      },
+                                      child: InkWell(
+                                        onTap: () {
+                                          cartController.removeItem(item);
+                                        },
+                                        child: Container(
+                                          width: item.isDismissible ? 50.w : 0,
+                                          height: 120.h,
+                                          decoration: BoxDecoration(
+                                            color: item.isDismissible
+                                                ? Colors.red
+                                                : Colors.transparent,
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: Center(
+                                            child: Icon(Icons.delete,
+                                                color: Colors.white, size: 24.w),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            // showCustomBlurDialog();
+                            cartController.removeItem(item);
+                            cartController.cartItems.refresh();
+                          },
+                          child: Container(
+                              width: 50.w,
+                              height: 120.h,
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.delete , color:  Colors.white,),
+                              )
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -603,41 +630,43 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Observer(
                                 builder: (_) =>
-                                !item.isDismissible
-                                    ? Dismissible(
-                                    key: Key(item.product.toString()),
-                                    background: Container(
-                                      width: 50.w,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        border: Border.all(
-                                            width: 0.50,
-                                            color: const Color(0xFFFAFAFA)),
-                                        borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(20),
-                                            bottomRight: Radius.circular(20)),
-                                      ),
-                                      child: const Center(
-                                        child: Icon(Icons.delete,
-                                            color: Colors.white, size: 30),
-                                      ),
-                                    ),
-                                    direction: DismissDirection.endToStart,
-                                    onUpdate: (details) {},
-                                    confirmDismiss: (direction) async {
-                                      //    cartController.removeItem(item);
-                                      cartController.cartItems[index]
-                                          .isDismissible = true;
-                                      cartController.cartItems.refresh();
-
-                                      return false; // إعادة false لمنع الحذف
-                                    },
-                                    onDismissed: (direction) {
-                                      //    cartController.removeItem(item);
-                                    },
-                                    child:
-                                    itemCart(item.product, item, index))
-                                    : itemCart(item.product, item, index)));
+                                // !item.isDismissible
+                                //     ? Dismissible(
+                                //     key: Key(item.product.toString()),
+                                //     background: Container(
+                                //       width: 50.w,
+                                //       decoration: BoxDecoration(
+                                //         color: Colors.red,
+                                //         border: Border.all(
+                                //             width: 0.50,
+                                //             color: const Color(0xFFFAFAFA)),
+                                //         borderRadius: const BorderRadius.only(
+                                //             topRight: Radius.circular(20),
+                                //             bottomRight: Radius.circular(20)),
+                                //       ),
+                                //       child: const Center(
+                                //         child: Icon(Icons.delete,
+                                //             color: Colors.white, size: 30),
+                                //       ),
+                                //     ),
+                                //
+                                //     direction: DismissDirection.endToStart,
+                                //     onUpdate: (details) {},
+                                //     confirmDismiss: (direction) async {
+                                //       //    cartController.removeItem(item);
+                                //       cartController.cartItems[index]
+                                //           .isDismissible = true;
+                                //       cartController.cartItems.refresh();
+                                //
+                                //       return false; // إعادة false لمنع الحذف
+                                //     },
+                                //     onDismissed: (direction) {
+                                //       //    cartController.removeItem(item);
+                                //     },
+                                //     child:
+                                //     itemCart(item.product, item, index))
+                                //     :
+                                itemCart(item.product, item, index)));
                       },
                     ),
                   ),
