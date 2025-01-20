@@ -1321,7 +1321,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           Container(
 
-            height: widget.height ?? 50.h,
+            height: widget.height ?? 60.h,
 
             child: Focus(
               onFocusChange: (hasFocus) {

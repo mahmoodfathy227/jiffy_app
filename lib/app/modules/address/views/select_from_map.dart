@@ -130,7 +130,7 @@ class SelectFromMap extends GetView<AddressController> {
                                                 SizedBox(height: 10.h,),
                                                 buildFloatingButton(
 
-                                                  buttonName: 'Use Your Current Location', context: context,
+                                                  buttonName: 'Or Use Current Location', context: context,
                                                   onPressed: () {
                                                     controller.getCurrentLocation(context);
 

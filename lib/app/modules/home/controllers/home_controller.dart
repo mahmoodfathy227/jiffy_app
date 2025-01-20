@@ -242,6 +242,7 @@ isCategoriesLoading.value = true; // استخدام القيمة المتغير�
   RxString state = ''.obs;
    RxString city = ''.obs;
    RxString country = ''.obs;
+   RxString address = ''.obs;
    RxBool isLocationLoading = false.obs;
    void getCurrentLocation() async{
      isLocationLoading.value = true;

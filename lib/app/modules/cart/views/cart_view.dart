@@ -168,99 +168,95 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                 cartController.cartItems[index].isDismissible = false;
                 cartController.cartItems.refresh();
               },
-              child: Container(
-                child: Stack(
-                  children: [
-                    Row(
+              child: Row(
+                children: [
+                  Container(
+                    child: Stack(
                       children: [
-                        Hero(
-                          tag: product!.id.toString(),
-                          child: Container(
-                            width: 100.88.w,
-                            height: 110.72.h,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0x19000000),
-                                  blurRadius: 20,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                )
-                              ],
-                            ),
-                            child: product.image.isEmpty
-                                ? ClipRRect(child: Image.asset(
-                                "assets/images/placeholder.png"))
-                                : ClipRRect(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                  imageUrl: product.image!,
-                                  fit: BoxFit.cover,
-
-                                  placeholder: (context, url) =>
-                                      Lottie.asset(
-                                          "assets/images/jiffy_placeholder.json"),
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
-                                        "assets/images/placeholder.png",
-                                        fit: BoxFit.contain,)
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 13.w),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            SizedBox(
-                              width: 114.w,
-                              child: Text(
-                                GetMaxChar(product!.name ?? '', 16),
-                                style: secondaryTextStyle(
-                                  color: Color(0xFF20003D),
-                                  size: 20.sp.round(),
-                                  weight: FontWeight.w600,
-                                  letterSpacing: -0.41,
+                            Hero(
+                              tag: product!.id.toString(),
+                              child: Container(
+                                width: 110.88.w,
+                                height: 110.72.h,
+                                decoration: const BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0x19000000),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    )
+                                  ],
+                                ),
+                                child: product.image.isEmpty
+                                    ? ClipRRect(child: Image.asset(
+                                    "assets/images/placeholder.png"))
+                                    : ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                  child: CachedNetworkImage(
+                                      imageUrl: product.image!,
+                                      fit: BoxFit.cover,
+
+                                      placeholder: (context, url) =>
+                                          Lottie.asset(
+                                              "assets/images/jiffy_placeholder.json"),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                            "assets/images/placeholder.png",
+                                            fit: BoxFit.contain,)
+                                  ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Text(
-                              GetMaxChar(product!.description ?? '', 16),
-                              style: secondaryTextStyle(
-                                color: Color(0x7F949494),
-                                size: 14.sp.round(),
-                                weight: FontWeight.w400,
-                                letterSpacing: -0.41,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Text(
-                              '\$ ${product!.price}',
-                              style: secondaryTextStyle(
-                                color: Color(0xFF4F0099),
-                                size: 16.sp.round(),
-                                weight: FontWeight.w600,
-                                letterSpacing: -0.41,
-                              ),
+                            SizedBox(width: 13.w),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 154.w,
+                                  child: Text(
+                                    GetMaxChar(product!.name ?? '', 12),
+                                    style: secondaryTextStyle(
+                                      color: Color(0xFF20003D),
+                                      size: 15.sp.round(),
+                                      weight: FontWeight.w600,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 12.h,
+                                ),
+                                Text(
+                                  GetMaxChar(product!.description ?? '', 11),
+                                  style: secondaryTextStyle(
+                                    color: Color(0x7F949494),
+                                    size: 14.sp.round(),
+                                    weight: FontWeight.w400,
+                                    letterSpacing: -0.41,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 12.h,
+                                ),
+                                Text(
+                                  '\$ ${product!.price}',
+                                  style: secondaryTextStyle(
+                                    color: Color(0xFF4F0099),
+                                    size: 16.sp.round(),
+                                    weight: FontWeight.w600,
+                                    letterSpacing: -0.41,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-
-                      ],
-                    ),
-
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
                         AnimatedPositionedDirectional(
                             duration: const Duration(milliseconds: 300),
                             top: 0.h,
@@ -322,88 +318,24 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                 ),
                               ),
                             ])),
-                        PositionedDirectional(
-                          bottom: 0.h,
-                          end: 0.w,
-                          child: Observer(
-                            builder: (_) =>
-                                Row(
-                                  children: [
-                                    Dismissible(
 
-                                      key: Key(item.product.toString()),
-
-                                      background: Container(
-                                        color: Colors.transparent,
-                                        child: const Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 20.0),
-                                            child: Icon(Icons.check,
-                                                color: Colors.white, size: 30),
-                                          ),
-                                        ),
-                                      ),
-                                      direction: DismissDirection.startToEnd,
-                                      onUpdate: (details) {},
-                                      confirmDismiss: (direction) async {
-                                        cartController.cartItems[index]
-                                            .isDismissible =
-                                        false;
-                                        cartController.cartItems.refresh();
-                                        return false;
-                                      },
-                                      onDismissed: (direction) {
-                                        //   cartController.removeItem(item);
-                                      },
-                                      child: InkWell(
-                                        onTap: () {
-                                          cartController.removeItem(item);
-                                        },
-                                        child: Container(
-                                          width: item.isDismissible ? 50.w : 0,
-                                          height: 120.h,
-                                          decoration: BoxDecoration(
-                                            color: item.isDismissible
-                                                ? Colors.red
-                                                : Colors.transparent,
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          child: Center(
-                                            child: Icon(Icons.delete,
-                                                color: Colors.white, size: 24.w),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // showCustomBlurDialog();
-                            cartController.removeItem(item);
-                            cartController.cartItems.refresh();
-                          },
-                          child: Container(
-                              width: 50.w,
-                              height: 120.h,
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.delete , color:  Colors.white,),
-                              )
-                          ),
-                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: (){
+                      cartController.removeItem(item);
+                      cartController.cartItems.refresh();
+                    },
+                    child: Container(
+
+
+
+                      child:  Icon(Icons.delete , color: primaryColor,),
+                    ),
+                  )
+                ],
               )),
         ));
   }
@@ -630,43 +562,42 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Observer(
                                 builder: (_) =>
-                                // !item.isDismissible
-                                //     ? Dismissible(
-                                //     key: Key(item.product.toString()),
-                                //     background: Container(
-                                //       width: 50.w,
-                                //       decoration: BoxDecoration(
-                                //         color: Colors.red,
-                                //         border: Border.all(
-                                //             width: 0.50,
-                                //             color: const Color(0xFFFAFAFA)),
-                                //         borderRadius: const BorderRadius.only(
-                                //             topRight: Radius.circular(20),
-                                //             bottomRight: Radius.circular(20)),
-                                //       ),
-                                //       child: const Center(
-                                //         child: Icon(Icons.delete,
-                                //             color: Colors.white, size: 30),
-                                //       ),
-                                //     ),
-                                //
-                                //     direction: DismissDirection.endToStart,
-                                //     onUpdate: (details) {},
-                                //     confirmDismiss: (direction) async {
-                                //       //    cartController.removeItem(item);
-                                //       cartController.cartItems[index]
-                                //           .isDismissible = true;
-                                //       cartController.cartItems.refresh();
-                                //
-                                //       return false; // إعادة false لمنع الحذف
-                                //     },
-                                //     onDismissed: (direction) {
-                                //       //    cartController.removeItem(item);
-                                //     },
-                                //     child:
-                                //     itemCart(item.product, item, index))
-                                //     :
-                                itemCart(item.product, item, index)));
+                                !item.isDismissible
+                                    ?
+                                Dismissible(
+                                    key: Key(item.product.toString()),
+                                    background: Container(
+                                      width: 50.w,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        border: Border.all(
+                                            width: 0.50,
+                                            color: const Color(0xFFFAFAFA)),
+                                        borderRadius: const BorderRadius.only(
+                                            topRight: Radius.circular(20),
+                                            bottomRight: Radius.circular(20)),
+                                      ),
+                                      child: const Center(
+                                        child: Icon(Icons.delete,
+                                            color: Colors.white, size: 30),
+                                      ),
+                                    ),
+                                    direction: DismissDirection.endToStart,
+                                    onUpdate: (details) {},
+                                    confirmDismiss: (direction) async {
+                                      //    cartController.removeItem(item);
+                                      cartController.cartItems[index]
+                                          .isDismissible = true;
+                                      cartController.cartItems.refresh();
+
+                                      return false; // إعادة false لمنع الحذف
+                                    },
+                                    onDismissed: (direction) {
+                                      //    cartController.removeItem(item);
+                                    },
+                                    child:
+                                    itemCart(item.product, item, index))
+                                    : itemCart(item.product, item, index)));
                       },
                     ),
                   ),
@@ -720,7 +651,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Get.put(CheckoutController());
+                                  // Get.put(CheckoutController());
                                   Get.to(() => const CheckoutView());
                                   // Get.toNamed(Routes.CHECKOUT);
                                 },

@@ -186,22 +186,9 @@ final Address addressToUpdate ;
                             ),
                           ),
                         )))
-                  // CustomTextField(
-                  //
-                  //     labelText: "Apartment", onChanged: (value) {
-                  //   controller.apartment.value = value;
-                  //
-                  //
-                  // })
+
                 ),
-//                 Expanded(
-//                     child: CustomTextField(
-//                     height: 60.h,
-//                     labelText:
-//                     addressToUpdate.apartment??
-//                         'apartment', onChanged: (value) {
-// controller.apartment.value = value;
-//                 })),
+
                 SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
                     height: 50.h,
@@ -278,7 +265,7 @@ final Address addressToUpdate ;
                               isDense: true,
                               icon: SvgPicture.asset(
                                   "assets/images/address/arrow-down.svg"),
-                              value: addressToUpdate.country ?? controller.selectedCountry.value,
+                              value: controller.selectedCountry.value,
                               isExpanded: true,
                               onChanged: (String? newValue) {
                                 controller.selectedCountry.value = newValue!;

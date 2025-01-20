@@ -35,7 +35,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'FullImage.dart';
 
-final CartController cartController = Get.put(CartController());
+final CartController cartController = Get.find();
 
 class ProductView extends GetView<ProductController> {
   const ProductView({
@@ -163,6 +163,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                   children: [
                     InkWell(
                       onTap: () {
+
                         var index = cartController
                             .cartItems
                             .indexWhere((item) =>
@@ -171,7 +172,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                         var currentItem = cartController
                             .cartItems[index];
 
-                        // تحقق إذا كانت الكمية تساوي d_limit بعد النقصان، وحذف المنتج إذا كانت كذلك
+
                         if (controller.product.value.d_limit != 0 &&
                             currentItem.quantity >
                                 controller.product.value.d_limit ||
@@ -191,7 +192,15 @@ print("${"pro id is ${controller.product.value.id}"}");
                           cartController
                               .removeItem(currentItem);
                           controller.changeAddToCartStatus();
-                        }
+
+
+                        // }
+
+                        cartController.updateQuantity(
+                          currentItem,
+                          currentItem.quantity - 1,
+                        );
+                     }
                       },
                       child: SvgPicture.asset(
                         'assets/images/home/minus.svg',
@@ -208,10 +217,13 @@ print("${"pro id is ${controller.product.value.id}"}");
                           style: secondaryTextStyle(
                               size: 15.sp.round()
                           ),
-                        ):
+                        )
+                            :
+                        cartController.cartItems.isEmpty ?
+                            SizedBox() :
                         Text(
                         cartController.cartItems[controller.cartIndex.value]
-                            .quantity.toString(),
+                            .quantity.toString() ,
                         style: secondaryTextStyle(
                             size: 15.sp.round()
                         ),
@@ -230,6 +242,8 @@ print("${"pro id is ${controller.product.value.id}"}");
                           currentItem,
                           currentItem.quantity + 1,
                         );
+
+
                       },
                       child: SvgPicture.asset(
                         'assets/images/home/plus.svg',

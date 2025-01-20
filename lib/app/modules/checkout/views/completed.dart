@@ -22,6 +22,8 @@ class Completed extends GetView<CheckoutController> {
           CustomAppBar(myFunction: () {},
             title: 'Completed',
             svgPath: "assets/images/notification.svg",
+            back: false,
+
 
           ),
           Padding(

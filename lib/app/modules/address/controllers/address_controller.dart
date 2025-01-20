@@ -96,24 +96,31 @@ class AddressController extends GetxController {
   }
 
   void getCurrentLocation(context) async {
-    // AppConstants.showLoading(context);
-    await getPermission();
-    Position location = await Geolocator.getCurrentPosition().then((value) {
-      latLng.value = LatLng(value.latitude, value.longitude);
-      print("latLng: ${latLng.value}");
-      mapController?.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: latLng.value, zoom: 14.4746)));
 
-      return Position(longitude: value.longitude, latitude: value.latitude, timestamp: DateTime.now(), accuracy: 1.0,
-        altitude: 1.0,
-        heading: 1.0,
-        speed: 1.0,
-        speedAccuracy: 1.0,
+    try {
+      await getPermission();
+      Position location = await Geolocator.getCurrentPosition().then((value) {
+        latLng.value = LatLng(value.latitude, value.longitude);
+        print("latLng: ${latLng.value}");
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: latLng.value, zoom: 14.4746)));
+
+        return Position(longitude: value.longitude, latitude: value.latitude, timestamp: DateTime.now(), accuracy: 1.0,
+          altitude: 1.0,
+          heading: 1.0,
+          speed: 1.0,
+          speedAccuracy: 1.0,
           altitudeAccuracy: 1.0,
           headingAccuracy: 1.0,
         );
-    });
-    nextScreen(location, context);
+
+      });
+      nextScreen(location, context);
+    }catch (e) {
+      Get.snackbar("Error", e.toString() , colorText: Colors.white);
+    }
+    // AppConstants.showLoading(context);
+
   }
 
 
@@ -124,25 +131,27 @@ void changeAddressStatus(status) {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!isLocationEnabled) {
-      _showLocationServicesDialog();
-      _stopSpinner();
+      // _showLocationServicesDialog();
+      // _stopSpinner();
       isPermissionGranted.value = false;
       return;
     } else {
+      Get.snackbar("Error", "Location is disabled" , colorText: Colors.white);
 
     }
 
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      _showPermissionDeniedSnackbar();
-      _stopSpinner();
+      // _showPermissionDeniedSnackbar();
+      // _stopSpinner();
       isPermissionGranted.value = false;
       return;
     }
 
     if (permission == LocationPermission.deniedForever) {
-      _showPermissionDeniedForeverDialog();
-      _stopSpinner();
+      // _showPermissionDeniedForeverDialog();
+      // _stopSpinner();
+      Get.snackbar('Error', "Permission Denied Forever Enable it From App Settings", colorText: Colors.white);
       isPermissionGranted.value = false;
       return;
     }
@@ -446,7 +455,7 @@ if(address.value.isEmpty){
             zoom: 11.0,
           )));
           setCustomMarker();
-          print(latLng.value!.latitude.toString() + ' kGooglePlex updated');
+          print('${latLng.value!.latitude} kGooglePlex updated');
         });
 
         debugPrint(value.toString());
@@ -462,7 +471,7 @@ if(address.value.isEmpty){
 
   void setCustomMarker() async {
     final BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(devicePixelRatio: 0.5, size: Size(5, 5)),
+      const ImageConfiguration(devicePixelRatio: 0.5, size: Size(5, 5)),
       'assets/images/location.png', // Replace with the location of your marker image in the assets folder.
     );
 
@@ -1430,11 +1439,48 @@ RxString addressPlace = "".obs;
   RxString addressGoventmant = "".obs;
 
   getUserLocation(LatLng currentPostion)async{
+    HomeController homeController = Get.find();
     List<Placemark> placemarks = await placemarkFromCoordinates(
         currentPostion.latitude, currentPostion.longitude);
     Placemark place = placemarks[0];
     addressPlace.value = place.name.toString() + place.street.toString() + place.locality.toString()+ place.country.toString();
     addressGoventmant.value = "${place.locality}, ${place.country}";
+    city.value = place.locality.toString();
+    selectedCountry.value = countriesList.firstWhereOrNull((element) => element.name == place.country.toString()) != null  ? place.country.toString() : "Lebanon";
+    state.value = place.administrativeArea.toString();
+    address.value = addressPlace.value ;
+////////////////////////
+    homeController.address.value = addressPlace.value;
+    homeController.city.value = place.locality.toString();
+    homeController.country.value = countriesList.firstWhereOrNull((element) => element.name == place.country.toString()) != null  ? place.country.toString() : "Lebanon";
+homeController.state.value = place.administrativeArea.toString();
+    if(homeController.state.isNotEmpty){
+      setState(homeController.state.value);
+    }
+
+    if(homeController.city.isNotEmpty){
+    setCity(homeController.city.value);
+    }
+    if(homeController.country.isNotEmpty){
+  setCountry(homeController.country.value);
+    }
+
+    if(homeController.address.isNotEmpty){
+setAddress(homeController.address.value);
+    }
+
+    nextScreen(Position(longitude: currentPostion.longitude, latitude: currentPostion.latitude, timestamp: DateTime.now(),
+        accuracy: 1.0,
+        altitude: 1.0,
+        heading: 1.0,
+        speed: 1.0,
+        speedAccuracy: 1.0, altitudeAccuracy: 1.0, headingAccuracy: 1.0
+
+
+    ),
+      Get.context
+
+    );
     print(place);
   }
 
@@ -1447,6 +1493,10 @@ setCountry(country){
 
   setCity(country){
     city.value = country;
+  }
+
+  setAddress(newAddress){
+    address.value = newAddress;
   }
 }
 

@@ -120,18 +120,10 @@ class CartController extends GetxController {
             items.map((e) => CartItem.fromJson(e)).toList();
         cartItems.assignAll(apiCartItems);
         
-        // // Retrieve cached cart items
-        // List<CartItem> cachedCartItems = getCacheCartDetails();
-        
-        // Remove items from cache that are not present in API cart details
-        // cachedCartItems.removeWhere((cachedItem) => !apiCartItems
-        //     .any((apiItem) => apiItem.product.id == cachedItem.product.id));
-        //
-        // // Update the cache with the remaining items
-        // saveCartItemsToCache(cachedCartItems);
+
         
         cartItems.refresh(); // Ensure the UI is updated
-        
+        print("cart items are ${response['data']['items']}");
         loading.value = false;
         // update();
       } else {
@@ -389,9 +381,10 @@ class CartController extends GetxController {
 
       if (response['status'] == 'success') {
         item.quantity = quantity;
-        cartItems.refresh(); // Ensure the UI is updated
+
         saveCartItems();
         update();
+        cartItems.refresh(); // Ensure the UI is updated
       } else {
         print('Failed to update quantity: ${response['data']}');
       }

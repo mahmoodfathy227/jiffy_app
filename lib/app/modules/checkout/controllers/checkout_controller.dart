@@ -25,14 +25,14 @@ RxInt total = 0.obs;
 
 
 
-var cartProducts = <CartProduct>[
-
-
-].obs;
+// var cartProducts = <CartProduct>[
+//
+//
+// ].obs;
   RxBool isAddressLoading = false.obs;
   @override
   void onInit() {
-    getCartDetails();
+    // getCartDetails();
 initCheckout();
     super.onInit();
   }
@@ -65,13 +65,13 @@ void assignDefaultAddress(address){
 
       final apiResponse = ApiDataResponse.fromJson(response);
       if (apiResponse.status == 'success') {
-        print("checkout gotten successful");
+
         
         subTotal.value =apiResponse.data['sub_total'];
        shipping.value = apiResponse.data['shipping'];
         discount.value = apiResponse.data['discount'];
         total.value = apiResponse.data['total'];
-
+        print("checkout gotten successful ${total.value}");
         isLoading.value = false;
       }
       else {
@@ -93,46 +93,49 @@ void assignDefaultAddress(address){
     }
 
   }
-void getCartDetails()  async {
-  isLoading.value = true;
-  try
-  {
-    final response = await apiConsumer.post(
-      'cart/details',
-
-    );
-
-    isLoading.value = true;
-    final apiResponse = ApiDataResponse.fromJson(response);
-    if (apiResponse.status == 'success') {
-      print("cart details gotten successful");
-for(var product in apiResponse.data['items']){
-  print("your product is ${product['product_id']}");
-  cartProducts.add(CartProduct.fromJson(product));
-}
-print("your cart items are ${cartProducts.first.product?.image}");
-      isLoading.value = false;
-
-    }
-    else {
-      handleApiErrorUser(apiResponse.message);
-      handleApiError(response.statusCode);
-      print("cart details  failed the message is ${apiResponse.message}");
-      isLoading.value = false;
-      // HapticFeedback.vibrate();
-    }
-
-  } catch (e, stackTrace) {
-    isLoading.value = false;
-
-    print('cart details  failed: ${e}');
-    // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
-    // handleApiErrorUser(apiResponse.message);
-    // errorMessage.value = e.toString() ?? "Please Check Fields and Try Again";
-    // HapticFeedback.vibrate();
-  }
-
-}
+// void getCartDetails()  async {
+//   isLoading.value = true;
+//   try
+//   {
+//     cartProducts.clear();
+//     cartProducts.refresh();
+//     final response = await apiConsumer.post(
+//       'cart/details',
+//
+//     );
+//
+//     isLoading.value = true;
+//     final apiResponse = ApiDataResponse.fromJson(response);
+//     if (apiResponse.status == 'success') {
+//       print("cart details gotten successful");
+// for(var product in apiResponse.data['items']){
+//   print("your product is ${product['product_id']}");
+//   cartProducts.add(CartProduct.fromJson(product));
+//   cartProducts.refresh();
+// }
+// print("your cart items are ${cartProducts.first.product?.image}");
+//       isLoading.value = false;
+//
+//     }
+//     else {
+//       handleApiErrorUser(apiResponse.message);
+//       handleApiError(response.statusCode);
+//       print("cart details  failed the message is ${apiResponse.message}");
+//       isLoading.value = false;
+//       // HapticFeedback.vibrate();
+//     }
+//
+//   } catch (e, stackTrace) {
+//     isLoading.value = false;
+//
+//     print('cart details  failed: ${e}');
+//     // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
+//     // handleApiErrorUser(apiResponse.message);
+//     // errorMessage.value = e.toString() ?? "Please Check Fields and Try Again";
+//     // HapticFeedback.vibrate();
+//   }
+//
+// }
 
 void confirmOrder()  async {
   isConfirmingOrder.value = true;
@@ -155,7 +158,7 @@ formDataIsEnabled: true,
       isConfirmingOrder.value = false;
       cartController.clearCart();
 
-      Get.off(() => const Completed());
+      Get.offAll(() => const Completed());
 
     }
     else {

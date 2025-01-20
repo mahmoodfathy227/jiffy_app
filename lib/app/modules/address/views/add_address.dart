@@ -37,20 +37,21 @@ class AddAddress extends GetView<AddressController> {
       ),
 
       floatingActionButton: Obx(() {
+
         // Get.put(AddressController());
         return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            buildFloatingButton(
-
-                buttonName: 'Select on Map'.tr, context: context,
-                onPressed: () {
-                  Get.to(SelectFromMap());
-                },
-                isPlainBackground: true
-
-
-            ),
+            // buildFloatingButton(
+            //
+            //     buttonName: 'Select on Map'.tr, context: context,
+            //     onPressed: () {
+            //       Get.to(SelectFromMap());
+            //     },
+            //     isPlainBackground: true
+            //
+            //
+            // ),
 
             buildFloatingButton(
 
@@ -199,13 +200,7 @@ class AddAddress extends GetView<AddressController> {
                   ),
                 ),
               )))
-                // CustomTextField(
-                //
-                //     labelText: "Apartment", onChanged: (value) {
-                //   controller.apartment.value = value;
-                //
-                //
-                // })
+
                 ),
                 SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
@@ -283,14 +278,16 @@ class AddAddress extends GetView<AddressController> {
                               isDense: true,
                               icon: SvgPicture.asset(
                                   "assets/images/address/arrow-down.svg"),
-                              value: homeController.country.value.isEmpty?
-                              controller.selectedCountry.value
-                              :
-                              homeController.country.value
+
+                              value: controller.selectedCountry.value
                               ,
                               isExpanded: true,
                               onChanged: (String? newValue) {
                                 controller.selectedCountry.value = newValue!;
+                                print("new value 1 is ${newValue}");
+
+                                print("new value 2 is ${controller.selectedCountry.value}");
+
                               },
                               items: controller.countriesList
                                   .map<DropdownMenuItem<String>>(
@@ -298,7 +295,7 @@ class AddAddress extends GetView<AddressController> {
                                     return DropdownMenuItem<String>(
                                       value: country.name,
                                       child: Text(
-                                        country.name ?? "",
+                                      homeController.country.value.isEmpty? country.name ?? "Lebanon" : homeController.country.value  ,
                                         style: primaryTextStyle(
                                           color: greyishColor,
                                           size: 14.sp.round(),
@@ -316,7 +313,7 @@ class AddAddress extends GetView<AddressController> {
             SizedBox(height: kDefaultPadding,),
             //state and city
             Obx(() {
-              HomeController homeController = Get.put(HomeController());
+              HomeController homeController = Get.find();
               if(homeController.state.isNotEmpty){
                 controller.setState(homeController.state.value);
               }
@@ -324,6 +321,17 @@ class AddAddress extends GetView<AddressController> {
               if(homeController.city.isNotEmpty){
                 controller.setCity(homeController.city.value);
               }
+              if(homeController.country.isNotEmpty){
+                controller.setCountry(homeController.country.value);
+              }
+
+              if(homeController.address.isNotEmpty){
+                controller.setAddress(homeController.address.value);
+              }
+
+
+
+
               return Row(
                 children: [
                   Expanded(
@@ -358,7 +366,8 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
               return Row(
                 children: [
                   Expanded(child: CustomTextField(
-                      // customTextEditingController: controller.addressTextEditingController.value,
+                       customTextEditingController: controller.addressTextEditingController.value,
+                      initialValue: homeController.address.value.isEmpty? '' : homeController.address.value.replaceAll('.', ''),
 
                       errorText: controller.addressError.value,
 

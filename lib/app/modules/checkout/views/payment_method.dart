@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:jiffy/app/modules/checkout/views/completed.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 
-
+CartController cartController = Get.find();
 class PaymentMethod extends GetView<CheckoutController> {
   const PaymentMethod({super.key,});
 
 
   @override
   Widget build(BuildContext context) {
-    Get.put(CheckoutController());
+    // Get.put(CheckoutController());
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: Stack(
@@ -260,14 +261,15 @@ class PaymentMethod extends GetView<CheckoutController> {
   }
 
   _buildProductScroll() {
+
     return Obx(() {
       return SizedBox(
         height: 320.h,
-        child: controller.cartProducts.isEmpty ? Center(child:
+        child: cartController.cartItems.isEmpty ? Center(child:
 
         Text("Cart is empty", style: secondaryTextStyle(),),)
             :
-        controller.isLoading.value ? Center(child: CircularProgressIndicator(color: primaryColor,)) :
+        cartController.loading.value ? Center(child: CircularProgressIndicator(color: primaryColor,)) :
 
         ListView.separated(
             shrinkWrap: true,
@@ -277,7 +279,7 @@ class PaymentMethod extends GetView<CheckoutController> {
             separatorBuilder: (context, index) {
               return SizedBox(height: 10.h,);
             },
-            itemCount: controller.cartProducts.length
+            itemCount: cartController.cartItems.length
         ),
       );
     });
@@ -333,7 +335,7 @@ placeholder: (ctx, v) {
                       return Image.asset("assets/images/placeholder.png", fit: BoxFit.fill,);
                     },
                       fit: BoxFit.fill,
-                      imageUrl: controller.cartProducts[index].product!.image!,),
+                      imageUrl: cartController.cartItems[index].product!.image!,),
                 ),
 
               ),
@@ -344,7 +346,7 @@ placeholder: (ctx, v) {
                 children: [
 
 
-                  Text(controller.cartProducts[index].product!.name!,
+                  Text(cartController.cartItems[index].product!.name!,
                     style: secondaryTextStyle(
                         weight: FontWeight.w500,
                         color: const Color(0xff20003D), size: 20.sp.round()),),
@@ -359,7 +361,7 @@ placeholder: (ctx, v) {
 
                           ),),
                         Spacer(),
-                        Text("${"qty".tr} : ${controller.cartProducts[index].quantity}",
+                        Text("${"qty".tr} : ${cartController.cartItems[index].quantity}",
                           style: secondaryTextStyle(color: primaryColor,
                               weight: FontWeight.w700,
                               size: 12.sp.round()
@@ -367,7 +369,7 @@ placeholder: (ctx, v) {
                       ],
                     ),
                   ),
-                  Text("\$ ${controller.cartProducts[index].product!.price.toString()}",
+                  Text("\$ ${cartController.cartItems[index].product!.price.toString()}",
                     style: secondaryTextStyle(color: primaryColor,
                         weight: FontWeight.w700,
                         size: 16.sp.round()

@@ -57,103 +57,103 @@ String randomId = "123";
               ),
             ),
             SizedBox(height: 20.h),
-            Container(
-              height: 55.h,
-              margin: EdgeInsets.symmetric(horizontal: kDefaultPadding * 2),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(35),
-                ),
-              ),
-
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          isCompany = false;
-                          randomId = Random().nextInt(10000).toString();
-                          controller.setUser("user");
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-
-                        decoration: BoxDecoration(
-                          gradient:
-                          !isCompany ?
-
-                          const LinearGradient(
-                            colors: [
-                              Color(0xFF6900CC), // Starting color (dark purple)
-                              Color(0xFF20003D), // Ending color (light purple)
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ) : null, // Dark purple background
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(35),
-                          ),
-                        ),
-                        child: Text(
-                          'Individual'.tr,
-                          style: primaryTextStyle(
-                              size: 16.sp.round(),
-                              weight: !isCompany ? FontWeight.w900 : FontWeight
-                                  .w300,
-                              color: !isCompany ? Colors.white : primaryColor
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          isCompany = true;
-                          randomId = Random().nextInt(10000).toString();
-                          controller.setUser("dealer");
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-
-                        decoration: BoxDecoration(
-                          gradient:
-                          isCompany ?
-
-                          const LinearGradient(
-                            colors: [
-                              Color(0xFF6900CC), // Starting color (dark purple)
-                              Color(0xFF20003D), // Ending color (light purple)
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ) : null,
-                          // Light purple background
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(35),
-                          ),
-                        ),
-                        child: Text(
-                            'Company'.tr,
-                            style: primaryTextStyle(
-                                size: 16.sp.round(),
-                                weight: isCompany ? FontWeight.w900 : FontWeight
-                                    .w300,
-                                color: !isCompany ? primaryColor : Colors.white
-                            )
-
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   height: 55.h,
+            //   margin: EdgeInsets.symmetric(horizontal: kDefaultPadding * 2),
+            //   decoration: const BoxDecoration(
+            //     color: Colors.white,
+            //     borderRadius: BorderRadius.all(
+            //       Radius.circular(35),
+            //     ),
+            //   ),
+            //
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child: InkWell(
+            //           onTap: () {
+            //             setState(() {
+            //               isCompany = false;
+            //               randomId = Random().nextInt(10000).toString();
+            //               controller.setUser("user");
+            //             });
+            //           },
+            //           child: Container(
+            //             alignment: Alignment.center,
+            //
+            //             decoration: BoxDecoration(
+            //               gradient:
+            //               !isCompany ?
+            //
+            //               const LinearGradient(
+            //                 colors: [
+            //                   Color(0xFF6900CC), // Starting color (dark purple)
+            //                   Color(0xFF20003D), // Ending color (light purple)
+            //                 ],
+            //                 begin: Alignment.centerLeft,
+            //                 end: Alignment.centerRight,
+            //               ) : null, // Dark purple background
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(35),
+            //               ),
+            //             ),
+            //             child: Text(
+            //               'Individual'.tr,
+            //               style: primaryTextStyle(
+            //                   size: 16.sp.round(),
+            //                   weight: !isCompany ? FontWeight.w900 : FontWeight
+            //                       .w300,
+            //                   color: !isCompany ? Colors.white : primaryColor
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       // Expanded(
+            //       //   child: InkWell(
+            //       //     onTap: () {
+            //       //       setState(() {
+            //       //         isCompany = true;
+            //       //         randomId = Random().nextInt(10000).toString();
+            //       //         controller.setUser("dealer");
+            //       //       });
+            //       //     },
+            //       //     child: Container(
+            //       //       alignment: Alignment.center,
+            //       //
+            //       //       decoration: BoxDecoration(
+            //       //         gradient:
+            //       //         isCompany ?
+            //       //
+            //       //         const LinearGradient(
+            //       //           colors: [
+            //       //             Color(0xFF6900CC), // Starting color (dark purple)
+            //       //             Color(0xFF20003D), // Ending color (light purple)
+            //       //           ],
+            //       //           begin: Alignment.centerLeft,
+            //       //           end: Alignment.centerRight,
+            //       //         ) : null,
+            //       //         // Light purple background
+            //       //         borderRadius: BorderRadius.all(
+            //       //           Radius.circular(35),
+            //       //         ),
+            //       //       ),
+            //       //       child: Text(
+            //       //           'Company'.tr,
+            //       //           style: primaryTextStyle(
+            //       //               size: 16.sp.round(),
+            //       //               weight: isCompany ? FontWeight.w900 : FontWeight
+            //       //                   .w300,
+            //       //               color: !isCompany ? primaryColor : Colors.white
+            //       //           )
+            //       //
+            //       //       ),
+            //       //     ),
+            //       //   ),
+            //       // ),
+            //     ],
+            //   ),
+            // ),
             SizedBox(height: 41.h),
          buildRegisterFields(context),
 
@@ -319,16 +319,16 @@ buildBackBtn(),
                       ))
                 ])),
     SizedBox(height: 25.h),
-        isCompany
-            ? ShowUp(
-          delay: 600,
-          child: CustomTextField(
-
-            labelText: 'Company Name'.tr,
-            onChanged: (value) => controller.company.value = value,
-            errorText: controller.companyError.value ,
-          ),
-        ) :
+        // isCompany
+        //     ? ShowUp(
+        //   delay: 600,
+        //   child: CustomTextField(
+        //
+        //     labelText: 'Company Name'.tr,
+        //     onChanged: (value) => controller.company.value = value,
+        //     errorText: controller.companyError.value ,
+        //   ),
+        // ) :
         const SizedBox(),
 
 
@@ -413,32 +413,32 @@ buildBackBtn(),
 
         SizedBox(height: 25.h),
 
-        Row(
-          children: [
-
-            Expanded(
-              child: Container(
-                height: 1,
-
-                color: Colors.grey[300],
-              ),
-            ),
-            SizedBox(width: 10.w,),
-            // Text("Sign up with", style: primaryTextStyle(
-            //     weight: FontWeight.w400,
-            //     size: 16.sp.round(),
-            //     color: Color(0xff10001F)
-            // ),),
-            // SizedBox(width: 10.w,),
-            // Expanded(
-            //   child: Container(
-            //     height: 1,
-            //
-            //     color: Colors.grey[300],
-            //   ),
-            // )
-          ],
-        ),
+        // Row(
+        //   children: [
+        //
+        //     Expanded(
+        //       child: Container(
+        //         height: 1,
+        //
+        //         color: Colors.grey[300],
+        //       ),
+        //     ),
+        //     SizedBox(width: 10.w,),
+        //     // Text("Sign up with", style: primaryTextStyle(
+        //     //     weight: FontWeight.w400,
+        //     //     size: 16.sp.round(),
+        //     //     color: Color(0xff10001F)
+        //     // ),),
+        //     // SizedBox(width: 10.w,),
+        //     // Expanded(
+        //     //   child: Container(
+        //     //     height: 1,
+        //     //
+        //     //     color: Colors.grey[300],
+        //     //   ),
+        //     // )
+        //   ],
+        // ),
         // SizedBox(
         //   width: MediaQuery
         //       .of(context)

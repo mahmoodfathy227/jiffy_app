@@ -157,7 +157,7 @@ class _MapViewState extends State<MyMapView>
   void _onSelect() {
     if (_selectedLocation == null) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Your current location')));
+          .showSnackBar(const SnackBar(content: Text('Your current location')));
     } else {
       Navigator.of(context).pop(_selectedLocation);
     }
@@ -276,37 +276,10 @@ class _MapViewState extends State<MyMapView>
       key: homeScaffoldKey, // Assign the key here
 
       appBar:  CustomAppBar(
-        title: 'Choose Your Location', myFunction: () {  },
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     AwesomePlaceSearch(
-      //       context: context,
-      //       key: "AIzaSyBPKhPD8sJQF1ky6VxvthFzkeYNjlZWjBg",
-      //       onTap: (value) async {
-      //         final va = await value;
-      //         setState(
-      //           () {
-      //             prediction = va;
-      //             if (_markers.isNotEmpty) {
-      //               MarkerId markerId = MarkerId(_markerIdVal());
-      //               Marker? marker = _markers[markerId];
-      //               Marker? updatedMarker = marker?.copyWith(
-      //                 positionParam:
-      //                     LatLng(prediction!.latitude!, prediction!.longitude!),
-      //               );
+        title: 'Confirm  Location', myFunction: () {  },
 
-      //               _markers[markerId] = updatedMarker!;
-      //               _selectedLocation =
-      //                   LatLng(prediction!.latitude!, prediction!.longitude!);
-      //             }
-      //           },
-      //         );
-      //       },
-      //     ).show();
-      //   },
-      //   child: const Icon(Icons.search),
-      // ),
+      ),
+
       body: Stack(children: [
         SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -355,6 +328,7 @@ class _MapViewState extends State<MyMapView>
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8),
         child: MySecondDefaultButton(
+
           isloading: false,
           onPressed: _onSelect,
           btnText: 'save',
