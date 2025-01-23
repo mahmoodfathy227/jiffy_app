@@ -231,6 +231,7 @@ class ProductController extends GetxController {
       product.value = Product.fromJson(response['data']);
 
      print("you attachments are ${product.value.attachments!}");
+      print("you searching id  is $id");
 
      for(var attachment in product.value.attachments!){
        if(attachment['name'] == "app_show"){
@@ -246,9 +247,10 @@ class ProductController extends GetxController {
       setSelectedIndex(selectedIndex.value);
       changeImagesList(selectedColor.value);
       await getProductReviews();
-      print("your product data is ${product.value}");
+      print("your product data is ${product.value.name}");
 isAddToCartActive.value = false;
       isProductLoading.value = false;
+
     } catch (e, stackTrace) {
       print(stackTrace.toString() + ' product test error' + '${e.toString()}');
 

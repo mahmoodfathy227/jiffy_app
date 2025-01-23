@@ -1905,7 +1905,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         print("tapped here");
                         if (isAddress) {
                           print("going to home");
-                          Get.put(CartController());
+
                           Get.off(() => MainView());
                         } else {
                           print("going to home no");
@@ -2173,7 +2173,7 @@ String GetMaxChar(String value, int max) {
 //     );
 //   }
 
-   final CartController cartController = Get.put(CartController());
+
 
 //   Widget _buildSelectedIcon(index, String iconName, String label) {
 //     return SizedBox(
@@ -4232,7 +4232,6 @@ buildFloatingButton({required String buttonName,
 Widget globalProductCard(Product product, int index) {
   return GestureDetector(
     onTap: () async {
-      ProductController productController = Get.put(ProductController());
       await productController.getProduct(product.id!);
       Get.to(const ProductView());
     },
@@ -4286,10 +4285,8 @@ Widget globalProductCard(Product product, int index) {
                                                 CircularProgressIndicator())),
                                     // مؤشر تحميل
                                     errorWidget: (context, url, error) =>
-                                        Image.network(
-                                          'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-                                          // صورة بديلة عند فشل التحميل
-                                          height: 120.h,
+                                        Lottie.asset(
+                                            "assets/images/jiffy_placeholder.json"
                                         ),
                                     fit: BoxFit.cover,
                                   ),
@@ -4684,7 +4681,6 @@ class _buildCardProductState extends State<buildProductCard> {
     return Obx(() {
       return GestureDetector(
         onTap: () async {
-          ProductController productController = Get.put(ProductController());
           await productController.getProduct(widget.product.id!);
           Get.to(const ProductView());
         },
@@ -4747,10 +4743,8 @@ class _buildCardProductState extends State<buildProductCard> {
 
                                           // مؤشر تحميل
                                           errorWidget: (context, url, error) =>
-                                              Image.network(
-                                                'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-                                                // صورة بديلة عند فشل التحميل
-                                                height: 120.h,
+                                              Lottie.asset(
+                                                  "assets/images/jiffy_placeholder.json"
                                               ),
                                           fit: BoxFit.cover,
                                         ),
@@ -5461,15 +5455,17 @@ Widget placeHolderProductCard() {
 
 
  Widget productCard(Product product, context, int index) {
-  ProductController productController = Get.put(ProductController());
-  CartController myCartController = Get.put(CartController());
+
 
   return Obx(() {
     return GestureDetector(
         onTap: () async {
-          productController.productId.value = product.id!;
+
+          // ProductController productController = Get.find<ProductController>();
+       productController.productId.value = product.id!;
           await productController.getProduct(product.id!);
-          Get.to(const ProductView());
+
+          Get.to(() => const ProductView());
         },
         child:
         productController.productId.value == product.id &&
@@ -5545,10 +5541,8 @@ Widget placeHolderProductCard() {
                                         ),
 
                                     errorWidget: (context, url, error) =>
-                                        Image.network(
-                                          'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-
-                                          height: 120.h,
+                                        Lottie.asset(
+                                            "assets/images/jiffy_placeholder.json"
                                         ),
                                     fit: BoxFit.cover,
                                   ),
@@ -5576,7 +5570,14 @@ Widget placeHolderProductCard() {
                             Flexible(
                               flex: 1,
                               child: Text(
-                                '${product.size ?? 300} gm',
+
+                                product.description.toString().length >= 12 ?
+                                '${product.description.substring(0, 12) ?? ""}'
+                                    :
+                                '${product.description ?? ""}'
+
+                                ,
+                                overflow: TextOverflow.ellipsis,
                                 style: secondaryTextStyle(
                                   color: Color(0xFF20003D),
                                   size: 12.sp.round(),
@@ -5616,10 +5617,10 @@ Widget placeHolderProductCard() {
                                     ),
                                     Obx(() {
                                       return
-                                        isProductInCart(product, myCartController) &&
+                                        isProductInCart(product, cartController) &&
                                             userToken != null
                                             ?
-                                        buildShowAddToCartButton(context, product, myCartController , product.outOfStock)
+                                        buildShowAddToCartButton(context, product, cartController , product.outOfStock)
 
                                             :
                                         buildAddToCartButton(context, product, product.outOfStock);
@@ -5713,10 +5714,8 @@ Widget placeHolderProductCard() {
                                             ),
 
                                         errorWidget: (context, url, error) =>
-                                            Image.network(
-                                              'https://jiffy.abadr.work/storage/products/01JAHWCTCQC9V501F1ZPF46G4T.png',
-
-
+                                            Lottie.asset(
+                                                "assets/images/jiffy_placeholder.json"
                                             ),
                                         fit: BoxFit.contain,
                                       ),
@@ -5744,7 +5743,12 @@ Widget placeHolderProductCard() {
                                 Flexible(
                                   flex: 1,
                                   child: Text(
-                                    '${product.size ?? 300} gm',
+                                      product.description.toString().length >= 12 ?
+                                      '${product.description.substring(0, 12) ?? ""}'
+                                    :
+                                      '${product.description ?? ""}'
+
+                                    ,
                                     style: secondaryTextStyle(
                                       color: Color(0xFF20003D),
                                       size: 12.sp.round(),
@@ -5785,10 +5789,10 @@ Widget placeHolderProductCard() {
 
 
 
-                                        isProductInCart(product, myCartController) &&
+                                        isProductInCart(product, cartController) &&
                                             userToken != null
                                             ?
-                                        buildShowAddToCartButton(context, product, myCartController ,  product.outOfStock)
+                                        buildShowAddToCartButton(context, product, cartController ,  product.outOfStock)
 
                                             :
                                         buildAddToCartButton(context, product , product.outOfStock)

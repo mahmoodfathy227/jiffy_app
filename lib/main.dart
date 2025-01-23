@@ -8,15 +8,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jiffy/app/modules/address/bindings/address_binding.dart';
+import 'package:jiffy/app/modules/address/controllers/address_controller.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/checkout/bindings/checkout_binding.dart';
+import 'package:jiffy/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/help/bindings/help_binding.dart';
+import 'package:jiffy/app/modules/help/controllers/help_controller.dart';
 import 'package:jiffy/app/modules/main/controllers/tab_controller.dart';
 import 'package:jiffy/app/modules/navBar/controllers/nav_bar_controller.dart';
+import 'package:jiffy/app/modules/orders/controllers/orders_controller.dart';
 import 'package:jiffy/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:jiffy/app/utils/traslation.dart';
 import 'package:restart_app/restart_app.dart';
@@ -36,13 +40,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 import 'app/modules/address/views/address_view.dart';
+import 'app/modules/auth/controllers/auth_controller.dart';
 import 'app/modules/checkout/views/payment_method.dart';
+import 'app/modules/global/controller/controller.dart';
 import 'app/modules/global/model/test_model_response.dart';
+import 'app/modules/home/controllers/home_controller.dart';
 import 'app/modules/onboarding/controllers/onboarding_controller.dart';
 
 import 'package:flutter/services.dart';
 
+import 'app/modules/product/controllers/product_controller.dart';
 import 'app/modules/product/views/product_view.dart';
+import 'app/modules/profile/controllers/profile_controller.dart';
 import 'app/modules/search/controllers/search_controller.dart';
 
 final sl = GetIt.instance;
@@ -187,12 +196,21 @@ _handleUri() {
 }
 
 CustomSearchController customSearchController = Get.put(CustomSearchController());
-WishlistController wishListController = Get.put(WishlistController());
- CartController cartController = Get.put(CartController());
+
+
 
 NavBarController tabController = Get.put(NavBarController());
 
+ ProductController productController = Get.find<ProductController>();
+CheckoutController checkoutController = Get.find<CheckoutController>();
+CartController cartController = Get.find<CartController>();
+WishlistController wishListController = Get.find<WishlistController>();
+AddressController addressController = Get.find<AddressController>();
+ProfileController profileController = Get.find<ProfileController>();
+
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
 
@@ -222,10 +240,30 @@ class MyApp extends StatelessWidget {
                       fallbackLocale: const Locale('en'),
                       theme: AppTheme.lightTheme(color: snap.data),
                       initialRoute: Routes.SPLASH,
-                      initialBinding: SplashBinding(),
+                      initialBinding: BindingsBuilder(
+                        () {
+                          Get.lazyPut(() => AuthController() , fenix: true);
+                          Get.lazyPut(() => GlobalController() , fenix: true, );
+                          Get.lazyPut(() => CartController() , fenix: true);
+
+                          Get.lazyPut(() => ProfileController() , fenix: true);
+                          Get.lazyPut(() => HomeController() , fenix: true);
+                          Get.lazyPut(() => ProductController() , fenix: true);
+                          // Get.put(() => ProductController());
+                          // Get.put(() => CartController());
+                          Get.lazyPut(() => CheckoutController() , fenix: true);
+                          Get.lazyPut(() => OrdersController() , fenix: true);
+                          Get.lazyPut(() => AddressController() , fenix: true);
+                          Get.lazyPut(() => CustomSearchController() , fenix: true);
+                          Get.lazyPut(() => WishlistController() , fenix: true);
+                          Get.lazyPut(() => HelpController() , fenix: true);
+
+
+                        }),
                       // initialRoute: Routes.CHECKOUT,
                       // initialBinding: CheckoutBinding(),
                       // home: const PaymentMethod(),
+
                       getPages: AppPages.routes,
                     );
                   });

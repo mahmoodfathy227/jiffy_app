@@ -54,7 +54,8 @@ if(inComingbodyRequest != null){
 
  combinedMap = {}..addAll(inComingbodyRequest);
  if(selectedCategory.value.isNotEmpty){
-   combinedMap.addAll({'category_ids[0]':categories.firstWhere((element) => element.name == selectedCategory.value).id.toString()});
+   combinedMap.addAll({'category_ids[0]':
+   categories.firstWhereOrNull((element) => element.name == selectedCategory.value)?.id.toString() ?? ""});
  }
 
 }

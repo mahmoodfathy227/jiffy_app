@@ -29,7 +29,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
   final CartController cartController = Get.find();
-  final ProductController productController = Get.put(ProductController());
+
 
   late AnimationController _controller;
   late Animation<double> _animation;

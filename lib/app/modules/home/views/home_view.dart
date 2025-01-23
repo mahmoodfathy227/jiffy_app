@@ -29,9 +29,9 @@ import 'dart:math' as math;
 class HomeView extends StatelessWidget {
   // Inject HomeController using GetX
   final HomeController homeController = Get.put(HomeController());
-  final CartController cartController =
-   Get.put(CartController());
-  final WishlistController wishListController = Get.put(WishlistController());
+
+
+
 
 
   @override
@@ -664,15 +664,7 @@ homeController: homeController,
               padding: EdgeInsetsDirectional.only(start: 5.w),
               child:
               product.length == 0 ?
-              ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                     return
-
-                    productCard(AppConstants.sampleProduct, context, index);
-                },
-              )
+            const SizedBox()
                   :
               Padding(
                 padding: EdgeInsetsDirectional.only(start: 10.w),
@@ -681,7 +673,9 @@ homeController: homeController,
                   scrollDirection: Axis.horizontal,
                   itemCount: product.length,
                   itemBuilder: (context, index) {
-                    return productCard(product[index], context, index);
+                    return Skeletonizer(
+                      enabled:  homeController.isLoading.value,
+                        child: productCard(product[index], context, index));
                   },
                 ),
               ),
@@ -716,198 +710,169 @@ homeController: homeController,
 
 
   Widget premiumProductTemplate(Product product, int index, context) {
-    CartController myCartController = Get.find();
+
     return GestureDetector(
       onTap: () async {
-        ProductController productController = Get.put(ProductController());
+        // ProductController productController = Get.find<ProductController>();
+
         await productController.getProduct(product.id!);
         Get.to(const ProductView());
       },
-      child: Padding(
-        padding: EdgeInsets.only(
+      child: Opacity(
+        opacity: product.outOfStock ? 0.5 : 1,
+        child: Padding(
+          padding: EdgeInsets.only(
 
-            top: 0.h),
-        child: SizedBox(
-          height: 290.h,
-          width: 180.w,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              SvgPicture.asset("assets/images/home/premium_product.svg",
-                height: 320.h,
-              ),
-              SizedBox(
-                height: 340.h,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 20.h,),
-                    CachedNetworkImage(
-                      width: 100.w,
-                      height: 100.h,
-                      imageUrl: "${product.image}",
-                      placeholder: (context, url) =>
-                          Lottie.asset(
-                            "assets/images/jiffy_placeholder.json",
-                          ),
-                      errorWidget: (context, url, error) =>
-                          Image.asset(
-                            "assets/images/placeholder.png",
-                          ),
+              top: 0.h),
+          child: SizedBox(
+            height: 290.h,
+            width: 180.w,
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                SvgPicture.asset("assets/images/home/premium_product.svg",
+                  height: 320.h,
+                ),
+                SizedBox(
+                  height: 340.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+
+                      SizedBox(height: 20.h,),
+                      CachedNetworkImage(
+                        width: 100.w,
+                        height: 100.h,
+                        imageUrl: "${product.image}",
+                        placeholder: (context, url) =>
+                            Lottie.asset(
+                              "assets/images/jiffy_placeholder.json",
+                            ),
+                        errorWidget: (context, url, error) =>
+                            Image.asset(
+                              "assets/images/placeholder.png",
+                            ),
 
 
-                    ),
-
-                    Container(
-                      width: 100.w,
-                      alignment: Alignment.center,
-                      child: Text(
-                        "${product.name}",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        style: primaryTextStyle(
-                          color: Color(0xFFFEFEFE),
-                          size: 15.sp.round(),
-                          height: 1.05,
-                          weight: FontWeight.w900,
-                          letterSpacing: -0.41,
-                        ),
                       ),
-                    ),
 
-                    Transform.translate(
-                      offset: const Offset(0, 10),
-                      child: Container(
+                      Container(
                         width: 100.w,
                         alignment: Alignment.center,
                         child: Text(
-                          "300 gm",
+                          "${product.name}",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
+                          maxLines: 1,
                           style: primaryTextStyle(
                             color: Color(0xFFFEFEFE),
-                            size: 14.sp.round(),
+                            size: 15.sp.round(),
                             height: 1.05,
-                            weight: FontWeight.w400,
+                            weight: FontWeight.w900,
                             letterSpacing: -0.41,
                           ),
                         ),
                       ),
-                    ),
 
-                    Transform.translate(
-                      offset:  Offset(0, 55.h),
-                      child: Container(
+                      Transform.translate(
+                        offset: const Offset(0, 10),
+                        child: Container(
                           width: 100.w,
                           alignment: Alignment.center,
                           child: Text(
-                              "\$ ${product.price}",
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: primaryTextStyle(
-                                color: Color(0xFFFEFEFE),
-                                size: 17.sp.round(),
-                              )
-                          )
+                            "300 gm",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: primaryTextStyle(
+                              color: Color(0xFFFEFEFE),
+                              size: 14.sp.round(),
+                              height: 1.05,
+                              weight: FontWeight.w400,
+                              letterSpacing: -0.41,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
 
-                    SizedBox(height: 5.h,),
-                    Obx(() {
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: myCartController.cartItems.any((item) =>
-                        item.product.id == product.id) ?
-                        Transform.translate(
-                          offset: Offset(0, 20),
-                          child: Stack(
+                      Transform.translate(
+                        offset:  product.outOfStock ?  Offset(0, 85.h)  : Offset(0, 55.h),
+                        child: Container(
+                            width: 100.w,
                             alignment: Alignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  addToCart(product);
-                                },
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                        height: 100.h,
-                                        color: Colors.white,
-                                        fit: BoxFit.cover,
-                                        "assets/images/home/add_to_cart_premium.svg"),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 15.h),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Column(children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.only(
-                                                start: 5.w,
+                            child: Text(
+                                "\$ ${product.price}",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: primaryTextStyle(
+                                  color: Color(0xFFFEFEFE),
+                                  size: 17.sp.round(),
+                                )
+                            )
+                        ),
+                      ),
+
+                      SizedBox(height: 5.h,),
+                      product.outOfStock ?
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.red,
+                        ),
+                        child: Text("Out Of Stock",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: primaryTextStyle(
+                              color: Color(0xFFFEFEFE),
+                              size: 14.sp.round(),
+                            )),
+                      )
+                          :
+                      Obx(() {
+                        return
 
 
-                                              ),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  handleDecrement(product , myCartController, product.outOfStock);
-                                                },
-                                                child: SvgPicture.asset(
-                                                  'assets/images/home/minus.svg',
-                                                  color: primaryColor,
-                                                  height: 20.h,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5.h,
-                                            )
-                                          ]),
-                                          Column(children: [
-                                            Text(
-                                              '${myCartController
-                                                  .cartItems[myCartController
-                                                  .cartItems.indexWhere((item) =>
-                                              item.product.id == product.id)]
-                                                  .quantity}',
-                                              textAlign: TextAlign.center,
-                                              style: primaryTextStyle(
 
-                                                size: 20.sp.round(),
-                                                height: 1.05,
-                                                weight: FontWeight.w900,
-                                                letterSpacing: -0.41,
-                                                color: primaryColor,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 2.h,
-                                            )
-                                          ]),
-                                          Column(
-                                            children: [
+                          AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: cartController.cartItems.any((item) =>
+                          item.product.id == product.id) ?
+                          Transform.translate(
+                            offset: Offset(0, 20),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    addToCart(product);
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                          height: 100.h,
+                                          color: Colors.white,
+                                          fit: BoxFit.cover,
+                                          "assets/images/home/add_to_cart_premium.svg"),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 15.h),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Column(children: [
                                               Padding(
-                                                padding:
-                                                Get.locale!.languageCode == 'ar' ?
-                                                EdgeInsets.only(
-                                                    left: 5.w
+                                                padding: EdgeInsetsDirectional.only(
+                                                  start: 5.w,
 
-
-                                                )
-                                                :
-                                                EdgeInsets.only(
-
-
-                                                  right: 5.w
 
                                                 ),
                                                 child: InkWell(
                                                   onTap: () {
-                                                    handleIncrement(product , myCartController, product.outOfStock);
+                                                    handleDecrement(product , cartController, product.outOfStock);
                                                   },
                                                   child: SvgPicture.asset(
-                                                    'assets/images/home/plus.svg',
+                                                    'assets/images/home/minus.svg',
                                                     color: primaryColor,
                                                     height: 20.h,
                                                   ),
@@ -916,43 +881,97 @@ homeController: homeController,
                                               SizedBox(
                                                 height: 5.h,
                                               )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                            ]),
+                                            Column(children: [
+                                              Text(
+                                                '${cartController
+                                                    .cartItems[cartController
+                                                    .cartItems.indexWhere((item) =>
+                                                item.product.id == product.id)]
+                                                    .quantity}',
+                                                textAlign: TextAlign.center,
+                                                style: primaryTextStyle(
+
+                                                  size: 20.sp.round(),
+                                                  height: 1.05,
+                                                  weight: FontWeight.w900,
+                                                  letterSpacing: -0.41,
+                                                  color: primaryColor,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 2.h,
+                                              )
+                                            ]),
+                                            Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                  Get.locale!.languageCode == 'ar' ?
+                                                  EdgeInsets.only(
+                                                      left: 5.w
+
+
+                                                  )
+                                                  :
+                                                  EdgeInsets.only(
+
+
+                                                    right: 5.w
+
+                                                  ),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      handleIncrement(product , cartController, product.outOfStock);
+                                                    },
+                                                    child: SvgPicture.asset(
+                                                      'assets/images/home/plus.svg',
+                                                      color: primaryColor,
+                                                      height: 20.h,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5.h,
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
 
-                            ],
+                              ],
+                            ),
+                          )
+                              :
+                          GestureDetector(
+                            onTap: () {
+                              addToCart(product);
+                            },
+                            child: Transform.translate(
+                              offset: Offset(0, 15),
+                              child: SvgPicture.asset(
+                                  height: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width / 3.9,
+                                  fit: BoxFit.cover,
+                                  "assets/images/home/add_to_cart_premium.svg"),
+                            ),
                           ),
-                        )
-                            :
-                        GestureDetector(
-                          onTap: () {
-                            addToCart(product);
-                          },
-                          child: Transform.translate(
-                            offset: Offset(0, 15),
-                            child: SvgPicture.asset(
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 3.9,
-                                fit: BoxFit.cover,
-                                "assets/images/home/add_to_cart_premium.svg"),
-                          ),
-                        ),
-                      );
-                    }),
+                        );
+                      }),
 
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1080,7 +1099,7 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
           shrinkWrap: true,
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
-          itemCount: 8,
+          itemCount: 4,
           itemBuilder: (context, index) {
             double offset = _scrollController.hasClients
                 ? _scrollController.offset

@@ -261,6 +261,7 @@ void changeAddressStatus(status) {
           //todo: set shipping id
           // cartController.shippingID.value = address.id.toString();
           // Handle the found address
+          print("addresss list are ${addressList.last.label +  addressList.last.country}");
         } catch (e) {
           if (e is StateError) {
             // Handle the case where no address is found
@@ -497,7 +498,7 @@ if(address.value.isEmpty){
 
     final updatedAddress = Address(
       id: addressToUpdate.id,
-      label: label.value.isEmpty ? addressToUpdate.label :  label.value,
+      label: selectedLabel.value.isEmpty ? addressToUpdate.label :  selectedLabel.value,
       apartment: apartment.value.isEmpty ? addressToUpdate.apartment : apartment.value,
       floor: floor.value.isEmpty ? addressToUpdate.floor : floor.value,
       building: building.value.isEmpty? addressToUpdate.building : building.value,
@@ -606,17 +607,7 @@ print("update address is ${updatedAddress.toJson()}");
 
   bool isFirstOpen = true;
 RxString selectedLabel = 'Home'.obs;
-  // List<Map<String, String>> labels = [
-  //   {
-  //     "name": "Home",
-  //
-  //   },
-  //   {
-  //     "name": "Work",
-  //
-  //   },
-  //
-  // ];
+
   List<Map<String, String>> worldCountries = [
     {
       "name": "Afghanistan",
@@ -1449,25 +1440,25 @@ RxString addressPlace = "".obs;
     selectedCountry.value = countriesList.firstWhereOrNull((element) => element.name == place.country.toString()) != null  ? place.country.toString() : "Lebanon";
     state.value = place.administrativeArea.toString();
     address.value = addressPlace.value ;
-////////////////////////
-    homeController.address.value = addressPlace.value;
-    homeController.city.value = place.locality.toString();
-    homeController.country.value = countriesList.firstWhereOrNull((element) => element.name == place.country.toString()) != null  ? place.country.toString() : "Lebanon";
-homeController.state.value = place.administrativeArea.toString();
-    if(homeController.state.isNotEmpty){
-      setState(homeController.state.value);
-    }
-
-    if(homeController.city.isNotEmpty){
-    setCity(homeController.city.value);
-    }
-    if(homeController.country.isNotEmpty){
-  setCountry(homeController.country.value);
-    }
-
-    if(homeController.address.isNotEmpty){
-setAddress(homeController.address.value);
-    }
+// ////////////////////////
+//     homeController.address.value = addressPlace.value;
+//     homeController.city.value = place.locality.toString();
+//     homeController.country.value = countriesList.firstWhereOrNull((element) => element.name == place.country.toString()) != null  ? place.country.toString() : "Lebanon";
+// homeController.state.value = place.administrativeArea.toString();
+//     if(homeController.state.isNotEmpty){
+//       setState(homeController.state.value);
+//     }
+//
+//     if(homeController.city.isNotEmpty){
+//     setCity(homeController.city.value);
+//     }
+//     if(homeController.country.isNotEmpty){
+//   setCountry(homeController.country.value);
+//     }
+//
+//     if(homeController.address.isNotEmpty){
+// setAddress(homeController.address.value);
+//     }
 
     nextScreen(Position(longitude: currentPostion.longitude, latitude: currentPostion.latitude, timestamp: DateTime.now(),
         accuracy: 1.0,

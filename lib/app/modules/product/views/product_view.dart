@@ -11,7 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:jiffy/app/modules/auth/views/login_view.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/cart/views/cart_view.dart';
-import 'package:jiffy/app/modules/global/config/helpers.dart';
+import 'package:jiffy/app/modules/global/config/helpers.dart' hide onLikeButtonTapped;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 
@@ -20,6 +20,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:get/get.dart';
 
 import '../../../../main.dart';
+import '../../../builtInPackage/like_button-2.0.5/lib/like_button.dart';
 import '../../global/config/configs.dart';
 import '../../global/model/model_response.dart';
 import '../../global/model/test_model_response.dart';
@@ -35,22 +36,25 @@ import 'package:path_provider/path_provider.dart';
 
 import 'FullImage.dart';
 
-final CartController cartController = Get.find();
+
 
 class ProductView extends GetView<ProductController> {
   const ProductView({
     Key? key,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    ProductController().initialized ? null : Get.put(ProductController());
+
     controller.setIndex();
-print("${"pro id is ${controller.product.value.id}"}");
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
 
-      body:Obx(() {
+      body:
+
+      Obx(() {
         return
 
           Opacity(
@@ -77,8 +81,6 @@ print("${"pro id is ${controller.product.value.id}"}");
                       ],
                     ),
 
-                    //Search Bar
-                    // _buildSearchWidget(context),
 
 
                     Column(
@@ -298,6 +300,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                                       Get.to(()=> LoginView());
                                     }else {
                                       if (controller.isAddToCartActive.value) {
+Get.put(CartController());
                                         Get.to(() => CartPage());
                                       } else {
                                         controller.changeAddToCartStatus();
@@ -546,54 +549,7 @@ print("${"pro id is ${controller.product.value.id}"}");
                         delay: 300,
                         child: GestureDetector(
                           onTap: () {
-                            // // Handle Add to Cart action
-                            // if (userToken != null) {
-                            //   print('teasdsadsa');
-                            //   bool isProductInCart =
-                            //       cartController.cartItems.any(
-                            //     (element) =>
-                            //         element.product != null &&
-                            //         controller.product != null &&
-                            //         element.selectedSize ==
-                            //             controller.selectedSize.value &&
-                            //         element.product.id ==
-                            //             controller.product.value.id,
-                            //   );
-                            //
-                            //   print('teasdsadsa2');
-                            //
-                            //   if (isProductInCart) {
-                            //     cartController.removeItem(cartController
-                            //         .cartItems
-                            //         .firstWhere((element) =>
-                            //             element.product.id ==
-                            //             controller.product.value.id));
-                            //   }
-                            //   print('teasdsadsa3');
-                            //   cartController.loading.value = true;
-                            //   controller.product.value.selectedSize =
-                            //       controller.selectedSize.value;
-                            //   controller.product.value.selectedColor =
-                            //       controller.selectedColor.value;
-                            //   if (controller.selectedSize.value.isNotEmpty &&
-                            //       controller.selectedColor.value.isNotEmpty) {
-                            //     cartController.addToCart(
-                            //       controller.product.value,
-                            //       controller.selectedSize.value,
-                            //       controller.selectedColor.value,
-                            //       quantity: 1,
-                            //     );
-                            //     print('teasdsadsa4');
-                            //     Get.toNamed(Routes.CART);
-                            //     cartController.loading.value = false;
-                            //   } else {
-                            //     Get.snackbar(
-                            //         "Error", "Please Select From Options First",
-                            //         backgroundColor: Colors.white);
-                            //   }
-                            // } else {
-                            //   Get.to(() => CartPage());
-                            // }
+
                           },
                           child: SvgPicture.asset(
                             "assets/images/product/add_to_cart.svg",
@@ -769,8 +725,7 @@ print("${"pro id is ${controller.product.value.id}"}");
             child: Row(
               children: [
                 Obx(() {
-                  ProductController productController =
-                  Get.put(ProductController());
+
                   return InkWell(
                     onTap: () {
                       // productController.isHomeIcon.value
@@ -890,14 +845,7 @@ print("${"pro id is ${controller.product.value.id}"}");
       List<String> imgList,
       placeHolderImg, List<Attachments> otherImgList) {
 
-    //adding attachments
-    // if (otherImgList.isNotEmpty) {
-    //   for (var img in otherImgList) {
-    //     if (img.name == "app_show") {
-    //       imgList.addNonNull(img.path!);
-    //     }
-    //   }
-    // }
+
 
     return ShowUp(
       delay: 200,
@@ -940,50 +888,67 @@ print("${"pro id is ${controller.product.value.id}"}");
                   alignment: Alignment.topLeft,
                   child: Text(
                     key: Key(comingProduct.name.toString()),
-                      comingProduct.name ?? "Purple Flower EDP",
+                     GetMaxChar( comingProduct.name, 12) ?? "",
                       style: secondaryTextStyle(
                           size: 25.sp.round(),
                           color: const Color(0xff20003D),
                           weight: FontWeight.w500))),
               const Spacer(),
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: SvgPicture.asset("assets/images/favourite.svg"))
+              SizedBox(
+                height: 100.h,
+                width: 40.w,
+                child:  Obx(
+                      () =>
+                      LikeButton(
+                        onTap: userToken == null ? null : onLikeButtonTapped,
+                        product: controller.product.value,
+                        isLiked: wishListController
+                            .isProductInWishList(controller.product.value.id)
+                            .value,
+                        size: 20.sp,
+                        circleColor: const CircleColor(
+                            start: Color(0xff00ddff), end: Color(0xff0099cc)),
+                        bubblesColor: BubblesColor(
+                          dotPrimaryColor: Color(0xff33b5e5),
+                          dotSecondaryColor: Color(0xff0099cc),
+                        ),
+                        likeCountAnimationDuration: Duration(seconds: 1),
+                        likeCountAnimationType: LikeCountAnimationType.all,
+                        countBuilder: (int? count, bool isLiked, String text) {
+                          var color =
+                          isLiked ? Colors.deepPurpleAccent : Colors.grey;
+
+                          return Text(
+                            '',
+                            style: TextStyle(color: color),
+                          );
+                        },
+                        likeBuilder: (bool isLiked) {
+                          return SvgPicture.asset(
+                            wishListController
+                                .isProductInWishList(controller.product.value.id)
+                                .value
+                                ? 'assets/images/addwish.svg'
+                                : 'assets/images/home/heart.svg',
+                            color: isLiked ? Colors.deepPurpleAccent : Colors
+                                .grey,
+                            width: 20.w,
+                          );
+                        },
+                      ),
+                )
+              ),
+
             ],
           ),
 
-          //Star Rating
-          // Padding(
-          //   padding: EdgeInsets.only(left: 10.w),
-          //   child: Row(
-          //     children: [
-          //       StarRating(
-          //         onRatingChanged: (double rating) {},
-          //         color: Colors.green,
-          //         rating: controller.product.value.rating == null
-          //             ? 0
-          //             : controller.product.value.rating.toDouble(),
-          //         isCustomer: false,
-          //       ),
-          //       Padding(
-          //         padding: EdgeInsets.only(top: 10.h),
-          //         child: comingProduct.rating == null
-          //             ? Text(
-          //                 "(0)",
-          //                 style: primaryTextStyle(),
-          //               )
-          //             : Text(
-          //                 "(${comingProduct.rating.toString()})",
-          //                 style: primaryTextStyle(),
-          //               ),
-          //       )
-          //     ],
-          //   ),
-          // ),
+
           Row(
             children: [
               Text(
-                "300 gm".tr,
+                GetMaxChar(  controller.product.value.description, 20) ?? "",
+
+
                 style: secondaryTextStyle(
                     weight: FontWeight.w400, size: 16.sp.round()),
               ),
@@ -1685,7 +1650,6 @@ class ImageSliderWithIndicators extends StatefulWidget {
 
 class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
   // int _currentIndex = 0;
-  ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -1726,6 +1690,8 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                       .size
                       .width,
                   placeholder: (context, url) => placeHolderWidget(),
+                  errorWidget:  (context, url , error) =>
+                      placeHolderWidget(),
                 ),
               )),
         ),
@@ -1763,7 +1729,7 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
   }
 
   _buildSmallImagesWithIndicators() {
-    ProductController myController = Get.put(ProductController());
+
 
     return Padding(
       padding: EdgeInsets.only(bottom: 10.h),
@@ -1781,8 +1747,8 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                   itemBuilder: (context, index) =>
                       InkResponse(
                         onTap: () {
-                          myController.setSelectedIndex(index);
-                          myController.setCarouselControllerIndex(index);
+                          productController.setSelectedIndex(index);
+                          productController.setCarouselControllerIndex(index);
                         },
                         child: Obx(() {
                           return ClipRRect(
@@ -1795,16 +1761,18 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
 
 
                                 child: index <=
-                                    myController.productImages.length - 1
+                                    productController.productImages.length - 1
                                     ? productController.selectedIndex.value ==
                                     index
                                     ? ShowUp(
                                   child: CachedNetworkImage(
                                     height: 65.h,
-                                    imageUrl: myController
+                                    imageUrl: productController
                                         .productImages[index].path!,
                                     fit: BoxFit.fitWidth,
                                     placeholder: (context, url) =>
+                                        placeHolderWidget(),
+                                    errorWidget:  (context, url , error) =>
                                         placeHolderWidget(),
                                   ),
                                 )
@@ -1817,10 +1785,12 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                                       BlendMode.srcATop,
                                     ),
                                     child: CachedNetworkImage(
-                                      imageUrl: myController
+                                      imageUrl: productController
                                           .productImages[index].path!,
                                       fit: BoxFit.contain,
                                       placeholder: (context, url) =>
+                                          placeHolderWidget(),
+                                      errorWidget:  (context, url , error) =>
                                           placeHolderWidget(),
                                     ),
                                   ),
@@ -1833,7 +1803,7 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                       SizedBox(
                         width: 5.w,
                       ),
-                  itemCount: myController.productImages.length),
+                  itemCount: productController.productImages.length),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
 import 'package:jiffy/app/modules/global/model/model_response.dart';
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
+import 'package:jiffy/app/modules/home/controllers/home_controller.dart';
 
 import 'package:jiffy/main.dart';
 
@@ -18,7 +19,6 @@ import '../../auth/views/login_view.dart';
 import '../../services/api_service.dart';
 
 class WishlistController extends GetxController {
-  //TODO: Implement WishlistController
 
   final count = 0.obs;
   final resultCount = 0.obs;
@@ -42,7 +42,7 @@ class WishlistController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-     getWishlistProducts();
+     // getWishlistProducts();
   }
 
   @override
@@ -60,8 +60,14 @@ class WishlistController extends GetxController {
     }
     print("the ids are ${_product_ids}");
 
-    // String _product_ids_inString = _product_ids.join(",");
-    await getProductsInSection(_product_ids);
+
+    // await getProductsInSection(_product_ids);
+    for( var id in wishlistProductIds) {
+      Product product =  await getProductWithId(id);
+      resultSearchProducts.add(product);
+    }
+
+
   }
 
   final wishlistProductIds = <int>[].obs;
@@ -88,9 +94,7 @@ class WishlistController extends GetxController {
             wishlistProductIds.addNonNull(id);
             print(id.toString() + 'tesasdsa');
           }
-          // WishlistController wishlistController =
-          //     Get.put<WishlistController>(WishlistController());
-          // wishlistController.
+
           setInitData(wishlistProductIds);
         } else {
           handleApiErrorUser(apiResponse.message);
@@ -133,9 +137,9 @@ class WishlistController extends GetxController {
           print('Wishlist data successful');
 
           wishlistProductIds.removeWhere((item) => item == product_id);
-          WishlistController wishlistController =
-              Get.put<WishlistController>(WishlistController());
-          wishlistController.removeFromGrid(product_id);
+
+          wishListController.removeFromGrid(product_id);
+
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
@@ -171,9 +175,9 @@ class WishlistController extends GetxController {
 
           wishlistProductIds.add(product_id);
 
-          WishlistController wishlistController =
-              Get.put<WishlistController>(WishlistController());
-          wishlistController.addToGrid(product_id);
+
+          wishListController.addToGrid(product_id);
+           // wishListController.getWishlistProducts();
         } else {
           handleApiErrorUser(apiResponse.message);
           handleApiError(response.statusCode);
@@ -196,51 +200,60 @@ class WishlistController extends GetxController {
 
     print("getting started...");
 
-    final Map<dynamic, dynamic> bodyFields = {};
+    final Map<String, dynamic> bodyFields = {};
 
     if(product_ids.isEmpty){
       isWishlistLoading.value = false;
       return [];
     }
     for (var id in product_ids) {
-      bodyFields["ids[${_index}]"] = id;
+      bodyFields["ids[$_index]"] = id;
       _index++;
     }
 
-    print("the body is ${bodyFields}");
-    var headers = {
-      'Accept': 'application/json',
-      'x-from': 'app',
-      'x-lang': 'en',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
 
-    final response = await http.post(
-      Uri.parse('https://jiffy.abadr.work/api/products'),
-      headers: headers,
-      body: bodyFields,
-    );
+
+    var formData = dio.FormData.fromMap(bodyFields);
+    print("the body is ${formData.fields.length}");
+    final response = await
+
+    apiConsumer.post('/products', formData: formData, formDataIsEnabled: true);
+
 
     try {
-      if (response.statusCode == 200) {
-        var responseData = json.decode(response.body);
+      print("your response data is $response");
 
-        for (var product in responseData['data']) {
-          resultSearchProducts.add(Product.fromJson(product));
-        }
-        resultSearchProducts.toSet().toList();
-        resultCount.value = resultSearchProducts.length;
-        isWishlistLoading.value = false;
-        print("your result length ${resultSearchProducts.length}");
 
-        return resultSearchProducts;
-      } else {
-        print(response.reasonPhrase);
-        isWishlistLoading.value = false;
-        print('products fetch failed 1: ${response.reasonPhrase} ');
-
-        return [];
+      for (var product in response['data']) {
+        resultSearchProducts.add(Product.fromJson(product));
+        print("custom product data is $product");
       }
+      resultSearchProducts.toSet().toList();
+      resultCount.value = resultSearchProducts.length;
+      isWishlistLoading.value = false;
+      print("your result length ${resultSearchProducts.length}");
+
+      return resultSearchProducts;
+//       if (response != null) {
+//         var responseData = json.decode(response.body);
+// print("your response data is ${responseData}");
+//         for (var product in responseData['data']) {
+//           resultSearchProducts.add(Product.fromJson(product));
+//           print("custom product data is ${product}");
+//         }
+//         resultSearchProducts.toSet().toList();
+//         resultCount.value = resultSearchProducts.length;
+//         isWishlistLoading.value = false;
+//         print("your result length ${resultSearchProducts.length}");
+//
+//         return resultSearchProducts;
+//       } else {
+//         print(response);
+//         isWishlistLoading.value = false;
+//         print('products fetch failed 1: ${response} ');
+//
+//         return [];
+//       }
     } catch (e, stackTrace) {
       isWishlistLoading.value = false;
       print('products fetch failed 2:  ${e} $stackTrace');

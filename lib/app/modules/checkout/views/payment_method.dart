@@ -226,6 +226,7 @@ class PaymentMethod extends GetView<CheckoutController> {
                 Expanded(
                   flex: 2,
                   child: buildFloatingButton(
+                    isPlainBackground: cartController.cartItems.isEmpty,
                     buttonName: 'Confirm Order'.tr,
                     isLoading: controller.isConfirmingOrder.value,
                     context: context,

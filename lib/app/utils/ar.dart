@@ -163,7 +163,7 @@ const Map<String , String> ar = {
   "Shipping Fee" : "رسوم التوصيل",
   "Discount Applied" : "تم تطبيق الخصم",
   'Tracking number:' : 'رقم التتبع:',
-
-
+  "Unauthorized" : "غير مصرح",
+  "Session Expired" : "انتهت صلاحية الجلسة",
 
 };

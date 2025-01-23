@@ -20,10 +20,10 @@ class ProfileUpdate extends StatefulWidget {
 }
 
 class _ProfileUpdateState extends State<ProfileUpdate> {
-  final ProfileController controller = Get.put(ProfileController());
+
   TextEditingController dobController = TextEditingController();
   DateTime? selectedDate;
-
+ProfileController controller = Get.find<ProfileController>();
   @override
   void initState() {
     super.initState();

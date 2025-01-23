@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:jiffy/app/modules/address/controllers/address_controller.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 
+import '../../../../main.dart';
 import '../../address/model/address_model.dart';
 import '../../address/views/address_view.dart';
 import '../../global/config/helpers.dart';
@@ -19,7 +20,7 @@ class CheckoutView extends GetView<CheckoutController> {
 
   @override
   Widget build(BuildContext context) {
-   AddressController addressController = Get.put(AddressController());
+
    addressController.changeAddressStatus(true);
     return Scaffold(
 body: AddressView(isFromAddress: false,),

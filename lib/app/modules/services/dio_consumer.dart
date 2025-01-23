@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' as gets;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:jiffy/app/modules/auth/controllers/auth_controller.dart';
+import 'package:jiffy/app/modules/auth/views/login_view.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/cart/views/cart_view.dart';
 import 'package:jiffy/app/modules/global/config/configs.dart';
@@ -17,6 +18,7 @@ import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:jiffy/app/modules/services/error/exceptions.dart';
 import 'package:jiffy/main.dart';
 
+import 'connection_service.dart';
 import '../global/model/test_model_response.dart';
 import 'api_consumer.dart';
 import 'app_interceptors.dart';
@@ -93,7 +95,7 @@ class DioConsumer implements ApiConsumer {
       if(error.response?.statusCode == 409){
     CartController cartController = Get.find();
     HomeController homeController = Get.find();
-    ProductController productController = Get.find();
+
     homeController.fetchHomePageData();
     for(var item in cartController.cartItems){
     Product resultProduct = productController.getProduct(item.product.id);
@@ -162,6 +164,7 @@ class DioConsumer implements ApiConsumer {
   dynamic _handleDioError(DioError error) {
     Log.e(error.toString());
     switch (error.type) {
+
       case DioErrorType.connectTimeout:
         throw const InternalServerErrorException();
       case DioErrorType.sendTimeout:
@@ -169,6 +172,11 @@ class DioConsumer implements ApiConsumer {
         throw const FetchDataException();
       case DioErrorType.response:
         switch (error.response?.statusCode) {
+          case StatusCode.unauthorized:
+            userToken = null;
+            authController.user.value = null;
+            Get.snackbar("Unauthorized".tr, "Session Expired".tr);
+            Get.offAll(LoginView());
           case StatusCode.badRequest:
             throw const BadRequestException();
           case StatusCode.unauthorized:
@@ -190,6 +198,7 @@ class DioConsumer implements ApiConsumer {
       case DioErrorType.cancel:
         break;
       case DioErrorType.other:
+        Get.to(() => const NoInternetView());
         throw const NoInternetConnectionException(
             'NoInternetConnectionException');
     }

@@ -17,35 +17,39 @@ class Completed extends GetView<CheckoutController> {
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
-      body: Stack(
-        children: [
-          CustomAppBar(myFunction: () {},
-            title: 'Completed',
-            svgPath: "assets/images/notification.svg",
-            back: false,
+      body: PopScope(
+  canPop: false,
+
+        child: Stack(
+          children: [
+            CustomAppBar(myFunction: () {},
+              title: 'Completed',
+              svgPath: "assets/images/notification.svg",
+              back: false,
 
 
-          ),
-          Padding(
-              padding:  EdgeInsets.only(top: 160.h , ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
-                  Text("Thank you".tr, style: primaryTextStyle(color: Color(0xFF10AE48),
-                  weight: FontWeight.w900,
-                    size: 24.sp.round()
+            ),
+            Padding(
+                padding:  EdgeInsets.only(top: 160.h , ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+        Image.asset("assets/images/payment/completed.gif",height: 400.h,width: 400.w,),
+                    Text("Thank you".tr, style: primaryTextStyle(color: Color(0xFF10AE48),
+                    weight: FontWeight.w900,
+                      size: 24.sp.round()
 
-                  ),),
-                  Text("You can view your order in ‘My Orders’ section.".tr, style:
-                  primaryTextStyle(color: Colors.grey,
-                  size: 12.sp.round()
-                  ) )
-                ],
-              )
-          ),
-        ],
+                    ),),
+                    Text("You can view your order in ‘My Orders’ section.".tr, style:
+                    primaryTextStyle(color: Colors.grey,
+                    size: 12.sp.round()
+                    ) )
+                  ],
+                )
+            ),
+          ],
+        ),
       ),
 
       floatingActionButton: buildFloatingButton(

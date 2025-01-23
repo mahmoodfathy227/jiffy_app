@@ -14,6 +14,7 @@ import 'package:jiffy/app/modules/profile/views/update_profile.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../main.dart';
 import '../../auth/views/register_view.dart';
 import '../controllers/profile_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +26,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView>
     with TickerProviderStateMixin {
-  final ProfileController controller = Get.put(ProfileController());
+
 
   Future<void> _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -37,7 +38,7 @@ class _ProfileViewState extends State<ProfileView>
 
   @override
   Widget build(BuildContext context) {
-    controller.fetchProfile();
+    profileController.fetchProfile();
     return Scaffold(
       body: userToken != null
           ? SingleChildScrollView(
@@ -112,8 +113,7 @@ class _ProfileViewState extends State<ProfileView>
                         ),
                         _buildMenuItem(
                             'address.svg', 'Address'.tr, () {
-                          AddressController addressController = Get.put(
-                              AddressController());
+
                           addressController.changeAddressStatus(false);
                           Get.to(AddressView(isFromAddress: true,));
                         }, 19, 1),
@@ -147,11 +147,11 @@ class _ProfileViewState extends State<ProfileView>
                         }, 19, 6),
                         _buildMenuItem('terms.svg', 'Terms of Use'.tr, () {
                           _launchURL(
-                              'https://jiffy.abadr.work/terms-of-use');
+                              'https://mahmoudco.com/terms-of-use');
                         }, 19, 5),
                         _buildMenuItem('privacy.svg', 'Privacy Policy'.tr, () {
                           _launchURL(
-                              'https://jiffy.abadr.work/privacy-policy');
+                              'https://mahmoudco.com/privacy-policy');
                         }, 19, 6),
 
 
@@ -164,7 +164,7 @@ class _ProfileViewState extends State<ProfileView>
                     delay: 200,
                     child: InkWell(
                       onTap: () {
-                        _showLogoutConfirmation(context, controller);
+                        _showLogoutConfirmation(context, profileController);
                       },
                       child: Container(
                         width: 324.w,
@@ -352,8 +352,8 @@ class _ProfileViewState extends State<ProfileView>
                       () =>
                       Text(
                         GetMaxChar(
-                            '${controller.userModel.value
-                                .firstName} ${controller.userModel.value
+                            '${profileController.userModel.value
+                                .firstName} ${profileController.userModel.value
                                 .lastName}',
                             13),
                         style: secondaryTextStyle(
@@ -366,9 +366,9 @@ class _ProfileViewState extends State<ProfileView>
                 ),
                 SizedBox(height: 15.h),
                 Obx(() {
-                  return controller.userModel.value.email.isNotEmpty
+                  return profileController.userModel.value.email.isNotEmpty
                       ? Text(
-                    GetMaxChar(controller.userModel.value.email, 25),
+                    GetMaxChar(profileController.userModel.value.email, 25),
                     style: secondaryTextStyle(
                       color: Colors.black,
                       size: 12.sp.round(),
@@ -451,16 +451,16 @@ class _ProfileViewState extends State<ProfileView>
               ),
               child: CircleAvatar(
                 radius: 52.r,
-                backgroundImage: controller.userModel.value.photo == null ||
-                    controller.userModel.value.photo!.isEmpty
+                backgroundImage: profileController.userModel.value.photo == null ||
+                    profileController.userModel.value.photo!.isEmpty
                     ? const AssetImage(
                     'assets/images/profile/profile_placeholder.png')
                     : null,
-                child: controller.userModel.value.photo == null ||
-                    controller.userModel.value.photo!.isEmpty
+                child: profileController.userModel.value.photo == null ||
+                    profileController.userModel.value.photo!.isEmpty
                     ? null
                     : CachedNetworkImage(
-                  imageUrl: controller.userModel.value.photo!,
+                  imageUrl: profileController.userModel.value.photo!,
                   placeholder: (context, url) =>
                   const CircularProgressIndicator(),
                   errorWidget: (context, url, error) =>

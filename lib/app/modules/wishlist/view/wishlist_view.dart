@@ -17,15 +17,8 @@ class WishlistView extends GetView<WishlistController> {
 
   @override
   Widget build(BuildContext context) {
-    if (WishlistController().initialized) {
-      print("true done yes");
-
-    } else {
-      print("true done no");
-
-      Get.lazyPut<WishlistController>(() => WishlistController());
-
-    }
+    controller.resultSearchProducts.clear();
+    controller.getWishlistProducts();
 
 
     print(
@@ -90,7 +83,7 @@ class WishlistView extends GetView<WishlistController> {
                                 child: loadingIndicatorWidget())
                                 : Expanded(
                               child: Transform.translate(
-                                offset: Offset(0, -90.h),
+                                offset: Offset(0, -10.h),
                                 child: ShowUp(
                                   child: buildProductGrid(context),
                                   delay: 400,
@@ -109,7 +102,6 @@ class WishlistView extends GetView<WishlistController> {
   }
 
   buildProductGrid(context) {
-
 
     return Obx(() {
       return Container(
@@ -130,7 +122,8 @@ class WishlistView extends GetView<WishlistController> {
                   weight: FontWeight.w400),
             ),
           )
-              : GridView.builder(
+              :
+          GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: MediaQuery
                     .of(context)
@@ -145,18 +138,14 @@ class WishlistView extends GetView<WishlistController> {
                 mainAxisSpacing: 1.h,
                 crossAxisSpacing: 1.w),
             itemBuilder: (context, index) {
-              return 
+              return
                 productCard(controller.resultSearchProducts[index], context, index);
-                
-              //   buildProductCard(
-              //   product:
-              //
-              //   controller.resultSearchProducts[index],
-              //   isInWishlist: true,
-              // );
+
+
             },
             itemCount: controller.resultSearchProducts.length,
-          ));
+          )
+      );
 
     });
   }

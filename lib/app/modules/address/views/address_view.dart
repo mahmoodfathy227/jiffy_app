@@ -13,6 +13,7 @@ import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/main/views/main_view.dart';
 
+import '../../../../main.dart';
 import '../../global/config/helpers.dart';
 import '../controllers/address_controller.dart';
 import 'edit_address.dart';
@@ -76,16 +77,17 @@ final bool isFromAddress;
           context: context,
           onPressed: () {
             if (controller.addressList.isEmpty) {
-              Get.to(() => const AddAddress());
+              controller.clearFieldsAndErrors();
+              Get.to(() =>  AddAddress());
             } else {
               if(isFromAddress) {
+                controller.clearFieldsAndErrors();
                 Get.to(() => const AddAddress());
               } else {
                 var defaultAddressId = controller.addressList
                     .where((address) => address.isDefault == 1)
                     .first;
-                CheckoutController checkoutController = Get.put(
-                    CheckoutController());
+
                 checkoutController.assignDefaultAddress(
                     defaultAddressId.id.toString());
                 Get.to(() => const PaymentMethod());
@@ -228,7 +230,7 @@ final bool isFromAddress;
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(address.label ?? "Home", style: primaryTextStyle(
+                        Text(address.label , style: primaryTextStyle(
                             weight: FontWeight.w700,
                             size: 20.sp.round()
                         )),

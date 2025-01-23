@@ -18,7 +18,6 @@ class AddAddress extends GetView<AddressController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: Stack(
@@ -37,7 +36,6 @@ class AddAddress extends GetView<AddressController> {
       ),
 
       floatingActionButton: Obx(() {
-
         // Get.put(AddressController());
         return Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -58,7 +56,8 @@ class AddAddress extends GetView<AddressController> {
               buttonName: 'Save Address'.tr, context: context,
               isLoading: controller.isLoading.value,
               onPressed: () {
-                print("your filled data ex are 2 ${controller.phone.value}, ${controller.address.value} ");
+                print("your filled data ex are 2 ${controller.phone
+                    .value}, ${controller.address.value} ");
                 controller.addAddress();
                 // controller.validateField(
                 //     controller.label.value, controller.labelError);
@@ -75,17 +74,7 @@ class AddAddress extends GetView<AddressController> {
   }
 
   _buildAddressFields(context) {
-    HomeController homeController;
-    if(HomeController().initialized == false) {
-      homeController = Get.put(HomeController());
-    } else {
-      homeController = Get.find<HomeController>();
-    }
 
-
-    if(homeController.country.isNotEmpty){
-      controller.setCountry(homeController.country.value);
-    }
 
     return Padding(
 
@@ -100,110 +89,7 @@ class AddAddress extends GetView<AddressController> {
             Row(
               children: [
                 Expanded(child:
-          Container(
-
-          decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14.r),
-          boxShadow: [
-            customBoxShadow
-          ],
-        ),
-
-          child: Obx(() =>
-              InputDecorator(
-                decoration: InputDecoration(
-
-                  filled: true,
-                  fillColor:
-
-
-                  Colors.white,
-
-
-                  enabledBorder: OutlineInputBorder(
-
-                    borderRadius: BorderRadius.circular(10),
-
-                    borderSide: const BorderSide(
-
-                      color:
-
-                      Colors.white,
-                      width: 1,
-                    ),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-
-                    borderRadius: BorderRadius.circular(10),
-
-                    borderSide: BorderSide(
-                      color:
-
-                      primaryColor
-                      ,
-                      width: 1,
-                    ),
-                  ),
-
-                  hintStyle: secondaryTextStyle(
-                    color: Colors.black,
-                    size: 14.sp.round(),
-                    weight: FontWeight.w400,
-                    height: 1,
-                  ),
-
-
-                  helperStyle: secondaryTextStyle(
-
-                    color: Colors.red,
-                    size: 12.sp.round(),
-                    weight: FontWeight.w400,
-                    height: 1,
-
-                  ),
-
-
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    underline: Container(
-                      height: 2,
-                      color: const Color(0xFFA6AAC3),
-                    ),
-                    isDense: true,
-                    icon: SvgPicture.asset(
-                        "assets/images/address/arrow-down.svg"),
-                    value:  controller.selectedLabel.value,
-                    isExpanded: true,
-                    onChanged: (String? newValue) {
-                      controller.selectedLabel.value = newValue!;
-
-                    },
-                    items: ['Home','Work']
-                        .map<DropdownMenuItem<String>>(
-                            (String label) {
-                          return DropdownMenuItem<String>(
-                            value: label,
-                            child: Text(
-                              label.tr ,
-                              style: primaryTextStyle(
-                                color: greyishColor,
-                                size: 14.sp.round(),
-                                weight: FontWeight.w400,
-                                height: 1,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                  ),
-                ),
-              )))
-
-                ),
-                SizedBox(width: kDefaultPadding * 0.8,),
-                Expanded(child: Container(
+                Container(
 
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -272,30 +158,24 @@ class AddAddress extends GetView<AddressController> {
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               underline: Container(
-                                height: 1,
+                                height: 2,
                                 color: const Color(0xFFA6AAC3),
                               ),
                               isDense: true,
                               icon: SvgPicture.asset(
                                   "assets/images/address/arrow-down.svg"),
-
-                              value: controller.selectedCountry.value
-                              ,
+                              value: controller.selectedLabel.value,
                               isExpanded: true,
                               onChanged: (String? newValue) {
-                                controller.selectedCountry.value = newValue!;
-                                print("new value 1 is ${newValue}");
-
-                                print("new value 2 is ${controller.selectedCountry.value}");
-
+                                controller.selectedLabel.value = newValue!;
                               },
-                              items: controller.countriesList
+                              items: ['Home', 'Work']
                                   .map<DropdownMenuItem<String>>(
-                                      (Country country) {
+                                      (String label) {
                                     return DropdownMenuItem<String>(
-                                      value: country.name,
+                                      value: label,
                                       child: Text(
-                                      homeController.country.value.isEmpty? country.name ?? "Lebanon" : homeController.country.value  ,
+                                        label.tr,
                                         style: primaryTextStyle(
                                           color: greyishColor,
                                           size: 14.sp.round(),
@@ -307,29 +187,141 @@ class AddAddress extends GetView<AddressController> {
                                   }).toList(),
                             ),
                           ),
-                        ))),)
+                        )))
+
+                ),
+                SizedBox(width: kDefaultPadding * 0.8,),
+                Expanded(child: Container(
+
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14.r),
+                      boxShadow: [
+                        customBoxShadow
+                      ],
+                    ),
+
+                    child:
+                    InputDecorator(
+                      decoration: InputDecoration(
+
+                        filled: true,
+                        fillColor:
+
+
+                        Colors.white,
+
+
+                        enabledBorder: OutlineInputBorder(
+
+                          borderRadius: BorderRadius.circular(10),
+
+                          borderSide: const BorderSide(
+
+                            color:
+
+                            Colors.white,
+                            width: 1,
+                          ),
+                        ),
+
+                        focusedBorder: OutlineInputBorder(
+
+                          borderRadius: BorderRadius.circular(10),
+
+                          borderSide: BorderSide(
+                            color:
+
+                            primaryColor
+                            ,
+                            width: 1,
+                          ),
+                        ),
+
+                        hintStyle: secondaryTextStyle(
+                          color: Colors.black,
+                          size: 14.sp.round(),
+                          weight: FontWeight.w400,
+                          height: 1,
+                        ),
+
+
+                        helperStyle: secondaryTextStyle(
+
+                          color: Colors.red,
+                          size: 12.sp.round(),
+                          weight: FontWeight.w400,
+                          height: 1,
+
+                        ),
+
+
+                      ),
+                      child: Obx(() {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            underline: Container(
+                              height: 1,
+                              color: const Color(0xFFA6AAC3),
+                            ),
+                            // isDense: true,
+                            icon: SvgPicture.asset(
+                                "assets/images/address/arrow-down.svg"),
+
+                            value:
+                            // homeController.country.value.isEmpty
+                            //     ? controller.selectedCountry.value
+                            //     : homeController.country.value,
+                             controller.selectedCountry.value,
+
+                            isExpanded: true,
+                            onChanged: (String? newValue) {
+                              controller.selectedCountry.value = newValue!;
+                              print("new value 1 is ${newValue}");
+
+                              print("new value 2 is ${controller
+                                  .selectedCountry.value}");
+                            },
+                            items: controller.countriesList
+                                .map<DropdownMenuItem<String>>(
+                                    (Country country) {
+                                  return DropdownMenuItem<String>(
+                                    value: country.name,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      height: 50.h,
+                                      width: 150.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            14.r),
+                                        color: primaryColor,
+                                      ),
+
+                                      child: Center(
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          country.name!,
+                                          style: primaryTextStyle(
+                                            color: Colors.white,
+                                            size: 11.sp.round(),
+                                            weight: FontWeight.w400,
+                                            height: 1,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                          ),
+                        );
+                      }),
+                    )
+                ),)
               ],
             ),
             SizedBox(height: kDefaultPadding,),
             //state and city
             Obx(() {
-              HomeController homeController = Get.find();
-              if(homeController.state.isNotEmpty){
-                controller.setState(homeController.state.value);
-              }
-
-              if(homeController.city.isNotEmpty){
-                controller.setCity(homeController.city.value);
-              }
-              if(homeController.country.isNotEmpty){
-                controller.setCountry(homeController.country.value);
-              }
-
-              if(homeController.address.isNotEmpty){
-                controller.setAddress(homeController.address.value);
-              }
-
-
 
 
               return Row(
@@ -338,7 +330,11 @@ class AddAddress extends GetView<AddressController> {
                       child: CustomTextField(
 
                           errorText: controller.stateError.value,
-initialValue: homeController.state.value.isEmpty? '' : homeController.state.value.replaceAll('.', ''),
+                          initialValue:controller.state.value.isEmpty
+                              ? ''
+                              :
+                              controller.state.value,
+
                           labelText: "State*".tr, onChanged: (value) {
                         controller.state.value = value;
                         print("state is ${controller.state.value}");
@@ -350,7 +346,10 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
 
                           errorText: controller.cityError.value,
 
-                          initialValue: homeController.city.value.isEmpty? '' : homeController.city.value.replaceAll('.', ''),
+                          initialValue: controller.city.value.isEmpty
+                              ? ''
+                              :
+                          controller.city.value,
 
                           labelText: "City".tr, onChanged: (value) {
                         controller.city.value = value;
@@ -362,21 +361,24 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
             //Address
 
             Obx(() {
-
               return Row(
                 children: [
                   Expanded(child: CustomTextField(
-                       customTextEditingController: controller.addressTextEditingController.value,
-                      initialValue: homeController.address.value.isEmpty? '' : homeController.address.value.replaceAll('.', ''),
+                      customTextEditingController: controller
+                          .addressTextEditingController.value,
+                      initialValue: controller.address.value.isEmpty
+                          ? ''
+                          :
+                      controller.state.value,
 
                       errorText: controller.addressError.value,
 
 
-                      labelText:"Address*".tr,
+                      labelText: "Address*".tr,
 
                       onChanged: (value) {
-                    controller.address.value = value;
-                  })),
+                        controller.address.value = value;
+                      })),
 
                 ],
               );
@@ -391,7 +393,6 @@ initialValue: homeController.state.value.isEmpty? '' : homeController.state.valu
 
                     labelText: "Apartment".tr, onChanged: (value) {
                   controller.apartment.value = value;
-
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),
                 Expanded(child: CustomTextField(
@@ -458,8 +459,8 @@ class _WorkHomeSwitcherState extends State<WorkHomeSwitcher> {
       borderRadius: BorderRadius.circular(30),
       isSelected: isSelected,
       onPressed: (int index) {
-       AddressController myAddressController = Get.find<AddressController>();
-       myAddressController.label.value = index == 1 ? "Home" : "Work";
+        AddressController myAddressController = Get.find<AddressController>();
+        myAddressController.label.value = index == 1 ? "Home" : "Work";
         setState(() {
           for (int i = 0; i < isSelected.length; i++) {
             isSelected[i] = i == index;

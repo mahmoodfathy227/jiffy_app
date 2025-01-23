@@ -4,11 +4,22 @@ import 'package:jiffy/app/modules/address/views/address_view.dart';
 import 'package:jiffy/app/modules/checkout/model/address_api_response.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
 import 'package:jiffy/app/modules/global/model/test_model_response.dart';
+import 'package:jiffy/app/modules/search/controllers/search_controller.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 
 import '../../../../main.dart';
+import '../../address/controllers/address_controller.dart';
 import '../../address/model/address_model.dart';
+import '../../auth/controllers/auth_controller.dart';
+import '../../cart/controllers/cart_controller.dart';
+import '../../global/controller/controller.dart';
 import '../../global/model/model_response.dart';
+import '../../help/controllers/help_controller.dart';
+import '../../home/controllers/home_controller.dart';
+import '../../orders/controllers/orders_controller.dart';
+import '../../product/controllers/product_controller.dart';
+import '../../profile/controllers/profile_controller.dart';
+import '../../wishlist/controllers/wishlist_controller.dart';
 import '../views/completed.dart';
 
 class CheckoutController extends GetxController {
@@ -25,14 +36,11 @@ RxInt total = 0.obs;
 
 
 
-// var cartProducts = <CartProduct>[
-//
-//
-// ].obs;
+
   RxBool isAddressLoading = false.obs;
   @override
   void onInit() {
-    // getCartDetails();
+
 initCheckout();
     super.onInit();
   }
@@ -93,49 +101,7 @@ void assignDefaultAddress(address){
     }
 
   }
-// void getCartDetails()  async {
-//   isLoading.value = true;
-//   try
-//   {
-//     cartProducts.clear();
-//     cartProducts.refresh();
-//     final response = await apiConsumer.post(
-//       'cart/details',
-//
-//     );
-//
-//     isLoading.value = true;
-//     final apiResponse = ApiDataResponse.fromJson(response);
-//     if (apiResponse.status == 'success') {
-//       print("cart details gotten successful");
-// for(var product in apiResponse.data['items']){
-//   print("your product is ${product['product_id']}");
-//   cartProducts.add(CartProduct.fromJson(product));
-//   cartProducts.refresh();
-// }
-// print("your cart items are ${cartProducts.first.product?.image}");
-//       isLoading.value = false;
-//
-//     }
-//     else {
-//       handleApiErrorUser(apiResponse.message);
-//       handleApiError(response.statusCode);
-//       print("cart details  failed the message is ${apiResponse.message}");
-//       isLoading.value = false;
-//       // HapticFeedback.vibrate();
-//     }
-//
-//   } catch (e, stackTrace) {
-//     isLoading.value = false;
-//
-//     print('cart details  failed: ${e}');
-//     // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
-//     // handleApiErrorUser(apiResponse.message);
-//     // errorMessage.value = e.toString() ?? "Please Check Fields and Try Again";
-//     // HapticFeedback.vibrate();
-//   }
-//
-// }
+
 
 void confirmOrder()  async {
   isConfirmingOrder.value = true;
@@ -154,11 +120,11 @@ formDataIsEnabled: true,
 
     final apiResponse = ApiDataResponse.fromJson(response);
     if (apiResponse.status == 'success') {
-      print("confirm checkout gotten successful");
+
       isConfirmingOrder.value = false;
       cartController.clearCart();
 
-      Get.offAll(() => const Completed());
+      Get.off(() => const Completed(), );
 
     }
     else {

@@ -10,6 +10,7 @@ import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 
 import '../../global/config/helpers.dart';
+import '../../home/controllers/home_controller.dart';
 import '../controllers/address_controller.dart';
 import 'add_address.dart';
 
@@ -18,7 +19,7 @@ class EditAddress extends GetView<AddressController> {
 final Address addressToUpdate ;
   @override
   Widget build(BuildContext context) {
-    print("edited address id ${addressToUpdate.id}");
+    print("edited address is ${addressToUpdate.apartment}");
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: Stack(
@@ -40,16 +41,16 @@ final Address addressToUpdate ;
         return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            buildFloatingButton(
-
-                buttonName: 'Select on Map'.tr, context: context,
-                onPressed: () {
-                  Get.to(SelectFromMap());
-                },
-                isPlainBackground: true
-
-
-            ),
+            // buildFloatingButton(
+            //
+            //     buttonName: 'Select on Map'.tr, context: context,
+            //     onPressed: () {
+            //       Get.to(SelectFromMap());
+            //     },
+            //     isPlainBackground: true
+            //
+            //
+            // ),
 
             buildFloatingButton(
 
@@ -74,6 +75,13 @@ final Address addressToUpdate ;
   }
 
   _buildAddressFields(context) {
+    HomeController homeController;
+    if (HomeController().initialized == false) {
+      homeController = Get.put(HomeController());
+    } else {
+      homeController = Get.find<HomeController>();
+    }
+
     return Padding(
 
       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding * 1.5),
@@ -161,9 +169,11 @@ final Address addressToUpdate ;
                               isDense: true,
                               icon: SvgPicture.asset(
                                   "assets/images/address/arrow-down.svg"),
-                              value: controller.selectedLabel.value,
+                              value:
+                              controller.selectedLabel.value,
                               isExpanded: true,
                               onChanged: (String? newValue) {
+
                                 controller.selectedLabel.value = newValue!;
                                 print("selectedLabel is ${controller.selectedLabel.value}");
                               },
@@ -191,7 +201,7 @@ final Address addressToUpdate ;
 
                 SizedBox(width: kDefaultPadding * 0.8,),
                 Expanded(child: Container(
-                    height: 50.h,
+
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14.r),
@@ -200,98 +210,123 @@ final Address addressToUpdate ;
                       ],
                     ),
 
-                    child: Obx(() =>
-                        InputDecorator(
-                          decoration: InputDecoration(
+                    child:
+                    InputDecorator(
+                      decoration: InputDecoration(
 
-                            filled: true,
-                            fillColor:
+                        filled: true,
+                        fillColor:
 
+
+                        Colors.white,
+
+
+                        enabledBorder: OutlineInputBorder(
+
+                          borderRadius: BorderRadius.circular(10),
+
+                          borderSide: const BorderSide(
+
+                            color:
 
                             Colors.white,
-
-
-                            enabledBorder: OutlineInputBorder(
-
-                              borderRadius: BorderRadius.circular(10),
-
-                              borderSide: const BorderSide(
-
-                                color:
-
-                                Colors.white,
-                                width: 1,
-                              ),
-                            ),
-
-                            focusedBorder: OutlineInputBorder(
-
-                              borderRadius: BorderRadius.circular(10),
-
-                              borderSide: BorderSide(
-                                color:
-
-                                primaryColor
-                                ,
-                                width: 1,
-                              ),
-                            ),
-
-                            hintStyle: secondaryTextStyle(
-                              color: Colors.black,
-                              size: 14.sp.round(),
-                              weight: FontWeight.w400,
-                              height: 1,
-                            ),
-
-
-                            helperStyle: secondaryTextStyle(
-
-                              color: Colors.red,
-                              size: 12.sp.round(),
-                              weight: FontWeight.w400,
-                              height: 1,
-
-                            ),
-
-
+                            width: 1,
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              underline: Container(
-                                height: 1,
-                                color: const Color(0xFFA6AAC3),
-                              ),
-                              isDense: true,
-                              icon: SvgPicture.asset(
-                                  "assets/images/address/arrow-down.svg"),
-                              value: controller.selectedCountry.value,
-                              isExpanded: true,
-                              onChanged: (String? newValue) {
-                                controller.selectedCountry.value = newValue!;
-                                print("new value ${controller.selectedCountry.value}");
-                                print("new value 2 ${newValue}");
+                        ),
 
-                              },
-                              items: controller.countriesList
-                                  .map<DropdownMenuItem<String>>(
-                                      (Country country) {
-                                    return DropdownMenuItem<String>(
-                                      value: country.name,
-                                      child: Text(
-                                        country.name ?? "",
-                                        style: primaryTextStyle(
-                                          color: greyishColor,
-                                          size: 14.sp.round(),
-                                          weight: FontWeight.w400,
-                                          height: 1,
+                        focusedBorder: OutlineInputBorder(
+
+                          borderRadius: BorderRadius.circular(10),
+
+                          borderSide: BorderSide(
+                            color:
+
+                            primaryColor
+                            ,
+                            width: 1,
+                          ),
+                        ),
+
+                        hintStyle: secondaryTextStyle(
+                          color: Colors.black,
+                          size: 14.sp.round(),
+                          weight: FontWeight.w400,
+                          height: 1,
+                        ),
+
+
+                        helperStyle: secondaryTextStyle(
+
+                          color: Colors.red,
+                          size: 12.sp.round(),
+                          weight: FontWeight.w400,
+                          height: 1,
+
+                        ),
+
+
+                      ),
+                      child: Obx(() {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            underline: Container(
+                              height: 1,
+                              color: const Color(0xFFA6AAC3),
+                            ),
+                            // isDense: true,
+                            icon: SvgPicture.asset(
+                                "assets/images/address/arrow-down.svg"),
+
+                            value:
+                                addressToUpdate.country,
+                            // homeController.country.value.isEmpty
+                            //     ? controller.selectedCountry.value
+                            //     : homeController.country.value,
+                            //  controller.selectedCountry.value,
+
+                            isExpanded: true,
+                            onChanged: (String? newValue) {
+                              controller.selectedCountry.value = newValue!;
+                              print("new value 1 is ${newValue}");
+
+                              print("new value 2 is ${controller
+                                  .selectedCountry.value}");
+                            },
+                            items: controller.countriesList
+                                .map<DropdownMenuItem<String>>(
+                                    (Country country) {
+                                  return DropdownMenuItem<String>(
+                                    value: country.name,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      height: 50.h,
+                                      width: 150.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            14.r),
+                                        color: primaryColor,
+                                      ),
+
+                                      child: Center(
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          country.name!,
+                                          style: primaryTextStyle(
+                                            color: Colors.white,
+                                            size: 11.sp.round(),
+                                            weight: FontWeight.w400,
+                                            height: 1,
+                                          ),
                                         ),
                                       ),
-                                    );
-                                  }).toList(),
-                            ),
+                                    ),
+                                  );
+                                }).toList(),
                           ),
-                        ))),)
+                        );
+                      }),
+                    )
+                ),)
               ],
             ),
             SizedBox(height: kDefaultPadding,),
@@ -315,6 +350,7 @@ errorText: controller.stateError.value,
                       child: CustomTextField(
 
                           errorText: controller.cityError.value,
+                          initialValue: addressToUpdate.city ,
                           height: 50.h,
                           labelText: "City" , onChanged: (value) {
                         controller.city.value = value;
@@ -350,10 +386,11 @@ errorText: controller.stateError.value,
               children: [
                 Expanded(child: CustomTextField(
     initialValue: addressToUpdate.apartment,
+
                     errorText: controller.apartmentError.value,
                     height: 50.h,
                     labelText: "Apartment", onChanged: (value) {
-
+                  controller.apartment.value = value;
 
                 })),
                 SizedBox(width: kDefaultPadding * 0.7,),

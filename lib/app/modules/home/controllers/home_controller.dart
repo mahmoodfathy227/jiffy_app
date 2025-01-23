@@ -38,9 +38,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   late AnimationController rotatingUpperBarController;
   RxBool isRotating = false.obs;
-  final WishlistController wishListController = Get.put(WishlistController());
-  final CartController cartController =
-      Get.put(CartController()); // Remove this line
+
+
 
   @override
   void onInit() {
