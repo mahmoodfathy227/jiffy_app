@@ -124,9 +124,13 @@ class AddressController extends GetxController {
   }
 
 
-void changeAddressStatus(status) {
-    isFromCheckout.value = status;
-}
+
+  void changeAddressStatus(status) {
+    Future.delayed(Duration(seconds: 2), () {
+      isFromCheckout.value = status;
+    });
+
+  }
   Future<void> getPermission() async {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
 
