@@ -165,5 +165,6 @@ const Map<String , String> ar = {
   'Tracking number:' : 'رقم التتبع:',
   "Unauthorized" : "غير مصرح",
   "Session Expired" : "انتهت صلاحية الجلسة",
+  "Discount" : "الخصم",
 
 };

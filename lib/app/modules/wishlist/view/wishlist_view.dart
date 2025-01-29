@@ -17,8 +17,8 @@ class WishlistView extends GetView<WishlistController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.resultSearchProducts.clear();
-    controller.getWishlistProducts();
+    // controller.resultSearchProducts.clear();
+
 
 
     print(
@@ -57,46 +57,42 @@ class WishlistView extends GetView<WishlistController> {
                 title: "WishList".tr, myFunction: () {},
 
               ),
-              Positioned(
-                  top: 150.h,
-                  left: 0,
-                  right: 0,
-                  child: SingleChildScrollView(
+              SingleChildScrollView(
 
-                    child: Container(
-                      height:
-                      MediaQuery
-                          .of(context)
-                          .size
-                          .height - 100.h,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Obx(() {
-
-                            return controller.isWishlistLoading.value
-                                ? Expanded(
-                                child: loadingIndicatorWidget())
-                                : Expanded(
-                              child: Transform.translate(
-                                offset: Offset(0, -10.h),
-                                child: ShowUp(
-                                  child: buildProductGrid(context),
-                                  delay: 400,
-                                ),
-                              ),
-                            );
-                          }),
-
-                          SizedBox(height: 100.h)
-                        ],
+                child: Container(
+                  height:
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .height - 100.h,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 15.h,
                       ),
-                    ),
-                  )),
+                      Obx(() {
+
+                        return controller.isWishlistLoading.value
+                            ? Expanded(
+                            child: loadingIndicatorWidget())
+                            : Expanded(
+                          child: Transform.translate(
+                            offset: Offset(0, -10.h),
+                            child: ShowUp(
+                              child: buildProductGrid(context),
+                              delay: 400,
+                            ),
+                          ),
+                        );
+                      }),
+
+                      SizedBox(height: 100.h)
+                    ],
+                  ),
+                ),
+              )
             ]))
     );
   }
@@ -123,27 +119,28 @@ class WishlistView extends GetView<WishlistController> {
             ),
           )
               :
-          GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: MediaQuery
-                    .of(context)
-                    .size
-                    .width /
-                    (MediaQuery
-                        .of(context)
-                        .size
-                        .height *
-                        heightDevidedRatio *1.1),
+          Transform.translate(
+
+            offset: const Offset(0, 70),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+
+
                 crossAxisCount: 2,
-                mainAxisSpacing: 1.h,
-                crossAxisSpacing: 1.w),
-            itemBuilder: (context, index) {
-              return
-                productCard(controller.resultSearchProducts[index], context, index);
+
+                crossAxisSpacing: 2,
+                // width / height: fixed for *all* items
+                childAspectRatio: (1.5 / 2.4),
+
+              ),
+              itemBuilder: (context, index) {
+                return
+                  productCard(controller.resultSearchProducts[index], context, index);
 
 
-            },
-            itemCount: controller.resultSearchProducts.length,
+              },
+              itemCount: controller.resultSearchProducts.length,
+            ),
           )
       );
 

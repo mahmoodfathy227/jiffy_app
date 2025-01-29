@@ -278,6 +278,7 @@ try{
 }catch(e){
         print("location error ${e.toString()}");
         Get.snackbar('Location', e.toString(), colorText: Colors.white);
+        isLocationLoading.value = false;
 }
 
   }

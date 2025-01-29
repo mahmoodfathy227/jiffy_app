@@ -161,7 +161,8 @@ const Map<String , String> en = {
 ,'Discount Applied' : "Discount Applied"
 ,'Tracking number:' : 'Tracking number:'
 ,'Unauthorized' : "Unauthorized"
-,'Session Expired' : "Session Expired"
+,'Session Expired' : "Session Expired",
+  "Discount" : "Discount",
 
 
 

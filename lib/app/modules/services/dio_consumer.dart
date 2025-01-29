@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:flutter/material.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -198,7 +198,8 @@ class DioConsumer implements ApiConsumer {
       case DioErrorType.cancel:
         break;
       case DioErrorType.other:
-        Get.to(() => const NoInternetView());
+        Get.snackbar("Error", "Please Check Your Internet Connection " ,colorText: Colors.white);
+        // Get.to(() => const NoInternetView());
         throw const NoInternetConnectionException(
             'NoInternetConnectionException');
     }

@@ -239,9 +239,10 @@ class SearchView extends GetView<CustomSearchController> {
 
               crossAxisCount: 2,
 
-              crossAxisSpacing: 1,
+              crossAxisSpacing: 2,
               // width / height: fixed for *all* items
-              childAspectRatio: (1.0 / 1.9),
+              childAspectRatio: (1.3 / 2.2),
+
             ),
             itemCount: customSearchController.filteredProducts.length,
             itemBuilder: (context, index) {
@@ -249,10 +250,7 @@ class SearchView extends GetView<CustomSearchController> {
                 SizedBox(
 
                     child: productCard(customSearchController.filteredProducts[index] ,context, index, ));
-              //   buildProductCard(
-              //     product: customSearchController.filteredProducts[index],);
-              // globalProductCard(
-              //     customSearchController.filteredProducts[index], index);
+
             },
           ),
         ),

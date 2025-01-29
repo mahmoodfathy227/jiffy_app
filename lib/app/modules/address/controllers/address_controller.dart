@@ -21,13 +21,6 @@ import '../model/address_model.dart';
 
 class AddressController extends GetxController {
   RxList<Address> addressList = <Address>[
-   // Address(id: 0, label: "Home", apartment: "test",
-   //     floor: "Home", building: "test", address: "x2715 Ash Dr. San, South Dak...",
-   //     phone: "01252525255", city: "test", country: "test", state: "test", latitude: 23423, longitude: 3454353, isDefault: 1),
-   //
-   //  Address(id: 0, label: "Home", apartment: "test",
-   //      floor: "Home", building: "test", address: "x2715 Ash Dr. San, South Dak...",
-   //      phone: "01252525255", city: "test", country: "test", state: "test", latitude: 23423, longitude: 3454353, isDefault: 1)
 
   ].obs;
   var addressTextEditingController  = TextEditingController().obs;
@@ -40,7 +33,7 @@ class AddressController extends GetxController {
 
 
 
-  var kGooglePlex = CameraPosition(
+  var kGooglePlex = const CameraPosition(
     target: LatLng(33.888630, 35.495480),
     zoom: 14.4746,
   ).obs;

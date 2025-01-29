@@ -29,10 +29,10 @@ RxBool isConfirmingOrder = false.obs;
 
 RxString myShippingAddress = "1".obs;
   final count = 0.obs;
-  RxInt subTotal = 0.obs;
-RxInt shipping = 0.obs;
-RxInt discount = 0.obs;
-RxInt total = 0.obs;
+RxString subTotal = "0".obs;
+RxString shipping ="0".obs;
+RxString discount = "0".obs;
+RxString total = "0".obs;
 
 
 
@@ -63,6 +63,7 @@ void assignDefaultAddress(address){
 }
   void initCheckout()  async {
     isLoading.value = true;
+    print("tgetting hevhlou");
     try
     {
       final response = await apiConsumer.post(
@@ -75,10 +76,10 @@ void assignDefaultAddress(address){
       if (apiResponse.status == 'success') {
 
         
-        subTotal.value =apiResponse.data['sub_total'];
-       shipping.value = apiResponse.data['shipping'];
-        discount.value = apiResponse.data['discount'];
-        total.value = apiResponse.data['total'];
+        subTotal.value =apiResponse.data['sub_total'].toString();
+       shipping.value = apiResponse.data['shipping'].toString();
+        discount.value = apiResponse.data['discount'].toString();
+        total.value = apiResponse.data['total'].toString();
         print("checkout gotten successful ${total.value}");
         isLoading.value = false;
       }
@@ -93,7 +94,7 @@ void assignDefaultAddress(address){
     } catch (e, stackTrace) {
       isLoading.value = false;
 
-      print('checkout failed: ${e}');
+      print('checkout failed: ${e} ${stackTrace}');
       // final apiResponse = ApiResponse.fromJson(jsonDecode(e.toString()));
       // handleApiErrorUser(apiResponse.message);
       // errorMessage.value = e.toString() ?? "Please Check Fields and Try Again";

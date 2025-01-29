@@ -136,14 +136,14 @@ class AppConstants {
 
    static final sampleProduct = Product(
     id: 1,
-    name: 'Product 1',
-    description: 'This is product 1',
-    price: 10.0,
-   size: 'XL',
-    rating: 4.5,
-    outOfStock: false,
-    image: 'https://retchhh.wordpress.com/wp-content/uploads/2015/03/loading1.gif',
-    old_price: 20.0,
+    name: '',
+    description: '',
+    price: 0.0,
+   size: '',
+    rating: 0.0,
+    outOfStock: true,
+    image: '',
+    old_price: 0.0,
 
   );
 }

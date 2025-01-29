@@ -17,10 +17,13 @@ import 'package:jiffy/app/modules/global/theme/app_theme.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
 import 'package:jiffy/app/modules/global/widget/widget.dart';
 import 'package:jiffy/app/modules/product/controllers/product_controller.dart';
+import 'package:jiffy/app/modules/product/views/product_view.dart';
 import 'package:jiffy/app/modules/services/api_service.dart';
 import 'package:jiffy/app/routes/app_pages.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../../../main.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -165,6 +168,9 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
           ).animate(_animation),
           child: InkWell(
               onTap: () {
+                print("tapped");
+                 productController.getProduct(product.id!);
+                Get.to(const ProductView());
                 cartController.cartItems[index].isDismissible = false;
                 cartController.cartItems.refresh();
               },
@@ -245,7 +251,7 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                                   height: 12.h,
                                 ),
                                 Text(
-                                  '\$ ${product!.price}',
+                                  '\$ ${product.price}',
                                   style: secondaryTextStyle(
                                     color: Color(0xFF4F0099),
                                     size: 16.sp.round(),
@@ -262,11 +268,11 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
                             top: 0.h,
                             end: !item.isDismissible ? 0.w : 0.w,
                             child: Column(children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               AnimatedContainer(
-                                duration: Duration(milliseconds: 300),
+                                duration: const Duration(milliseconds: 300),
                                 height: 90.h,
                                 padding: EdgeInsets.symmetric(horizontal: 15.w),
                                 child: Column(
@@ -560,44 +566,44 @@ class _CartPageState extends State<CartPage> with TickerProviderStateMixin {
 
                         return Padding(
                             padding: const EdgeInsets.only(bottom: 20),
-                            child: Observer(
-                                builder: (_) =>
-                                !item.isDismissible
-                                    ?
-                                Dismissible(
-                                    key: Key(item.product.toString()),
-                                    background: Container(
-                                      width: 50.w,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        border: Border.all(
-                                            width: 0.50,
-                                            color: const Color(0xFFFAFAFA)),
-                                        borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(20),
-                                            bottomRight: Radius.circular(20)),
-                                      ),
-                                      child: const Center(
-                                        child: Icon(Icons.delete,
-                                            color: Colors.white, size: 30),
-                                      ),
-                                    ),
-                                    direction: DismissDirection.endToStart,
-                                    onUpdate: (details) {},
-                                    confirmDismiss: (direction) async {
-                                      //    cartController.removeItem(item);
-                                      cartController.cartItems[index]
-                                          .isDismissible = true;
-                                      cartController.cartItems.refresh();
+                            child:
+                            !item.isDismissible
+                                ?
+                            Dismissible(
+                                key: Key(item.product.toString()),
+                                background: Container(
+                                  width: 50.w,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    border: Border.all(
+                                        width: 0.50,
+                                        color: const Color(0xFFFAFAFA)),
+                                    borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(20),
+                                        bottomRight: Radius.circular(20)),
+                                  ),
+                                  child: const Center(
+                                    child: Icon(Icons.delete,
+                                        color: Colors.white, size: 30),
+                                  ),
+                                ),
+                                direction: DismissDirection.endToStart,
+                                onUpdate: (details) {},
+                                confirmDismiss: (direction) async {
+                                  //    cartController.removeItem(item);
+                                  cartController.cartItems[index]
+                                      .isDismissible = true;
+                                  cartController.cartItems.refresh();
 
-                                      return false; // إعادة false لمنع الحذف
-                                    },
-                                    onDismissed: (direction) {
-                                      //    cartController.removeItem(item);
-                                    },
-                                    child:
-                                    itemCart(item.product, item, index))
-                                    : itemCart(item.product, item, index)));
+                                  return false; // إعادة false لمنع الحذف
+                                },
+                                onDismissed: (direction) {
+                                  //    cartController.removeItem(item);
+                                },
+                                child:
+                                itemCart(item.product, item, index))
+                                : itemCart(item.product, item, index)
+                        );
                       },
                     ),
                   ),

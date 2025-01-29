@@ -227,44 +227,12 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // SlideTransition(
-            //     position: homeController!.slideAnimation,
-            //     child: FadeTransition(
-            //         opacity:
-            //         homeController!.fadeInAnimation, // GetX controlled fade
-            //         child: Row(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             // GestureDetector(
-            //             //   onTap: () {
-            //             //     // Open Drawer or any action
-            //             //   },
-            //             //   child: SvgPicture.asset(
-            //             //     'assets/images/home/menu.svg',
-            //             //   ),
-            //             // ),
-            //             SvgPicture.asset(
-            //               'assets/images/splash/logo.svg',
-            //               width: 60.w,
-            //               height: 52.h,
-            //             ),
-            //             // SvgPicture.asset(
-            //             //   'assets/images/home/notification.svg',
-            //             // ),
-            //           ],
-            //         ))),'
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // GestureDetector(
-                //   onTap: () {
-                //     // Open Drawer or any action
-                //   },
-                //   child: SvgPicture.asset(
-                //     'assets/images/home/menu.svg',
-                //   ),
-                // ),
-                Spacer(),
+
+                const Spacer(),
                 Padding(
                   padding:  EdgeInsets.only(left: 25.w),
                   child: SvgPicture.asset(
@@ -273,10 +241,8 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                     height: 52.h,
                   ),
                 ),
-                // SvgPicture.asset(
-                //   'assets/images/home/notification.svg',
-                // ),
-               Spacer(),
+
+               const Spacer(),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_)=> const SearchView()));
@@ -313,68 +279,7 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
               ],
             ),
             SizedBox(height: 26.h),
-            // Row(
-            //   children: [
-            //     Container(
-            //       width: 287.w,
-            //       height: 44.h,
-            //       decoration: ShapeDecoration(
-            //         color: Colors.white,
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(31),
-            //         ),
-            //         shadows: const [
-            //           BoxShadow(
-            //             color: Color(0x19000000),
-            //             blurRadius: 30,
-            //             offset: Offset(0, 4),
-            //             spreadRadius: -5,
-            //           )
-            //         ],
-            //       ),
-            //       child: GestureDetector(
-            //         onTap: () {
-            //           // Get.toNamed(Routes.SEARCH);
-            //         },
-            //         child: Padding(
-            //           padding:
-            //           EdgeInsetsDirectional.only(start: 16.0.w, bottom: 5.h),
-            //           child: customHomeSearchField(),
-            //         ),
-            //       ),
-            //     ),
-            //     SizedBox(width: 11.w),
-            //     // Space between the search field and the icon
-            //     // Search Icon next to the search field
-            //     GestureDetector(
-            //       onTap: () {
-            //         Get.to(SearchView());
-            //       },
-            //       child: Container(
-            //           width: 44.w,
-            //           height: 44.h,
-            //           decoration: const ShapeDecoration(
-            //             color: Colors.white,
-            //             shape: OvalBorder(),
-            //             shadows: [
-            //               BoxShadow(
-            //                 color: Color(0x19000000),
-            //                 blurRadius: 30,
-            //                 offset: Offset(0, 4),
-            //                 spreadRadius: -5,
-            //               )
-            //             ],
-            //           ),
-            //           child: Center(
-            //             child: SvgPicture.asset(
-            //               'assets/images/home/search.svg',
-            //               width: 18.w,
-            //               height: 18.h,
-            //             ),
-            //           )),
-            //     ),
-            //   ],
-            // ),
+
             SizedBox(height: 25.h),
             Text(
               'Current Location'.tr,
@@ -386,18 +291,7 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                 letterSpacing: -0.41,
               ),
             )
-            // FadeTransition(
-            //     opacity: homeController.fadeInAnimation, // GetX controlled fade
-            //     child: Text(
-            //       'Current Location',
-            //       textAlign: TextAlign.center,
-            //       style: secondaryTextStyle(
-            //         color: Colors.white,
-            //         size: 12.sp.round(),
-            //         weight: FontWeight.w300,
-            //         letterSpacing: -0.41,
-            //       ),
-            //     ))
+
             ,
             SizedBox(height: 10.h),
             Row(
@@ -410,17 +304,15 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                 Obx(() {
                   return
                     homeController.isLocationLoading.value?
-                    SizedBox(
-                      width: 25.w,
-                        height: 25.h,
-                        child: const CircularProgressIndicator(color: Colors.white, ))
+                    const SizedBox(
+                    )
                         :
                     homeController.state.value.isEmpty &&
 
                         homeController.city.value.isEmpty ?
 
                     IconButton(
-                      icon:  Icon(Icons.refresh_outlined,color: Colors.white),
+                      icon:  const Icon(Icons.refresh_outlined,color: Colors.white),
                       onPressed: () async{
                          homeController.getCurrentLocation();
                       },
@@ -442,29 +334,7 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                 }),
               ],
             ),
-            // FadeTransition(
-            //   opacity: homeController.fadeInAnimation, // GetX controlled fade
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       SvgPicture.asset(
-            //         'assets/images/home/locations.svg',
-            //       ),
-            //       SizedBox(width: 12.w),
-            //       Text(
-            //         'Cairo, Egypt',
-            //         textAlign: TextAlign.center,
-            //         style: secondaryTextStyle(
-            //           color: Color(0xFFFFFDD2),
-            //           size: 24.sp.round(),
-            //           weight: FontWeight.w700,
-            //           height: 0.09,
-            //           letterSpacing: -0.41,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // )
+
           ],
         ),
       ));
@@ -2339,7 +2209,8 @@ Widget EmptyScreen({nameImage, title, desc, txtbutton}) {
           InkWell(
             onTap: () {
               // Get.toNamed(Routes.CHECKOUT);
-              Get.to(() => const SearchView());
+              // Get.to(() => const SearchView());
+              tabController.changeIndex(0);
             },
             child: Container(
               width: 181.w,
@@ -4232,7 +4103,7 @@ buildFloatingButton({required String buttonName,
 Widget globalProductCard(Product product, int index) {
   return GestureDetector(
     onTap: () async {
-      await productController.getProduct(product.id!);
+       await productController.getProduct(product.id!);
       Get.to(const ProductView());
     },
     child: Container(
@@ -4681,8 +4552,8 @@ class _buildCardProductState extends State<buildProductCard> {
     return Obx(() {
       return GestureDetector(
         onTap: () async {
-          await productController.getProduct(widget.product.id!);
-          Get.to(const ProductView());
+           await productController.getProduct(widget.product.id!);
+          Get.to(ProductView());
         },
         child: Container(
             decoration: const BoxDecoration(
@@ -5463,7 +5334,7 @@ Widget placeHolderProductCard() {
 
           // ProductController productController = Get.find<ProductController>();
        productController.productId.value = product.id!;
-          await productController.getProduct(product.id!);
+           await productController.getProduct(product.id!);
 
           Get.to(() => const ProductView());
         },
@@ -5702,9 +5573,9 @@ Widget placeHolderProductCard() {
                                   flex: 3,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
+                                    child: Container(
 
-                                      width: 60.w,
+                                      width: 120.w,
                                       child: CachedNetworkImage(
 
                                         imageUrl: product.image,
@@ -5717,7 +5588,7 @@ Widget placeHolderProductCard() {
                                             Lottie.asset(
                                                 "assets/images/jiffy_placeholder.json"
                                             ),
-                                        fit: BoxFit.contain,
+                                        fit: BoxFit.fitHeight,
                                       ),
                                     ),
                                   ),
@@ -5810,7 +5681,8 @@ Widget placeHolderProductCard() {
 
 
               ),
-              product.outOfStock ?      Transform.translate(
+              product.outOfStock ?
+              Transform.translate(
                 offset: Get.locale!.languageCode == "ar" ? Offset(- 15, 60) : Offset(72, 60),
                 child: Transform.rotate(
                   angle: pi / 4,
@@ -5829,7 +5701,7 @@ Widget placeHolderProductCard() {
                 ),
               )
                   :
-              SizedBox(),
+              const SizedBox(),
 
 
 
@@ -6016,7 +5888,7 @@ buildLikedButton(context, Product product , isOutOfStock) {
         bottom: MediaQuery
             .of(context)
             .size
-            .width / 2.1,
+            .width / 1.9,
         left: MediaQuery
             .of(context)
             .size

@@ -42,7 +42,7 @@ class WishlistController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-     // getWishlistProducts();
+     getWishlistProducts();
   }
 
   @override

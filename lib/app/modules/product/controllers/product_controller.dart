@@ -5,6 +5,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:jiffy/app/modules/global/config/constant.dart';
+import 'package:jiffy/app/modules/global/widget/widget.dart';
 
 import 'package:jiffy/app/modules/main/views/main_view.dart';
 
@@ -31,14 +32,14 @@ class ProductController extends GetxController {
   Rx<int> imageIndex = 0.obs;
   Rx<Product> product = Product(
     id: 0,
-    name: "Perfume",
-    price: 0.toString(),
-    description: "Good Perfume",
-    image: "https://www.pngall.com/wp-content/uploads/2016/05/Perfume-Free-Download-PNG.png",
+    name: "",
+    price: "",
+    description: "",
+    image: "",
     old_price: 0.toString(),
-    rating: 4,
+    rating: "",
     size: "",
-    outOfStock: false,
+    outOfStock: true,
   ).obs;
   RxInt productId = 0.obs;
   ApiConsumer apiConsumer = sl();
@@ -224,14 +225,14 @@ class ProductController extends GetxController {
     isProductLoading.value = true;
     productId.value = id;
     try {
+      print("start getting product 1 ");
       final response = await apiConsumer.post(
         'products/$id',
       );
 
       product.value = Product.fromJson(response['data']);
 
-     print("you attachments are ${product.value.attachments!}");
-      print("you searching id  is $id");
+
 
      for(var attachment in product.value.attachments!){
        if(attachment['name'] == "app_show"){
@@ -248,10 +249,14 @@ class ProductController extends GetxController {
       changeImagesList(selectedColor.value);
       await getProductReviews();
       print("your product data is ${product.value.name}");
+
 isAddToCartActive.value = false;
+
       isProductLoading.value = false;
+      print("end of the condition is ${      isProductInCart(product.value, cartController)}");
 
     } catch (e, stackTrace) {
+      print("start getting product 2 ${e} ");
       print(stackTrace.toString() + ' product test error' + '${e.toString()}');
 
       product.value = AppConstants.sampleProduct;

@@ -12,12 +12,14 @@ import 'package:jiffy/app/modules/auth/views/login_view.dart';
 import 'package:jiffy/app/modules/cart/controllers/cart_controller.dart';
 import 'package:jiffy/app/modules/cart/views/cart_view.dart';
 import 'package:jiffy/app/modules/global/config/helpers.dart' hide onLikeButtonTapped;
+import 'package:jiffy/app/modules/main/views/main_view.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../main.dart';
 import '../../../builtInPackage/like_button-2.0.5/lib/like_button.dart';
@@ -39,7 +41,8 @@ import 'FullImage.dart';
 
 
 class ProductView extends GetView<ProductController> {
-  const ProductView({
+  const ProductView( {
+
     Key? key,
   }) : super(key: key);
 
@@ -57,33 +60,36 @@ class ProductView extends GetView<ProductController> {
       Obx(() {
         return
 
-          Opacity(
-            opacity: controller.product.value.outOfStock ? 0.5 : 1,
-            child: SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        //Carousel Images
-                        _buildProductImagesCarousel(
-                            context, [controller.product.value.image], "", controller.productImages),
-                        CustomAppBar(
-                          myFunction: () {},
-                          title: "Product".tr,
-                          svgPath: "assets/images/shopping-cart.svg",
-                        ),
-                      ],
-                    ),
+          SizedBox(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      //Carousel Images
+                controller.isProductLoading.value?
+                placeHolderWidget()
+                :
+                _buildProductImagesCarousel(
+                          context, [controller.product.value.image], "", controller.productImages),
+                      CustomAppBar(
+                        myFunction: () {},
+                        title: "Product".tr,
+                        svgPath: "assets/images/shopping-cart.svg",
+                      ),
+                    ],
+                  ),
 
 
 
-                    Column(
+                  Skeletonizer(
+                    enabled:     controller.isProductLoading.value,
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -113,8 +119,8 @@ class ProductView extends GetView<ProductController> {
                             height: 100.h,
                           )
 
-            // //Product Colors
-            //                           _buildProductColors(context),
+                          // //Product Colors
+                          //                           _buildProductColors(context),
 
                           // //Product Sizes
                           // _buildProductSizes(context),
@@ -130,8 +136,8 @@ class ProductView extends GetView<ProductController> {
                           // _buildSeeAlsoProduct(
                           //     context, controller.product.value),
                         ]),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -139,17 +145,264 @@ class ProductView extends GetView<ProductController> {
       floatingActionButton: Obx(() {
         return
 
-          controller.product.value.outOfStock ? SizedBox() :  Row(
+          controller.product.value.outOfStock ?
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.fastOutSlowIn,
+                height: 91.h,
+                width: controller.isAddToCartActive.value ?
+                MediaQuery
+                    .of(context)
+                    .size
+                    .width / 2.5
+                    : MediaQuery
+                    .of(context)
+                    .size
+                    .width - 60.w,
+
+                child: SizedBox(
+
+
+                  child: FloatingActionButton(
+
+                      onPressed: () {
+
+                      },
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0,
+                      child: ShowUp(
+                          delay: 200,
+                          child: GestureDetector(
+                            onTap: () async {
+
+                            },
+                            child: SizedBox(
+
+                                child:
+
+                                MyDefaultButton(
+                                  isPlainBackground: true,
+                                  height: 75.h,
+                                  btnWidth: 350,
+                                  onPressed: () {
+
+                                  },
+                                  isActive: controller.product.value.outOfStock,
+                                  isloading: false,
+                                  btnText:
+
+                                  "Out of stock".tr,
+
+                                  isSecondaryTextStyle: true,
+                                  borderRadius: 51,
+
+
+                                )
+
+                            ),
+                          )
+                      )
+                  ),
+                ),
+              )
+            ],
+          )
+              :
+
+
+          isProductInCart(controller.product.value, cartController)?
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+
               AnimatedContainer(
                 duration: const Duration(milliseconds: 600),
                 curve: Curves.fastOutSlowIn,
                 height: 75.h,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(52),
-                  border: Border.all(color: primaryColor),
-                  color:  Colors.white
+                    borderRadius: BorderRadius.circular(52),
+                    border: Border.all(color: primaryColor),
+                    color:  Colors.white
+                ),
+
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 2.5,
+
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+
+                        var index = cartController
+                            .cartItems
+                            .indexWhere((item) =>
+                        item.product.id ==
+                            controller.product.value.id);
+                        var currentItem = cartController
+                            .cartItems[index];
+
+
+                        if (controller.product.value.d_limit != 0 &&
+                            currentItem.quantity >
+                                controller.product.value.d_limit ||
+                            controller.product.value.d_limit == 0 &&
+                                currentItem.quantity >
+                                    1) {
+                          cartController.updateQuantity(
+                            currentItem,
+                            currentItem.quantity - 1,
+                          );
+                        } else if (controller.product.value.d_limit == 0 &&
+                            currentItem.quantity ==
+                                1 ||
+                            currentItem.quantity ==
+                                controller.product.value.d_limit) {
+                          print('teasdsadsadsa');
+                          cartController
+                              .removeItem(currentItem);
+                          controller.changeAddToCartStatus();
+
+
+                          // }
+
+                          cartController.updateQuantity(
+                            currentItem,
+                            currentItem.quantity - 1,
+                          );
+                        }
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/home/minus.svg',
+                        width: 27.w,
+                        height: 27.h,
+                        color: Colors.red,
+                      ),
+                    ),
+                    Obx(() {
+                      return
+
+                        Text(
+                          // cartController.cartItems[controller.cartIndex.value]
+                          //     .quantity.toString() ,
+                            '${cartController
+                                .cartItems[cartController
+                                .cartItems.indexWhere((item) =>
+                            item.product.id == controller.product.value.id)]
+                                .quantity}',
+                          style: secondaryTextStyle(
+                              size: 15.sp.round()
+                          ),
+                        );
+                    }),
+                    InkWell(
+                      onTap: () {
+                        var index = cartController
+                            .cartItems
+                            .indexWhere((item) =>
+                        item.product.id ==
+                            controller.product.value.id);
+                        var currentItem = cartController
+                            .cartItems[index];
+                        cartController.updateQuantity(
+                          currentItem,
+                          currentItem.quantity + 1,
+                        );
+
+
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/home/plus.svg',
+                        width: 27.w,
+                        height: 27.h,
+                        color: Colors.green,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.fastOutSlowIn,
+                height: 91.h,
+                width:  MediaQuery
+                    .of(context)
+                    .size
+                    .width / 2.5,
+
+                child: SizedBox(
+
+
+                  child: FloatingActionButton(
+
+                      onPressed: () {
+
+                      },
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0,
+                      child: ShowUp(
+                          delay: 200,
+                          child: GestureDetector(
+                            onTap: () async {
+
+                            },
+                            child: SizedBox(
+
+                                child:
+
+                                MyDefaultButton(
+                                  isPlainBackground: false,
+                                  height: 75.h,
+                                  btnWidth: 350,
+                                  onPressed: () {
+                                    if(userToken == null){
+                                      Get.to(()=> LoginView());
+                                    }else {
+                                      tabController.changeIndex(2);
+                                      Get.to(MainView());
+                                    }
+
+                                  },
+
+                                  isloading: false,
+                                  btnText:
+                                  "View Cart".tr,
+
+                                  isSecondaryTextStyle: true,
+                                  borderRadius: 51,
+
+
+                                )
+
+                            ),
+                          )
+                      )
+                  ),
+                ),
+              )
+            ],
+          )
+          :
+              //switch active card or not
+          controller.isAddToCartActive.value?
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.fastOutSlowIn,
+                height: 75.h,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(52),
+                    border: Border.all(color: primaryColor),
+                    color:  Colors.white
                 ),
 
                 width: controller.isAddToCartActive.value ?
@@ -190,19 +443,19 @@ class ProductView extends GetView<ProductController> {
                                 1 ||
                             currentItem.quantity ==
                                 controller.product.value.d_limit) {
-                          print('teasdsadsadsa');
+
                           cartController
                               .removeItem(currentItem);
                           controller.changeAddToCartStatus();
 
 
-                        // }
+                          // }
 
-                        cartController.updateQuantity(
-                          currentItem,
-                          currentItem.quantity - 1,
-                        );
-                     }
+                          cartController.updateQuantity(
+                            currentItem,
+                            currentItem.quantity - 1,
+                          );
+                        }
                       },
                       child: SvgPicture.asset(
                         'assets/images/home/minus.svg',
@@ -222,14 +475,19 @@ class ProductView extends GetView<ProductController> {
                         )
                             :
                         cartController.cartItems.isEmpty ?
-                            SizedBox() :
+                        SizedBox() :
                         Text(
-                        cartController.cartItems[controller.cartIndex.value]
-                            .quantity.toString() ,
-                        style: secondaryTextStyle(
-                            size: 15.sp.round()
-                        ),
-                      );
+                          // cartController.cartItems[controller.cartIndex.value]
+                          //     .quantity.toString() ,
+                            '${cartController
+                                .cartItems[cartController
+                                .cartItems.indexWhere((item) =>
+                            item.product.id == controller.product.value.id)]
+                                .quantity}',
+                          style: secondaryTextStyle(
+                              size: 15.sp.round()
+                          ),
+                        );
                     }),
                     InkWell(
                       onTap: () {
@@ -261,7 +519,8 @@ class ProductView extends GetView<ProductController> {
                 duration: const Duration(milliseconds: 600),
                 curve: Curves.fastOutSlowIn,
                 height: 91.h,
-                width: controller.isAddToCartActive.value ?
+                width:
+                controller.isAddToCartActive.value ?
                 MediaQuery
                     .of(context)
                     .size
@@ -300,8 +559,10 @@ class ProductView extends GetView<ProductController> {
                                       Get.to(()=> LoginView());
                                     }else {
                                       if (controller.isAddToCartActive.value) {
-Get.put(CartController());
-                                        Get.to(() => CartPage());
+                                        tabController.changeIndex(2);
+                                        Get.to(MainView());
+                                        // Get.put(CartController());
+                                        // Get.to(() => CartPage());
                                       } else {
                                         controller.changeAddToCartStatus();
                                       }
@@ -314,7 +575,7 @@ Get.put(CartController());
                                   controller.isAddToCartActive.value ?
                                   "View Cart".tr
                                       :
-                                  "Add To Cart",
+                                  "Add To Cart".tr,
                                   isSecondaryTextStyle: true,
                                   borderRadius: 51,
 
@@ -328,67 +589,83 @@ Get.put(CartController());
                 ),
               )
             ],
+          )
+          :
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.fastOutSlowIn,
+            height: 91.h,
+            width:
+            controller.isAddToCartActive.value ?
+            MediaQuery
+                .of(context)
+                .size
+                .width / 2.5
+                : MediaQuery
+                .of(context)
+                .size
+                .width - 60.w,
+
+            child: SizedBox(
+
+
+              child: FloatingActionButton(
+
+                  onPressed: () {
+
+                  },
+                  backgroundColor: Colors.transparent,
+                  elevation: 0.0,
+                  child: ShowUp(
+                      delay: 200,
+                      child: GestureDetector(
+                        onTap: () async {
+
+                        },
+                        child: SizedBox(
+
+                            child:
+
+                            MyDefaultButton(
+                              isPlainBackground: false,
+                              height: 75.h,
+                              btnWidth: 350,
+                              onPressed: () {
+                                if(userToken == null){
+                                  Get.to(()=> LoginView());
+                                }else {
+                                  if (controller.isAddToCartActive.value) {
+                                    // Get.put(CartController());
+                                    // Get.to(() => CartPage());
+
+                                    tabController.changeIndex(2);
+                                    Get.to(MainView());
+                                  } else {
+                                    controller.changeAddToCartStatus();
+                                  }
+                                }
+
+                              },
+
+                              isloading: false,
+                              btnText:
+                              controller.isAddToCartActive.value ?
+                              "View Cart".tr
+                                  :
+                              "Add To Cart".tr,
+                              isSecondaryTextStyle: true,
+                              borderRadius: 51,
+
+
+                            )
+
+                        ),
+                      )
+                  )
+              ),
+            ),
           );
-// :
-//           AnimatedContainer(
-//           duration: const Duration(milliseconds: 600),
-//           curve: Curves.fastOutSlowIn,
-//           height: 91.h,
-//           width:  controller.isAddToCartActive.value ?
-//           MediaQuery
-//               .of(context)
-//               .size
-//               .width / 2.5
-//               : MediaQuery
-//               .of(context)
-//               .size
-//               .width - 60.w,
-//           child: SizedBox(
-//
-//
-//             child: FloatingActionButton(
-//
-//                 onPressed: () {
-//
-//                 },
-//                 backgroundColor: Colors.transparent,
-//                 elevation: 0.0,
-//                 child: ShowUp(
-//                     delay: 200,
-//                     child: GestureDetector(
-//                       onTap: () async {
-//
-//                       },
-//                       child: SizedBox(
-//
-//                           child:
-//
-//                           MyDefaultButton(
-//                             isPlainBackground: false,
-//                             height: 75.h,
-//                             btnWidth: 350,
-//                             onPressed: () {
-//                               controller.changeAddToCartStatus();
-//                             },
-//
-//                             isloading: false,
-//                             btnText:
-//                             controller.isAddToCartActive.value ?
-//                             "View Cart"
-//                             :
-//                             "Add To Cart",
-//                             isSecondaryTextStyle: true,
-//                             borderRadius: 51,
-//
-//
-//                           )
-//
-//                       ),
-//                     )
-//                 )
-//             ),
-//           ),
-//         );
+
       }),
 
       floatingActionButtonLocation:
@@ -571,95 +848,98 @@ Get.put(CartController());
   }
 
   buildRatingWidget(context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.w),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 15.h,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                  controller.product.value.rating == null
-                      ? "0"
-                      : controller.product.value.rating.toString(),
-                  style: secondaryTextStyle(
-                      color: Color(0xFF231F20),
-                      height: 0.03,
-                      letterSpacing: 0.48,
-                      weight: FontWeight.w400,
-                      size: 40.sp.round())),
-              SizedBox(
-                width: 10.w,
-              ),
-              Text("OUT OF 5".tr,
-                  style: secondaryTextStyle(
-                      color: Color(0xFF8A8A8F),
-                      height: 0.11,
-                      letterSpacing: 0.07,
-                      weight: FontWeight.w400,
-                      size: 12.sp.round())),
-              Spacer(),
-              controller.product.value.rating == null
-                  ? Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  StarRating(
-                      isCustomer: false,
-                      rating: 5,
-                      onRatingChanged: (v) {},
-                      color: const Color(0xffFBBD51)),
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  Text("83 ratings",
-                      style: secondaryTextStyle(
-                        color: greyishColor,
-                        size: 12.sp.round(),
-                      ))
-                ],
-              )
-                  : StarRating(
-                  isCustomer: false,
-                  rating: controller.product.value.rating!.toDouble(),
-                  onRatingChanged: (v) {},
-                  color: Color(0xffFBBD51))
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          // buildRatingBar(
-          //     "5",
-          //     controller.product.value.rating
-          //         ? 0
-          //         : controller.product.value.rating[4].toDouble()),
-          // buildRatingBar(
-          //     "4",
-          //     controller.product.value.rating
-          //         ? 0
-          //         : controller.product.value.rating.toDouble()),
-          // buildRatingBar(
-          //     "3",
-          //     controller.product.value.rating
-          //         ? 0
-          //         : controller.product.value.rating![2].toDouble()),
-          // buildRatingBar(
-          //     "2",
-          //     controller.product.value.rating
-          //         ? 0
-          //         : controller.product.value.rating![1].toDouble()),
-          // buildRatingBar(
-          //     "1",
-          //     controller.product.value.rating!.isEmpty
-          //         ? 0
-          //         : controller.product.value.rating![1].toDouble()),
-          SizedBox(
-            height: 50,
-          ),
-        ],
+    return Skeletonizer(
+      enabled: controller.isProductLoading.value,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.w),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 15.h,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                    controller.product.value.rating == null
+                        ? "0"
+                        : controller.product.value.rating.toString(),
+                    style: secondaryTextStyle(
+                        color: Color(0xFF231F20),
+                        height: 0.03,
+                        letterSpacing: 0.48,
+                        weight: FontWeight.w400,
+                        size: 40.sp.round())),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Text("OUT OF 5".tr,
+                    style: secondaryTextStyle(
+                        color: Color(0xFF8A8A8F),
+                        height: 0.11,
+                        letterSpacing: 0.07,
+                        weight: FontWeight.w400,
+                        size: 12.sp.round())),
+                Spacer(),
+                controller.product.value.rating == null
+                    ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    StarRating(
+                        isCustomer: false,
+                        rating: 5,
+                        onRatingChanged: (v) {},
+                        color: const Color(0xffFBBD51)),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Text("83 ratings",
+                        style: secondaryTextStyle(
+                          color: greyishColor,
+                          size: 12.sp.round(),
+                        ))
+                  ],
+                )
+                    : StarRating(
+                    isCustomer: false,
+                    rating: controller.product.value.rating!.toDouble(),
+                    onRatingChanged: (v) {},
+                    color: Color(0xffFBBD51))
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            // buildRatingBar(
+            //     "5",
+            //     controller.product.value.rating
+            //         ? 0
+            //         : controller.product.value.rating[4].toDouble()),
+            // buildRatingBar(
+            //     "4",
+            //     controller.product.value.rating
+            //         ? 0
+            //         : controller.product.value.rating.toDouble()),
+            // buildRatingBar(
+            //     "3",
+            //     controller.product.value.rating
+            //         ? 0
+            //         : controller.product.value.rating![2].toDouble()),
+            // buildRatingBar(
+            //     "2",
+            //     controller.product.value.rating
+            //         ? 0
+            //         : controller.product.value.rating![1].toDouble()),
+            // buildRatingBar(
+            //     "1",
+            //     controller.product.value.rating!.isEmpty
+            //         ? 0
+            //         : controller.product.value.rating![1].toDouble()),
+            SizedBox(
+              height: 50,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1090,7 +1370,12 @@ Get.put(CartController());
         //     : SizedBox())
 
         Obx(() {
-          return buildRatingWidget(context);
+          return
+
+          controller.isProductLoading.value?
+          SizedBox()
+          :
+          buildRatingWidget(context);
         })
       ],
     );
@@ -1179,7 +1464,7 @@ Get.put(CartController());
             btnWidth: 350,
             onPressed: () {},
             isloading: false,
-            btnText: 'Add To Cart',
+            btnText: 'Add To Cart'.tr,
             isSecondaryTextStyle: true,
             borderRadius: 50,
           )),
@@ -1283,7 +1568,7 @@ Get.put(CartController());
                 width: MediaQuery
                     .of(context)
                     .size
-                    .width - 150.w,
+                    .width - 130.w,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1324,9 +1609,9 @@ Get.put(CartController());
                 style: secondaryTextStyle(
                   color: greyishColor,
                   size: 10.sp.round(),
-                  
+
                 ),
-            
+
               ),
             ),
           ),
@@ -1684,7 +1969,7 @@ class _ImageSliderWithIndicatorsState extends State<ImageSliderWithIndicators> {
                       .of(context)
                       .size
                       .height / 1.2,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.fill,
                   width: MediaQuery
                       .of(context)
                       .size

@@ -715,7 +715,7 @@ homeController: homeController,
       onTap: () async {
         // ProductController productController = Get.find<ProductController>();
 
-        await productController.getProduct(product.id!);
+         await productController.getProduct(product.id!);
         Get.to(const ProductView());
       },
       child: Opacity(

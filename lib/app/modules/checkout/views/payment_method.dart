@@ -124,7 +124,7 @@ class PaymentMethod extends GetView<CheckoutController> {
 
       bottomSheet: Container(
 
-        height: 250.h,
+        height: 280.h,
 
         decoration: BoxDecoration(
 
@@ -202,6 +202,26 @@ class PaymentMethod extends GetView<CheckoutController> {
                       Row(
                         children: [
                           Text(
+                            "Discount:".tr,
+                            style: secondaryTextStyle(
+                                size: 14.sp.round(),
+                                weight: FontWeight.w400
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            "\$ ${controller.discount.value.toString()}",
+                            style: secondaryTextStyle(
+                                size: 14.sp.round(),
+                                weight: FontWeight.w400
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Row(
+                        children: [
+                          Text(
                             "Total:".tr,
                             style: secondaryTextStyle(
                                 size: 14.sp.round(),
@@ -217,7 +237,8 @@ class PaymentMethod extends GetView<CheckoutController> {
                             ),
                           ),
                         ],
-                      )
+                      ),
+
 
                     ],
                   ),
@@ -242,21 +263,7 @@ class PaymentMethod extends GetView<CheckoutController> {
           }),
         ),
       ),
-      // floatingActionButton: buildFloatingButton(
-      //
-      //
-      //   buttonName: 'Confirm Order',
-      //
-      //   context: context,
-      //   onPressed: () {
-      //     print("pressed");
-      //     Get.to(const Completed());
-      //   },
-      //
-      // ),
 
-
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
     );
   }
