@@ -198,8 +198,8 @@ class DioConsumer implements ApiConsumer {
       case DioErrorType.cancel:
         break;
       case DioErrorType.other:
-        Get.snackbar("Error", "Please Check Your Internet Connection " ,colorText: Colors.white);
-        // Get.to(() => const NoInternetView());
+        // Get.snackbar("Error", "Please Check Your Internet Connection " ,colorText: Colors.white);
+         Get.to(() => const NoInternetView());
         throw const NoInternetConnectionException(
             'NoInternetConnectionException');
     }

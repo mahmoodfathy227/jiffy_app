@@ -2,6 +2,7 @@
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:jiffy/app/modules/global/theme/colors.dart';
@@ -39,61 +40,24 @@ class _NoInternetViewState extends State<NoInternetView> {
 
   @override
   Widget build(BuildContext context) {
-    return TickerMode(
-      enabled: isTicker,
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child:
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(Icons.signal_wifi_connected_no_internet_4, color: primaryColor, size: 55,),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                'No Internet Connection',
-                style: primaryTextStyle(size: 20, weight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              isLoading
-                  ? CircularProgressIndicator(
-                backgroundColor: primaryColor,
-              )
-                  : ElevatedButton(
-                  onPressed: () async {
-                    if (mounted) {
-                      isLoading = true;
-                      setState(() {});
-                    }
+    return Scaffold(
+      body: SafeArea(child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SvgPicture.asset("assets/images/no_internet/rounded_eclipce.svg"),
+              SvgPicture.asset("assets/images/no_internet/plug.svg"),
 
-                    Future.delayed(const Duration(seconds: 1), () async {
-                      await Connectivity()
-                          .checkConnectivity()
-                          .then((value) async {
-                        if (value.first == ConnectivityResult.none) {
-                          if (mounted) {
-                            isLoading = false;
-                            setState(() {});
-                          }
-                        } else {
-                          await Get.closeCurrentSnackbar();
-                          Get.to(MainView());
-                        }
-                      });
-                    });
-                  },
-                  child: Text(
-                    'Retry',
-                    style: primaryTextStyle(),
-                  )),
-            ]),
+            ],
           ),
-        ),
-      ),
+          const Spacer(),
+          SvgPicture.asset("assets/images/no_internet/Whoops! No Internet Connection found. Check your connection or try again.svg"),
+          const Spacer(),
+          SvgPicture.asset("assets/images/no_internet/try_again.svg"),
+          const Spacer(),
+        ],
+      )),
     );
   }
 
