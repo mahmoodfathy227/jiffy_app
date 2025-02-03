@@ -122,14 +122,7 @@ class _ProfileViewState extends State<ProfileView>
                           Get.to(()=> OrdersView());
                         }, 19, 3),
                         // _buildMenuItem('rate.svg', 'Rate this app', () {
-                        //   if (GetPlatform.isAndroid) {
-                        //     _launchURL(
-                        //         'https://play.google.com/store/apps/details?id=maryana.genixs.com.maryana');
-                        //   } else if (GetPlatform.isIOS) {
-                        //     _launchURL(
-                        //         'https://apps.apple.com/hk/app/mariannella/id6608972125?l=en-GB');
-                        //   }
-                        // }, 19, 4),
+                 
                         _buildMenuItem('help.svg', 'Help Center'.tr, () {
                           Get.to(HelpView());
                         }, 19, 5),

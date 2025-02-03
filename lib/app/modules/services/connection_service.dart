@@ -52,7 +52,7 @@ class _NoInternetViewState extends State<NoInternetView> {
             ],
           ),
           const Spacer(),
-          SvgPicture.asset("assets/images/no_internet/Whoops! No Internet Connection found. Check your connection or try again.svg"),
+          SvgPicture.asset("assets/images/no_internet/Whoops!No Internet Connection found. Check your connection or try again.svg"),
           const Spacer(),
           SvgPicture.asset("assets/images/no_internet/try_again.svg"),
           const Spacer(),

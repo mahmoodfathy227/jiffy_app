@@ -255,6 +255,12 @@ class ProfileController extends GetxController {
   }
 
   void fetchProfile() async {
+    if (
+    userToken == null || userToken == ''){
+      print('not logged in user');
+      return ;
+    }
+       
     try {
       isLoading(true);
 

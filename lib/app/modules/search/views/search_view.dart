@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -551,11 +552,19 @@ controller: customSearchController.categoryScrollController,
                         width: customSearchController.isExpanded.value
                             ? 90.w
                             : 80.w,
-                        duration: Duration(milliseconds: 250),
+                        duration: const Duration(milliseconds: 250),
+
                         child: SizedBox(
 
-                          child: Text(
-                            customSearchController.categories[index].name!,
+                          child: 
+
+                          AutoSizeText(
+                                customSearchController.categories[index].name!,
+                                      maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            minFontSize: 10.sp,
+                            maxFontSize: 13.sp,
+                            stepGranularity: 1.sp,
                             style: secondaryTextStyle(
                                 size: 13.sp.round(),
                                 color:
@@ -565,9 +574,23 @@ controller: customSearchController.categoryScrollController,
                                 primaryColor :
                                 Colors.grey
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          )
+                          
+                          
+                          // Text(
+                          //   customSearchController.categories[index].name!,
+                          //   style: secondaryTextStyle(
+                          //       size: 13.sp.round(),
+                          //       color:
+                          //       customSearchController.categories[index].name ==
+                          //           customSearchController.selectedCategory
+                          //               .value ?
+                          //       primaryColor :
+                          //       Colors.grey
+                          //   ),
+                          //   maxLines: 2,
+                          //   overflow: TextOverflow.ellipsis,
+                          // ),
                         ),
                       ),
 

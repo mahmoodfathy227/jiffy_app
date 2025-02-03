@@ -1113,10 +1113,10 @@ class ProductView extends GetView<ProductController> {
 
     final xFile = XFile(file.path);
 
-    Share.shareXFiles([xFile],
-        text:
-        'Check out this Product: https://mariannela-8c357.web.app/product/?id=${controller
-            .product.value.id} ');
+    // Share.shareXFiles([xFile],
+    //     text:
+    //     'Check out this Product: 
+    //         .product.value.id} ');
     controller.endSharing();
   }
 

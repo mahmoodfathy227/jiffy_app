@@ -51,6 +51,8 @@ class PaymentMethod extends GetView<CheckoutController> {
                       children: [
                         Container(
 
+
+
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10.r),

@@ -98,6 +98,7 @@ Future<void> setupFlutterNotifications() async {
 
 Future<void> init() async {
   try {
+
     //Core injections
     await Firebase.initializeApp();
     setupFlutterNotifications();
@@ -122,6 +123,8 @@ Future<void> init() async {
       print('Message data: ${message.data}');
       showFlutterNotification(message);
     } as void Function(RemoteMessage event)?);
+    HomeController homeController = Get.put(HomeController());
+       homeController.getCurrentLocation();
   } catch (error, stackTrace) {
     print('test error $stackTrace ');
   }
@@ -163,12 +166,9 @@ void main() async {
 
   await AppConstants.loadUserFromCache();
 
-  // GoogleFonts.cormorant().fontFamily = GoogleFonts.cormorant().fontFamily;
-
-  // GoogleFonts.cormorant
   Get.put(ApiService());
 
-  runApp(MyApp());
+  runApp(const MyApp());
 
 
 }

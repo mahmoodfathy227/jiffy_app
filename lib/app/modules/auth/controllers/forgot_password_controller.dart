@@ -79,7 +79,8 @@ class ForgotPasswordController extends GetxController {
       'Content-Type': 'application/x-www-form-urlencoded'
     };
     var request = http.Request(
-        'POST', Uri.parse('https://panel.mariannella.com/api/password/forget'));
+        'POST', Uri.parse
+        ('https://mahmoudco.com/api/password/forget'));
     request.bodyFields = {'email': '${myEmail}'};
     request.headers.addAll(headers);
 
@@ -162,7 +163,7 @@ class ForgotPasswordController extends GetxController {
         'Content-Type': 'application/x-www-form-urlencoded'
       };
       var request = http.Request('POST',
-          Uri.parse('https://panel.mariannella.com/api/password/reset'));
+          Uri.parse('https://mahmoudco.com/api/password/reset'));
       request.bodyFields = {
         'token': '1111',
         'password': newPasswordController.text,

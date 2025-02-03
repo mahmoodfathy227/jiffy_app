@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/colors.dart';
 
 const APP_NAME = 'jiffy';
+// var defaultPrimaryColor = Color(0xFF4F0099);
 var defaultPrimaryColor = Color(0xFF4F0099);
 
 const DOMAIN_URL =

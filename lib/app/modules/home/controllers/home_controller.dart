@@ -46,7 +46,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onInit();
     fetchHomePageData();
     getCategories();
-    getCurrentLocation();
+  
     scrollController.addListener(_onScroll);
     rotatingUpperBarController = AnimationController(
       duration: Duration(seconds: 2),
@@ -242,44 +242,62 @@ isCategoriesLoading.value = true; // استخدام القيمة المتغير�
    RxString city = ''.obs;
    RxString country = ''.obs;
    RxString address = ''.obs;
-   RxBool isLocationLoading = false.obs;
+   //RxBool isLocationLoading = false.obs;
    void getCurrentLocation() async{
-     isLocationLoading.value = true;
-      // ask permission to  location
-      bool serviceEnabled;
-      LocationPermission permission;
+    //  isLocationLoading.value = true;
+           // ask permission to  location
+           bool serviceEnabled;
+           LocationPermission permission;
+     
+         
+                 permission = await Geolocator.checkPermission();
+           if (permission == LocationPermission.denied) {
+        
+             if (permission == LocationPermission.denied) {
+               print('Location permissions are denied');
+             }
+             
+           }
+           if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
+             print('Location services are disabled.');
+     permission = await Geolocator.requestPermission().then((value) async{ 
+      if (value == LocationPermission.denied) {return value;} else{
+        await getLocationNameLogic();
+             
 
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        print('Location services are disabled.');
-        // Get.snackbar("Location", "Location services are disabled", colorText: Colors.white);
-        isLocationLoading.value = false;
+        return value;
       }
+     
+       });
 
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
-          isLocationLoading.value = false;
-        }
-        isLocationLoading.value = false;
-      }
+           } else {
 
-try{
-  Position position = await Geolocator.getCurrentPosition();
-  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-  var first = placemarks.first;
-  state.value = first.administrativeArea!.substring(0, 8) + '..';
-  city.value = first.locality!.length >= 8 ? '${first.locality!.substring(0, 8)}..' :first.locality! ;
-  country.value = first.country!;
-  isLocationLoading.value = false;
-  print("Your state is ${state.value} and city is ${city.value}");
-}catch(e){
-        print("location error ${e.toString()}");
-        Get.snackbar('Location', e.toString(), colorText: Colors.white);
-        isLocationLoading.value = false;
-}
+           }
+
+await getLocationNameLogic();
 
   }
+
+   Future<void> getLocationNameLogic() async {
+     
+     try{
+       
+     
+     
+     
+       Position position = await Geolocator.getCurrentPosition();
+       List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+       var first = placemarks.first;
+        state.value =  first.administrativeArea!= null ? first.administrativeArea! : "";
+     city.value = first.locality!= null ? first.locality! : "";
+       country.value = first.country!;
+       //isLocationLoading.value = false;
+       print("Your state is ${state.value} and city is ${city.value}");
+       update();
+     }catch(e){
+             print("location error ${e.toString()}");
+             Get.snackbar('Location', e.toString(), colorText: Colors.white);
+             //isLocationLoading.value = false;
+     }
+   }
 }

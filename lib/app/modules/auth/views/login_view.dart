@@ -45,6 +45,7 @@ class LoginView extends StatelessWidget {
             ShowUp(
                 delay: 400,
                 child: CustomTextField(
+
                   labelText: 'Your Email'.tr,
                   onChanged: (value) => controller.email.value = value,
                   errorText:  controller.emailError.value,
@@ -125,7 +126,6 @@ SizedBox(height:25.h ,),
               ),
             ),
           Spacer(),
-            // Text("Sign In With", style: primaryTextStyle(color: Colors.black,
             //     size: 13.sp.round(),
             //     weight: FontWeight.w400),),
             //
@@ -218,7 +218,7 @@ SizedBox(height:25.h ,),
         ShowUp(
             delay: 400,
             child: Text(
-              'Welcome to Marianella',
+              'Welcome to Jiffy',
               textAlign: TextAlign.center,
               style: boldTextStyle(
                   color: const Color(0xFF090A0A),

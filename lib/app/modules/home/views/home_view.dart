@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -81,259 +82,7 @@ homeController: homeController,
                             ).fadeIn(),),
 
 
-                          // Slide-down animation using GetX controlled animations
-//                         PositionedDirectional(
-//                           start: -127.w,
-//                           top: -290.h,
-//                           child: Container(
-//
-//                             width: 644.w,
-//                             height: 663.h,
-//                             child: Stack(
-//                               children: [
-//                               Positioned(
-//                               left: 15.w,
-//                               top: 0,
-//                               child: Obx(() {
-//                                 // This widget will now reactively listen to changes in rotationAngleCircule
-//                                 return Transform.rotate(
-//                                   angle: homeController
-//                                       .rotationAngleCircule
-//                                       .value,
-//                                   // Controlled by HomeController
-//                                   child: RotationTransition(
-//                                     turns: Tween(begin: 0.0, end: 1.0)
-//                                         .animate(homeController
-//                                         .rotatingUpperBarController),
-//
-//                                     child: SvgPicture.asset(
-//                                       'assets/images/home/circule.svg',
-//                                       fit: BoxFit.contain,
-//
-//                                       width: 645.w,
-//                                       height: 598.h,
-//                                     ),
-//                                   ),
-//                                 );
-//                               }),
-//                             ),
-//                                 // ListView with Rotation
-//                                 Positioned.fill(
-//                                   child: Column(
-//                                     mainAxisAlignment:
-//                                     MainAxisAlignment.end,
-//                                     children: [
-//                                       SemiLunarScrollView(),
-//                                       // Add dots indicator below categories
-//                                       buildDots(homeController),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                           // child: SlideTransition(
-//                           //     position: homeController.slideAnimation,
-//                           //     child: FadeTransition(
-//                           //       opacity: homeController
-//                           //           .fadeInAnimation, // GetX Fade-In
-//                           //       child: Container(
-//                           //         width: 644.w,
-//                           //         height: 663.h,
-//                           //         child: Stack(
-//                           //           children: [
-//                           //             Positioned(
-//                           //               left: 15.w,
-//                           //               top: 0,
-//                           //               child: Obx(() {
-//                           //                 // This widget will now reactively listen to changes in rotationAngleCircule
-//                           //                 return Transform.rotate(
-//                           //                   angle: homeController
-//                           //                       .rotationAngleCircule
-//                           //                       .value,
-//                           //                   // Controlled by HomeController
-//                           //                   child: SvgPicture.asset(
-//                           //                     'assets/images/home/circule.svg',
-//                           //                     fit: BoxFit.contain,
-//                           //                     width: 645.w,
-//                           //                     height: 598.h,
-//                           //                   ),
-//                           //                 );
-//                           //               }),
-//                           //             ),
-//                           //             // ListView with Rotation
-//                           //             Positioned.fill(
-//                           //               child: Column(
-//                           //                 mainAxisAlignment:
-//                           //                 MainAxisAlignment.end,
-//                           //                 children: [
-//                           //                   SizedBox(
-//                           //                     height: 150
-//                           //                         .h,
-//                           //                     // Adjust height if needed
-//                           //                     width: MediaQuery
-//                           //                         .of(context)
-//                           //                         .size
-//                           //                         .width +
-//                           //                         85.w,
-//                           //                     child: PageView.builder(
-//                           //                       onPageChanged: (
-//                           //                           int pageIndex) {
-//                           //                         homeController
-//                           //                             .onPageChanged(
-//                           //                             pageIndex); // GetX Page change handler
-//                           //                       },
-//                           //                       controller: homeController
-//                           //                           .pageController.value,
-//                           //                       itemCount: (homeController
-//                           //                           .categories.length /
-//                           //                           4)
-//                           //                           .ceil(),
-//                           //                       // Number of pages
-//                           //                       itemBuilder:
-//                           //                           (context, pageIndex) {
-//                           //                         int startIndex = pageIndex *
-//                           //                             4;
-//                           //                         int endIndex =
-//                           //                         (startIndex + 4) >
-//                           //                             homeController
-//                           //                                 .categories
-//                           //                                 .length
-//                           //                             ? homeController
-//                           //                             .categories.length
-//                           //                             : startIndex + 4;
-//                           //                         List<
-//                           //                             String> currentCategories =
-//                           //                         homeController.categories
-//                           //                             .sublist(startIndex,
-//                           //                             endIndex);
-//                           //
-//                           //                         return Center(
-//                           //                           child: Padding(
-//                           //                             padding: EdgeInsets
-//                           //                                 .only(
-//                           //                                 top: 0.h),
-//                           //                             child: SizedBox(
-//                           //                               height: 300
-//                           //                                   .h,
-//                           //                               // Adjust to fit your curve
-//                           //                               child: ListView
-//                           //                                   .builder(
-//                           //                                 controller:
-//                           //                                 homeController
-//                           //                                     .scrollController
-//                           //                                 ,
-//                           //
-//                           //                                 scrollDirection:
-//                           //                                 Axis.horizontal,
-//                           //
-//                           //                                 // physics:
-//                           //                                 // const NeverScrollableScrollPhysics(),
-//                           //                                 itemCount:
-//                           //                                 currentCategories
-//                           //                                     .length,
-//                           //                                 itemBuilder: (
-//                           //                                     context,
-//                           //                                     indexList) {
-//                           //                                   // Adjust vertical offset based on index to create the curved effect
-//                           //                                   double verticalShift =
-//                           //                                   homeController
-//                           //                                       .calculateVerticalShift(
-//                           //                                       indexList,
-//                           //                                       currentCategories
-//                           //                                           .length);
-//                           //                                   return Padding(
-//                           //                                     padding: EdgeInsets
-//                           //                                         .symmetric(
-//                           //                                       horizontal: 34
-//                           //                                           .w /
-//                           //                                           2, // Horizontal spacing
-//                           //                                     ),
-//                           //                                     child: Transform
-//                           //                                         .translate(
-//                           //                                       offset: Offset(
-//                           //                                           0,
-//                           //                                           verticalShift),
-//                           //                                       child: Column(
-//                           //                                         children: [
-//                           //                                           buildCategoryItem(
-//                           //                                             currentCategories[
-//                           //                                             indexList],
-//                           //                                             Icons
-//                           //                                                 .category,
-//                           //                                           ),
-//                           //                                         ],
-//                           //                                       ),
-//                           //                                     ),
-//                           //                                   );
-//                           //                                 },
-//                           //                               ),
-//                           //                             ),
-//                           //                           ),
-//                           //                         );
-//                           //                       },
-//                           //                     ),
-//                           //                   ),
-//                           //                   // Add dots indicator below categories
-//                           //                   buildDots(homeController),
-//                           //                 ],
-//                           //               ),
-//                           //             ),
-//                           //           ],
-//                           //         ),
-//                           //       ),
-//                           //     ))
-//                         ),
-//
-//                         // Add Search bar with Slide and Fade animation
-//                         Positioned(
-//                             top: 36.h,
-//                             left: 0,
-//                             right: 0,
-//                             child: ShowUp(
-//                               delay: 300,
-//                               child: SearchHomeBar(
-//                                   homeController: homeController),
-//                             )),
-// // body of home
-//                         PositionedDirectional(
-//                             top: 400.h,
-//                             child: Column(
-//                               children: [
-//                                 // Obx(() =>
-//                                 //     SlideTransition(
-//                                 //         position: Tween<Offset>(
-//                                 //           begin: const Offset(1.0,
-//                                 //               0.0),
-//                                 //           // يبدأ خارج الشاشة على اليمين (x = 1)
-//                                 //           end: const Offset(0.0,
-//                                 //               0.0), // ينتهي في موقعه الطبيعي (x = 0)
-//                                 //         ).animate(
-//                                 //           CurvedAnimation(
-//                                 //             parent: homeController.controller,
-//                                 //             curve: Curves.easeInOut,
-//                                 //           ),
-//                                 //         ),
-//                                 //         child: viewProductSection(
-//                                 //             'Latest Product',
-//                                 //             homeController
-//                                 //                 .homePageData.value
-//                                 //                 .latestProducts,
-//                                 //             context))),
-//                                 Obx(() {
-//                                   return ShowUp(
-//                                     delay: 500,
-//                                     child: viewProductSection(
-//                                         'Latest Product',
-//                                         homeController
-//                                             .homePageData.value
-//                                             .latestProducts,
-//                                         context),
-//                                   );
-//                                 })
-//                               ],
-//                             )),
-//                       ],
+//                         
                         ]),
                   ),
                   buildDots(homeController),
@@ -353,25 +102,7 @@ homeController: homeController,
                   SizedBox(
                     height: 19.h,
                   ),
-                  // Obx(() =>
-                  //     SlideTransition(
-                  //         position: Tween<Offset>(
-                  //           begin: const Offset(
-                  //               1.0, 0.0),
-                  //           // يبدأ خارج الشاشة على اليمين (x = 1)
-                  //           end: const Offset(
-                  //               0.0, 0.0), // ينتهي في موقعه الطبيعي (x = 0)
-                  //         ).animate(
-                  //           CurvedAnimation(
-                  //             parent: homeController.controller,
-                  //             curve: Curves.easeInOut,
-                  //           ),
-                  //         ),
-                  //         child: viewProductSection(
-                  //             'Featured Product',
-                  //             homeController.homePageData.value
-                  //                 .featuredProducts,
-                  //             context))),
+              
                   Obx(() {
                     return viewProductSection(
                         'Best Selling Product'.tr,
@@ -641,7 +372,7 @@ homeController: homeController,
 
   Widget viewProductSection(title, dynamic product, context) {
     return SizedBox(
-      height: 365.h,
+      height: product.length == 0 ?  100.h : 365.h,
       child: Column(
         children: [
           TitleWithSeeAll(
@@ -656,7 +387,7 @@ homeController: homeController,
           Transform.translate(
             offset: const Offset(0, -20),
             child: Container(
-              height: 320.h ,
+              height: product.length == 0 ?  0.h : 320.h ,
               width: MediaQuery
                   .of(context)
                   .size
@@ -664,7 +395,7 @@ homeController: homeController,
               padding: EdgeInsetsDirectional.only(start: 5.w),
               child:
               product.length == 0 ?
-            const SizedBox()
+             Text("No Products Yet ...", style: secondaryTextStyle())
                   :
               Padding(
                 padding: EdgeInsetsDirectional.only(start: 10.w),
@@ -1266,13 +997,26 @@ class _SemiLunarScrollViewState extends State<SemiLunarScrollView> {
                           child: SizedBox(
                             width: 52.w,
 
-                            child: Text(homeController.categories[index].name!,
-                              overflow: TextOverflow.ellipsis,
+                            child: 
+                            
+                            AutoSizeText(
+                              homeController.categories[index].name!,
                               maxLines: 1,
+                              maxFontSize: 12.sp,
+                              minFontSize: 9.sp,
+                              stepGranularity: 1.sp,
                               textAlign: TextAlign.center,
                               style: secondaryTextStyle(
                                   size: 12.sp.round()
-                              ),),
+                              ),
+                            )
+                            // Text(homeController.categories[index].name!,
+                            //   overflow: TextOverflow.ellipsis,
+                            //   maxLines: 1,
+                            //   textAlign: TextAlign.center,
+                            //   style: secondaryTextStyle(
+                            //       size: 12.sp.round()
+                            //   ),),
                           ),
                         ),
 

@@ -301,12 +301,30 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
                   'assets/images/home/locations.svg',
                 ),
                 SizedBox(width: 12.w),
-                Obx(() {
-                  return
-                    homeController.isLocationLoading.value?
-                    const SizedBox(
-                    )
-                        :
+               
+                
+      
+
+
+GetBuilder<HomeController>(builder: (homeController) {
+  return 
+                // homeController.isLocationLoading.value?
+                //     Row(
+                //       children: [
+                //        IconButton(
+                //       icon:  const Icon(Icons.refresh_outlined,color: Colors.white),
+                //       onPressed: () async{
+                //          homeController.getCurrentLocation();
+                //       },
+
+                //      ),
+                //         const SizedBox(width: 10,),
+                //         const CircularProgressIndicator(
+                //           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                //         ),
+                //       ],
+                //     )
+                //         :
                     homeController.state.value.isEmpty &&
 
                         homeController.city.value.isEmpty ?
@@ -319,18 +337,38 @@ Widget SearchHomeBar({HomeController? homeController,required BuildContext conte
 
                      )
 :
-                    Text(
+  
+  AutoSizeText(
+ 
+      maxFontSize: 20.sp,
+      minFontSize: 12.sp,
+      stepGranularity:  1.sp   ,
+      maxLines: 3,
+      softWrap: true,
 
-                    '${homeController.state.value},${homeController.city.value}',
-                    textAlign: TextAlign.center,
-                    style: secondaryTextStyle(
-                      color: const Color(0xFFFFFDD2),
-                      size: 24.sp.round(),
-                      weight: FontWeight.w700,
-                      height: 0.09,
-                      letterSpacing: -0.41,
-                    ),
-                  );
+                        '${homeController.state.value},${homeController.city.value}',
+                         textAlign: TextAlign.center,
+                      
+                      style: secondaryTextStyle(
+                        color: const Color(0xFFFFFDD2),
+                      
+                        weight: FontWeight.w700,
+                        height: 0.09,
+                        letterSpacing: -0.41,
+                      ),
+  
+  );
+
+
+              
+                  //   style: secondaryTextStyle(
+                  //     color: const Color(0xFFFFFDD2),
+                  //     size: 24.sp.round(),
+                  //     weight: FontWeight.w700,
+                  //     height: 0.09,
+                  //     letterSpacing: -0.41,
+                  //   ),
+                  // );
                 }),
               ],
             ),
@@ -1191,7 +1229,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           Container(
 
-            height: widget.height ?? 60.h,
+            height: widget.height ?? 50.h,
 
             child: Focus(
               onFocusChange: (hasFocus) {
@@ -1324,7 +1362,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                 weight: FontWeight.w400,
 
                               ), // Set an initial font size
-                              maxLines: 2, // Adjust as needed
+                              maxLines: 3, // Adjust as needed
                               minFontSize: 8.sp,
                               stepGranularity: 8.sp,
                             ),
